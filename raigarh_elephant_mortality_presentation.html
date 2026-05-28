@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wild Elephant Mortality — Complete Forensic Analysis · Raigarh Van Mandal</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --forest-dark: #1a3a2a;
+    --forest-mid: #2d6a4f;
+    --forest-light: #52b788;
+    --earth-brown: #6b4226;
+    --sky-blue: #1e3a5f;
+    --sky-mid: #2c5f8a;
+    --alert-red: #c0392b;
+    --alert-orange: #e67e22;
+    --alert-yellow: #f39c12;
+    --white: #ffffff;
+    --off-white: #f8f9fa;
+    --light-gray: #e9ecef;
+    --mid-gray: #6c757d;
+    --dark-gray: #343a40;
+    --arsenic-purple: #6c3483;
+  }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #0d1117;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* ── Slideshow Container ── */
+  .slideshow {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .slide {
+    display: none;
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+  .slide.active { display: flex; flex-direction: column; }
+
+  /* ── Navigation ── */
+  .nav {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 1000;
+    background: rgba(0,0,0,0.5);
+    padding: 10px 20px;
+    border-radius: 40px;
+    backdrop-filter: blur(8px);
+  }
+  .nav button {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 24px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+  }
+  .nav button:hover { background: rgba(255,255,255,0.3); }
+  .nav button:disabled { opacity: 0.3; cursor: default; }
+  .slide-counter {
+    color: rgba(255,255,255,0.8);
+    font-size: 13px;
+    font-weight: 500;
+    min-width: 60px;
+    text-align: center;
+  }
+
+  /* ── Slide Layouts ── */
+  .slide-header {
+    padding: 28px 48px 16px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .slide-title-bar {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+  .slide-num {
+    font-size: 11px;
+    opacity: 0.4;
+    font-weight: 500;
+  }
+  .slide-body {
+    flex: 1;
+    padding: 0 48px 80px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .slide-body.two-col {
+    flex-direction: row;
+    gap: 32px;
+    align-items: stretch;
+  }
+  .col { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+
+  /* ── Typography ── */
+  h1 { font-size: clamp(28px, 4vw, 52px); font-weight: 800; line-height: 1.1; }
+  h2 { font-size: clamp(20px, 2.5vw, 32px); font-weight: 700; line-height: 1.2; }
+  h3 { font-size: clamp(14px, 1.6vw, 20px); font-weight: 700; }
+  h4 { font-size: clamp(12px, 1.3vw, 16px); font-weight: 600; }
+  p  { font-size: clamp(11px, 1.2vw, 15px); line-height: 1.6; }
+  .small { font-size: clamp(10px, 1vw, 13px); line-height: 1.5; opacity: 0.8; }
+
+  /* ── Stat Cards ── */
+  .stats-row {
+    display: flex;
+    gap: 16px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
+  .stat-card {
+    flex: 1;
+    min-width: 100px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 16px 12px;
+    text-align: center;
+  }
+  .stat-card .stat-value {
+    font-size: clamp(22px, 3vw, 38px);
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-card .stat-label {
+    font-size: 11px;
+    opacity: 0.7;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── Cause Bars ── */
+  .cause-bar { margin: 8px 0; }
+  .cause-bar-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .cause-bar-track {
+    height: 10px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .cause-bar-fill { height: 100%; border-radius: 6px; transition: width 0.8s ease; }
+
+  /* ── Evidence Cards ── */
+  .evidence-card {
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border-left: 4px solid;
+  }
+  .evidence-card h4 { margin-bottom: 4px; }
+
+  /* ── Tag / Badge ── */
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 2px 3px;
+  }
+  .badge-red    { background: #c0392b; color: #fff; }
+  .badge-orange { background: #e67e22; color: #fff; }
+  .badge-green  { background: #27ae60; color: #fff; }
+  .badge-blue   { background: #2980b9; color: #fff; }
+  .badge-purple { background: #8e44ad; color: #fff; }
+
+  /* ── Alert Box ── */
+  .alert-box {
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .alert-box.red    { background: rgba(192,57,43,0.2);  border: 1px solid #c0392b; color: #ff8a80; }
+  .alert-box.orange { background: rgba(230,126,34,0.2); border: 1px solid #e67e22; color: #ffcc80; }
+  .alert-box.green  { background: rgba(39,174,96,0.2);  border: 1px solid #27ae60; color: #80e5a0; }
+  .alert-box.purple { background: rgba(142,68,173,0.2); border: 1px solid #8e44ad; color: #ce9ef8; }
+
+  /* ── Grid Boxes ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
+  .info-box {
+    border-radius: 10px;
+    padding: 14px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+  .info-box h4 { margin-bottom: 6px; }
+
+  /* ── Timeline ── */
+  .timeline { display: flex; gap: 0; margin: 16px 0; }
+  .timeline-item {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    padding: 12px 8px;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 1px;
+    height: 60%;
+    background: rgba(255,255,255,0.2);
+    transform: translateY(-50%);
+  }
+  .timeline-item:last-child::before { display: none; }
+  .timeline-year { font-size: 11px; opacity: 0.6; font-weight: 600; margin-bottom: 4px; }
+  .timeline-val { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+  .timeline-label { font-size: 10px; opacity: 0.7; }
+
+  /* ── Table ── */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .data-table th {
+    background: rgba(255,255,255,0.12);
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 700;
+  }
+  .data-table td { padding: 7px 12px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .data-table tr:hover td { background: rgba(255,255,255,0.04); }
+
+  /* ── Lab result badges ── */
+  .neg { color: #80e5a0; font-weight: 700; }
+  .pos { color: #ff8a80; font-weight: 700; }
+
+  /* ── Separator ── */
+  .sep { height: 1px; background: rgba(255,255,255,0.12); margin: 12px 0; }
+
+  /* ── Priority Matrix ── */
+  .priority-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .priority-tag {
+    min-width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  .p1 { background: #c0392b; color: white; }
+  .p2 { background: #e67e22; color: white; }
+  .p3 { background: #f39c12; color: white; }
+  .p4 { background: #27ae60; color: white; }
+  .p5 { background: #2980b9; color: white; }
+  .p6 { background: #8e44ad; color: white; }
+  .p7 { background: #16a085; color: white; }
+  .p8 { background: #2c3e50; color: white; }
+
+  /* ── Conclusion Bullets ── */
+  .conclusion-point {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+  .conclusion-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+
+  /* ══════════════════════════════════════════════════════
+     SLIDE-SPECIFIC THEMES
+  ═══════════════════════════════════════════════════════ */
+
+  /* Slide 1 — Cover */
+  #slide-1 {
+    background: linear-gradient(135deg, #0d2818 0%, #1a3a2a 40%, #1e3a5f 100%);
+    color: white;
+    justify-content: flex-end;
+  }
+  #slide-1 .slide-body {
+    justify-content: flex-end;
+    padding-bottom: 100px;
+  }
+  #slide-1 .eyebrow {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #52b788;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  #slide-1 .confidential-tag {
+    margin-top: 24px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  #slide-1 .cover-divider {
+    height: 3px;
+    width: 60px;
+    background: #52b788;
+    margin: 16px 0;
+  }
+  #slide-1 .forest-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 70% 30%, rgba(82,183,136,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(44,95,138,0.12) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  /* Slide 2 — Data Sources */
+  #slide-2 { background: linear-gradient(160deg, #0f1e2d 0%, #1a2e45 100%); color: white; }
+
+  /* Slide 3 — Cause of Death */
+  #slide-3 { background: linear-gradient(160deg, #1a0f0a 0%, #2d1a10 100%); color: white; }
+
+  /* Slide 4 — Age & Sex */
+  #slide-4 { background: linear-gradient(160deg, #0d1a0f 0%, #1a3322 100%); color: white; }
+
+  /* Slide 5 — Temporal */
+  #slide-5 { background: linear-gradient(160deg, #0e1830 0%, #1a2e50 100%); color: white; }
+
+  /* Slide 6 — Geospatial */
+  #slide-6 { background: linear-gradient(160deg, #0f1a12 0%, #1e3428 100%); color: white; }
+
+  /* Slide 7 — Evidence Chain & Drowning */
+  #slide-7 { background: linear-gradient(160deg, #0a1520 0%, #152840 100%); color: white; }
+
+  /* Slide 8 — Electrocution */
+  #slide-8 { background: linear-gradient(160deg, #1a0a0a 0%, #2d0f0f 100%); color: white; }
+
+  /* Slide 9 — Arsenic */
+  #slide-9 { background: linear-gradient(160deg, #180d28 0%, #2d1a48 100%); color: white; }
+
+  /* Slide 10 — Lab Register */
+  #slide-10 { background: linear-gradient(160deg, #0f1a10 0%, #1a2e1e 100%); color: white; }
+
+  /* Slide 11 — New Cluster */
+  #slide-11 { background: linear-gradient(160deg, #1a1002 0%, #2d2004 100%); color: white; }
+
+  /* Slide 12 — Human Fatalities */
+  #slide-12 { background: linear-gradient(160deg, #0d1520 0%, #1a2d3a 100%); color: white; }
+
+  /* Slide 13 — GIS Map */
+  #slide-13 { background: linear-gradient(160deg, #0f1e10 0%, #1e3820 100%); color: white; }
+
+  /* Slide 14 — Forensic Audit */
+  #slide-14 { background: linear-gradient(160deg, #0f1520 0%, #1a2840 100%); color: white; }
+
+  /* Slide 15 — Kurkut Mystery */
+  #slide-15 { background: linear-gradient(160deg, #1a0f0f 0%, #2e1818 100%); color: white; }
+
+  /* Slide 16 — Not Disease */
+  #slide-16 { background: linear-gradient(160deg, #0a1520 0%, #152840 100%); color: white; }
+
+  /* Slide 17 — Action P1-P4 */
+  #slide-17 { background: linear-gradient(160deg, #0a1a0a 0%, #152815 100%); color: white; }
+
+  /* Slide 18 — Action P5-P8 */
+  #slide-18 { background: linear-gradient(160deg, #0a1a10 0%, #152820 100%); color: white; }
+
+  /* Slide 19 — Conclusion */
+  #slide-19 { background: linear-gradient(160deg, #0d1e10 0%, #1a3822 100%); color: white; }
+
+  /* Slide 20 — End */
+  #slide-20 {
+    background: linear-gradient(135deg, #0d2818 0%, #1a3a2a 40%, #1e3a5f 100%);
+    color: white;
+  }
+
+  /* ── Shared accent ring for some slides ── */
+  .accent-ring {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0.06;
+  }
+</style>
+</head>
+<body>
+
+<div class="slideshow" id="slideshow">
+
+  <!-- ═══════════════════════════════════════════════ SLIDE 1 ══ -->
+  <div class="slide active" id="slide-1">
+    <div class="forest-overlay"></div>
+    <div class="slide-body" style="padding-top:60px; justify-content:center;">
+      <p class="eyebrow">Bilaspur Circle · Raigarh Van Mandal · Chhattisgarh · FY 2021-22 to 2025-26</p>
+      <h1 style="color:white; max-width:800px;">Wild Elephant<br>Mortality —<br><span style="color:#52b788;">Complete<br>Forensic Analysis</span></h1>
+      <div class="cover-divider"></div>
+      <p style="opacity:0.75; max-width:620px; font-size:14px; line-height:1.7;">
+        Integrated analysis of <strong>16 Post-Mortem reports</strong> and <strong>12 forensic laboratory findings</strong>
+        (ICAR-IVRI Izatnagar + NDVSU SWFH Jabalpur) — correlating PM pathology, toxicology,
+        histopathology, virology and 558-compartment GIS overlay.
+      </p>
+      <div class="stats-row" style="margin-top:28px;">
+        <div class="stat-card">
+          <div class="stat-value" style="color:#52b788;">18</div>
+          <div class="stat-label">Elephant Deaths</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" style="color:#e07b54;">9</div>
+          <div class="stat-label">Human Deaths</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" style="color:#5bb3e8;">20mo</div>
+          <div class="stat-label">Study Period</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" style="color:#f1c40f;">₹48.25L</div>
+          <div class="stat-label">Compensation Paid</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" style="color:#a78ee8;">558</div>
+          <div class="stat-label">Compartments</div>
+        </div>
+      </div>
+      <p class="confidential-tag">Confidential · Raigarh Forest Division · Compiled 27 May 2026</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ SLIDE 2 ══ -->
+  <div class="slide" id="slide-2">
+    <div class="slide-header" style="color:rgba(255,255,255,0.5);">
+      <span class="slide-title-bar">Study Scope &amp; Data Sources</span>
+      <span class="slide-num">2 / 20</span>
+    </div>
+    <div class="slide-body">
+      <h2 style="color:white; margin-bottom:16px;">Study Scope &amp; Data Sources</h2>
+      <div class="grid-3" style="margin-bottom:16px;">
+        <div class="info-box" style="border-color:#2c5f8a; border-left:3px solid #2c5f8a;">
+          <h4 style="color:#5bb3e8;">📋 PM Reports</h4>
+          <p class="small">16 official Post-Mortem reports · 18 elephants · Raigarh &amp; Dharamjaigarh Forest Divisions · Verified by Veterinary Surgeons</p>
+        </div>
+        <div class="info-box" style="border-color:#27ae60; border-left:3px solid #27ae60;">
+          <h4 style="color:#52b788;">🔬 Lab Reports</h4>
+          <p class="small">12 forensic lab reports · ICAR-IVRI CWL Izatnagar · NDVSU SWFH Jabalpur · Toxicology + Histopathology + Virology</p>
+        </div>
+        <div class="info-box" style="border-color:#8e44ad; border-left:3px solid #8e44ad;">
+          <h4 style="color:#ce9ef8;">🗺 GIS / KMZ</h4>
+          <p class="small">558 compartments · Raigarh Van Mandal boundary · 4 Ranges · 84 Beats · Geo-tagged death locations</p>
+        </div>
+        <div class="info-box" style="border-color:#e67e22; border-left:3px solid #e67e22;">
+          <h4 style="color:#ffcc80;">💀 Human Casualty</h4>
+          <p class="small">5-year official record · 9 human deaths · Compensation: ₹48,25,000 · Bilaspur Circle verified</p>
+        </div>
+        <div class="info-box" style="border-color:#c0392b; border-left:3px solid #c0392b;">
+          <h4 style="color:#ff8a80;">⚠ Arsenic Finding</h4>
+          <p class="small">Novel discovery Dec 2025 · Arsenic in tissue samples from 2 calves — Tamnar + Bangursiya · Histopathology + tox confirmed</p>
+        </div>
+        <div class="info-box" style="border-color:#f39c12; border-left:3px solid #f39c12;">
+          <h4 style="color:#ffe082;">🏛 Admin Record</h4>
+          <p class="small">DFO Raigarh divisional letter · PIL No. 89/2024 (Suo Moto) · Staff suspension documented · Proven intervention: Dehardih</p>
+        </div>
+      </div>
+      <h3 style="color:#5bb3e8; margin-bottom:10px;">Five-Year Elephant Mortality Timeline — Raigarh Van Mandal</h3>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-year">2021-22</div>
+          <div class="timeline-val" style="color:#52b788;">1</div>
+          <div class="timeline-label">Elephant (est.)</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2022-23</div>
+          <div class="timeline-val" style="color:#f39c12;">3</div>
+          <div class="timeline-label">Elephants</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2023-24</div>
+          <div class="timeline-val" style="color:#52b788;">0</div>
+          <div class="timeline-label">Nil</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2024-25</div>
+          <div class="timeline-val" style="color:#e67e22;">8</div>
+          <div class="timeline-label">Elephants</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2025-26</div>
+          <div class="timeline-val" style="color:#c0392b;">9*</div>
+          <div class="timeline-label">Elephants (ongoing)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ SLIDE 3 ══ -->
+  <div class="slide" id="slide-3">
+    <div class="slide-header" style="color:rgba(255,255,255,0.5);">
+      <span class="slide-title-bar">Cause of Death — Distribution &amp; Root Causes</span>
+      <span class="slide-num">3 / 20</span>
+    </div>
+    <div class="slide-body">
+      <h2 style="color:white; margin-bottom:6px;">Cause of Death — 18 Deaths</h2>
+      <p class="small" style="margin-bottom:20px; color:#ff8a80; font-weight:700;">83% of deaths from human-modified hazards — ZERO viral or poisoning cause found in any lab test.</p>
+      <div class="cause-bar">
+        <div class="cause-bar-label"><span style="color:#5bb3e8;">💧 Drowning</span><span style="color:#5bb3e8; font-size:18px; font-weight:800;">10 deaths · 55.6%</span></div>
+        <div class="cause-bar-track"><div class="cause-bar-fill" style="width:55.6%; background:#2980b9;"></div></div>
+        <p class="small" style="margin-top:4px;">All victims ≤3 yr · 8 water bodies · No toxin/virus found · Zero cases before field intervention</p>
+      </div>
+      <div class="cause-bar" style="margin-top:14px;">
+        <div class="cause-bar-label"><span style="color:#ff8a80;">⚡ Electrocution</span><span style="color:#ff8a80; font-size:18px; font-weight:800;">4 deaths · 22.2%</span></div>
+        <div class="cause-bar-track"><div class="cause-bar-fill" style="width:22.2%; background:#c0392b;"></div></div>
+        <p class="small" style="margin-top:4px;">2 incidents · Same Tamnar Range · 11 kV wire · Pre-warned · PIL 89/2024 filed</p>
+      </div>
+      <div class="cause-bar" style="margin-top:14px;">
+        <div class="cause-bar-label"><span style="color:#ffcc80;">🦴 Head Trauma</span><span style="color:#ffcc80; font-size:18px; font-weight:800;">1 death · 5.6%</span></div>
+        <div class="cause-bar-track"><div class="cause-bar-fill" style="width:5.6%; background:#e67e22;"></div></div>
+        <p class="small" style="margin-top:4px;">Karkatta Nadi · Skull fracture · Steep bank fall · No external wound</p>
+      </div>
+      <div class="cause-bar" style="margin-top:14px;">
+        <div class="cause-bar-label"><span style="color:#80e5a0;">🌿 Disease/Malnutrition</span><span style="color:#80e5a0; font-size:18px; font-weight:800;">1 death · 5.6%</span></div>
+        <div class="cause-bar-track"><div class="cause-bar-fill" style="width:5.6%; background:#27ae60;"></div></div>
+        <p class="small" style="margin-top:4px;">3-month calf · 14 kg (normal ~100 kg) · Starvation / maternal loss</p>
+      </div>
+      <div class="cause-bar" style="margin-top:14px;">
+        <div class="cause-bar-label"><span style="color:#ce9ef8;">❓ Under Investigation</span><span style="color:#ce9ef8; font-size:18px; font-weight:800;">2 deaths · 11.1%</span></div>
+        <div class="cause-bar-track"><div class="cause-bar-fill" style="width:11.1%; background:#8e44ad;"></div></div>
+        <p class="small" style="margin-top:4px;">Kurkut Nadi · 5–6 day decomposed · 106 cm blackish neck ring on male</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ SLIDE 4 ══ -->
+  <div class="slide" id="slide-4">
+    <div class="slide-header" style="color:rgba(255,255,255,0.5);">
+      <span class="slide-title-bar">Age &amp; Sex Distribution — The Calf Catastrophe</span>
+      <span class="slide-num">4 / 20</span>
+    </div>
+    <div class="slide-body two-col">
+      <div class="col">
+        <h2 style="color:white;">Age &amp; Sex Distribution</h2>
+        <div class="alert-box orange" style="margin:10px 0;">
+          <span style="font-size:22px;">🐘</span>
+          <span><strong>61% of deaths (11/18) are calves ≤24 months</strong> — fingerprint of an acute environmental hazard, not natural attrition</span>
+        </div>
+        <div class="info-box" style="border-left:3px solid #2980b9;">
+          <h4 style="color:#5bb3e8; margin-bottom:8px;">💧 DROWNING = Exclusively the Young</h4>
+          <p class="small">Ages: 2.5, 5, 5, 5.5, 6, 6, 7, 21, 24, 24 months</p>
+          <p class="small">Median: <strong>6 months</strong> · Maximum: <strong>24 months</strong></p>
+          <p class="small" style="color:#ff8a80; font-weight:700; margin-top:6px;">NOT ONE drowning victim was over 3 years old.</p>
+        </div>
+        <div class="info-box" style="border-left:3px solid #c0392b; margin-top:10px;">
+          <h4 style="color:#ff8a80; margin-bottom:8px;">⚡ ELECTROCUTION = Large-Bodied</h4>
+          <p class="small">Ages: 2.5, 25, 55, 65 years — large adults contact overhead wires.</p>
+          <p class="small">One calf died only from proximity during herd contact.</p>
+        </div>
+        <div class="info-box" style="margin-top:10px;">
+          <h4 style="margin-bottom:6px;">Sex Distribution</h4>
+          <div style="display:flex; gap:20px; align-items:center; margin-top:8px;">
+            <div style="text-align:center;">
+              <div style="font-size:26px; font-weight:800; color:#5bb3e8;">10 ♂</div>
+              <div class="small">Male (55.6%)</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:26px; font-weight:800; color:#f48fb1;">8 ♀</div>
+              <div class="small">Female (44.4%)</div>
+            </div>
+          </div>
+          <p class="small" style="margin-top:8px; color:#ffcc80;">Drowning skews male: 7/10 drowning victims are male calves. Exploratory behaviour increases water-body exposure.</p>
+        </div>
+      </div>
+      <div class="col">
+        <h3 style="color:#52b788; margin-bottom:12px;">4 Biomechanical Reasons Calves Drown While Adults Walk Through the Same Water</h3>
+        <div class="info-box" style="border-left:3px solid #52b788; margin-bottom:10px;">
+          <h4 style="color:#52b788;">📏 Height</h4>
+          <p class="small">Calf = 0.8–1.2m · Adult = 2.5m. Same pool, lethal for calf only.</p>
+        </div>
+        <div class="info-box" style="border-left:3px solid #f39c12; margin-bottom:10px;">
+          <h4 style="color:#ffe082;">💪 Strength</h4>
+          <p class="small">Mud traps calf limbs. Adult's mass frees it; calf exhausts itself.</p>
+        </div>
+        <div class="info-box" style="border-left:3px solid #2980b9; margin-bottom:10px;">
+          <h4 style="color:#5bb3e8;">🧭 Behaviour</h4>
+          <p class="small">Male calves explore more, enter water first — 70% of victims are male.</p>
+        </div>
+        <div class="info-box" style="border-left:3px solid #c0392b; margin-bottom:10px;">
+          <h4 style="color:#ff8a80;">☠ Toxin Load</h4>
+          <p class="small">Calves ingest more contaminated water per kg; arsenic hits them hardest.</p>
+        </div>
+        <div class="alert-box orange">
+          <span>⚠</span>
+          <span>Escape ramps must be <strong>calf-scaled</strong> (≤1:4 slope, firm substrate) — an adult-friendly ramp may be inaccessible to a 6-month calf.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ SLIDE 5 ══ -->
+  <div class="slide" id="slide-5">
+    <div class="slide-header" style="color:rgba(255,255,255,0.5);">
+      <span class="slide-title-bar">Temporal Pattern — May Pulse, October Peak &amp; Monsoon Silence</span>
+      <span class="slide-num">5 / 20</span>
+    </div>
+    <div class="slide-body">
+      <h2 style="color:white; margin-bottom:20px;">Temporal Pattern — When Do Elephants Die?</h2>
+      <div class="grid-2" style="margin-bottom:16px;">
+        <div class="info-box" style="border-left:4px solid #e67e22;">
+          <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:8px;">
+            <span style="font-size:36px; font-weight:900; color:#e67e22;">5</span>
+            <div>
+              <div style="font-size:13px; font-weight:700; color:#ffcc80;">MAY · Deadliest Month (27.8%)</div>
+            </div>
+          </div>
+          <p class="small">Pre-monsoon pools shrink into deep muddy traps — calves cannot escape. Summer calving adds vulnerable newborns.</p>
+        </div>
+        <div class="info-box" style="border-left:4px solid #c0392b;">
+          <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:8px;">
+            <span style="font-size:36px; font-weight:900; color:#c0392b;">4</span>
+            <div>
+              <div style="font-size:13px; font-weight:700; color:#ff8a80;">OCTOBER · Electrocution Peak (22.2%)</div>
+            </div>
+          </div>
+          <p class="small">Post-monsoon vegetation flush draws herds into corridors where wires hang amid tall bamboo.</p>
+        </div>
+        <div class="info-box" style="border-left:4px solid #2980b9;">
+          <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:8px;">
+            <span style="font-size:36px; font-weight:900; color:#2980b9;">5</span>
+            <div>
+              <div style="font-size:13px; font-weight:700; color:#5bb3e8;">WINTER DEC–FEB · Drowning Cluster (27.8%)</div>
+            </div>
+          </div>
+          <p class="small">Persistent cold-season water scarcity concentrates herds at hazardous water bodies.</p>
+        </div>
+        <div class="info-box" style="border-left:4px solid #27ae60;">
+          <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:8px;">
+            <span style="font-size:36px; font-weight:900; color:#27ae60;">0</span>
+            <div>
+              <div style="font-size:13px; font-weight:700; color:#80e5a0;">MONSOON JUN–SEP · ZERO Deaths</div>
+            </div>
+          </div>
+          <p class="small">Abundant dispersed water — no crowding at hazardous sites.</p>
+        </div>
+      </div>
+      <div class="alert-box green">
+        <span>💡</span>
+        <span><strong>The monsoon silence is the key control.</strong> When water is abundant and dispersed, deaths drop to zero. This proves the structural hazard theory — not disease, not poison.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ SLIDE 6 ══ -->
+  <div class="slide" id="slide-6">
+    <div class="slide-header" style="color:rgba(255,255,255,0.5);">
+      <span class="slide-title-bar">Geospatial Analysis — 558 Compartments · 4 Ranges · Hotspots</span>
+      <span class="slide-num">6 / 20</span>
+    </div>
+    <div class="slide-body two-col">
+      <div class="col">
+        <h2 style="color:white; margin-bottom:14px;">Mortality Hotspots by Range</h2>
+        <div class="info-box" style="border-left:4px solid #c0392b; margin-bottom:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h4 style="color:#ff8a80;">GHARGHODA RANGE</h4>
+            <span class="badge badge-red">7 deaths</span>
+          </div>
+          <p class="small">166 compartments · Charmar · Deharidih · Chharratangar · Karkatta Nadi · Pankhatadam · Kurkut Nadi</p>
+        </div>
+        <div class="info-box" style="border-left:4px solid #e67e22; margin-bottom:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h4 style="color:#ffcc80;">TAMNAR RANGE</h4>
+            <span class="badge badge-orange">6 deaths</span>
+          </div>
+          <p class="small">159 compartments · Kachkoba · Kerakhol · Saraipali ⚠ · Jhingol · Kerajharia</p>
+        </div>
+        <div class="info-box" style="border-left:4px solid #f39c12; margin-bottom:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h4 style="color:#ffe082;">RAIGARH RANGE</h4>
+            <span class="badge badge-orange">2 deaths</span>
+          </div>
+          <p class="small">162 compartments · Bangursiya ⚠ Arsenic · Kantajhariya</p>
+        </div>
+        <div class="info-box" style="border-left:4px solid #27ae60; margin-bottom:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h4 style="color:#80e5a0;">KHARSIYA RANGE</h4>
+            <span class="badge badge-green">0 elephant deaths</span>
+          </div>
+          <p class="small">71 compartments · No elephant deaths recorded; 2 human deaths</p>
+        </div>
+        <div class="info-box" style="border-left:4px solid #8e44ad;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h4 style="color:#ce9ef8;">CHHAL RANGE (DHJ)</h4>
+            <span class="badge badge-purple">3 deaths</span>
+          </div>
+          <p class="small">Ghoghra Dam · 511 RF Kerajharia · Amamuda Talab — NEW 2026 cluster</p>
+        </div>
+      </div>
+      <div class="col">
+        <h3 style="color:#5bb3e8; margin-bottom:12px;">Water Body Risk Index</h3>
+        <table class="data-table">
+          <thead>
+            <tr><th>Rank</th><th>Water Body</th><th>Deaths</th><th>Flags</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>#1</td><td>Bangursiya Pond</td><td style="color:#ff8a80; font-weight:700;">2d</td><td><span class="badge badge-purple">As⚠</span></td></tr>
+            <tr><td>#2</td><td>Karkatta Nadi/Dam</td><td style="color:#ff8a80; font-weight:700;">3d</td><td>—</td></tr>
+            <tr><td>#3</td><td>Saraipali</td><td style="color:#ffcc80; font-weight:700;">1d</td><td><span class="badge badge-purple">As⚠</span></td></tr>
+            <tr><td>#4</td><td>Kurkut Nadi</td><td style="color:#ffcc80; font-weight:700;">2d</td><td>—</td></tr>
+            <tr><td>#5</td><td>Pankhatadam</td><td style="color:#ffcc80; font-weight:700;">2d</td><td>—</td></tr>
+            <tr><td>#6</td><td>Amamuda Talab</td><td style="color:#ffe082; font-weight:700;">1d</td><td>—</td></tr>
+            <tr><td>#7</td><td>Ghoghra Dam</td><td style="color:#ffe082; font-weight:700;">1d</td><td>—</td></tr>
+            <tr><td>#8</td><td>511 RF Kerajharia</td><td style="color:#ffe082; font-weight:700;">1d</td><td>—</td></tr>
+          </tbody>
+        </table>
+        <div class="alert-box green" style="margin-top:16px;">
+          <span>✅</span>
+          <span><strong>Proven:</strong> Dehardih pond clearance (10,620 m²) halted deaths at that site — direct evidence intervention works.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ SLIDE 7 ══ -->
+  <div class="slide" id="slide-7">
+    <div class="slide-header" style="color:rgba(255,255,255,0.5);">
+      <span class="slide-title-bar">Drowning — Root Cause Analysis &amp; Evidence Chain</span>
+      <span class="slide-num">7 / 20</span>
+    </div>
+    <div class="slide-body two-col">
+      <div class="col">
+        <h2 style="color:white; margin-bottom:12px;">Drowning — Root Cause Analysis</h2>
+        <div class="info-box" style="border-left:3px solid #2980b9; margin-bottom:10px;">
+          <h4 style="color:#5bb3e8; margin-bottom:6px;">Proximate Mechanism</h4>
+          <p class="small">Aspiration of muddy water into bronchi/alveoli → Asphyxia → cardio-respiratory arrest</p>
+          <p class="small" style="margin-top:4px;">PM: frothy fluid, water in stomach, bloating, bladder voiding, sand particles in airways</p>
+        </div>
+        <div class="info-box" style="border-left:3px solid #e67e22; margin-bottom:10px;">
+          <h4 style="color:#ffcc80; margin-bottom:6px;">Root Cause — Structural Hazard</h4>
+          <p class="small">• Steep/vertical banks on dams &amp; ponds<br>• Deep muddy bottoms trap calf limbs<br>• Pre-monsoon pool shrinkage removes egress<br>• Calves physically too short to self-extract<br>• No escape ledges or ramps engineered</p>
+        </div>
+        <div class="info-box" style="border-left:3px solid #c0392b;">
+          <h4 style="color:#ff8a80; margin-bottom:6px;">Systemic Failure</h4>
+          <p class="small">• Water bodies not designed for wildlife egress<br>• No early-warning monitoring at ranked sites<br>• Reactive (PM after death), not preventive<br>• Dehardih clearance not replicated<br>• May-season patrol protocol absent</p>
+        </div>
+      </div>
+      <div class="col">
+        <h3 style="color:#5bb3e8; margin-bottom:12px;">The Evidence Chain</h3>
+        <div style="display:flex; flex-direction:column; gap:0;">
+          <div class="info-box" style="border-radius:10px 10px 0 0; border-left:3px solid #52b788; margin-bottom:1px;">
+            <h4 style="color:#52b788;">① Death Found</h4>
+            <p class="small">Field staff report carcass location</p>
+          </div>
+          <div class="info-box" style="border-radius:0; border-left:3px solid #5bb3e8; margin-bottom:1px;">
+            <h4 style="color:#5bb3e8;">② Post-Mortem</h4>
+            <p class="small">Vet examines within hours of discovery</p>
+          </div>
+          <div class="info-box" style="border-radius:0; border-left:3px solid #f39c12; margin-bottom:1px;">
+            <h4 style="color:#ffe082;">③ Sample Collection</h4>
+            <p class="small">Preserved in formalin / salt / ice</p>
+          </div>
+          <div class="info-box" style="border-radius:0; border-left:3px solid #e67e22; margin-bottom:1px;">
+            <h4 style="color:#ffcc80;">④ Lab Testing</h4>
+            <p class="small">ICAR-IVRI Izatnagar or NDVSU Jabalpur</p>
+          </div>
+          <div class="info-box" style="border-radius:0 0 10px 10px; border-left:3px solid #c0392b;">
+            <h4 style="color:#ff8a80;">⑤ Final Verdict</h4>
+            <p class="small">PM + Lab together = definitive cause of death</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ SLIDE 8 ══ -->
+  <div class="slide" id="slide-8">
+    <div class="slide-header" style="color:rgba(255,255,255,0.5);">
+      <span class="slide-title-bar">Electrocution — 4 Deaths · 2 Incidents · Same Range · 12 Months Apart</span>
+      <span class="slide-num">8 / 20</span>
+    </div>
+    <div class="slide-body two-col">
+      <div class="col">
+        <div class="alert-box red" style="margin-bottom:12px;">
+          <span>⚡</span>
+          <span>INCIDENT 1 — 26 October 2024 · Kachkoba, Tamnar</span>
+        </div>
+        <div class="info-box" style="border-left:4px solid #c0392b;">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+            <span class="badge badge-red">3 DEATHS</span>
+          </div>
+          <p class="small">Makna (tuskless) ♂ 65 yr · Female ♀ 55 yr · Female calf ♀ 2.5 yr</p>
+          <div class="sep"></div>
+          <p class="small"><strong>PM:</strong> Trunk burn 25×10×1.5 cm · Blister formation · Unclotted tarry blood</p>
+          <p class="small"><strong>Evidence:</strong> 11 kV wire broken on ground, below standard 3.45 m height</p>
+          <div class="sep"></div>
+          <p class="small" style="color:#ff8a80;"><strong>⚠ Electricity dept notified DAY BEFORE — failed to act</strong></p>
+          <p class="small" style="color:#ffcc80;">Consequence: 2 field staff suspended · PIL 89/2024 filed</p>
+        </div>
+      </div>
+      <div class="col">
+        <div class="alert-box red" style="margin-bottom:12px;">
+          <span>⚡</span>
+          <span>INCIDENT 2 — 20 October 2025 · Kerakhol East, Tamnar</span>
+        </div>
+        <div class="info-box" style="border-left:4px solid #c0392b;">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+            <span class="badge badge-red">1 DEATH</span>
+          </div>
+          <p class="small">Male ♂ 25 years · 3,200 kg</p>
+          <div class="sep"></div>
+          <p class="small"><strong>PM:</strong> 110 cm electric cord burn mark (longest documented) · Unclotted dark blood in empty heart chambers · Multi-organ haemorrhage</p>
+          <div class="sep"></div>
+          <p class="small" style="color:#ff8a80;"><strong>Recurrence in same Tamnar Range — 12 months after PIL + suspension</strong></p>
+        </div>
+        <div class="alert-box red" style="margin-top:14px;">
+          <span>🔺</span>
+          <span><strong>Critical Pattern:</strong> PIL, staff suspension and formal notification did NOT prevent recurrence. No permanent infrastructure fix was made. Total: <strong>7 elephant electrocution deaths across 4 incidents</strong> in Raigarh Van Mandal.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ SLIDE 9 ══ -->
+  <div class="slide" id="slide-9">
+    <div class="slide-header" style="color:rgba(255,255,255,0.5);">
+      <span class="slide-title-bar">Arsenic Contamination — The Hidden Threat</span>
+      <span class="slide-num">9 / 20</span>
+    </div>
+    <div class="slide-body two-col">
+      <div class="col">
+        <h2 style="color:#ce9ef8; margin-bottom:12px;">☠ Arsenic Contamination</h2>
+        <p class="small" style="color:#ffcc80; font-weight:700; margin-bottom:12px;">Found Only Through Histopathology — a Year After the First Deaths</p>
+        <div class="info-box" style="border-left:4px solid #8e44ad; margin-bottom:10px;">
+          <h4 style="color:#ce9ef8;">Case 10 — Saraipali, Tamnar · Nov 2025</h4>
+          <p class="small">♂ Male calf · 7 months · ICAR-IVRI CAD-1274/25-26</p>
+          <div class="sep"></div>
+          <p class="small"><strong>Histopath:</strong> Liver — mild to moderate hepatocyte degeneration</p>
+          <p class="small"><span class="pos">TOXICOLOGY: ARSENIC POSITIVE</span></p>
+          <p class="small" style="margin-top:4px;">Diagnosis: Indicative of arsenic contaminant water/feed</p>
+        </div>
+        <div class="info-box" style="border-left:4px solid #8e44ad;">
+          <h4 style="color:#ce9ef8;">Case 11 — Bangursiya Pond · Dec 2025</h4>
+          <p class="small">♂ Male calf · 4–6 months · ICAR-IVRI</p>
+          <div class="sep"></div>
+          <p class="small"><strong>Histopath (detailed):</strong> Liver — engorged sinusoids + multifocal haemorrhages · Kidney — engorged glomeruli + haemorrhages · Lung — alveolar oedema · Brain — neuronal satellitosis + neuronophagia · Heart — engorged intramyocardial vessels · Spleen — severe follicle hyperplasia</p>
+          <p class="small" style="margin-top:6px;"><span class="pos">ARSENIC POSITIVE</span> · <span class="neg">EEHV qPCR: NEGATIVE</span> · <span class="neg">No pathogens</span></p>
+          <p class="small" style="color:#ffcc80; font-weight:700; margin-top:4px;">Diagnosis: ACUTE PNEUMONIA — Lab changed the PM diagnosis</p>
+        </div>
+      </div>
+      <div class="col">
+        <div class="alert-box purple">
+          <span>❗</span>
+          <span><strong>Why This Changes Everything:</strong> Both calves were labelled 'drowning' at PM — but lab revealed arsenic causing liver, kidney and brain damage BEFORE they entered water. Arsenic weakens calves, making escape impossible.</span>
+        </div>
+        <h3 style="color:#ce9ef8; margin:16px 0 10px;">Plausible Arsenic Sources — Raigarh Coal Belt</h3>
+        <div class="info-box" style="border-left:3px solid #7f8c8d; margin-bottom:8px;">
+          <h4>⛏ Coal Mining</h4>
+          <p class="small">Raigarh sits in India's most coal-intensive belt. Fly-ash pond leachate and mine runoff are well-documented arsenic sources.</p>
+        </div>
+        <div class="info-box" style="border-left:3px solid #7f8c8d; margin-bottom:8px;">
+          <h4>🪨 Geogenic</h4>
+          <p class="small">Natural arsenic-bearing geology leaching into groundwater — concentrates in shrinking pre-monsoon pools.</p>
+        </div>
+        <div class="info-box" style="border-left:3px solid #7f8c8d; margin-bottom:14px;">
+          <h4>🌾 Agro-chemical</h4>
+          <p class="small">Legacy arsenical pesticide residues in agricultural runoff at forest edges.</p>
+        </div>
+        <div class="alert-box red">
+          <span>🚨</span>
+          <span><strong>URGENT:</strong> Immediate arsenic &amp; heavy-metal water survey of ALL elephant water bodies in Tamnar–Bangursiya corridor. Escalate to State PCB + District Health.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ SLIDE 10 ══ -->
+  <div class="slide" id="slide-10">
+    <div class="slide-header" style="color:rgba(255,255,255,0.5);">
+      <span class="slide-title-bar">Complete Forensic Laboratory Register — All 12 Reports</span>
+      <span class="slide-num">10 / 20</span>
+    </div>
+    <div class="slide-body">
+      <h2 style="color:white; margin-bottom:16px;">Complete Forensic Laboratory Register — 12 Reports</h2>
+      <div class="grid-3" style="margin-bottom:16px;">
+        <div class="info-box" style="border-left:3px solid #27ae60;">
+          <h4 style="color:#80e5a0;">☠ Toxicology</h4>
+          <p class="small">13 cases tested</p>
+          <p class="small neg" style="font-size:14px; margin-top:4px;">ALL NEGATIVE</p>
+          <p class="small">No poisoning in any case</p>
+        </div>
+        <div class="info-box" style="border-left:3px solid #27ae60;">
+          <h4 style="color:#80e5a0;">🌿 HCN Screen</h4>
+          <p class="small">4 cases · May 2025</p>
+          <p class="small neg" style="font-size:14px; margin-top:4px;">ALL NEGATIVE</p>
+          <p class="small">Bamboo cyanide ruled out</p>
+        </div>
+        <div class="info-box" style="border-left:3px solid #27ae60;">
+          <h4 style="color:#80e5a0;">🦠 EEHV-1 PCR</h4>
+          <p class="small">7 cases — ICAR-IVRI + NDVSU</p>
+          <p class="small neg" style="font-size:14px; margin-top:4px;">ALL NEGATIVE</p>
+          <p class="small">No herpesvirus epidemic</p>
+        </div>
+        <div class="info-box" style="border-left:3px solid #27ae60;">
+          <h4 style="color:#80e5a0;">❤ EMCV</h4>
+          <p class="small">2 cases · Mar 2026</p>
+          <p class="small neg" style="font-size:14px; margin-top:4px;">ALL NEGATIVE</p>
+          <p class="small">Cardiac virus ruled out</p>
+        </div>
+        <div class="info-box" style="border-left:3px solid #c0392b;">
+          <h4 style="color:#ff8a80;">🔬 Histopathology</h4>
+          <p class="small">4 cases · Dec 2025</p>
+          <p class="small pos" style="font-size:14px; margin-top:4px;">ARSENIC + PNEUMONIA</p>
+          <p class="small">Lab changed PM diagnosis</p>
+        </div>
+        <div class="info-box" style="border-left:3px solid #27ae60;">
+          <h4 style="color:#80e5a0;">🧫 Bacteriology</h4>
+          <p class="small">2 cases</p>
+          <p class="small neg" style="font-size:14px; margin-top:4px;">NO PATHOGENS</p>
+          <p class="small">No bacterial sepsis</p>
+        </div>
+      </div>
+      <div class="info-box" style="border-left:3px solid #5bb3e8;">
+        <h4 style="color:#5bb3e8; margin-bottom:6px;">Panel Evolution Over 15 Months</h4>
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+          <span class="badge badge-blue">Feb 2025: Tox only</span>
+          <span style="color:rgba(255,255,255,0.4);">→</span>
+          <span class="badge badge-green">Jul 2025: +HCN</span>
+          <span style="color:rgba(255,255,255,0.4);">→</span>
+          <span class="badge badge-purple">Dec 2025: +Histopath+EEHV+Bacteriology</span>
+          <span style="color:rgba(255,255,255,0.4);">→</span>
+          <span class="badge badge-orange">Mar 2026: +EMCV</span>
+          <span style="color:rgba(255,255,255,0.4);">→</span>
+          <span class="badge badge-red">May 2026: NDVSU EEHV-1 PCR</span>
+        </div>
+        <p class="small" style="margin-top:8px; opacity:0.7;">Labs: ICAR-IVRI Centre for Wildlife, Izatnagar · NDVSU School of Wildlife Forensic &amp; Health, Jabalpur</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ SLIDE 11 ══ -->
+  <div class="slide" id="slide-11">
+    <div class="slide-header" style="color:rgba(255,255,255,0.5);">
+      <span class="slide-title-bar">NEW CLUSTER — Dharamjaigarh · 3 Deaths in 16 Days (May 2026)</span>
+      <span class="slide-num">11 / 20</span>
+    </div>
+    <div class="slide-body">
+      <h2 style="color:white; margin-bottom:14px;">🆕 New Cluster — Chhal Range · 3 Deaths in 16 Days</h2>
+      <div class="grid-3" style="margin-bottom:14px;">
+        <div class="info-box" style="border-left:4px solid #e67e22;">
+          <h4 style="color:#ffcc80;">Case 16 · 08 May 2026</h4>
+          <p class="small">Ghoghra Dam · 502 RF · Singhijhap</p>
+          <p class="small" style="opacity:0.6; font-size:10px;">N 22°08'46" E 83°12'43"</p>
+          <div class="sep"></div>
+          <p class="small">♂ Male calf · ~6 months · ~350 kg</p>
+          <p class="small"><strong>PM:</strong> Brownish muddy fluid + sand in trachea · Frothy muddy water in bronchi/alveoli · Stomach full of muddy water</p>
+          <div class="sep"></div>
+          <p class="small"><span class="neg">EEHV-1 PCR: NEGATIVE</span></p>
+          <p class="small" style="color:#5bb3e8; font-weight:700;">VERDICT: DROWNING</p>
+        </div>
+        <div class="info-box" style="border-left:4px solid #e67e22;">
+          <h4 style="color:#ffcc80;">Case 17 · 11 May 2026</h4>
+          <p class="small">511 RF Kerajharia · Chhal Parisar</p>
+          <p class="small" style="opacity:0.6; font-size:10px;">N 22°09'56" E 83°06'58"</p>
+          <div class="sep"></div>
+          <p class="small">♂ Male calf · 5–6 months · ~250 kg</p>
+          <p class="small"><strong>PM:</strong> Tongue protruded · Blood+fluid from mouth · Mud in both eyes · Muddy fluid in trachea · Fluid + sand in lungs</p>
+          <div class="sep"></div>
+          <p class="small"><span class="neg">EEHV-1 PCR: NEGATIVE</span></p>
+          <p class="small" style="color:#5bb3e8; font-weight:700;">VERDICT: DROWNING</p>
+        </div>
+        <div class="info-box" style="border-left:4px solid #c0392b;">
+          <h4 style="color:#ff8a80;">Case 18 · 24 May 2026 ⚠</h4>
+          <p class="small">476 PF · Amamuda Talab · Pusalda</p>
+          <p class="small" style="opacity:0.6; font-size:10px;">N 22°06'00" E 83°09'31"</p>
+          <div class="sep"></div>
+          <p class="small">♂ Male calf · 1.5–2 years · ~475 kg</p>
+          <p class="small"><strong>PM:</strong> Rigor PRESENT · Muddy water in alveoli · HEART COMPLETELY EMPTY · Intestinal haemorrhages · Liver inflamed · Kidney haemorrhages · Vocal cord inflammation</p>
+          <div class="sep"></div>
+          <p class="small" style="color:#ff8a80; font-weight:700;">Lab PENDING — arsenic testing recommended</p>
+          <p class="small" style="color:#5bb3e8; font-weight:700;">VERDICT: DROWNING</p>
+        </div>
+      </div>
+      <div class="alert-box orange">
+        <span>🗺</span>
+        <span><strong>3 GPS-confirmed distinct water bodies · 3 male calves · 16 days · EEHV-1 negative × 2</strong> — Confirmed range-wide structural water hazard in Chhal Range. Arsenic testing pending for most severe Case 18.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ SLIDE 12 ══ -->
+  <div class="slide" id="slide-12">
+    <div class="slide-header" style="color:rgba(255,255,255,0.5);">
+      <span class="slide-title-bar">Human Fatalities — Elephant Conflict · 5-Year Official Record</span>
+      <span class="slide-num">12 / 20</span>
+    </div>
+    <div class="slide-body">
+      <h2 style="color:white; margin-bottom:20px;">Human Fatalities — Elephant Conflict · 5-Year Record</h2>
+      <div class="stats-row" style="justify-content:center; gap:40px; margin-bottom:28px;">
+        <div class="stat-card" style="min-width:160px;">
+          <div class="stat-value" style="color:#ff8a80;">9</div>
+          <div class="stat-label">Total Human Deaths</div>
+        </div>
+        <div class="stat-card" style="min-width:160px;">
+          <div class="stat-value" style="color:#f1c40f;">₹48.25L</div>
+          <div class="stat-label">Total Compensation Paid</div>
+        </div>
+        <div class="stat-card" style="min-width:160px;">
+          <div class="stat-value" style="color:#5bb3e8;">₹6L</div>
+          <div class="stat-label">Per-Death (Standard)</div>
+        </div>
+      </div>
+      <div class="alert-box orange" style="max-width:700px; margin:0 auto 20px;">
+        <span>📍</span>
+        <span>All human deaths GPS-tagged in 5-year record. Deaths distributed across Raigarh, Gharghoda, Tamnar, and Kharsiya ranges at elephant-human interface zones around forest periphery.</span>
+      </div>
+      <div class="info-box" style="max-width:700px; margin:0 auto;">
+        <h4 style="color:#ffcc80; margin-bottom:8px;">Compensation Distribution Note</h4>
+        <p class="small">Standard per-death compensation: ₹6 Lakh · Total 9 deaths = ₹54L expected, but ₹48.25L recorded — Baturakchhar (₹25,000) appears to be property damage compensation, not full death compensation · All records verified by Bilaspur Circle.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ SLIDE 13 ══ -->
+  <div class="slide" id="slide-13">
+    <div class="slide-header" style="color:rgba(255,255,255,0.5);">
+      <span class="slide-title-bar">GIS Compartment Map — 558 Forest Compartments + Mortality Overlay</span>
+      <span class="slide-num">13 / 20</span>
+    </div>
+    <div class="slide-body two-col">
+      <div class="col">
+        <h2 style="color:white; margin-bottom:12px;">GIS Compartment Overview</h2>
+        <div class="stats-row" style="flex-wrap:wrap; margin-bottom:14px;">
+          <div class="stat-card"><div class="stat-value" style="color:#52b788;">558</div><div class="stat-label">Compartments</div></div>
+          <div class="stat-card"><div class="stat-value" style="color:#5bb3e8;">84</div><div class="stat-label">Forest Beats</div></div>
+          <div class="stat-card"><div class="stat-value" style="color:#f1c40f;">4</div><div class="stat-label">Ranges</div></div>
+        </div>
+        <div class="grid-2">
+          <div class="info-box" style="border-left:3px solid #c0392b;">
+            <h4 style="color:#ff8a80;">Raigarh Range</h4>
+            <p class="small">162 compartments</p>
+          </div>
+          <div class="info-box" style="border-left:3px solid #e67e22;">
+            <h4 style="color:#ffcc80;">Gharghoda Range</h4>
+            <p class="small">166 compartments</p>
+          </div>
+          <div class="info-box" style="border-left:3px solid #f39c12;">
+            <h4 style="color:#ffe082;">Tamnar Range</h4>
+            <p class="small">159 compartments</p>
+          </div>
+          <div class="info-box" style="border-left:3px solid #27ae60;">
+            <h4 style="color:#80e5a0;">Kharsiya Range</h4>
+            <p class="small">71 compartments</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <h3 style="color:#5bb3e8; margin-bottom:10px;">Key Beats by Death Cause</h3>
+        <table class="data-table" style="font-size:11px;">
+          <thead>
+            <tr><th>Beat</th><th>Range</th><th>Cause</th><th>Deaths</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Kachkoba</td><td>Tamnar</td><td style="color:#ff8a80;">Electrocution</td><td>3</td></tr>
+            <tr><td>Kerakhol East</td><td>Tamnar</td><td style="color:#ff8a80;">Electrocution</td><td>1</td></tr>
+            <tr><td>Chharratangar</td><td>Gharghoda</td><td style="color:#ff8a80;">Electrocution</td><td>2</td></tr>
+            <tr><td>Amlidih + Pusalda</td><td>Gharghoda</td><td style="color:#ff8a80;">Electrocution</td><td>2</td></tr>
+            <tr><td>Deharidih/Charmar</td><td>Gharghoda</td><td style="color:#5bb3e8;">Drowning</td><td>3+</td></tr>
+            <tr><td>Saraipali</td><td>Tamnar</td><td><span style="color:#5bb3e8;">Drowning</span> <span class="badge badge-purple">As⚠</span></td><td>1</td></tr>
+            <tr><td>Bangursiya</td><td>Raigarh</td><td><span style="color:#5bb3e8;">Drowning</span> <span class="badge badge-purple">As⚠</span></td><td>2</td></tr>
+            <tr><td>Kaya</td><td>Gharghoda</td><td style="color:#ffcc80;">Trauma/Fall</td><td>1</td></tr>
+            <tr><td>Jhingol</td><td>Tamnar</td><td style="color:#80e5a0;">Malnutrition</td><td>1</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ SLIDE 14 ══ -->
+  <div class="slide" id="slide-14">
+    <div class="slide-header" style="color:rgba(255,255,255,0.5);">
+      <span class="slide-title-bar">Forensic Quality Audit — Strengths &amp; Gaps</span>
+      <span class="slide-num">14 / 20</span>
+    </div>
+    <div class="slide-body two-col">
+      <div class="col">
+        <h2 style="color:#80e5a0; margin-bottom:14px;">✓ Strengths</h2>
+        <div class="info-box" style="border-left:3px solid #27ae60; margin-bottom:8px;">
+          <h4 style="color:#80e5a0;">Dual-lab corroboration</h4>
+          <p class="small">ICAR-IVRI Izatnagar + NDVSU SWFH Jabalpur — two independent national reference labs</p>
+        </div>
+        <div class="info-box" style="border-left:3px solid #27ae60; margin-bottom:8px;">
+          <h4 style="color:#80e5a0;">Panel expansion over 15 months</h4>
+          <p class="small">Tox → +HCN → +Histopath+EEHV+Bacteriology → +EMCV → NDVSU PCR</p>
+        </div>
+        <div class="info-box" style="border-left:3px solid #27ae60; margin-bottom:8px;">
+          <h4 style="color:#80e5a0;">7-day turnaround</h4>
+          <p class="small">Chhal EEHV-1 result in 7 days (PM 08/05 → Result 15/05/2026)</p>
+        </div>
+        <div class="info-box" style="border-left:3px solid #27ae60; margin-bottom:8px;">
+          <h4 style="color:#80e5a0;">Chain of custody</h4>
+          <p class="small">Sealed/witnessed samples; GPS in 2026 cases; multiple officer signatures</p>
+        </div>
+        <div class="info-box" style="border-left:3px solid #27ae60;">
+          <h4 style="color:#80e5a0;">Physical intervention proof</h4>
+          <p class="small">Dehardih 10,620 m² clearance executed — deaths stopped at that site</p>
+        </div>
+      </div>
+      <div class="col">
+        <h2 style="color:#ff8a80; margin-bottom:14px;">⚠ Gaps Requiring Correction</h2>
+        <div class="info-box" style="border-left:3px solid #c0392b; margin-bottom:8px;">
+          <h4 style="color:#ff8a80;">Histopathology started Dec 2025</h4>
+          <p class="small">First 8 deaths had toxicology only — arsenic found a year late</p>
+        </div>
+        <div class="info-box" style="border-left:3px solid #c0392b; margin-bottom:8px;">
+          <h4 style="color:#ff8a80;">No arsenic retrospective screening</h4>
+          <p class="small">Cases 1–9, 16–18 never tested — archived formalin blocks should be screened</p>
+        </div>
+        <div class="info-box" style="border-left:3px solid #c0392b; margin-bottom:8px;">
+          <h4 style="color:#ff8a80;">Decomposition defeats diagnosis</h4>
+          <p class="small">Kurkut cases (5–6 days old) — faster detection + cold transport needed</p>
+        </div>
+        <div class="info-box" style="border-left:3px solid #c0392b; margin-bottom:8px;">
+          <h4 style="color:#ff8a80;">Neck ring forensically unresolved</h4>
+          <p class="small">Case 13's 106-cm neck mark needs physical forensic re-examination</p>
+        </div>
+        <div class="info-box" style="border-left:3px solid #c0392b;">
+          <h4 style="color:#ff8a80;">No water/soil environmental sampling</h4>
+          <p class="small">Arsenic source unconfirmed — no water samples collected at contaminated sites</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ SLIDE 15 ══ -->
+  <div class="slide" id="slide-15">
+    <div class="slide-header" style="color:rgba(255,255,255,0.5);">
+      <span class="slide-title-bar">UNRESOLVED — Kurkut Nadi Deaths · The One Remaining Mystery</span>
+      <span class="slide-num">15 / 20</span>
+    </div>
+    <div class="slide-body two-col">
+      <div class="col">
+        <h2 style="color:#ff8a80; margin-bottom:12px;">❓ Kurkut Nadi Deaths — 11 March 2026</h2>
+        <div class="alert-box red" style="margin-bottom:12px;">
+          <span>📍</span>
+          <span>Compartment 1273 RF · Kurkut Nadi river · Gharghoda Range</span>
+        </div>
+        <div class="info-box" style="border-left:4px solid #c0392b; margin-bottom:10px;">
+          <h4 style="color:#ff8a80;">Case 13: Male calf · 2.5–3 years · ~400 kg</h4>
+          <h4 style="color:#f48fb1;">Case 14: Female calf · ~2.5 years</h4>
+          <div class="sep"></div>
+          <p class="small">Both carcasses 5–6 days old at time of PM · Advanced putrefaction · Organs liquefied</p>
+          <div class="sep"></div>
+          <p class="small" style="color:#ff8a80; font-weight:700;">⚠ CRITICAL — Male (Case 13): Blackish circumferential mark around neck — Measured length: 106 cm — Maggot infestation at neck — Heart completely empty</p>
+        </div>
+        <div class="info-box" style="border-left:3px solid #8e44ad;">
+          <h4 style="color:#ce9ef8; margin-bottom:6px;">Lab Results (ICAR-IVRI)</h4>
+          <p class="small">Histopathology: Advanced autolysis — too decomposed to interpret</p>
+          <p class="small"><span class="neg">EEHV qPCR: NEGATIVE</span> · <span class="neg">EMCV RT-PCR: NEGATIVE</span></p>
+          <p class="small"><span class="neg">Toxicology: ALL NEGATIVE</span> (HCN, nitrate, metals, pesticides)</p>
+          <p class="small" style="color:#ffcc80; font-weight:700; margin-top:4px;">Diagnosis: Nothing specifically diagnosed (tissues decomposed)</p>
+        </div>
+      </div>
+      <div class="col">
+        <h3 style="color:#ff8a80; margin-bottom:12px;">Analysis — What the Lab Doesn't Answer</h3>
+        <div class="alert-box red">
+          <span>🔍</span>
+          <span>The lab clears all pathogens and toxins but cannot answer the critical question: <strong>what caused the 106-cm circumferential neck mark?</strong></span>
+        </div>
+        <div class="info-box" style="margin-top:12px; border-left:3px solid #c0392b;">
+          <h4 style="color:#ff8a80; margin-bottom:6px;">Morphology Consistent With</h4>
+          <p class="small">✅ Wire snare or cable entanglement</p>
+          <p class="small">✅ Dual simultaneous death at same site — unusual</p>
+        </div>
+        <div class="info-box" style="margin-top:10px; border-left:3px solid #27ae60;">
+          <h4 style="color:#80e5a0; margin-bottom:6px;">NOT Consistent With</h4>
+          <p class="small">❌ Drowning</p>
+          <p class="small">❌ Electrocution</p>
+          <p class="small">❌ Natural disease</p>
+        </div>
+        <div class="alert-box red" style="margin-top:14px;">
+          <span>🚨</span>
+          <span><strong>RECOMMENDATION:</strong> Physical forensic re-examination of Case 13 neck mark photographs. Sweep Comp 1273 RF for wire snares/traps. Treat as potential wildlife crime until excluded. Engage WCCB.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ SLIDE 16 ══ -->
+  <div class="slide" id="slide-16">
+    <div class="slide-header" style="color:rgba(255,255,255,0.5);">
+      <span class="slide-title-bar">Why This Is NOT a Disease Problem — It Is a Safety Engineering Problem</span>
+      <span class="slide-num">16 / 20</span>
+    </div>
+    <div class="slide-body">
+      <h2 style="color:white; margin-bottom:10px;">Why This Is NOT a Disease Problem</h2>
+      <div class="alert-box green" style="margin-bottom:16px;">
+        <span style="font-size:16px;">🔬</span>
+        <span><strong>ZERO</strong> viral disease · <strong>ZERO</strong> bacterial pathogen · <strong>ZERO</strong> conventional poison · <strong>ZERO</strong> HCN · <strong>ZERO</strong> EEHV · <strong>ZERO</strong> EMCV — across 12 lab reports and 29+ samples (Feb 2025 – May 2026)</span>
+      </div>
+      <div class="grid-3" style="margin-bottom:16px;">
+        <div class="info-box" style="border-left:3px solid #c0392b;">
+          <h4 style="color:#ff8a80;">Would disease explain it?</h4>
+          <p class="small"><span class="neg">EEHV-1: NEGATIVE</span> in all cases</p>
+          <p class="small"><span class="neg">EMCV: NEGATIVE</span></p>
+          <p class="small"><span class="neg">No bacteria</span> in heart blood</p>
+          <p class="small">Uniform PM pathology across 2 divisions</p>
+        </div>
+        <div class="info-box" style="border-left:3px solid #e67e22;">
+          <h4 style="color:#ffcc80;">Would poisoning explain it?</h4>
+          <p class="small"><span class="neg">HCN (bamboo cyanide): NEGATIVE</span></p>
+          <p class="small"><span class="neg">Pesticides: NEGATIVE</span></p>
+          <p class="small"><span class="neg">Nitrate-nitrite: NEGATIVE</span></p>
+          <p class="small"><span class="neg">Heavy metals (exc. arsenic): NEGATIVE</span></p>
+        </div>
+        <div class="info-box" style="border-left:3px solid #27ae60;">
+          <h4 style="color:#80e5a0;">What DOES explain it?</h4>
+          <p class="small"><span class="pos">PM frothy muddy water</span> in airways = drowning</p>
+          <p class="small"><span class="pos">Burns + dark unclotted blood</span> = electrocution</p>
+          <p class="small"><span class="pos">Structural water hazards</span> = calf traps</p>
+          <p class="small"><span class="pos">Unprotected 11kV wires</span> = electrocution risk</p>
+        </div>
+      </div>
+      <div class="alert-box green">
+        <span>✅</span>
+        <span><strong>Proof that physical intervention works:</strong> Dehardih dam — forest dept cleared 10,620 m² of aquatic vegetation → <strong>NO FURTHER CALF DEATHS at that site.</strong> Documented in DFO Raigarh administrative letter. The same approach, at scale, stops the deaths.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ SLIDE 17 ══ -->
+  <div class="slide" id="slide-17">
+    <div class="slide-header" style="color:rgba(255,255,255,0.5);">
+      <span class="slide-title-bar">Prioritised Action Matrix — P1 to P4</span>
+      <span class="slide-num">17 / 20</span>
+    </div>
+    <div class="slide-body">
+      <h2 style="color:white; margin-bottom:16px;">Prioritised Action Matrix (1 of 2) — P1 to P4</h2>
+      <div class="priority-item">
+        <div class="priority-tag p1">P1</div>
+        <div>
+          <div style="display:flex; gap:8px; align-items:center; margin-bottom:4px; flex-wrap:wrap;">
+            <h4 style="color:#ff8a80;">Arsenic water survey</h4>
+            <span class="badge badge-red">IMMEDIATE</span>
+            <span class="badge badge-blue">Forest + PCB + Health</span>
+          </div>
+          <p class="small">Sample all elephant-use water bodies for arsenic + heavy metals. Repeat Feb–May dry-down. Escalate to State PCB + District Health (livestock + public health risk).</p>
+        </div>
+      </div>
+      <div class="priority-item">
+        <div class="priority-tag p2">P2</div>
+        <div>
+          <div style="display:flex; gap:8px; align-items:center; margin-bottom:4px; flex-wrap:wrap;">
+            <h4 style="color:#ffcc80;">Calf-scaled egress ramps at top-4 water bodies</h4>
+            <span class="badge badge-orange">Pre-monsoon 2026</span>
+            <span class="badge badge-blue">Forest Division</span>
+          </div>
+          <p class="small">≤1:4 gradient ramps + firm substrate at Bangursiya, Karkatta, Saraipali, Kurkut. Calf-scaled not adult-scaled. Replicate Dehardih model.</p>
+        </div>
+      </div>
+      <div class="priority-item">
+        <div class="priority-tag p3">P3</div>
+        <div>
+          <div style="display:flex; gap:8px; align-items:center; margin-bottom:4px; flex-wrap:wrap;">
+            <h4 style="color:#ffe082;">Power-line audit &amp; rectification — Tamnar corridor</h4>
+            <span class="badge badge-orange">Before Oct 2026</span>
+            <span class="badge badge-blue">Forest + CSPDCL</span>
+          </div>
+          <p class="small">Audit all 11 kV lines through elephant corridors. Enforce ≥6 m clearance or underground/insulation. Bind electricity dept under PIL 89/2024 compliance.</p>
+        </div>
+      </div>
+      <div class="priority-item">
+        <div class="priority-tag p4">P4</div>
+        <div>
+          <div style="display:flex; gap:8px; align-items:center; margin-bottom:4px; flex-wrap:wrap;">
+            <h4 style="color:#80e5a0;">May–October intensive patrol protocol</h4>
+            <span class="badge badge-green">Annual Seasonal</span>
+            <span class="badge badge-blue">Range Offices</span>
+          </div>
+          <p class="small">Daily monitoring of ranked water bodies and power corridors in peak-death windows. Calf-rescue rapid-response teams on standby.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ SLIDE 18 ══ -->
+  <div class="slide" id="slide-18">
+    <div class="slide-header" style="color:rgba(255,255,255,0.5);">
+      <span class="slide-title-bar">Prioritised Action Matrix — P5 to P8</span>
+      <span class="slide-num">18 / 20</span>
+    </div>
+    <div class="slide-body">
+      <h2 style="color:white; margin-bottom:16px;">Prioritised Action Matrix (2 of 2) — P5 to P8</h2>
+      <div class="priority-item">
+        <div class="priority-tag p5">P5</div>
+        <div>
+          <div style="display:flex; gap:8px; align-items:center; margin-bottom:4px; flex-wrap:wrap;">
+            <h4 style="color:#5bb3e8;">Mandatory histopathology + arsenic for every PM</h4>
+            <span class="badge badge-red">IMMEDIATE</span>
+            <span class="badge badge-blue">Vet Services</span>
+          </div>
+          <p class="small">Standardise the Dec 2025 expanded panel (histo+tox+virology+metals) for ALL future cases. Retrospectively test archived blocks from Cases 1–9, 16–18.</p>
+        </div>
+      </div>
+      <div class="priority-item">
+        <div class="priority-tag p6">P6</div>
+        <div>
+          <div style="display:flex; gap:8px; align-items:center; margin-bottom:4px; flex-wrap:wrap;">
+            <h4 style="color:#ce9ef8;">Criminal re-investigation — Kurkut Nadi neck ring</h4>
+            <span class="badge badge-red">IMMEDIATE</span>
+            <span class="badge badge-blue">Forest + WCCB</span>
+          </div>
+          <p class="small">Physical forensic re-examination of Case 13's 106 cm neck mark for snare evidence. Sweep Comp 1273 RF. Treat as potential wildlife crime until excluded.</p>
+        </div>
+      </div>
+      <div class="priority-item">
+        <div class="priority-tag p7">P7</div>
+        <div>
+          <div style="display:flex; gap:8px; align-items:center; margin-bottom:4px; flex-wrap:wrap;">
+            <h4 style="color:#80e5a0;">Carcass rapid-detection &amp; cold-transport</h4>
+            <span class="badge badge-green">6 Months</span>
+            <span class="badge badge-blue">Forest Division</span>
+          </div>
+          <p class="small">Camera-trap + informer network at ranked sites. Portable refrigeration for samples. Target &lt;48hr detection-to-PM to prevent decomposition blocking diagnosis.</p>
+        </div>
+      </div>
+      <div class="priority-item">
+        <div class="priority-tag p8">P8</div>
+        <div>
+          <div style="display:flex; gap:8px; align-items:center; margin-bottom:4px; flex-wrap:wrap;">
+            <h4>Herd-level census &amp; calf survivorship study</h4>
+            <span class="badge" style="background:#2c3e50; color:white;">12 Months</span>
+            <span class="badge badge-blue">Forest + Research</span>
+          </div>
+          <p class="small">Establish baseline. Quantify population impact of 11 lost calves. Track calving sites. Identify herds with calves for targeted water protection.</p>
+        </div>
+      </div>
+      <div class="info-box" style="margin-top:12px; border-color:#27ae60;">
+        <p class="small" style="color:#80e5a0; font-weight:700;">Priority: <span style="color:#ff8a80;">P1–P3 = before Oct 2026 (critical)</span> · <span style="color:#ffcc80;">P4–P6 = immediate</span> · <span style="color:#5bb3e8;">P7–P8 = within 12 months</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ SLIDE 19 ══ -->
+  <div class="slide" id="slide-19">
+    <div class="slide-header" style="color:rgba(255,255,255,0.5);">
+      <span class="slide-title-bar">Concluding Assessment</span>
+      <span class="slide-num">19 / 20</span>
+    </div>
+    <div class="slide-body">
+      <h2 style="color:white; margin-bottom:6px;">Concluding Assessment</h2>
+      <p style="color:#52b788; font-size:16px; font-weight:700; margin-bottom:16px;">This is not a disease event. It is a solvable habitat-safety failure.</p>
+      <div class="conclusion-point" style="background:rgba(192,57,43,0.15); border:1px solid rgba(192,57,43,0.4);">
+        <span class="conclusion-icon">⚠️</span>
+        <div>
+          <h4 style="color:#ff8a80; margin-bottom:4px;">83% of deaths from human-modified hazards</h4>
+          <p class="small">Unsafe water bodies, unprotected power lines, one suspected snare. NOT natural attrition — a solvable infrastructure failure.</p>
+        </div>
+      </div>
+      <div class="conclusion-point" style="background:rgba(39,174,96,0.12); border:1px solid rgba(39,174,96,0.4);">
+        <span class="conclusion-icon">🔬</span>
+        <div>
+          <h4 style="color:#80e5a0; margin-bottom:4px;">Zero viral/bacterial/chemical cause — 12 lab reports, 29+ samples</h4>
+          <p class="small">No epidemic. EEHV negative. HCN negative. The herd is safe from infectious disease.</p>
+        </div>
+      </div>
+      <div class="conclusion-point" style="background:rgba(142,68,173,0.15); border:1px solid rgba(142,68,173,0.4);">
+        <span class="conclusion-icon">☠️</span>
+        <div>
+          <h4 style="color:#ce9ef8; margin-bottom:4px;">Arsenic contamination confirmed — urgent escalation needed</h4>
+          <p class="small">Tamnar–Bangursiya water bodies. An urgent water-quality and public-health escalation is needed beyond the Forest Dept alone.</p>
+        </div>
+      </div>
+      <div class="conclusion-point" style="background:rgba(230,126,34,0.15); border:1px solid rgba(230,126,34,0.4);">
+        <span class="conclusion-icon">🐘</span>
+        <div>
+          <h4 style="color:#ffcc80; margin-bottom:4px;">61% calf mortality — a generational reproductive crisis</h4>
+          <p class="small">11 lost calves in 20 months will echo through herd demographics for decades.</p>
+        </div>
+      </div>
+      <div class="conclusion-point" style="background:rgba(39,174,96,0.15); border:1px solid rgba(39,174,96,0.4);">
+        <span class="conclusion-icon">✅</span>
+        <div>
+          <h4 style="color:#80e5a0; margin-bottom:4px;">Drowning IS preventable — the Dehardih clearance proves it</h4>
+          <p class="small">Calf-scaled egress ramps + aquatic vegetation clearance + pre-monsoon patrol = the solution.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ SLIDE 20 ══ -->
+  <div class="slide" id="slide-20">
+    <div class="forest-overlay"></div>
+    <div class="slide-body" style="justify-content:center; align-items:center; text-align:center;">
+      <p style="font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#52b788; font-weight:600; margin-bottom:20px;">Raigarh Van Mandal · Chhattisgarh</p>
+      <h1 style="color:white; margin-bottom:20px; font-size:clamp(24px,3.5vw,48px);">Wild Elephant Mortality<br><span style="color:#52b788;">Complete Forensic Analysis</span></h1>
+      <div style="height:2px; width:80px; background:#52b788; margin:0 auto 24px;"></div>
+      <div class="stats-row" style="justify-content:center;">
+        <div class="stat-card"><div class="stat-value" style="color:#52b788;">18</div><div class="stat-label">Elephant Deaths</div></div>
+        <div class="stat-card"><div class="stat-value" style="color:#ce9ef8;">12</div><div class="stat-label">Lab Reports</div></div>
+        <div class="stat-card"><div class="stat-value" style="color:#5bb3e8;">29+</div><div class="stat-label">Samples Tested</div></div>
+        <div class="stat-card"><div class="stat-value" style="color:#52b788;">0</div><div class="stat-label">Disease Cause</div></div>
+      </div>
+      <p style="opacity:0.5; margin-top:28px; font-size:12px; letter-spacing:1px;">RAIGARH FOREST DIVISION + DHARAMJAIGARH FOREST DIVISION</p>
+      <p style="opacity:0.35; margin-top:6px; font-size:11px;">Compiled 27 May 2026 · ICAR-IVRI + NDVSU SWFH Laboratory Evidence · CONFIDENTIAL</p>
+    </div>
+  </div>
+
+</div><!-- /slideshow -->
+
+<!-- Navigation -->
+<div class="nav">
+  <button id="prevBtn" onclick="changeSlide(-1)" disabled>← Prev</button>
+  <span class="slide-counter" id="counter">1 / 20</span>
+  <button id="nextBtn" onclick="changeSlide(1)">Next →</button>
+</div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+
+  function showSlide(n) {
+    slides[current].classList.remove('active');
+    current = (n + total) % total;
+    slides[current].classList.add('active');
+    document.getElementById('counter').textContent = (current + 1) + ' / ' + total;
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === total - 1;
+  }
+
+  function changeSlide(dir) { showSlide(current + dir); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   changeSlide(-1);
+  });
+
+  // Touch/swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(dx) > 50) changeSlide(dx < 0 ? 1 : -1);
+  });
+</script>
+</body>
+</html>
