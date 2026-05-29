@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DFO Raigarh — Dak Register System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#163a27; --primary-light:#1e5035; --primary-dark:#0d2318;
+  --accent:#c8921a; --accent-light:#e0a830;
+  --bg:#f0f4f1; --card:#ffffff; --text:#1c2526; --text-muted:#6b7a80;
+  --border:#e2e8e4; --danger:#e74c3c; --success:#27ae60;
+  --shadow-sm:0 1px 4px rgba(0,0,0,.08);
+  --shadow-md:0 4px 16px rgba(0,0,0,.12);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.16);
+  --r:8px; --r-lg:14px; --r-xl:20px;
+  /* legacy aliases */
+  --forest:#163a27; --forest-light:#1e5035; --gold:#c8921a; --ink:#1c2526;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{
+  font-family:'Inter','Noto Sans Devanagari',sans-serif;
+  background:var(--bg); color:var(--text); font-size:14px; line-height:1.5;
+}
+.mono{font-family:'JetBrains Mono',monospace;}
+.dev{font-family:'Noto Sans Devanagari','Inter',sans-serif;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;}
+input,select,textarea{font-family:inherit;font-size:14px;}
+a{color:inherit;}
+
+/* ---------- LOGIN ---------- */
+#loginOverlay{
+  position:fixed;inset:0;z-index:5000;display:none;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#0d2318 0%,#163a27 50%,#0d2318 100%);
+  padding:20px;
+}
+.login-card{
+  background:var(--card);width:100%;max-width:440px;border-radius:24px;
+  box-shadow:var(--shadow-lg);padding:40px 36px;text-align:center;
+  animation:popIn .4s ease;
+}
+@keyframes popIn{from{opacity:0;transform:translateY(20px) scale(.97);}to{opacity:1;transform:none;}}
+.login-logo{
+  width:72px;height:72px;border-radius:50%;margin:0 auto 18px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-light));
+  display:flex;align-items:center;justify-content:center;font-size:36px;
+  box-shadow:0 0 24px rgba(200,146,26,.6),0 4px 14px rgba(0,0,0,.2);
+}
+.login-card h1{font-size:28px;font-weight:800;color:var(--primary);letter-spacing:-.5px;}
+.login-card .sub{color:var(--text-muted);font-size:14px;margin-bottom:28px;}
+.login-field{position:relative;margin-bottom:16px;text-align:left;}
+.login-field .ico{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;opacity:.7;}
+.login-field input{
+  width:100%;padding:14px 14px 14px 42px;border:1.5px solid var(--border);
+  border-radius:12px;background:#fafcfa;transition:.15s;
+}
+.login-field input:focus{outline:none;border-color:var(--primary);background:#fff;box-shadow:0 0 0 3px rgba(22,58,39,.1);}
+.login-btn{
+  width:100%;padding:14px;border-radius:12px;color:#fff;font-weight:700;font-size:15px;
+  background:linear-gradient(135deg,var(--primary),var(--primary-light));
+  box-shadow:var(--shadow-sm);transition:.15s;margin-top:6px;
+}
+.login-btn:hover{filter:brightness(1.08);box-shadow:var(--shadow-md);}
+.login-error{display:none;color:var(--danger);font-size:13px;font-weight:600;margin-bottom:12px;}
+.cred-hint{
+  margin-top:24px;background:#f0f4f1;border:1px solid var(--border);border-radius:12px;
+  padding:14px 16px;text-align:left;font-size:13px;
+}
+.cred-hint .ttl{font-weight:700;color:var(--primary);margin-bottom:8px;}
+.cred-row{
+  display:flex;justify-content:space-between;padding:6px 8px;border-radius:8px;cursor:pointer;
+  transition:.12s;color:var(--text-muted);
+}
+.cred-row:hover{background:#e2e8e4;color:var(--text);}
+.cred-row b{color:var(--text);}
+
+/* ---------- TOPBAR ---------- */
+#app{display:none;}
+.topbar{
+  position:sticky;top:0;z-index:300;height:64px;background:var(--card);
+  border-bottom:2px solid var(--accent);box-shadow:var(--shadow-sm);
+  display:flex;align-items:center;padding:0 20px;gap:16px;
+}
+.brand{display:flex;align-items:center;gap:12px;}
+.brand-logo{
+  width:40px;height:40px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent-light));
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+  box-shadow:0 0 10px rgba(200,146,26,.4);
+}
+.brand-txt b{font-size:17px;font-weight:800;color:var(--primary);display:block;line-height:1.1;}
+.brand-txt span{font-size:11px;color:var(--text-muted);}
+.nav-tabs{display:flex;gap:6px;margin-left:24px;}
+.nav-tab{
+  padding:8px 16px;border-radius:8px;font-weight:600;color:var(--text-muted);
+  display:flex;align-items:center;gap:6px;transition:.12s;
+}
+.nav-tab:hover{background:var(--bg);color:var(--text);}
+.nav-tab.active{background:var(--primary);color:#fff;}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:14px;}
+.nav-date{font-size:12px;color:var(--text-muted);font-weight:500;}
+.nav-user{display:flex;align-items:center;gap:10px;}
+.nav-avatar{
+  width:38px;height:38px;border-radius:50%;background:var(--primary);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;
+}
+.nav-user-meta{line-height:1.2;}
+.nav-user-meta b{font-size:13px;display:block;}
+.nav-role-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px;}
+.role-admin{background:rgba(200,146,26,.18);color:var(--accent);}
+.role-staff{background:rgba(39,174,96,.15);color:var(--success);}
+.logout-btn{
+  padding:8px 14px;border-radius:8px;background:var(--bg);color:var(--text);font-weight:600;
+  border:1px solid var(--border);transition:.12s;
+}
+.logout-btn:hover{background:var(--danger);color:#fff;border-color:var(--danger);}
+
+/* ---------- SUB-TOOLBAR ---------- */
+.subbar{
+  background:var(--primary);color:#fff;padding:10px 20px;display:flex;align-items:center;gap:16px;
+  font-size:13px;
+}
+.subbar .sb-date{font-weight:500;opacity:.92;}
+.subbar button{color:#fff;background:rgba(255,255,255,.12);padding:6px 12px;border-radius:8px;font-weight:600;transition:.12s;}
+.subbar button:hover{background:rgba(255,255,255,.25);}
+.subbar .sb-right{margin-left:auto;display:flex;gap:8px;align-items:center;}
+.view-switch{display:flex;gap:4px;background:rgba(0,0,0,.2);padding:3px;border-radius:8px;}
+.view-switch button{background:transparent;padding:5px 12px;font-size:12px;}
+.view-switch button.active{background:var(--accent);}
+
+/* ---------- LAYOUT ---------- */
+.wrap{max-width:1280px;margin:0 auto;padding:22px 20px 60px;}
+.page{display:none;}
+.page.active{display:block;animation:fade .25s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);padding:22px;margin-bottom:20px;}
+.card h2{font-size:18px;font-weight:700;color:var(--primary);margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+.card .card-sub{color:var(--text-muted);font-size:13px;margin-bottom:18px;}
+.section-title{font-size:15px;font-weight:700;color:var(--primary);margin:0 0 12px;display:flex;align-items:center;gap:8px;}
+
+/* ---------- FORM ---------- */
+.grid{display:grid;gap:14px;}
+.grid-2{grid-template-columns:1fr 1fr;}
+.grid-3{grid-template-columns:1fr 1fr 1fr;}
+@media(max-width:760px){.grid-2,.grid-3{grid-template-columns:1fr;}}
+.field{display:flex;flex-direction:column;gap:6px;}
+.field label{font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;}
+.field input,.field select,.field textarea{
+  padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--r);background:#fafcfa;transition:.12s;width:100%;
+}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--primary);background:#fff;box-shadow:0 0 0 3px rgba(22,58,39,.08);}
+.field textarea{resize:vertical;min-height:64px;}
+.btn{padding:11px 20px;border-radius:var(--r);font-weight:700;transition:.12s;display:inline-flex;align-items:center;gap:7px;}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;box-shadow:var(--shadow-sm);}
+.btn-primary:hover{filter:brightness(1.08);}
+.btn-gold{background:linear-gradient(135deg,var(--accent),var(--accent-light));color:#fff;}
+.btn-ghost{background:var(--bg);color:var(--text);border:1px solid var(--border);}
+.btn-ghost:hover{background:var(--border);}
+.btn-danger{background:var(--danger);color:#fff;}
+.form-actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;}
+
+/* chip grid */
+.chip-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{
+  padding:7px 14px;border:1.5px solid var(--border);border-radius:20px;font-size:13px;font-weight:600;
+  color:var(--text-muted);background:#fafcfa;cursor:pointer;transition:.12s;user-select:none;
+}
+.chip:hover{border-color:var(--primary);color:var(--text);}
+.chip.sel{background:var(--primary);color:#fff;border-color:var(--primary);}
+
+/* priority pills */
+.pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;}
+.p-Normal{background:#eef2f0;color:var(--text-muted);}
+.p-Urgent{background:#fff3cd;color:#9a6c00;}
+.p-Critical{background:#fdecea;color:var(--danger);}
+.s-Pending{background:#fff3cd;color:#9a6c00;}
+.s-InProgress,.s-In\ Progress{background:#e3f0fb;color:#1f6fb2;}
+.s-Completed{background:#e8f7ee;color:var(--success);}
+.s-Closed{background:#eef2f0;color:var(--text-muted);}
+
+/* ---------- TABLE ---------- */
+.table-toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
+.table-toolbar input,.table-toolbar select{padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--r);background:#fff;}
+.table-toolbar input{flex:1;min-width:180px;}
+.spacer{flex:1;}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--r-lg);}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead th{
+  background:var(--primary);color:#fff;text-align:left;padding:11px 12px;font-weight:600;
+  font-size:12px;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;cursor:pointer;position:sticky;top:0;
+}
+thead th:hover{background:var(--primary-light);}
+tbody td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top;}
+tbody tr:hover{background:#fafcfa;}
+tbody tr:last-child td{border-bottom:none;}
+.empty-row td{text-align:center;padding:40px;color:var(--text-muted);}
+.act-btn{padding:5px 8px;border-radius:6px;font-size:14px;transition:.12s;}
+.act-edit{background:#eef2f0;}
+.act-edit:hover{background:var(--accent);}
+.act-del{background:#fdecea;}
+.act-del:hover{background:var(--danger);}
+.subj-cell{max-width:260px;}
+.subj-cell .summary{color:var(--text-muted);font-size:12px;margin-top:2px;}
+.marked-chips{display:flex;flex-wrap:wrap;gap:4px;}
+.marked-chips span{background:#eef2f0;padding:2px 8px;border-radius:12px;font-size:11px;}
+
+/* ---------- DASHBOARD ---------- */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:22px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden;}
+.stat-card .ico{position:absolute;right:14px;top:14px;font-size:26px;opacity:.25;}
+.stat-card .num{font-size:30px;font-weight:800;color:var(--primary);}
+.stat-card .lbl{font-size:12px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px;}
+.stat-card.gold .num{color:var(--accent);}
+.stat-card.danger .num{color:var(--danger);}
+.stat-card.success .num{color:var(--success);}
+.dash-2col{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+@media(max-width:860px){.dash-2col{grid-template-columns:1fr;}}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:13px;}
+.bar-row .nm{width:130px;flex-shrink:0;}
+.bar-track{flex:1;height:18px;background:var(--bg);border-radius:10px;overflow:hidden;}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--primary-light));border-radius:10px;}
+.bar-row .vl{width:30px;text-align:right;font-weight:700;}
+
+/* ---------- TOAST ---------- */
+#toastBox{position:fixed;bottom:24px;right:24px;z-index:4000;display:flex;flex-direction:column;gap:10px;}
+.toast{
+  background:var(--text);color:#fff;padding:13px 18px;border-radius:var(--r);box-shadow:var(--shadow-md);
+  font-weight:600;font-size:13px;display:flex;align-items:center;gap:10px;animation:slideIn .25s ease;min-width:240px;
+}
+.toast.success{background:var(--success);}
+.toast.error{background:var(--danger);}
+.toast.info{background:var(--primary);}
+@keyframes slideIn{from{opacity:0;transform:translateX(40px);}to{opacity:1;transform:none;}}
+
+/* ---------- MODAL / OVERLAY ---------- */
+.overlay{position:fixed;inset:0;z-index:1000;background:rgba(13,35,24,.55);display:none;align-items:center;justify-content:center;padding:20px;}
+.overlay.show{display:flex;}
+.modal{background:var(--card);border-radius:var(--r-xl);box-shadow:var(--shadow-lg);max-width:560px;width:100%;max-height:88vh;overflow-y:auto;padding:26px;animation:popIn .3s ease;}
+.modal h3{font-size:19px;font-weight:800;color:var(--primary);margin-bottom:4px;}
+.modal .modal-sub{color:var(--text-muted);font-size:13px;margin-bottom:18px;}
+.modal-close{float:right;font-size:22px;color:var(--text-muted);line-height:1;}
+.sec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:14px;}
+.sec-opt{border:1.5px solid var(--border);border-radius:var(--r-lg);padding:14px;text-align:center;cursor:pointer;transition:.12s;background:#fafcfa;}
+.sec-opt:hover{border-color:var(--primary);transform:translateY(-2px);box-shadow:var(--shadow-sm);}
+.sec-opt.sel{border-color:var(--accent);background:#fff8ec;}
+.sec-opt .si{font-size:26px;}
+.sec-opt .sn{font-weight:700;font-size:13px;margin-top:6px;color:var(--text);}
+.sec-opt .sd{font-size:11px;color:var(--text-muted);margin-top:2px;}
+
+/* subsystem boxes */
+.subsys{display:none;}
+.subsys.active{display:block;}
+.info-box{background:#f0f4f1;border-left:3px solid var(--accent);border-radius:var(--r);padding:12px 16px;font-size:13px;color:var(--text-muted);margin-bottom:16px;}
+.badge-count{background:var(--accent);color:#fff;border-radius:20px;padding:1px 8px;font-size:11px;font-weight:700;margin-left:6px;}
+.section-banner{
+  display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,var(--primary),var(--primary-light));
+  color:#fff;border-radius:var(--r-lg);padding:18px 22px;margin-bottom:20px;box-shadow:var(--shadow-sm);
+}
+.section-banner .bico{font-size:34px;}
+.section-banner b{font-size:20px;display:block;}
+.section-banner span{font-size:13px;opacity:.85;}
+.section-banner .chg{margin-left:auto;}
+</style>
+</head>
+<body>
+
+<!-- ================= LOGIN ================= -->
+<div id="loginOverlay">
+  <form class="login-card" onsubmit="doLogin(event)">
+    <div class="login-logo">🌿</div>
+    <h1>DFO Raigarh</h1>
+    <div class="sub">Dak Register System</div>
+    <div class="login-error" id="loginError"></div>
+    <div class="login-field">
+      <span class="ico">👤</span>
+      <input type="text" id="loginUsername" placeholder="Username" autocomplete="username" required>
+    </div>
+    <div class="login-field">
+      <span class="ico">🔒</span>
+      <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password" required>
+    </div>
+    <button type="submit" class="login-btn">Sign In</button>
+    <div class="cred-hint">
+      <div class="ttl">📋 Default Credentials</div>
+      <div class="cred-row" onclick="fillCred('admin','Admin@2024')"><span>Admin</span><b>admin / Admin@2024</b></div>
+      <div class="cred-row" onclick="fillCred('staff','Staff@2024')"><span>Staff</span><b>staff / Staff@2024</b></div>
+    </div>
+  </form>
+</div>
+
+<!-- ================= APP ================= -->
+<div id="app">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-logo">🌿</div>
+      <div class="brand-txt"><b>DFO Raigarh</b><span>Dak Register System</span></div>
+    </div>
+    <div class="nav-tabs admin-only">
+      <button class="nav-tab active" data-page="dashboard" onclick="switchPage('dashboard')">📊 Dashboard</button>
+      <button class="nav-tab" data-page="entry" onclick="switchPage('entry')">✏️ Staff Entry</button>
+    </div>
+    <div class="nav-right">
+      <span class="nav-date" id="navDate"></span>
+      <div class="nav-user">
+        <div class="nav-avatar" id="navUserInitials">--</div>
+        <div class="nav-user-meta">
+          <b id="navUserName">User</b>
+          <span class="nav-role-badge" id="navRoleBadge">--</span>
+        </div>
+      </div>
+      <button class="logout-btn" onclick="doLogout()">Logout</button>
+    </div>
+  </div>
+
+  <!-- SUB-TOOLBAR -->
+  <div class="subbar">
+    <span class="sb-date" id="sbDate"></span>
+    <button onclick="openSettings()">⚙️ Settings</button>
+    <div class="sb-right">
+      <button onclick="exportCSV()">⬇️ Export CSV</button>
+      <button onclick="printReport()">🖨️ Print</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <!-- ========== DASHBOARD (admin) ========== -->
+    <div class="page admin-only" id="page-dashboard">
+      <div class="stat-grid" id="statGrid"></div>
+      <div class="dash-2col">
+        <div class="card">
+          <div class="section-title">📂 Entries by Section</div>
+          <div id="dashBySection"></div>
+        </div>
+        <div class="card">
+          <div class="section-title">🚦 Status Overview</div>
+          <div id="dashByStatus"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title">🕐 Recent Entries</div>
+        <div class="tbl-wrap"><table><thead><tr>
+          <th>Date</th><th>Letter No.</th><th>Sender</th><th>Subject</th><th>Section</th><th>Priority</th><th>Status</th>
+        </tr></thead><tbody id="dashRecent"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- ========== STAFF ENTRY ========== -->
+    <div class="page active" id="page-entry">
+
+      <!-- Section banner -->
+      <div class="section-banner" id="sectionBanner">
+        <span class="bico" id="banIcon">📂</span>
+        <div><b id="banName">Section</b><span id="banDesc">—</span></div>
+        <button class="btn btn-gold chg" onclick="openChangeSection()">🔄 Change Section</button>
+      </div>
+
+      <!-- Admin section filter -->
+      <div class="card admin-only" style="padding:16px 22px;">
+        <div class="field" style="max-width:340px;">
+          <label>Section Filter (Admin)</label>
+          <select id="adminSectionFilter" onchange="onAdminSectionChange()"></select>
+        </div>
+      </div>
+
+      <!-- ===== LETTER FORM (default) ===== -->
+      <div class="subsys active" id="sub-letter">
+        <div class="card">
+          <h2>✏️ New Dak Entry</h2>
+          <div class="card-sub">Record an incoming letter / dak for this section.</div>
+          <form id="letterForm" onsubmit="saveLetter(event)">
+            <input type="hidden" id="editId">
+            <div class="grid grid-3">
+              <div class="field"><label>Date *</label><input type="date" id="fDate" required></div>
+              <div class="field"><label>Letter No. *</label><input type="text" id="fLetterNo" placeholder="e.g. 2024/RGH/0123" required></div>
+              <div class="field"><label>Priority</label>
+                <select id="fPriority"><option>Normal</option><option>Urgent</option><option>Critical</option></select>
+              </div>
+            </div>
+            <div class="grid grid-2" style="margin-top:14px;">
+              <div class="field"><label>Sender *</label>
+                <input list="senderList" id="fSender" placeholder="Type or pick sender" required>
+                <datalist id="senderList"></datalist>
+              </div>
+              <div class="field"><label>Category</label>
+                <select id="fCategory">
+                  <option>Letter</option><option>Notice</option><option>Order</option>
+                  <option>Application</option><option>Report</option><option>Complaint</option><option>Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="field" style="margin-top:14px;"><label>Subject *</label><input type="text" id="fSubject" placeholder="Subject of the letter" required></div>
+            <div class="field" style="margin-top:14px;"><label>Summary</label><textarea id="fSummary" placeholder="Brief summary / remarks"></textarea></div>
+            <div class="field" style="margin-top:14px;"><label>Status</label>
+              <select id="fStatus"><option>Pending</option><option>In Progress</option><option>Completed</option><option>Closed</option></select>
+            </div>
+            <div class="field" style="margin-top:14px;">
+              <label>Marked To</label>
+              <div class="chip-grid" id="markedChips"></div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">💾 Save Entry</button>
+              <button type="button" class="btn btn-ghost" onclick="resetLetterForm()">↺ Reset</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- ===== RTI SUBSYSTEM ===== -->
+      <div class="subsys" id="sub-rti">
+        <div class="card">
+          <h2>📜 RTI Application</h2>
+          <div class="card-sub">Track Right to Information applications, fees, and replies.</div>
+          <div class="info-box">RTI mode active — letters here are tracked with applicant, fee status, and 30-day reply deadline.</div>
+          <form id="rtiForm" onsubmit="saveRti(event)">
+            <input type="hidden" id="rtiEditId">
+            <div class="grid grid-3">
+              <div class="field"><label>Received Date *</label><input type="date" id="rtiDate" required></div>
+              <div class="field"><label>RTI No. *</label><input type="text" id="rtiNo" placeholder="RTI/2024/001" required></div>
+              <div class="field"><label>Fee Status</label>
+                <select id="rtiFee"><option>Paid</option><option>BPL (Exempt)</option><option>Pending</option></select>
+              </div>
+            </div>
+            <div class="grid grid-2" style="margin-top:14px;">
+              <div class="field"><label>Applicant Name *</label><input type="text" id="rtiApplicant" required></div>
+              <div class="field"><label>Reply Due Date</label><input type="date" id="rtiDue"></div>
+            </div>
+            <div class="field" style="margin-top:14px;"><label>Information Sought *</label><textarea id="rtiSubject" required></textarea></div>
+            <div class="grid grid-2" style="margin-top:14px;">
+              <div class="field"><label>Status</label>
+                <select id="rtiStatus"><option>Received</option><option>Under Process</option><option>Replied</option><option>Transferred</option><option>Rejected</option></select>
+              </div>
+              <div class="field"><label>Remarks</label><input type="text" id="rtiRemarks"></div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">💾 Save RTI</button>
+              <button type="button" class="btn btn-ghost" onclick="resetRtiForm()">↺ Reset</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- ===== STENO COMPLAINT SUBSYSTEM ===== -->
+      <div class="subsys" id="sub-steno">
+        <div class="card">
+          <h2>📝 Information / Complaint</h2>
+          <div class="card-sub">Steno section — record complaints and information requests with action tracking.</div>
+          <div class="info-box">Steno mode active — complaints tracked with complainant, type, and action taken.</div>
+          <form id="stenoForm" onsubmit="saveSteno(event)">
+            <input type="hidden" id="stenoEditId">
+            <div class="grid grid-3">
+              <div class="field"><label>Date *</label><input type="date" id="stDate" required></div>
+              <div class="field"><label>Ref No. *</label><input type="text" id="stNo" placeholder="STN/2024/01" required></div>
+              <div class="field"><label>Type</label>
+                <select id="stType"><option>Complaint</option><option>Information</option><option>Grievance</option><option>Suggestion</option></select>
+              </div>
+            </div>
+            <div class="grid grid-2" style="margin-top:14px;">
+              <div class="field"><label>Complainant Name *</label><input type="text" id="stName" required></div>
+              <div class="field"><label>Contact</label><input type="text" id="stContact" placeholder="Phone / Email"></div>
+            </div>
+            <div class="field" style="margin-top:14px;"><label>Subject / Complaint *</label><textarea id="stSubject" required></textarea></div>
+            <div class="field" style="margin-top:14px;"><label>Action Taken</label><textarea id="stAction"></textarea></div>
+            <div class="grid grid-2" style="margin-top:14px;">
+              <div class="field"><label>Status</label>
+                <select id="stStatus"><option>Pending</option><option>Under Inquiry</option><option>Resolved</option><option>Closed</option></select>
+              </div>
+              <div class="field"><label>Priority</label>
+                <select id="stPriority"><option>Normal</option><option>Urgent</option><option>Critical</option></select>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">💾 Save</button>
+              <button type="button" class="btn btn-ghost" onclick="resetStenoForm()">↺ Reset</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- ===== NOC TREE FELLING SUBSYSTEM ===== -->
+      <div class="subsys" id="sub-noc">
+        <div class="card">
+          <h2>🌳 NOC — Tree Felling Application</h2>
+          <div class="card-sub">Track tree felling NOC applications, species, count, and field verification.</div>
+          <div class="info-box">NOC mode active — applications tracked with location, tree species/count, and inspection status.</div>
+          <form id="nocForm" onsubmit="saveNoc(event)">
+            <input type="hidden" id="nocEditId">
+            <div class="grid grid-3">
+              <div class="field"><label>Date *</label><input type="date" id="nocDate" required></div>
+              <div class="field"><label>Application No. *</label><input type="text" id="nocNo" placeholder="NOC/2024/01" required></div>
+              <div class="field"><label>No. of Trees</label><input type="number" id="nocCount" min="0" value="0"></div>
+            </div>
+            <div class="grid grid-2" style="margin-top:14px;">
+              <div class="field"><label>Applicant Name *</label><input type="text" id="nocApplicant" required></div>
+              <div class="field"><label>Tree Species</label><input type="text" id="nocSpecies" placeholder="e.g. Sal, Teak, Mango"></div>
+            </div>
+            <div class="field" style="margin-top:14px;"><label>Location / Khasra *</label><input type="text" id="nocLocation" required></div>
+            <div class="field" style="margin-top:14px;"><label>Reason / Purpose</label><textarea id="nocReason"></textarea></div>
+            <div class="grid grid-2" style="margin-top:14px;">
+              <div class="field"><label>Field Verification</label>
+                <select id="nocVerify"><option>Not Done</option><option>Scheduled</option><option>Completed</option></select>
+              </div>
+              <div class="field"><label>Status</label>
+                <select id="nocStatus"><option>Received</option><option>Under Process</option><option>Approved</option><option>Rejected</option></select>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">💾 Save NOC</button>
+              <button type="button" class="btn btn-ghost" onclick="resetNocForm()">↺ Reset</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- ===== ENTRIES TABLE ===== -->
+      <div class="card">
+        <div class="section-title" id="tableTitle">📒 Register Entries</div>
+        <div class="table-toolbar">
+          <input type="text" id="searchBox" placeholder="🔍 Search entries..." oninput="renderEntryTable()">
+          <select id="statusFilter" onchange="renderEntryTable()">
+            <option value="">All Status</option>
+            <option>Pending</option><option>In Progress</option><option>Completed</option><option>Closed</option>
+            <option>Received</option><option>Under Process</option><option>Replied</option><option>Approved</option><option>Rejected</option>
+            <option>Under Inquiry</option><option>Resolved</option>
+          </select>
+          <select id="priorityFilter" onchange="renderEntryTable()">
+            <option value="">All Priority</option><option>Normal</option><option>Urgent</option><option>Critical</option>
+          </select>
+        </div>
+        <div class="tbl-wrap" id="entryTableWrap"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION SETUP OVERLAY (first-time staff) ===== -->
+<div class="overlay" id="setupOverlay">
+  <div class="modal">
+    <h3>👋 Welcome — Select Your Section</h3>
+    <div class="modal-sub">Choose the section you work in. This will be saved on this device.</div>
+    <div class="sec-grid" id="setupSecGrid"></div>
+    <div class="form-actions">
+      <button class="btn btn-primary" onclick="confirmSetup()">✔️ Continue</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CHANGE SECTION MODAL ===== -->
+<div class="overlay" id="changeSecOverlay">
+  <div class="modal">
+    <span class="modal-close" onclick="closeOverlay('changeSecOverlay')">×</span>
+    <h3>🔄 Change Section</h3>
+    <div class="modal-sub">Switch the active working section.</div>
+    <div class="sec-grid" id="changeSecGrid"></div>
+    <div class="form-actions">
+      <button class="btn btn-primary" onclick="confirmChangeSection()">✔️ Apply</button>
+      <button class="btn btn-ghost" onclick="closeOverlay('changeSecOverlay')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SETTINGS MODAL ===== -->
+<div class="overlay" id="settingsOverlay">
+  <div class="modal">
+    <span class="modal-close" onclick="closeOverlay('settingsOverlay')">×</span>
+    <h3>⚙️ Settings</h3>
+    <div class="modal-sub">Manage data and preferences.</div>
+    <div id="settingsBody"></div>
+  </div>
+</div>
+
+<div id="toastBox"></div>
+
+<script>
+/* =====================================================================
+   AUTH
+===================================================================== */
+const CREDENTIALS = {
+  admin: { password:'Admin@2024', role:'admin', displayName:'DFO Administrator' },
+  staff: { password:'Staff@2024', role:'staff', displayName:'Staff Member' }
+};
+const AUTH_SESSION_KEY = 'dfo_auth_v1';
+let currentSession = null;
+
+function fillCred(u,p){
+  document.getElementById('loginUsername').value=u;
+  document.getElementById('loginPassword').value=p;
+}
+function initAuth(){
+  const saved = sessionStorage.getItem(AUTH_SESSION_KEY);
+  if(saved){
+    try{ currentSession=JSON.parse(saved); onLoginSuccess(); }
+    catch(e){ sessionStorage.removeItem(AUTH_SESSION_KEY); showLoginScreen(); }
+  } else { showLoginScreen(); }
+}
+function showLoginScreen(){ document.getElementById('loginOverlay').style.display='flex'; }
+function doLogin(e){
+  if(e) e.preventDefault();
+  const username=document.getElementById('loginUsername').value.trim().toLowerCase();
+  const password=document.getElementById('loginPassword').value;
+  const errorEl=document.getElementById('loginError');
+  const cred=CREDENTIALS[username];
+  if(!cred || cred.password!==password){
+    errorEl.textContent='❌ Invalid username or password';
+    errorEl.style.display='block';
+    document.getElementById('loginPassword').value='';
+    return;
+  }
+  errorEl.style.display='none';
+  currentSession={username,role:cred.role,displayName:cred.displayName};
+  sessionStorage.setItem(AUTH_SESSION_KEY,JSON.stringify(currentSession));
+  document.getElementById('loginOverlay').style.display='none';
+  onLoginSuccess();
+}
+function doLogout(){ sessionStorage.removeItem(AUTH_SESSION_KEY); location.reload(); }
+function isAdmin(){ return currentSession && currentSession.role==='admin'; }
+
+function onLoginSuccess(){
+  document.getElementById('app').style.display='block';
+  const initials=currentSession.displayName.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('navUserInitials').textContent=initials;
+  document.getElementById('navUserName').textContent=currentSession.displayName;
+  const roleBadge=document.getElementById('navRoleBadge');
+  roleBadge.textContent=isAdmin()?'Admin':'Staff';
+  roleBadge.className='nav-role-badge '+(isAdmin()?'role-admin':'role-staff');
+  if(isAdmin()){
+    document.querySelectorAll('.admin-only').forEach(el=>el.style.removeProperty('display'));
+    document.querySelectorAll('.staff-only').forEach(el=>el.style.display='none');
+  } else {
+    document.querySelectorAll('.admin-only').forEach(el=>el.style.display='none');
+    document.querySelectorAll('.staff-only').forEach(el=>el.style.removeProperty('display'));
+  }
+  initApp();
+}
+
+/* =====================================================================
+   DATA / CONFIG
+===================================================================== */
+const STORE_KEY='dfo_raigarh_v3';
+const SEC_KEY='dfo_raigarh_section';
+const RTI_STORE='dfo_raigarh_rti_v1';
+const S_STORE='dfo_raigarh_steno_v1';
+const NOC_STORE='dfo_raigarh_noc_v1';
+const SENDER_STORE='dfo_raigarh_senders_v1';
+
+const SECTIONS=[
+  { name:'Expenditure-1',  icon:'💰', desc:'Budget letters'         },
+  { name:'Expenditure-2',  icon:'🌱', desc:'CAMPA / Plantation'     },
+  { name:'Audit',          icon:'🔎', desc:'Audit related'          },
+  { name:'RTI',            icon:'📜', desc:'RTI applications'       },
+  { name:'Court',          icon:'⚖️', desc:'Court cases'            },
+  { name:'Draftsman',      icon:'📐', desc:'Construction / Tender'  },
+  { name:'MNREGA',         icon:'🏗️', desc:'MNREGA works'           },
+  { name:'Establishment',  icon:'👥', desc:'Personnel / Leave'      },
+  { name:'Revenue',        icon:'📊', desc:'Revenue matters'        },
+  { name:'Wildlife',       icon:'🐘', desc:'Wildlife / Complaint'   },
+  { name:'Protection',     icon:'🔥', desc:'Forest Offence / Fire'  },
+  { name:'Steno',          icon:'📝', desc:'Info / Complaint'       },
+  { name:'Production',     icon:'🪵', desc:'Depot / Production'     },
+  { name:'Head Clerk',     icon:'📋', desc:'Reports / Guidelines'   },
+  { name:'NOC Tree Felling',icon:'🌳', desc:'Tree Felling Applications'},
+];
+const MARKED_OPTIONS=['DFO','SDO','RFO','Range Officer','Head Clerk','Accountant','Steno','Forester','File'];
+const DEFAULT_SENDERS=['CCF Raigarh','PCCF Office','Collector Raigarh','SDM','Govt. of Chhattisgarh','CGHC','Range Office Dharamjaigarh','Range Office Kharsia','Public'];
+
+let entries=[], rtiEntries=[], stenoEntries=[], nocEntries=[], senders=[];
+let activeSection=null;     // staff working section / admin filter
+let selectedSetupSection=null, selectedChangeSection=null;
+let sortKey=null, sortAsc=true;
+
+/* storage helpers */
+function load(key,def){ try{ return JSON.parse(localStorage.getItem(key))||def; }catch(e){ return def; } }
+function save(key,val){ localStorage.setItem(key,JSON.stringify(val)); }
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+
+/* =====================================================================
+   INIT APP (after login)
+===================================================================== */
+function initApp(){
+  entries=load(STORE_KEY,[]);
+  rtiEntries=load(RTI_STORE,[]);
+  stenoEntries=load(S_STORE,[]);
+  nocEntries=load(NOC_STORE,[]);
+  senders=load(SENDER_STORE,DEFAULT_SENDERS.slice());
+
+  const today=new Date();
+  const ds=today.toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('navDate').textContent=today.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+  document.getElementById('sbDate').textContent='📅 '+ds;
+
+  ['fDate','rtiDate','stDate','nocDate'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=today.toISOString().slice(0,10); });
+
+  buildMarkedChips();
+  refreshSenderList();
+
+  // admin section filter
+  if(isAdmin()){
+    const sel=document.getElementById('adminSectionFilter');
+    sel.innerHTML='<option value="__ALL__">— All Sections —</option>'+
+      SECTIONS.map(s=>`<option value="${s.name}">${s.icon} ${s.name}</option>`).join('');
+    activeSection=load(SEC_KEY,null) || '__ALL__';
+    sel.value=activeSection;
+    document.querySelector('.section-banner').style.display='none';
+    switchPage('dashboard');
+    refreshDash();
+    applySectionMode();
+    renderEntryTable();
+  } else {
+    // staff
+    const saved=load(SEC_KEY,null);
+    if(!saved){ openSetup(); }
+    else { activeSection=saved; applySectionMode(); renderEntryTable(); }
+    switchPage('entry');
+  }
+}
+
+/* =====================================================================
+   SECTION MODE — show right subsystem
+===================================================================== */
+function currentSection(){
+  if(isAdmin() && activeSection==='__ALL__') return null;
+  return activeSection;
+}
+function sectionMeta(name){ return SECTIONS.find(s=>s.name===name); }
+
+function applySectionMode(){
+  const sec=currentSection();
+  // hide all subsystems
+  document.querySelectorAll('.subsys').forEach(s=>s.classList.remove('active'));
+
+  // banner (staff)
+  if(!isAdmin()){
+    const m=sectionMeta(activeSection);
+    document.getElementById('banIcon').textContent=m?m.icon:'📂';
+    document.getElementById('banName').textContent=activeSection||'Section';
+    document.getElementById('banDesc').textContent=m?m.desc:'—';
+  }
+
+  // choose subsystem form
+  let formId='sub-letter';
+  if(sec==='RTI') formId='sub-rti';
+  else if(sec==='Steno') formId='sub-steno';
+  else if(sec==='NOC Tree Felling') formId='sub-noc';
+  // admin "All" -> default letter form (generic)
+  if(isAdmin() && !sec) formId='sub-letter';
+
+  document.getElementById(formId).classList.add('active');
+
+  // table title
+  const tt=document.getElementById('tableTitle');
+  tt.textContent='📒 '+(sec?sec+' — Entries':'All Register Entries');
+}
+
+function onAdminSectionChange(){
+  activeSection=document.getElementById('adminSectionFilter').value;
+  save(SEC_KEY,activeSection);
+  applySectionMode();
+  renderEntryTable();
+}
+
+/* =====================================================================
+   MARKED-TO CHIPS
+===================================================================== */
+function buildMarkedChips(){
+  const box=document.getElementById('markedChips');
+  box.innerHTML=MARKED_OPTIONS.map(o=>`<span class="chip" data-val="${o}" onclick="toggleChip(this)">${o}</span>`).join('');
+}
+function toggleChip(el){ el.classList.toggle('sel'); }
+function getMarkedTo(){ return [...document.querySelectorAll('#markedChips .chip.sel')].map(c=>c.dataset.val); }
+function setMarkedTo(arr){
+  document.querySelectorAll('#markedChips .chip').forEach(c=>{
+    c.classList.toggle('sel',(arr||[]).includes(c.dataset.val));
+  });
+}
+
+/* =====================================================================
+   SENDER LEARNING
+===================================================================== */
+function refreshSenderList(){
+  document.getElementById('senderList').innerHTML=senders.map(s=>`<option value="${escAttr(s)}">`).join('');
+}
+function learnSender(name){
+  name=name.trim();
+  if(name && !senders.includes(name)){ senders.push(name); save(SENDER_STORE,senders); refreshSenderList(); }
+}
+
+/* =====================================================================
+   LETTER ENTRIES
+===================================================================== */
+function saveLetter(e){
+  e.preventDefault();
+  const sec=currentSection() || (isAdmin()?'General':activeSection);
+  const id=document.getElementById('editId').value;
+  const obj={
+    id:id||uid(), type:'letter', section:sec,
+    date:document.getElementById('fDate').value,
+    letterNo:document.getElementById('fLetterNo').value.trim(),
+    sender:document.getElementById('fSender').value.trim(),
+    category:document.getElementById('fCategory').value,
+    subject:document.getElementById('fSubject').value.trim(),
+    summary:document.getElementById('fSummary').value.trim(),
+    priority:document.getElementById('fPriority').value,
+    status:document.getElementById('fStatus').value,
+    markedTo:getMarkedTo(),
+    ts:Date.now()
+  };
+  learnSender(obj.sender);
+  if(id){ const i=entries.findIndex(x=>x.id===id); if(i>-1) entries[i]=obj; toast('Entry updated','success'); }
+  else { entries.unshift(obj); toast('Entry saved','success'); }
+  save(STORE_KEY,entries); resetLetterForm(); renderEntryTable(); if(isAdmin()) refreshDash();
+}
+function resetLetterForm(){
+  document.getElementById('letterForm').reset();
+  document.getElementById('editId').value='';
+  document.getElementById('fDate').value=new Date().toISOString().slice(0,10);
+  setMarkedTo([]);
+}
+function editLetter(id){
+  const x=entries.find(e=>e.id===id); if(!x) return;
+  document.getElementById('editId').value=x.id;
+  document.getElementById('fDate').value=x.date;
+  document.getElementById('fLetterNo').value=x.letterNo;
+  document.getElementById('fSender').value=x.sender;
+  document.getElementById('fCategory').value=x.category;
+  document.getElementById('fSubject').value=x.subject;
+  document.getElementById('fSummary').value=x.summary;
+  document.getElementById('fPriority').value=x.priority;
+  document.getElementById('fStatus').value=x.status;
+  setMarkedTo(x.markedTo);
+  scrollTop(); toast('Editing entry — make changes & save','info');
+}
+
+/* =====================================================================
+   RTI
+===================================================================== */
+function saveRti(e){
+  e.preventDefault();
+  const id=document.getElementById('rtiEditId').value;
+  const obj={
+    id:id||uid(), type:'rti', section:'RTI',
+    date:document.getElementById('rtiDate').value,
+    rtiNo:document.getElementById('rtiNo').value.trim(),
+    fee:document.getElementById('rtiFee').value,
+    applicant:document.getElementById('rtiApplicant').value.trim(),
+    due:document.getElementById('rtiDue').value,
+    subject:document.getElementById('rtiSubject').value.trim(),
+    status:document.getElementById('rtiStatus').value,
+    remarks:document.getElementById('rtiRemarks').value.trim(),
+    ts:Date.now()
+  };
+  if(id){ const i=rtiEntries.findIndex(x=>x.id===id); if(i>-1) rtiEntries[i]=obj; toast('RTI updated','success'); }
+  else { rtiEntries.unshift(obj); toast('RTI saved','success'); }
+  save(RTI_STORE,rtiEntries); resetRtiForm(); renderEntryTable(); if(isAdmin()) refreshDash();
+}
+function resetRtiForm(){
+  document.getElementById('rtiForm').reset();
+  document.getElementById('rtiEditId').value='';
+  document.getElementById('rtiDate').value=new Date().toISOString().slice(0,10);
+}
+function editRti(id){
+  const x=rtiEntries.find(e=>e.id===id); if(!x) return;
+  document.getElementById('rtiEditId').value=x.id;
+  document.getElementById('rtiDate').value=x.date;
+  document.getElementById('rtiNo').value=x.rtiNo;
+  document.getElementById('rtiFee').value=x.fee;
+  document.getElementById('rtiApplicant').value=x.applicant;
+  document.getElementById('rtiDue').value=x.due;
+  document.getElementById('rtiSubject').value=x.subject;
+  document.getElementById('rtiStatus').value=x.status;
+  document.getElementById('rtiRemarks').value=x.remarks;
+  scrollTop(); toast('Editing RTI','info');
+}
+
+/* =====================================================================
+   STENO COMPLAINT
+===================================================================== */
+function saveSteno(e){
+  e.preventDefault();
+  const id=document.getElementById('stenoEditId').value;
+  const obj={
+    id:id||uid(), type:'steno', section:'Steno',
+    date:document.getElementById('stDate').value,
+    refNo:document.getElementById('stNo').value.trim(),
+    sType:document.getElementById('stType').value,
+    name:document.getElementById('stName').value.trim(),
+    contact:document.getElementById('stContact').value.trim(),
+    subject:document.getElementById('stSubject').value.trim(),
+    action:document.getElementById('stAction').value.trim(),
+    status:document.getElementById('stStatus').value,
+    priority:document.getElementById('stPriority').value,
+    ts:Date.now()
+  };
+  if(id){ const i=stenoEntries.findIndex(x=>x.id===id); if(i>-1) stenoEntries[i]=obj; toast('Complaint updated','success'); }
+  else { stenoEntries.unshift(obj); toast('Complaint saved','success'); }
+  save(S_STORE,stenoEntries); resetStenoForm(); renderEntryTable(); if(isAdmin()) refreshDash();
+}
+function resetStenoForm(){
+  document.getElementById('stenoForm').reset();
+  document.getElementById('stenoEditId').value='';
+  document.getElementById('stDate').value=new Date().toISOString().slice(0,10);
+}
+function editSteno(id){
+  const x=stenoEntries.find(e=>e.id===id); if(!x) return;
+  document.getElementById('stenoEditId').value=x.id;
+  document.getElementById('stDate').value=x.date;
+  document.getElementById('stNo').value=x.refNo;
+  document.getElementById('stType').value=x.sType;
+  document.getElementById('stName').value=x.name;
+  document.getElementById('stContact').value=x.contact;
+  document.getElementById('stSubject').value=x.subject;
+  document.getElementById('stAction').value=x.action;
+  document.getElementById('stStatus').value=x.status;
+  document.getElementById('stPriority').value=x.priority;
+  scrollTop(); toast('Editing complaint','info');
+}
+
+/* =====================================================================
+   NOC TREE FELLING
+===================================================================== */
+function saveNoc(e){
+  e.preventDefault();
+  const id=document.getElementById('nocEditId').value;
+  const obj={
+    id:id||uid(), type:'noc', section:'NOC Tree Felling',
+    date:document.getElementById('nocDate').value,
+    nocNo:document.getElementById('nocNo').value.trim(),
+    count:+document.getElementById('nocCount').value||0,
+    applicant:document.getElementById('nocApplicant').value.trim(),
+    species:document.getElementById('nocSpecies').value.trim(),
+    location:document.getElementById('nocLocation').value.trim(),
+    reason:document.getElementById('nocReason').value.trim(),
+    verify:document.getElementById('nocVerify').value,
+    status:document.getElementById('nocStatus').value,
+    ts:Date.now()
+  };
+  if(id){ const i=nocEntries.findIndex(x=>x.id===id); if(i>-1) nocEntries[i]=obj; toast('NOC updated','success'); }
+  else { nocEntries.unshift(obj); toast('NOC saved','success'); }
+  save(NOC_STORE,nocEntries); resetNocForm(); renderEntryTable(); if(isAdmin()) refreshDash();
+}
+function resetNocForm(){
+  document.getElementById('nocForm').reset();
+  document.getElementById('nocEditId').value='';
+  document.getElementById('nocDate').value=new Date().toISOString().slice(0,10);
+  document.getElementById('nocCount').value=0;
+}
+function editNoc(id){
+  const x=nocEntries.find(e=>e.id===id); if(!x) return;
+  document.getElementById('nocEditId').value=x.id;
+  document.getElementById('nocDate').value=x.date;
+  document.getElementById('nocNo').value=x.nocNo;
+  document.getElementById('nocCount').value=x.count;
+  document.getElementById('nocApplicant').value=x.applicant;
+  document.getElementById('nocSpecies').value=x.species;
+  document.getElementById('nocLocation').value=x.location;
+  document.getElementById('nocReason').value=x.reason;
+  document.getElementById('nocVerify').value=x.verify;
+  document.getElementById('nocStatus').value=x.status;
+  scrollTop(); toast('Editing NOC','info');
+}
+
+/* =====================================================================
+   DELETE (admin only)
+===================================================================== */
+function delEntry(type,id){
+  if(!isAdmin()) return;
+  if(!confirm('Delete this entry permanently?')) return;
+  if(type==='rti'){ rtiEntries=rtiEntries.filter(x=>x.id!==id); save(RTI_STORE,rtiEntries); }
+  else if(type==='steno'){ stenoEntries=stenoEntries.filter(x=>x.id!==id); save(S_STORE,stenoEntries); }
+  else if(type==='noc'){ nocEntries=nocEntries.filter(x=>x.id!==id); save(NOC_STORE,nocEntries); }
+  else { entries=entries.filter(x=>x.id!==id); save(STORE_KEY,entries); }
+  toast('Entry deleted','error'); renderEntryTable(); if(isAdmin()) refreshDash();
+}
+
+/* =====================================================================
+   UNIFIED ROW MODEL — normalize every entry type into common columns
+===================================================================== */
+function normalize(x){
+  if(x.type==='rti') return {
+    id:x.id,type:'rti',date:x.date,no:x.rtiNo,sender:x.applicant,
+    subject:x.subject,category:'RTI ('+x.fee+')',priority:'Normal',
+    markedTo:[],status:x.status,section:'RTI',
+    extra:'Due: '+(x.due||'-')+(x.remarks?' • '+x.remarks:'')
+  };
+  if(x.type==='steno') return {
+    id:x.id,type:'steno',date:x.date,no:x.refNo,sender:x.name,
+    subject:x.subject,category:x.sType,priority:x.priority,
+    markedTo:[],status:x.status,section:'Steno',
+    extra:(x.contact?'☎ '+x.contact:'')+(x.action?' • Action: '+x.action:'')
+  };
+  if(x.type==='noc') return {
+    id:x.id,type:'noc',date:x.date,no:x.nocNo,sender:x.applicant,
+    subject:(x.species?x.species+' — ':'')+x.location,
+    category:'Trees: '+x.count,priority:'Normal',
+    markedTo:[],status:x.status,section:'NOC Tree Felling',
+    extra:'Verify: '+x.verify+(x.reason?' • '+x.reason:'')
+  };
+  return {
+    id:x.id,type:'letter',date:x.date,no:x.letterNo,sender:x.sender,
+    subject:x.subject,category:x.category,priority:x.priority,
+    markedTo:x.markedTo||[],status:x.status,section:x.section,
+    extra:x.summary||''
+  };
+}
+
+function gatherRows(){
+  let rows=[];
+  const sec=currentSection();
+  if(isAdmin() && !sec){
+    // all
+    rows=[ ...entries, ...rtiEntries, ...stenoEntries, ...nocEntries ];
+  } else if(sec==='RTI'){ rows=rtiEntries.slice(); }
+  else if(sec==='Steno'){ rows=stenoEntries.slice(); }
+  else if(sec==='NOC Tree Felling'){ rows=nocEntries.slice(); }
+  else { rows=entries.filter(e=>e.section===sec); }
+  return rows.map(normalize);
+}
+
+/* =====================================================================
+   RENDER ENTRY TABLE  (role-based)
+===================================================================== */
+function renderEntryTable(){
+  let rows=gatherRows();
+  const q=(document.getElementById('searchBox').value||'').toLowerCase();
+  const sf=document.getElementById('statusFilter').value;
+  const pf=document.getElementById('priorityFilter').value;
+  if(q) rows=rows.filter(r=>JSON.stringify(r).toLowerCase().includes(q));
+  if(sf) rows=rows.filter(r=>r.status===sf);
+  if(pf) rows=rows.filter(r=>r.priority===pf);
+
+  if(sortKey){
+    rows.sort((a,b)=>{
+      let av=(a[sortKey]||'')+'',bv=(b[sortKey]||'')+'';
+      return sortAsc?av.localeCompare(bv):bv.localeCompare(av);
+    });
+  } else {
+    rows.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  }
+
+  const showAction=isAdmin();
+  const showSection=isAdmin() && !currentSection();
+  let head='<tr>'+
+    '<th onclick="sortBy(\'_i\')">S.No.</th>'+
+    '<th onclick="sortBy(\'date\')">Date</th>'+
+    '<th onclick="sortBy(\'no\')">Letter No.</th>'+
+    '<th onclick="sortBy(\'sender\')">Sender</th>'+
+    '<th onclick="sortBy(\'subject\')">Subject</th>'+
+    (showSection?'<th onclick="sortBy(\'section\')">Section</th>':'')+
+    '<th onclick="sortBy(\'category\')">Category</th>'+
+    '<th onclick="sortBy(\'priority\')">Priority</th>'+
+    '<th>Marked To</th>'+
+    '<th onclick="sortBy(\'status\')">Status</th>'+
+    (showAction?'<th>Action</th>':'')+
+    '</tr>';
+
+  let body='';
+  if(!rows.length){
+    const cols=10+(showSection?1:0)+(showAction?1:0);
+    body=`<tr class="empty-row"><td colspan="${cols}">📭 No entries found. Add your first entry above.</td></tr>`;
+  } else {
+    rows.forEach((r,i)=>{
+      const marked=(r.markedTo||[]).map(m=>`<span>${esc(m)}</span>`).join('');
+      body+='<tr>'+
+        `<td>${i+1}</td>`+
+        `<td>${fmtDate(r.date)}</td>`+
+        `<td class="mono">${esc(r.no)}</td>`+
+        `<td>${esc(r.sender)}</td>`+
+        `<td class="subj-cell">${esc(r.subject)}${r.extra?`<div class="summary">${esc(r.extra)}</div>`:''}</td>`+
+        (showSection?`<td>${esc(r.section)}</td>`:'')+
+        `<td>${esc(r.category)}</td>`+
+        `<td><span class="pill p-${cssSafe(r.priority)}">${esc(r.priority)}</span></td>`+
+        `<td><div class="marked-chips">${marked||'<span style="opacity:.4">—</span>'}</div></td>`+
+        `<td><span class="pill s-${cssSafe(r.status)}">${esc(r.status)}</span></td>`+
+        (showAction?`<td><button class="act-btn act-edit" onclick="dispatchEdit('${r.type}','${r.id}')">✏️</button> <button class="act-btn act-del" onclick="delEntry('${r.type}','${r.id}')">🗑️</button></td>`:'')+
+        '</tr>';
+    });
+  }
+  document.getElementById('entryTableWrap').innerHTML=`<table><thead>${head}</thead><tbody>${body}</tbody></table>`;
+}
+function dispatchEdit(type,id){
+  if(type==='rti') editRti(id);
+  else if(type==='steno') editSteno(id);
+  else if(type==='noc') editNoc(id);
+  else editLetter(id);
+}
+function sortBy(k){ if(sortKey===k) sortAsc=!sortAsc; else { sortKey=k; sortAsc=true; } renderEntryTable(); }
+
+/* =====================================================================
+   DASHBOARD (admin)
+===================================================================== */
+function allRowsNormalized(){
+  return [ ...entries, ...rtiEntries, ...stenoEntries, ...nocEntries ].map(normalize);
+}
+function refreshDash(){
+  const rows=allRowsNormalized();
+  const total=rows.length;
+  const pending=rows.filter(r=>['Pending','Received','Under Process','Under Inquiry'].includes(r.status)).length;
+  const done=rows.filter(r=>['Completed','Closed','Replied','Approved','Resolved'].includes(r.status)).length;
+  const critical=rows.filter(r=>r.priority==='Critical'||r.priority==='Urgent').length;
+  const stats=[
+    {num:total,lbl:'Total Entries',ico:'📒',cls:''},
+    {num:pending,lbl:'Pending',ico:'⏳',cls:'gold'},
+    {num:done,lbl:'Completed',ico:'✅',cls:'success'},
+    {num:critical,lbl:'Urgent / Critical',ico:'🚨',cls:'danger'},
+    {num:SECTIONS.length,lbl:'Sections',ico:'📂',cls:''},
+  ];
+  document.getElementById('statGrid').innerHTML=stats.map(s=>
+    `<div class="stat-card ${s.cls}"><span class="ico">${s.ico}</span><div class="num">${s.num}</div><div class="lbl">${s.lbl}</div></div>`).join('');
+
+  // by section
+  const bySec={};
+  rows.forEach(r=>{ bySec[r.section]=(bySec[r.section]||0)+1; });
+  const maxSec=Math.max(1,...Object.values(bySec));
+  const secEntries=Object.entries(bySec).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('dashBySection').innerHTML= secEntries.length? secEntries.map(([n,c])=>
+    `<div class="bar-row"><span class="nm">${esc(n)}</span><div class="bar-track"><div class="bar-fill" style="width:${(c/maxSec*100)}%"></div></div><span class="vl">${c}</span></div>`).join('')
+    : '<div style="color:var(--text-muted)">No data yet.</div>';
+
+  // by status
+  const byStat={};
+  rows.forEach(r=>{ byStat[r.status]=(byStat[r.status]||0)+1; });
+  const maxSt=Math.max(1,...Object.values(byStat));
+  const statEntries=Object.entries(byStat).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('dashByStatus').innerHTML= statEntries.length? statEntries.map(([n,c])=>
+    `<div class="bar-row"><span class="nm"><span class="pill s-${cssSafe(n)}">${esc(n)}</span></span><div class="bar-track"><div class="bar-fill" style="width:${(c/maxSt*100)}%"></div></div><span class="vl">${c}</span></div>`).join('')
+    : '<div style="color:var(--text-muted)">No data yet.</div>';
+
+  // recent
+  const recent=rows.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||'')).slice(0,8);
+  document.getElementById('dashRecent').innerHTML= recent.length? recent.map(r=>
+    `<tr><td>${fmtDate(r.date)}</td><td class="mono">${esc(r.no)}</td><td>${esc(r.sender)}</td><td>${esc(r.subject)}</td><td>${esc(r.section)}</td><td><span class="pill p-${cssSafe(r.priority)}">${esc(r.priority)}</span></td><td><span class="pill s-${cssSafe(r.status)}">${esc(r.status)}</span></td></tr>`).join('')
+    : '<tr class="empty-row"><td colspan="7">No recent entries.</td></tr>';
+}
+
+/* =====================================================================
+   PAGE SWITCH
+===================================================================== */
+function switchPage(p){
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  const el=document.getElementById('page-'+p); if(el) el.classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.toggle('active',t.dataset.page===p));
+  if(p==='dashboard') refreshDash();
+  if(p==='entry') renderEntryTable();
+}
+
+/* =====================================================================
+   SECTION SETUP (staff first-time)
+===================================================================== */
+function openSetup(){
+  document.getElementById('setupSecGrid').innerHTML=SECTIONS.map(s=>
+    `<div class="sec-opt" data-name="${s.name}" onclick="pickSetup(this)"><div class="si">${s.icon}</div><div class="sn">${s.name}</div><div class="sd">${s.desc}</div></div>`).join('');
+  document.getElementById('setupOverlay').classList.add('show');
+}
+function pickSetup(el){
+  document.querySelectorAll('#setupSecGrid .sec-opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel'); selectedSetupSection=el.dataset.name;
+}
+function confirmSetup(){
+  if(!selectedSetupSection){ toast('Please pick a section','error'); return; }
+  activeSection=selectedSetupSection;
+  save(SEC_KEY,activeSection);
+  document.getElementById('setupOverlay').classList.remove('show');
+  applySectionMode(); renderEntryTable();
+  toast('Section set to '+activeSection,'success');
+}
+
+/* CHANGE SECTION */
+function openChangeSection(){
+  selectedChangeSection=activeSection;
+  document.getElementById('changeSecGrid').innerHTML=SECTIONS.map(s=>
+    `<div class="sec-opt ${s.name===activeSection?'sel':''}" data-name="${s.name}" onclick="pickChange(this)"><div class="si">${s.icon}</div><div class="sn">${s.name}</div><div class="sd">${s.desc}</div></div>`).join('');
+  document.getElementById('changeSecOverlay').classList.add('show');
+}
+function pickChange(el){
+  document.querySelectorAll('#changeSecGrid .sec-opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel'); selectedChangeSection=el.dataset.name;
+}
+function confirmChangeSection(){
+  if(!selectedChangeSection){ toast('Pick a section','error'); return; }
+  activeSection=selectedChangeSection;
+  save(SEC_KEY,activeSection);
+  closeOverlay('changeSecOverlay');
+  applySectionMode(); renderEntryTable();
+  toast('Switched to '+activeSection,'success');
+}
+
+/* =====================================================================
+   SETTINGS
+===================================================================== */
+function openSettings(){
+  const body=document.getElementById('settingsBody');
+  if(isAdmin()){
+    body.innerHTML=`
+      <div class="info-box">Administrator settings — manage all data.</div>
+      <div class="form-actions" style="flex-direction:column;align-items:stretch;gap:10px;">
+        <button class="btn btn-primary" onclick="exportCSV()">⬇️ Export All as CSV</button>
+        <button class="btn btn-gold" onclick="exportJSON()">📦 Backup (JSON)</button>
+        <label class="btn btn-ghost" style="text-align:center;cursor:pointer;">📥 Restore from Backup
+          <input type="file" accept="application/json" style="display:none" onchange="importJSON(event)">
+        </label>
+        <button class="btn btn-ghost" onclick="resetSenders()">🔄 Reset Sender List</button>
+        <button class="btn btn-danger" onclick="clearAllData()">🗑️ Clear ALL Data</button>
+      </div>`;
+  } else {
+    body.innerHTML=`
+      <div class="info-box">Staff settings — limited options.</div>
+      <div class="form-actions" style="flex-direction:column;align-items:stretch;gap:10px;">
+        <button class="btn btn-primary" onclick="exportCSV()">⬇️ Export My Section (CSV)</button>
+        <button class="btn btn-gold" onclick="openChangeSection();closeOverlay('settingsOverlay')">🔄 Change My Section</button>
+      </div>`;
+  }
+  document.getElementById('settingsOverlay').classList.add('show');
+}
+function resetSenders(){
+  if(!confirm('Reset sender list to defaults?')) return;
+  senders=DEFAULT_SENDERS.slice(); save(SENDER_STORE,senders); refreshSenderList();
+  toast('Sender list reset','success');
+}
+function clearAllData(){
+  if(!isAdmin()) return;
+  if(!confirm('This deletes ALL entries (letters, RTI, Steno, NOC). Continue?')) return;
+  if(!confirm('Are you absolutely sure? This cannot be undone.')) return;
+  entries=[];rtiEntries=[];stenoEntries=[];nocEntries=[];
+  save(STORE_KEY,entries);save(RTI_STORE,rtiEntries);save(S_STORE,stenoEntries);save(NOC_STORE,nocEntries);
+  closeOverlay('settingsOverlay'); renderEntryTable(); refreshDash();
+  toast('All data cleared','error');
+}
+function exportJSON(){
+  const data={entries,rtiEntries,stenoEntries,nocEntries,senders,exported:new Date().toISOString()};
+  downloadFile('dfo_raigarh_backup_'+Date.now()+'.json',JSON.stringify(data,null,2),'application/json');
+  toast('Backup downloaded','success');
+}
+function importJSON(e){
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const d=JSON.parse(r.result);
+      entries=d.entries||[];rtiEntries=d.rtiEntries||[];stenoEntries=d.stenoEntries||[];nocEntries=d.nocEntries||[];
+      senders=d.senders||DEFAULT_SENDERS.slice();
+      save(STORE_KEY,entries);save(RTI_STORE,rtiEntries);save(S_STORE,stenoEntries);save(NOC_STORE,nocEntries);save(SENDER_STORE,senders);
+      refreshSenderList(); renderEntryTable(); refreshDash(); closeOverlay('settingsOverlay');
+      toast('Backup restored','success');
+    }catch(err){ toast('Invalid backup file','error'); }
+  };
+  r.readAsText(f);
+}
+
+/* =====================================================================
+   EXPORT CSV / PRINT
+===================================================================== */
+function exportCSV(){
+  const rows=gatherRows();
+  if(!rows.length){ toast('No entries to export','error'); return; }
+  const hdr=['S.No.','Date','Letter No.','Sender','Subject','Section','Category','Priority','Marked To','Status','Details'];
+  const lines=[hdr.join(',')];
+  rows.forEach((r,i)=>{
+    lines.push([i+1,r.date,r.no,r.sender,r.subject,r.section,r.category,r.priority,(r.markedTo||[]).join('; '),r.status,r.extra]
+      .map(csvCell).join(','));
+  });
+  downloadFile('dfo_raigarh_export_'+Date.now()+'.csv',lines.join('\n'),'text/csv');
+  toast('CSV exported','success');
+}
+function csvCell(v){ v=(v==null?'':''+v); return '"'+v.replace(/"/g,'""')+'"'; }
+function downloadFile(name,content,mime){
+  const blob=new Blob([content],{type:mime});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+}
+function printReport(){
+  const rows=gatherRows();
+  const sec=currentSection()||'All Sections';
+  const win=window.open('','_blank');
+  let html=`<html><head><title>DFO Raigarh — Dak Register</title>
+    <style>body{font-family:Arial,sans-serif;padding:24px;color:#1c2526;}
+    h1{color:#163a27;margin:0;}h3{color:#6b7a80;margin:4px 0 16px;font-weight:normal;}
+    table{width:100%;border-collapse:collapse;font-size:12px;}
+    th{background:#163a27;color:#fff;padding:8px;text-align:left;}
+    td{border:1px solid #ccc;padding:6px;}tr:nth-child(even){background:#f3f6f4;}
+    .ft{margin-top:20px;font-size:11px;color:#6b7a80;border-top:2px solid #c8921a;padding-top:8px;}</style></head><body>
+    <h1>🌿 DFO Raigarh — Dak Register</h1>
+    <h3>Section: ${esc(sec)} • Generated: ${new Date().toLocaleString('en-IN')} • Total: ${rows.length}</h3>
+    <table><thead><tr><th>S.No.</th><th>Date</th><th>Letter No.</th><th>Sender</th><th>Subject</th><th>Section</th><th>Category</th><th>Priority</th><th>Status</th></tr></thead><tbody>`;
+  rows.forEach((r,i)=>{ html+=`<tr><td>${i+1}</td><td>${fmtDate(r.date)}</td><td>${esc(r.no)}</td><td>${esc(r.sender)}</td><td>${esc(r.subject)}</td><td>${esc(r.section)}</td><td>${esc(r.category)}</td><td>${esc(r.priority)}</td><td>${esc(r.status)}</td></tr>`; });
+  html+=`</tbody></table><div class="ft">Dak Register System — Forest Department, Raigarh (Chhattisgarh)</div></body></html>`;
+  win.document.write(html); win.document.close(); win.focus(); setTimeout(()=>win.print(),300);
+}
+
+/* =====================================================================
+   TOAST + UTILITIES
+===================================================================== */
+function toast(msg,type='info'){
+  const box=document.getElementById('toastBox');
+  const t=document.createElement('div'); t.className='toast '+type;
+  const ico=type==='success'?'✅':type==='error'?'⚠️':'ℹ️';
+  t.innerHTML=`<span>${ico}</span><span>${esc(msg)}</span>`;
+  box.appendChild(t);
+  setTimeout(()=>{ t.style.opacity='0'; t.style.transform='translateX(40px)'; setTimeout(()=>t.remove(),250); },2800);
+}
+function closeOverlay(id){ document.getElementById(id).classList.remove('show'); }
+function scrollTop(){ window.scrollTo({top:0,behavior:'smooth'}); }
+function esc(s){ return (s==null?'':''+s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function escAttr(s){ return esc(s).replace(/'/g,'&#39;'); }
+function cssSafe(s){ return (s==null?'':''+s).replace(/[^a-zA-Z]/g,''); }
+function fmtDate(d){ if(!d) return '-'; try{ return new Date(d).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}); }catch(e){ return d; } }
+
+/* close overlays on backdrop click */
+document.querySelectorAll('.overlay').forEach(o=>{
+  o.addEventListener('click',e=>{ if(e.target===o && o.id!=='setupOverlay') o.classList.remove('show'); });
+});
+
+window.onload=initAuth;
+</script>
+</body>
+</html>
