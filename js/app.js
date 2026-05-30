@@ -1,183 +1,297 @@
-// Presentation navigation & animation controller
+// ============================================================
+//  PRESENTATION NAVIGATION & ANIMATION CONTROLLER
+// ============================================================
 
 const slides = [];
 let current = 0;
 const chartsInitialized = new Set();
-const mapsInitializedSlides = new Set();
+const mapsInitialized = {};
 
-// Spotlight state
-let spotlightTimer = null;
-let spotlightIdx = 0;
-const SPOTLIGHT_DURATION = 5000;
+// Spotlight state for Resource Persons slide
+let spotlightInterval = null;
+let spotlightIndex = 0;
+let spotlightStopped = false;
 
-function buildSlideList() {
+// ── Collect slides after DOM ready ──────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.slide').forEach(s => slides.push(s));
-}
+  // Set first slide active
+  if (slides.length > 0) {
+    slides[0].classList.add('active');
+    document.getElementById('slideNum').textContent = `1 / ${slides.length}`;
+    onSlideActivate(0);
+  }
+});
 
+// ── Navigation ───────────────────────────────────────────────────────────
 function goTo(n) {
   if (slides.length === 0) return;
   const prev = current;
-  current = Math.max(0, Math.min(n, slides.length - 1));
-  if (prev === current) return;
+  const next = Math.max(0, Math.min(n, slides.length - 1));
+  if (next === prev) return;
 
   slides[prev].classList.remove('active');
-  slides[prev].classList.add('leaving');
-  setTimeout(() => slides[prev].classList.remove('leaving'), 700);
+  slides[prev].classList.add('prev');
+  setTimeout(() => slides[prev].classList.remove('prev'), 650);
 
+  current = next;
   slides[current].classList.add('active');
   document.getElementById('slideNum').textContent = `${current + 1} / ${slides.length}`;
   onSlideActivate(current);
 }
 
-function onSlideActivate(idx) {
-  const slide = slides[idx];
-  const id = slide.id;
-
-  // Trigger count-up for KPI numbers
-  slide.querySelectorAll('[data-countup]').forEach(el => {
-    const target = parseInt(el.dataset.countup, 10);
-    countUp(el, target, 1600);
-  });
-
-  // Lazy chart init
-  if (!chartsInitialized.has(id)) {
-    chartsInitialized.add(id);
-    switch (id) {
-      case 's6a': initPopChart('popCanvas'); break;
-      case 's7':  initYearBarsChart('yearBarsCanvas'); initTrendChart('trendMiniCanvas'); break;
-      case 's8':  initCauseChart('causeCanvas'); break;
-      case 's9a': initAgeChart('ageCanvas'); break;
-      case 's9b': initSexChart('sexCanvas'); break;
-      case 's9c': initSeasonalChart('seasonCanvas'); break;
-      case 's9d': initRangeChart('rangeCanvas'); break;
-      case 's12': initTrendChart('trendCanvas'); break;
-      case 's15': initHumanBarsChart('humanBarsCanvas'); break;
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goTo(current + 1);
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   goTo(current - 1);
+  if (e.key === 'f' || e.key === 'F') {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen?.();
+    } else {
+      document.exitFullscreen?.();
     }
   }
+  if (e.key === 'Home') goTo(0);
+  if (e.key === 'End')  goTo(slides.length - 1);
+});
 
-  // Lazy map init
-  if (!mapsInitializedSlides.has(id)) {
-    mapsInitializedSlides.add(id);
-    if (id === 's6b')  setTimeout(() => initDistributionMap('distMap'), 100);
-    if (id === 's10')  setTimeout(() => initCasualtyMap('casualtyMap'), 100);
-    if (id === 's16')  setTimeout(() => initOverlayMap('overlayMap'), 100);
-  }
-
-  // Spotlight for Resource Persons slide
-  if (id === 's3') {
-    startSpotlight();
-  } else {
-    stopSpotlight();
-  }
-
-  // Animate list items in report slides
-  slide.querySelectorAll('.reveal-item').forEach((el, i) => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(16px)';
-    setTimeout(() => {
-      el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-      el.style.opacity = '1';
-      el.style.transform = 'translateY(0)';
-    }, 200 + i * 150);
-  });
-}
-
-// ── Count-up animation ──────────────────────────────────────────────────────
-
+// ── Count-up animation ───────────────────────────────────────────────────
 function countUp(el, target, duration) {
+  if (!el) return;
+  duration = duration || 1500;
   const start = performance.now();
-  const from = 0;
-  function tick(now) {
+  const startVal = 0;
+
+  function step(now) {
     const elapsed = now - start;
     const progress = Math.min(elapsed / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    el.textContent = Math.round(from + (target - from) * eased);
-    if (progress < 1) requestAnimationFrame(tick);
+    const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+    const value = Math.round(startVal + (target - startVal) * eased);
+    el.textContent = value;
+    if (progress < 1) requestAnimationFrame(step);
+    else el.textContent = target;
   }
-  requestAnimationFrame(tick);
+  requestAnimationFrame(step);
 }
 
-// ── Spotlight animation ─────────────────────────────────────────────────────
-
+// ── Spotlight for Resource Persons (slide index 2) ───────────────────────
 function startSpotlight() {
-  const cards = document.querySelectorAll('#s3 .person-card');
-  if (!cards.length) return;
-  spotlightIdx = 0;
-  applySpotlight(cards, spotlightIdx);
-  spotlightTimer = setInterval(() => {
-    spotlightIdx = (spotlightIdx + 1) % cards.length;
-    applySpotlight(cards, spotlightIdx);
-  }, SPOTLIGHT_DURATION);
+  spotlightStopped = false;
+  spotlightIndex = 0;
 
-  cards.forEach((card, i) => {
+  const featured  = document.querySelector('.person-featured');
+  const gridCards = Array.from(document.querySelectorAll('.person-cards-grid .person-card'));
+  if (!featured) return;
+
+  // All 5 "persons" — featured + 4 grid cards
+  const allCards = [featured, ...gridCards];
+
+  function applySpotlight(idx) {
+    allCards.forEach((card, i) => {
+      card.classList.remove('spotlight', 'dim');
+      if (i === idx) {
+        card.classList.add('spotlight');
+      } else {
+        card.classList.add('dim');
+      }
+    });
+  }
+
+  applySpotlight(0);
+
+  spotlightInterval = setInterval(() => {
+    if (spotlightStopped) {
+      clearInterval(spotlightInterval);
+      return;
+    }
+    spotlightIndex = (spotlightIndex + 1) % allCards.length;
+    applySpotlight(spotlightIndex);
+  }, 5000);
+
+  // Click to pin
+  allCards.forEach((card, i) => {
     card.addEventListener('click', () => {
-      stopSpotlight();
-      applySpotlight(cards, i);
+      spotlightStopped = true;
+      clearInterval(spotlightInterval);
+      allCards.forEach((c, j) => {
+        c.classList.remove('spotlight', 'dim');
+        if (j !== i) c.classList.add('dim');
+        else c.classList.add('spotlight');
+      });
     });
   });
 }
 
-function applySpotlight(cards, activeIdx) {
-  cards.forEach((card, i) => {
-    card.classList.remove('spotlight', 'dim');
-    if (i === activeIdx) card.classList.add('spotlight');
-    else card.classList.add('dim');
-  });
-}
-
 function stopSpotlight() {
-  if (spotlightTimer) {
-    clearInterval(spotlightTimer);
-    spotlightTimer = null;
-  }
+  spotlightStopped = true;
+  if (spotlightInterval) clearInterval(spotlightInterval);
+  const allCards = document.querySelectorAll('.person-featured, .person-cards-grid .person-card');
+  allCards.forEach(c => c.classList.remove('spotlight', 'dim'));
 }
 
-// ── Dashboard tabs (slides 9a-9d) ───────────────────────────────────────────
-
-function switchDashTab(tabId, slideId) {
-  // Navigate to correct slide
-  const targetIdx = slides.findIndex(s => s.id === slideId);
-  if (targetIdx >= 0) goTo(targetIdx);
-}
-
-// ── Keyboard & init ─────────────────────────────────────────────────────────
-
-document.addEventListener('keydown', e => {
-  switch (e.key) {
-    case 'ArrowRight':
-    case 'ArrowDown':
-    case ' ':
-      e.preventDefault();
-      goTo(current + 1);
-      break;
-    case 'ArrowLeft':
-    case 'ArrowUp':
-      e.preventDefault();
-      goTo(current - 1);
-      break;
-    case 'f':
-    case 'F':
-      document.documentElement.requestFullscreen?.();
-      break;
-    case 'Home':
-      goTo(0);
-      break;
-    case 'End':
-      goTo(slides.length - 1);
-      break;
-  }
-});
-
-window.addEventListener('DOMContentLoaded', () => {
-  buildSlideList();
-  document.getElementById('slideNum').textContent = `1 / ${slides.length}`;
-  onSlideActivate(0);
-
-  // Touch/swipe support
-  let touchStartX = 0;
-  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
-  document.addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].clientX - touchStartX;
-    if (Math.abs(dx) > 50) goTo(current + (dx < 0 ? 1 : -1));
+// ── Human casualty inline bars animation ─────────────────────────────────
+function animateHumanBars() {
+  const maxVal = 16;
+  document.querySelectorAll('.year-bar-fill').forEach(fill => {
+    const val = parseInt(fill.dataset.val || 0, 10);
+    const pct = (val / maxVal) * 100;
+    fill.style.width = '0%';
+    setTimeout(() => {
+      fill.style.width = pct + '%';
+    }, 200);
   });
-});
+}
+
+// ── Slide activation handler ─────────────────────────────────────────────
+function onSlideActivate(index) {
+  const slideId = slides[index] ? slides[index].id : null;
+
+  // Stop spotlight if leaving slide 3
+  if (index !== 2) stopSpotlight();
+
+  switch (index) {
+
+    // Slide 1 — Title (no special init)
+    case 0: break;
+
+    // Slide 2 — Workshop Context
+    case 1: {
+      const kpis = slides[1].querySelectorAll('.kpi-value[data-count]');
+      kpis.forEach(el => countUp(el, parseInt(el.dataset.count, 10)));
+      break;
+    }
+
+    // Slide 3 — Resource Persons
+    case 2:
+      setTimeout(startSpotlight, 600);
+      break;
+
+    // Slide 4 — Schedule (timeline, no special anim)
+    case 3: break;
+
+    // Slide 5 — Participants
+    case 4: {
+      const el = slides[4].querySelector('.hero-count');
+      if (el) countUp(el, 48, 1800);
+      break;
+    }
+
+    // Slide 6a — Population
+    case 5:
+      if (!chartsInitialized.has('popCanvas')) {
+        chartsInitialized.add('popCanvas');
+        setTimeout(() => initPopChart('popCanvas'), 300);
+      }
+      break;
+
+    // Slide 6b — Distribution Map
+    case 6:
+      setTimeout(() => {
+        if (!mapsInitialized['distMap']) {
+          mapsInitialized['distMap'] = true;
+          initDistributionMap('distMap');
+        }
+      }, 200);
+      break;
+
+    // Slide 7 — Elephant Casualty Total
+    case 7: {
+      const el = slides[7].querySelector('.hero-count');
+      if (el) countUp(el, 41, 1800);
+      if (!chartsInitialized.has('yearBarsCanvas')) {
+        chartsInitialized.add('yearBarsCanvas');
+        setTimeout(() => initYearBarsChart('yearBarsCanvas'), 400);
+      }
+      break;
+    }
+
+    // Slide 8 — Cause of Death
+    case 8:
+      if (!chartsInitialized.has('causeCanvas')) {
+        chartsInitialized.add('causeCanvas');
+        setTimeout(() => initCauseChart('causeCanvas'), 300);
+      }
+      break;
+
+    // Slide 9a — Age Group
+    case 9:
+      if (!chartsInitialized.has('ageCanvas')) {
+        chartsInitialized.add('ageCanvas');
+        setTimeout(() => initAgeChart('ageCanvas'), 300);
+      }
+      break;
+
+    // Slide 9b — Sex Group
+    case 10:
+      if (!chartsInitialized.has('sexCanvas')) {
+        chartsInitialized.add('sexCanvas');
+        setTimeout(() => initSexChart('sexCanvas'), 300);
+      }
+      break;
+
+    // Slide 9c — Seasonal
+    case 11:
+      if (!chartsInitialized.has('seasonCanvas')) {
+        chartsInitialized.add('seasonCanvas');
+        setTimeout(() => initSeasonalChart('seasonCanvas'), 300);
+      }
+      break;
+
+    // Slide 9d — Range-wise
+    case 12:
+      if (!chartsInitialized.has('rangeCanvas')) {
+        chartsInitialized.add('rangeCanvas');
+        setTimeout(() => initRangeChart('rangeCanvas'), 300);
+      }
+      break;
+
+    // Slide 10 — Geo Casualty Map
+    case 13:
+      setTimeout(() => {
+        if (!mapsInitialized['casualtyMap']) {
+          mapsInitialized['casualtyMap'] = true;
+          initCasualtyMap('casualtyMap');
+        }
+      }, 200);
+      break;
+
+    // Slide 11 — PM Report Summary (no special init)
+    case 14: break;
+
+    // Slide 12 — PM Analysis
+    case 15:
+      if (!chartsInitialized.has('trendCanvas')) {
+        chartsInitialized.add('trendCanvas');
+        setTimeout(() => initTrendChart('trendCanvas'), 300);
+      }
+      break;
+
+    // Slide 13 — Lab Report (no special init)
+    case 16: break;
+
+    // Slide 14 — Conclusion (no special init)
+    case 17: break;
+
+    // Slide 15 — Human Casualty
+    case 18: {
+      const el = slides[18].querySelector('.hero-count');
+      if (el) countUp(el, 45, 1800);
+      setTimeout(animateHumanBars, 400);
+      break;
+    }
+
+    // Slide 16 — Overlay Map
+    case 19:
+      setTimeout(() => {
+        if (!mapsInitialized['overlayMap']) {
+          mapsInitialized['overlayMap'] = true;
+          initOverlayMap('overlayMap');
+        }
+      }, 200);
+      break;
+
+    // Slide 17 — Thank You
+    case 20: break;
+
+    default: break;
+  }
+}
