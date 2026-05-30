@@ -105,16 +105,16 @@ function initOverlayMap(id) {
 
   const elephantIcon = L.divIcon({
     className: '',
-    html: '<div style="width:11px;height:11px;border-radius:50%;background:#52B788;border:2px solid #fff;box-shadow:0 0 4px rgba(82,183,136,0.8);"></div>',
-    iconSize: [11, 11],
-    iconAnchor: [5, 5]
+    html: '<div style="font-size:20px;line-height:1;filter:drop-shadow(0 1px 3px rgba(0,0,0,0.6));">🐘</div>',
+    iconSize: [22, 22],
+    iconAnchor: [11, 11]
   });
 
   const humanIcon = L.divIcon({
     className: '',
-    html: '<div style="width:11px;height:11px;border-radius:50%;background:#E63946;border:2px solid #fff;box-shadow:0 0 4px rgba(230,57,70,0.8);"></div>',
-    iconSize: [11, 11],
-    iconAnchor: [5, 5]
+    html: '<div style="font-size:20px;line-height:1;filter:drop-shadow(0 1px 3px rgba(0,0,0,0.6));">🧍</div>',
+    iconSize: [22, 22],
+    iconAnchor: [11, 11]
   });
 
   // Phase 1: elephant markers immediately
