@@ -6,297 +6,209 @@
 <title>Slide 3 — Resource Persons</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
-html, body { width:100%; height:100%; background:#0A1628; font-family:system-ui,-apple-system,sans-serif; overflow:hidden; }
+html,body { width:100%;height:100%;overflow:hidden;
+  background:#0A1628;font-family:system-ui,-apple-system,sans-serif; }
 
-/* ── Full-screen slide ── */
+/* ────────── SLIDE SHELL ────────── */
 .slide {
   width:100vw; height:100vh;
-  display:grid;
-  grid-template-rows: auto 1fr 2fr;
-  padding:32px 80px 36px;
-  gap:20px;
+  display:flex; flex-direction:column;
+  padding:28px 80px 32px; gap:18px;
 }
 
-/* ── Section tag ── */
 .section-tag {
-  justify-self:center;
-  display:inline-block;
-  background:rgba(82,183,136,0.12);
-  border:1px solid rgba(82,183,136,0.4);
-  color:#52B788;
-  padding:5px 16px;
-  border-radius:4px;
-  font-size:0.72rem;
-  font-weight:700;
-  letter-spacing:0.12em;
-  text-transform:uppercase;
+  align-self:center;
+  background:rgba(82,183,136,0.1); border:1px solid rgba(82,183,136,0.4);
+  color:#52B788; padding:5px 16px; border-radius:4px;
+  font-size:0.7rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
 }
 
-/* ── Row 1: top card centred ── */
+/* ── Row 1: single card, centred ── */
 .row-top {
-  display:flex;
-  justify-content:center;
-  align-items:stretch;
+  display:flex; justify-content:center;
+  flex:1;                        /* equal flex share with each grid row */
 }
-/* top card matches a grid-col width */
-.row-top .card-wrap { width:calc(50% - 10px); }
+.row-top .cw { width:50%; }     /* same width as one 2-col grid cell   */
 
-/* ── Row 2+3: 2×2 grid ── */
+/* ── Rows 2&3: 2-col grid ── */
 .row-grid {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px;
+  display:grid; grid-template-columns:1fr 1fr; gap:18px;
+  flex:2;                        /* two rows → 2× height of top row    */
 }
 
-/* ── card-wrap ── */
-.card-wrap {
+/* ────────── CARD WRAP ────────── */
+.cw {
   position:relative;
-  transition:opacity .4s ease;
-  cursor:pointer;
+  transition:opacity .35s ease, visibility .35s ease;
 }
-.card-wrap.dim { opacity:0.2; pointer-events:none; }
+/* when another card is zoomed — hide this one */
+.cw.hidden { opacity:0; visibility:hidden; pointer-events:none; }
+/* while this card is zoomed — keep visible in background (will be covered) */
+.cw.zooming { z-index:200; }
 
-/* ── Card face ── */
-.person-card {
+/* ────────── CARD FACE ────────── */
+.card {
   width:100%; height:100%;
   background:#112240;
-  border:1.5px solid rgba(82,183,136,0.22);
-  border-radius:14px;
-  padding:18px 20px 20px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  text-align:center;
-  transition:border-color .3s, box-shadow .3s;
-  user-select:none;
+  border:1.5px solid rgba(82,183,136,0.22); border-radius:14px;
+  padding:14px 16px 16px;
+  display:flex; flex-direction:column; align-items:center; text-align:center;
+  cursor:pointer;
+  transition:border-color .3s, box-shadow .3s, transform .55s cubic-bezier(.22,1,.36,1);
+  transform-origin:center center;
+  will-change:transform;
 }
-.card-wrap:hover .person-card {
-  border-color:rgba(82,183,136,0.55);
-  box-shadow:0 0 0 1px rgba(82,183,136,0.2);
+.cw:not(.hidden):not(.zooming) .card:hover {
+  border-color:rgba(82,183,136,.5);
+  box-shadow:0 0 0 1px rgba(82,183,136,.2);
 }
-.card-wrap.active .person-card {
+/* zoomed state — card scales to fill viewport centre */
+.cw.zooming .card {
   border-color:#52B788;
-  box-shadow:0 0 0 2px rgba(82,183,136,0.25);
+  box-shadow:0 0 80px rgba(82,183,136,.45), 0 30px 80px rgba(0,0,0,.75);
 }
 
-/* ── Photo placeholder (square) ── */
-.photo-box {
-  width:100%;
-  aspect-ratio:1/1;
-  background:#0d1e35;
-  border:2px dashed rgba(82,183,136,0.3);
-  border-radius:9px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  flex-shrink:0;
-  margin-bottom:12px;
-  overflow:hidden;
+/* ────────── PHOTO PLACEHOLDER ────────── */
+.photo {
+  width:100%; aspect-ratio:1/1; flex-shrink:0;
+  background:#0d1e35; border:2px dashed rgba(82,183,136,.28); border-radius:9px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  margin-bottom:10px; overflow:hidden;
 }
-.photo-box img { width:100%; height:100%; object-fit:cover; border-radius:7px; }
-.initials { font-size:2rem; font-weight:800; color:rgba(82,183,136,0.38); }
-.photo-label { font-size:0.58rem; color:rgba(82,183,136,0.28); letter-spacing:.14em; text-transform:uppercase; margin-top:5px; }
+.photo img { width:100%;height:100%;object-fit:cover;border-radius:7px; }
+.ini  { font-size:1.8rem; font-weight:800; color:rgba(82,183,136,.35); }
+.lbl  { font-size:.55rem; color:rgba(82,183,136,.25); letter-spacing:.14em;
+        text-transform:uppercase; margin-top:5px; }
 
-/* ── Text ── */
-.name  { font-size:0.88rem; font-weight:700; color:#E8F0E8; line-height:1.2; }
-.title { font-size:0.68rem; color:#8BA098; margin-top:5px; line-height:1.55; }
+/* ────────── TEXT ────────── */
+.name  { font-size:.88rem; font-weight:700; color:#E8F0E8; line-height:1.2; }
+.ttl   { font-size:.67rem; color:#8BA098; margin-top:5px; line-height:1.55; }
 .badge {
-  display:inline-block; margin-top:10px;
-  background:rgba(82,183,136,0.1); border:1px solid rgba(82,183,136,0.3);
-  color:#52B788; padding:3px 10px; border-radius:4px;
-  font-size:0.6rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase;
+  display:inline-block; margin-top:8px;
+  background:rgba(82,183,136,.1); border:1px solid rgba(82,183,136,.3);
+  color:#52B788; padding:2px 9px; border-radius:4px;
+  font-size:.58rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase;
 }
 
-/* ══ ZOOM LAYER ══════════════════════════════════════════════ */
-/* Dark backdrop */
-#backdrop {
-  position:fixed; inset:0;
-  background:rgba(5,12,24,0.85);
-  backdrop-filter:blur(4px);
-  z-index:500;
-  opacity:0; pointer-events:none;
-  transition:opacity .4s ease;
-}
-#backdrop.on { opacity:1; pointer-events:all; }
-
-/* Floating card clone that zooms to centre */
-#zoom-card {
-  position:fixed;
-  z-index:600;
-  opacity:0; pointer-events:none;
-  transform-origin:top left;         /* set dynamically */
-  transition:none;
-}
-#zoom-card.on { opacity:1; pointer-events:all; }
-#zoom-card .person-card {
-  border-color:#52B788 !important;
-  box-shadow:0 0 70px rgba(82,183,136,0.4), 0 30px 70px rgba(0,0,0,0.7) !important;
-  cursor:default;
-}
-
-/* ── Hint ── */
+/* ────────── HINT ────────── */
 #hint {
-  position:fixed; bottom:16px; left:50%; transform:translateX(-50%);
-  font-size:0.65rem; color:rgba(255,255,255,0.22); letter-spacing:.05em;
-  pointer-events:none;
+  position:fixed; bottom:14px; left:50%; transform:translateX(-50%);
+  font-size:.62rem; color:rgba(255,255,255,.2); pointer-events:none;
 }
 </style>
 </head>
 <body>
 
-<div id="backdrop"></div>
-<div id="zoom-card"></div>
-
 <div class="slide">
   <div class="section-tag">Resource Persons</div>
 
-  <!-- Row 1 — top centre -->
+  <!-- TOP ROW: Dr. Parag Nigam -->
   <div class="row-top">
-    <div class="card-wrap" id="c0">
-      <div class="person-card">
-        <div class="photo-box"><span class="initials">PN</span><span class="photo-label">Photo</span></div>
+    <div class="cw" id="c0">
+      <div class="card" onclick="zoom(0)">
+        <div class="photo"><span class="ini">PN</span><span class="lbl">Photo</span></div>
         <div class="name">Dr. Parag Nigam</div>
-        <div class="title">Scientist G &amp; Head<br>Dept. of Wildlife Health Management</div>
+        <div class="ttl">Scientist G &amp; Head<br>Dept. of Wildlife Health Management</div>
         <span class="badge">Session Chair</span>
       </div>
     </div>
   </div>
 
-  <!-- Rows 2 & 3 — 2×2 grid -->
+  <!-- GRID ROWS: 2×2 -->
   <div class="row-grid">
-    <div class="card-wrap" id="c1">
-      <div class="person-card">
-        <div class="photo-box"><span class="initials">TS</span><span class="photo-label">Photo</span></div>
+    <div class="cw" id="c1">
+      <div class="card" onclick="zoom(1)">
+        <div class="photo"><span class="ini">TS</span><span class="lbl">Photo</span></div>
         <div class="name">Dr. Tapendra Saini</div>
-        <div class="title">Scientist-C<br>Dept. of Wildlife Health Management</div>
+        <div class="ttl">Scientist-C<br>Dept. of Wildlife Health Management</div>
         <span class="badge">Resource Person</span>
       </div>
     </div>
-    <div class="card-wrap" id="c2">
-      <div class="person-card">
-        <div class="photo-box"><span class="initials">CS</span><span class="photo-label">Photo</span></div>
+    <div class="cw" id="c2">
+      <div class="card" onclick="zoom(2)">
+        <div class="photo"><span class="ini">CS</span><span class="lbl">Photo</span></div>
         <div class="name">Dr. C.P. Sharma</div>
-        <div class="title">Principal Technical Officer<br>Forensic Cell</div>
+        <div class="ttl">Principal Technical Officer<br>Forensic Cell</div>
         <span class="badge">Resource Person</span>
       </div>
     </div>
-    <div class="card-wrap" id="c3">
-      <div class="person-card">
-        <div class="photo-box"><span class="initials">MK</span><span class="photo-label">Photo</span></div>
+    <div class="cw" id="c3">
+      <div class="card" onclick="zoom(3)">
+        <div class="photo"><span class="ini">MK</span><span class="lbl">Photo</span></div>
         <div class="name">Dr. M. Karikalan</div>
-        <div class="title">Senior Scientist<br>Centre for Wildlife</div>
+        <div class="ttl">Senior Scientist<br>Centre for Wildlife</div>
         <span class="badge">Lab Reports</span>
       </div>
     </div>
-    <div class="card-wrap" id="c4">
-      <div class="person-card">
-        <div class="photo-box"><span class="initials">AS</span><span class="photo-label">Photo</span></div>
+    <div class="cw" id="c4">
+      <div class="card" onclick="zoom(4)">
+        <div class="photo"><span class="ini">AS</span><span class="lbl">Photo</span></div>
         <div class="name">Dr. A.B. Shrivastav</div>
-        <div class="title">Former Director<br>Centre for Wildlife &amp; Forensic Health (CWFH)</div>
+        <div class="ttl">Former Director<br>Centre for Wildlife &amp; Forensic Health</div>
         <span class="badge">Resource Person</span>
       </div>
     </div>
   </div>
 </div>
 
-<div id="hint">Click any card to zoom · card returns automatically after 5 s</div>
+<div id="hint">Click any card · zooms to centre · returns automatically after 5 s</div>
 
 <script>
-const backdrop  = document.getElementById('backdrop');
-const zoomCard  = document.getElementById('zoom-card');
-const cardWraps = Array.from({length:5}, (_,i) => document.getElementById('c'+i));
-
-let busy      = false;   // true while a zoom animation is in progress
+const wraps = Array.from({length:5}, (_,i) => document.getElementById('c'+i));
+let active = -1;
 let holdTimer = null;
 
-/* ── helpers ── */
-function allCardsExcept(idx) {
-  return cardWraps.filter((_, i) => i !== idx);
-}
+function zoom(idx) {
+  if (active !== -1) return;           // ignore clicks while one is zoomed
+  active = idx;
 
-/* ── ZOOM IN ── */
-function zoomIn(idx, onHoldEnd) {
-  if (busy) return;
-  busy = true;
-
-  const wrap = cardWraps[idx];
-  const card = wrap.querySelector('.person-card');
+  const wrap = wraps[idx];
+  const card = wrap.querySelector('.card');
   const rect = card.getBoundingClientRect();
 
-  /* 1. populate zoom-card at EXACT original position & size */
-  zoomCard.innerHTML = card.outerHTML;
-  zoomCard.style.cssText =
-    `left:${rect.left}px; top:${rect.top}px;` +
-    `width:${rect.width}px; height:${rect.height}px;` +
-    `transform:none; transition:none; opacity:0;`;
+  // ── hide all OTHER cards instantly ──
+  wraps.forEach((w, i) => { if (i !== idx) w.classList.add('hidden'); });
 
-  zoomCard.classList.add('on');
-  zoomCard.offsetHeight; // force reflow so transition fires from here
+  // ── compute scale + translate to move card centre → viewport centre ──
+  const cardCx = rect.left + rect.width  / 2;
+  const cardCy = rect.top  + rect.height / 2;
+  const vpCx   = window.innerWidth  / 2;
+  const vpCy   = window.innerHeight / 2;
 
-  /* 2. dim other cards */
-  allCardsExcept(idx).forEach(w => w.classList.add('dim'));
-  wrap.classList.add('active');
+  const dx = vpCx - cardCx;
+  const dy = vpCy - cardCy;
 
-  /* 3. show backdrop */
-  backdrop.classList.add('on');
+  // scale so card height = 70% viewport height, max 3×
+  const scale = Math.min((window.innerHeight * 0.70) / rect.height, 3);
 
-  /* 4. compute target transform: translate to viewport centre + scale up */
-  const fromCx = rect.left + rect.width  / 2;
-  const fromCy = rect.top  + rect.height / 2;
-  const toCx   = window.innerWidth  / 2;
-  const toCy   = window.innerHeight / 2;
-  const dx     = toCx - fromCx;
-  const dy     = toCy - fromCy;
+  wrap.classList.add('zooming');
 
-  // Scale so card fills ~58% viewport height, max 2.5×
-  const scale  = Math.min((window.innerHeight * 0.58) / rect.height, 2.5);
+  // apply transform — CSS transition on .card handles the animation
+  card.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
+  card.style.zIndex    = '100';
 
-  /* 5. animate to centre */
-  requestAnimationFrame(() => {
-    zoomCard.style.transition =
-      'transform .6s cubic-bezier(.22,1,.36,1), opacity .25s ease';
-    zoomCard.style.opacity   = '1';
-    // translate is relative to top-left corner, so shift by dx,dy
-    // then scale from centre: also shift by half the card dims × (scale-1)
-    const tx = dx - (rect.width  / 2) * (scale - 1);
-    const ty = dy - (rect.height / 2) * (scale - 1);
-    zoomCard.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
-  });
-
-  /* 6. hold 5 s then zoom out */
-  holdTimer = setTimeout(() => zoomOut(idx, onHoldEnd), 5000);
+  // ── after 5 s, zoom back ──
+  holdTimer = setTimeout(() => zoomBack(idx), 5000);
 }
 
-/* ── ZOOM OUT — card travels back to original position ── */
-function zoomOut(idx, cb) {
+function zoomBack(idx) {
   clearTimeout(holdTimer);
+  const wrap = wraps[idx];
+  const card = wrap.querySelector('.card');
 
-  /* animate back to scale(1) at original position = translate(0,0) scale(1) */
-  zoomCard.style.transition =
-    'transform .5s cubic-bezier(.55,0,.45,1), opacity .3s ease .2s';
-  zoomCard.style.transform  = 'none';   // back to original rect
-  zoomCard.style.opacity    = '0';
+  // reverse the transform → card shrinks back to original position
+  card.style.transition = 'transform .5s cubic-bezier(.55,0,.45,1), box-shadow .3s';
+  card.style.transform  = '';
 
-  backdrop.classList.remove('on');
-
+  // after animation completes → restore all cards
   setTimeout(() => {
-    zoomCard.classList.remove('on');
-    zoomCard.innerHTML = '';
-    cardWraps[idx].classList.remove('active');
-    allCardsExcept(idx).forEach(w => w.classList.remove('dim'));
-    busy = false;
-    if (cb) cb();
+    card.style.transition = '';
+    card.style.zIndex     = '';
+    wrap.classList.remove('zooming');
+    wraps.forEach(w => w.classList.remove('hidden'));
+    active = -1;
   }, 520);
 }
-
-/* ── click handlers ── */
-cardWraps.forEach((wrap, idx) => {
-  wrap.addEventListener('click', () => {
-    if (busy) return;
-    zoomIn(idx);
-  });
-});
 </script>
 </body>
 </html>
