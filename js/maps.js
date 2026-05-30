@@ -1,7 +1,8 @@
 // Maps module — Leaflet-based map initializers
-// All maps are initialized lazily; subsequent calls are no-ops.
-
-const mapsInitialized = {};
+// Lazily initialized; mapsInitialized object is declared in app.js
+// and available globally since scripts are loaded in order.
+// This ensures the same object is shared between maps.js and app.js.
+window.mapsInitialized = window.mapsInitialized || {};
 
 function initDistributionMap(id) {
   if (mapsInitialized[id]) return;

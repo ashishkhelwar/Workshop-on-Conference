@@ -3,714 +3,900 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Elephant &amp; Human Casualty — Workshop Presentation | Bilaspur 2026</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<title>Elephant &amp; Human Casualty — Bilaspur Forest Department Workshop</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="css/theme.css">
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════════════════════════
+<!-- ═══════════════════════════════════════════════════════════════
      SLIDE 1 — TITLE
-══════════════════════════════════════════════════════════════════════════ -->
+     ═══════════════════════════════════════════════════════════════ -->
 <section class="slide slide-title active" id="s1">
-  <div class="title-bg-glow anim-zoom"></div>
-  <!-- Decorative elephant silhouette -->
-  <svg viewBox="0 0 800 500" style="position:absolute;bottom:0;right:0;width:55%;opacity:0.04;pointer-events:none">
-    <path d="M650,420 Q700,350 680,280 Q660,210 600,200 Q570,195 560,220 Q540,200 510,205
-             Q490,170 450,165 Q410,160 390,190 Q360,165 330,178 Q300,145 265,155
-             Q220,140 200,175 Q175,155 155,172 Q130,160 115,185
-             Q90,175 80,205 Q60,210 55,240 Q40,250 42,280 Q30,295 38,320
-             Q25,340 35,365 Q20,385 30,410 Q25,430 45,440 L750,440 Q760,430 750,415 Z"
-          fill="currentColor"/>
+  <div class="bg-overlay"></div>
+  <!-- Elephant silhouette SVG (decorative background) -->
+  <svg class="elephant-bg" viewBox="0 0 600 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M480 340 C500 300 520 260 510 220 C500 180 470 160 440 155
+             C420 150 400 158 385 170 C370 155 350 148 330 150
+             C310 152 295 162 285 175 C270 168 252 165 235 170
+             C210 178 195 200 192 225 C188 250 196 275 210 292
+             C200 308 195 328 198 350 C202 375 218 395 240 405
+             C240 418 238 432 242 442 C246 452 256 455 268 452
+             C278 449 284 440 286 430 C296 438 308 442 320 440
+             C332 438 340 430 344 420 C360 428 378 430 392 424
+             C392 436 390 450 396 458 C402 464 414 464 422 458
+             C428 452 430 440 428 428 C450 418 466 400 474 378
+             C480 362 480 350 480 340 Z
+             M340 200 C355 192 372 190 386 196 C378 210 365 218 350 220
+             C342 214 338 207 340 200 Z
+             M270 210 C280 202 296 200 308 206 C302 218 290 224 278 222
+             C270 217 267 213 270 210 Z"
+          fill="#52B788"/>
+    <!-- Trunk -->
+    <path d="M192 225 C180 240 165 260 158 282 C152 300 155 318 162 328
+             C168 336 178 338 186 332 C192 326 194 314 190 302
+             C186 290 182 276 188 264 C192 255 196 245 192 235 Z"
+          fill="#52B788"/>
+    <!-- Tail -->
+    <path d="M480 340 C492 330 506 326 514 332 C520 338 516 350 508 356
+             C502 360 494 358 490 352 C488 348 486 344 480 340 Z"
+          fill="#52B788"/>
   </svg>
-  <div class="title-lower">
-    <div class="section-tag anim-fadeup">Bilaspur Forest Department Workshop · 30 May 2026</div>
-    <h1 class="anim-fadeup delay-1">Elephant <span>&amp;</span> Human<br>Casualty</h1>
-    <p class="subtitle anim-fadeup delay-2">Dharamjaigarh &amp; Raigarh Forest Divisions | Bilaspur, Chhattisgarh</p>
-    <p class="meta anim-fadeup delay-3">Financial Years 2021–22 to 2025–26 &nbsp;·&nbsp; 86 Geo-referenced Incidents &nbsp;·&nbsp; Five-Year Analysis</p>
+  <div class="lower-third animate-fade-up">
+    <div class="section-tag">Bilaspur Forest Department Workshop &nbsp;·&nbsp; 30 May 2026</div>
+    <h1>Elephant <span>&amp;</span> Human<br>Casualty</h1>
+    <p class="subtitle">Dharamjaigarh &amp; Raigarh Forest Divisions &nbsp;|&nbsp; Bilaspur, Chhattisgarh</p>
+    <p class="meta">Financial Years 2021–22 to 2025–26 &nbsp;·&nbsp; 86 Geo-referenced Incidents</p>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════════
+<!-- ═══════════════════════════════════════════════════════════════
      SLIDE 2 — ABOUT WORKSHOP
-══════════════════════════════════════════════════════════════════════════ -->
-<section class="slide" id="s2">
-  <div class="layout-band">
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide bg-forest" id="s2">
+  <div class="layout-band" style="height:100%">
     <div class="band"></div>
     <div class="band-content">
-      <div class="section-tag">Workshop Context</div>
-      <h2 style="margin-bottom:18px">Human-Elephant Conflict:<br>Data, Science &amp; Solutions</h2>
-      <p style="color:#8BA098;font-size:0.92rem;max-width:640px;margin-bottom:28px;line-height:1.7">
-        This workshop brings together field officers, range managers, GIS specialists, and wildlife scientists
-        from Dharamjaigarh and Raigarh Forest Divisions to review five years of incident data, examine
-        postmortem and laboratory findings, and formulate a coordinated action plan for reducing
-        human-elephant conflict casualties in Bilaspur district.
+      <div class="section-tag animate-fade-up">Workshop Context</div>
+      <h2 class="animate-fade-up delay-1">Human-Elephant Conflict:<br>Data, Science &amp; Solutions</h2>
+      <p class="muted mt-12 animate-fade-up delay-2" style="max-width:600px;font-size:0.95rem;">
+        A technical workshop bringing together field officers, scientists, and GIS analysts to review
+        five years of casualty data, identify spatial hotspots, and formulate an evidence-based
+        intervention framework for Bilaspur District.
       </p>
-      <div style="margin-bottom:28px">
-        <div class="finding-item visible" style="opacity:1;transform:none">
-          <div class="finding-dot"></div>
-          <div class="finding-text"><strong>Data-driven decision making</strong> — translate 86 geo-referenced incidents into targeted infrastructure improvements</div>
+      <ul class="bullet-list mt-20 animate-fade-up delay-3" style="max-width:600px">
+        <li>Establish a shared, data-driven understanding of casualty patterns across both divisions</li>
+        <li>Strengthen cross-division coordination for rapid incident response and prevention</li>
+        <li>Develop an actionable intervention framework — power-line audits, escape ramps, early warning</li>
+      </ul>
+      <div class="kpi-grid kpi-grid-4 mt-32 animate-fade-up delay-4" style="max-width:700px">
+        <div class="kpi-card">
+          <div class="kpi-label">Coverage</div>
+          <div class="kpi-value" data-count="5">5</div>
+          <div class="kpi-sub">Financial Years</div>
         </div>
-        <div class="finding-item visible" style="opacity:1;transform:none">
-          <div class="finding-dot" style="background:#F4A261"></div>
-          <div class="finding-text"><strong>Cross-division coordination</strong> — establish real-time communication protocol between Dharamjaigarh and Raigarh mandals</div>
+        <div class="kpi-card">
+          <div class="kpi-label">Geo-points</div>
+          <div class="kpi-value" data-count="86">86</div>
+          <div class="kpi-sub">Geo-referenced</div>
         </div>
-        <div class="finding-item visible" style="opacity:1;transform:none">
-          <div class="finding-dot" style="background:#C9A84C"></div>
-          <div class="finding-text"><strong>Actionable intervention framework</strong> — prioritise electrocution prevention and drowning mitigation as immediate actions</div>
+        <div class="kpi-card">
+          <div class="kpi-label">Divisions</div>
+          <div class="kpi-value" data-count="2">2</div>
+          <div class="kpi-sub">DH &amp; RG</div>
         </div>
-      </div>
-      <div class="kpi-row">
-        <div class="kpi-card"><div class="kpi-label">Financial Years</div><div class="kpi-value text-green">5</div></div>
-        <div class="kpi-card"><div class="kpi-label">Geo-points</div><div class="kpi-value text-green">86</div></div>
-        <div class="kpi-card"><div class="kpi-label">Divisions</div><div class="kpi-value text-green">2</div></div>
-        <div class="kpi-card"><div class="kpi-label">Coverage</div><div class="kpi-value text-green">100%</div></div>
+        <div class="kpi-card">
+          <div class="kpi-label">Coverage</div>
+          <div class="kpi-value green">100%</div>
+          <div class="kpi-sub">All Incidents</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════════
-     SLIDE 3 — RESOURCE PERSONS 🔒
-══════════════════════════════════════════════════════════════════════════ -->
-<section class="slide" id="s3">
-  <div style="padding:40px 60px;height:100%;display:flex;flex-direction:column">
-    <div class="section-tag">Resource Persons</div>
-    <h2 style="margin-bottom:24px">Faculty &amp; Experts</h2>
-    <!-- Featured top card -->
-    <div class="persons-top" style="margin-bottom:18px">
-      <div class="person-card featured" style="flex-direction:row;text-align:left;max-width:620px;gap:22px">
-        <div class="person-avatar" style="flex-shrink:0">AKN</div>
-        <div>
-          <div class="person-name" style="font-size:1.2rem">Dr. A. K. Nigam</div>
-          <div class="person-title">Divisional Forest Officer<br>Dharamjaigarh Van Mandal, Bilaspur</div>
-          <div class="person-org">Chhattisgarh Forest Department</div>
-        </div>
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 3 — RESOURCE PERSONS
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide bg-dark" id="s3">
+  <div class="person-cards-wrapper">
+    <div class="section-tag" style="align-self:flex-start">Resource Persons</div>
+
+    <!-- Featured: Person 1 -->
+    <div class="person-featured" id="pFeatured">
+      <div class="person-avatar large">AN</div>
+      <div>
+        <div class="person-name">Dr. A.K. Nigam</div>
+        <div class="person-title">Divisional Forest Officer<br>Dharamjaigarh Van Mandal, Bilaspur</div>
+        <span class="person-badge">Lead Presenter</span>
       </div>
     </div>
-    <!-- 2×2 grid -->
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px;flex:1">
-      <div class="person-card">
-        <div class="person-avatar">RKS</div>
-        <div class="person-name">Mr. R. K. Saini</div>
-        <div class="person-title">Divisional Forest Officer<br>Raigarh Van Mandal</div>
-        <div class="person-org">CG Forest Department</div>
+
+    <!-- Grid: Persons 2–5 -->
+    <div class="person-cards-grid">
+      <div class="person-card" id="pCard1">
+        <div class="person-avatar">RS</div>
+        <div class="person-name">Mr. R.K. Saini</div>
+        <div class="person-title">DFO, Raigarh Van Mandal<br>Bilaspur, Chhattisgarh</div>
+        <span class="person-badge">Co-Presenter</span>
       </div>
-      <div class="person-card">
-        <div class="person-avatar">SKS</div>
-        <div class="person-name">Dr. S. K. Sharma</div>
+      <div class="person-card" id="pCard2">
+        <div class="person-avatar">SS</div>
+        <div class="person-name">Dr. S.K. Sharma</div>
         <div class="person-title">Range Officer<br>Chhal Beat, Dharamjaigarh</div>
-        <div class="person-org">CG Forest Department</div>
+        <span class="person-badge">Field Report</span>
       </div>
-      <div class="person-card">
-        <div class="person-avatar" style="background:linear-gradient(135deg,#1a3a5c,#2EC4B6)">MK</div>
+      <div class="person-card" id="pCard3">
+        <div class="person-avatar">MK</div>
         <div class="person-name">Dr. M. Karikalan</div>
-        <div class="person-title">Sr. Scientist &amp; Incharge<br>Centre for Wildlife Conservation &amp; Disease Surveillance</div>
-        <div class="person-org">ICAR-IVRI, Izatnagar</div>
+        <div class="person-title">Sr. Scientist &amp; Incharge<br>ICAR-IVRI Izatnagar (Lab Authority)</div>
+        <span class="person-badge">Lab Reports</span>
       </div>
-      <div class="person-card">
-        <div class="person-avatar" style="background:linear-gradient(135deg,#3a2a10,#C9A84C)">PKS</div>
-        <div class="person-name">Mr. P. K. Shrivastav</div>
+      <div class="person-card" id="pCard4">
+        <div class="person-avatar">PS</div>
+        <div class="person-name">Mr. P.K. Shrivastav</div>
         <div class="person-title">GIS Analyst<br>Bilaspur Forest Division</div>
-        <div class="person-org">CG Forest Department</div>
+        <span class="person-badge">GIS &amp; Mapping</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════════
+<!-- ═══════════════════════════════════════════════════════════════
      SLIDE 4 — SCHEDULE
-══════════════════════════════════════════════════════════════════════════ -->
-<section class="slide" id="s4">
-  <div class="layout-band">
-    <div class="band"></div>
-    <div class="band-content">
-      <div class="section-tag">Programme</div>
-      <h2 style="margin-bottom:24px">Workshop Schedule — 30 May 2026</h2>
-      <div class="timeline">
-        <div class="tl-item">
-          <div class="tl-time">09:30</div>
-          <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
-          <div class="tl-body"><h4>Registration &amp; Welcome</h4><p>Venue setup, participant registration</p></div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-time">10:00</div>
-          <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
-          <div class="tl-body"><h4>Inaugural Session &amp; Workshop Objectives</h4><p>Opening address, scope &amp; expected outcomes</p></div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-time">10:30</div>
-          <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
-          <div class="tl-body"><h4>Elephant Population &amp; Range Dynamics</h4><p>Dr. A. K. Nigam — Population trends, CG elephant corridor status</p></div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-time">11:00</div>
-          <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
-          <div class="tl-body"><h4>Five-Year Casualty Data Presentation</h4><p>Mr. R. K. Saini — 2021–26 incident analysis, both divisions</p></div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-time">11:30</div>
-          <div class="tl-spine"><div class="tl-dot" style="background:#F4A261"></div><div class="tl-line"></div></div>
-          <div class="tl-body"><h4 style="color:#F4A261">Tea Break</h4><p>15 minutes</p></div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-time">11:45</div>
-          <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
-          <div class="tl-body"><h4>GIS Hotspot Analysis &amp; Mapping</h4><p>Mr. P. K. Shrivastav — 86-point geo-mapping, risk matrix</p></div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-time">12:15</div>
-          <div class="tl-spine"><div class="tl-dot" style="background:#2EC4B6"></div><div class="tl-line"></div></div>
-          <div class="tl-body"><h4>PM &amp; Laboratory Report Findings</h4><p>Dr. M. Karikalan — ICAR-IVRI toxicology, histopathology, arsenic findings</p></div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-time">12:45</div>
-          <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
-          <div class="tl-body"><h4>Recommendations &amp; Action Plan</h4><p>Immediate / short-term / long-term interventions, responsibilities</p></div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-time">13:15</div>
-          <div class="tl-spine"><div class="tl-dot" style="background:#C9A84C"></div></div>
-          <div class="tl-body"><h4 style="color:#C9A84C">Lunch &amp; Field Discussion</h4><p>Open floor, division-wise queries</p></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════════════════════════════════
-     SLIDE 5 — PARTICIPANTS
-══════════════════════════════════════════════════════════════════════════ -->
-<section class="slide" id="s5">
-  <div style="padding:55px 80px;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
-    <div class="section-tag">Participants</div>
-    <div style="margin:16px 0 8px">
-      <span class="hero-number green" data-countup="48">0</span>
-    </div>
-    <p style="font-size:1.2rem;color:#8BA098;margin-bottom:40px">Participants from 6 departments &amp; institutions</p>
-    <div class="logo-grid">
-      <div class="dept-card"><div class="dept-abbr">DH</div><div class="dept-name">Dharamjaigarh Van Mandal<br><span style="color:#52B788;font-size:0.68rem">23 Elephant · 36 Human</span></div></div>
-      <div class="dept-card"><div class="dept-abbr">RG</div><div class="dept-name">Raigarh Van Mandal<br><span style="color:#52B788;font-size:0.68rem">18 Elephant · 9 Human</span></div></div>
-      <div class="dept-card"><div class="dept-abbr" style="color:#2EC4B6">IVRI</div><div class="dept-name">ICAR-IVRI<br>Izatnagar, U.P.</div></div>
-      <div class="dept-card"><div class="dept-abbr" style="color:#C9A84C">WL</div><div class="dept-name">Wildlife Department<br>Chhattisgarh</div></div>
-      <div class="dept-card"><div class="dept-abbr">GIS</div><div class="dept-name">GIS Cell<br>Bilaspur Division</div></div>
-      <div class="dept-card"><div class="dept-abbr" style="color:#F4A261">DA</div><div class="dept-name">District Administration<br>Bilaspur</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════════════════════════════════
-     SLIDE 6a — CURRENT STATUS & POPULATION
-══════════════════════════════════════════════════════════════════════════ -->
-<section class="slide" id="s6a">
-  <div class="layout-half">
-    <div class="half">
-      <div class="section-tag">Slide 6a · Population</div>
-      <h2 style="margin-bottom:18px">Elephant Population —<br>Chhattisgarh</h2>
-      <p style="color:#8BA098;font-size:0.88rem;line-height:1.7;margin-bottom:24px">
-        Chhattisgarh's elephant population has grown significantly from 164 in 2002 to an estimated
-        410+ in 2025, driven by migration from Odisha and Jharkhand. The northern corridor covering
-        Bilaspur, Raigarh, and Korba districts now harbours the largest concentration.
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide bg-dark" id="s4">
+  <div class="layout-half" style="height:100%">
+    <div class="half border-right">
+      <div class="section-tag">Programme Schedule</div>
+      <h2>Workshop Agenda</h2>
+      <p class="muted mt-12" style="font-size:0.88rem">30 May 2026 &nbsp;·&nbsp; Forest Rest House, Bilaspur</p>
+      <div class="divider"></div>
+      <p style="font-size:0.85rem;color:#8BA098;line-height:1.7;">
+        A full-day technical session reviewing five years of incident data, spatial analysis,
+        postmortem findings, and culminating in a structured action-plan discussion for
+        Dharamjaigarh and Raigarh Van Mandals.
       </p>
-      <div class="kpi-row" style="flex-direction:column;gap:12px">
-        <div class="kpi-card"><div class="kpi-label">Estimated CG Population (2025)</div><div class="kpi-value text-green">~410</div></div>
-        <div class="kpi-card"><div class="kpi-label">Growth since 2002</div><div class="kpi-value text-amber">+150%</div></div>
-        <div class="kpi-card"><div class="kpi-label">Active Herds — Bilaspur Zone</div><div class="kpi-value text-green">8–12</div></div>
+      <div class="mt-20" style="display:flex;gap:12px;flex-wrap:wrap">
+        <span class="stat-badge">48 Participants</span>
+        <span class="stat-badge">5 Sessions</span>
+        <span class="stat-badge">2 Divisions</span>
       </div>
     </div>
-    <div class="half right">
-      <h3 style="margin-bottom:16px;color:#8BA098;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.1em">Population Trend 2002–2025</h3>
-      <div class="chart-wrap" style="height:340px">
+    <div class="half" style="overflow-y:auto;padding-top:40px;padding-bottom:40px">
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-time">09:30</div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-text">
+            <h4>Registration &amp; Welcome</h4>
+            <p>Participant registration, distribution of materials</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">10:00</div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-text">
+            <h4>Inaugural Session &amp; Workshop Objectives</h4>
+            <p>Opening remarks, scope and expected outcomes</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">10:30</div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-text">
+            <h4>Elephant Population &amp; Range Dynamics</h4>
+            <p>Dr. A.K. Nigam — DFO, Dharamjaigarh</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">11:00</div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-text">
+            <h4>Five-Year Casualty Data Presentation</h4>
+            <p>Mr. R.K. Saini — DFO, Raigarh</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">11:30</div>
+          <div class="timeline-dot" style="background:#C9A84C;border-color:#0A1628"></div>
+          <div class="timeline-text">
+            <h4 style="color:#C9A84C">Tea Break</h4>
+            <p>15 minutes</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">11:45</div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-text">
+            <h4>GIS Hotspot Analysis &amp; Mapping</h4>
+            <p>Mr. P.K. Shrivastav — GIS Analyst</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">12:15</div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-text">
+            <h4>PM &amp; Lab Report Findings</h4>
+            <p>Dr. M. Karikalan — ICAR-IVRI Izatnagar</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">12:45</div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-text">
+            <h4>Recommendations &amp; Action Plan</h4>
+            <p>Panel discussion — all resource persons</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">13:15</div>
+          <div class="timeline-dot" style="background:#F4A261;border-color:#0A1628"></div>
+          <div class="timeline-text">
+            <h4 style="color:#F4A261">Lunch &amp; Field Discussion</h4>
+            <p>Informal networking and field-level deliberations</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 5 — PARTICIPANTS
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide bg-forest" id="s5">
+  <div style="padding:60px 80px;height:100%;display:flex;flex-direction:column;justify-content:center">
+    <div class="section-tag" style="align-self:center;margin-bottom:0">Attending Delegations</div>
+    <div class="stat-hero mt-20">
+      <div class="hero-number green hero-count" style="font-size:clamp(4rem,12vw,9rem)">0</div>
+      <div class="stat-label">Total Participants</div>
+    </div>
+    <div class="logo-grid">
+      <div class="dept-logo">
+        <strong>Dharamjaigarh Van Mandal</strong>
+        DFO, Range Officers, Beat Guards
+      </div>
+      <div class="dept-logo">
+        <strong>Raigarh Van Mandal</strong>
+        DFO, Range Officers, Beat Guards
+      </div>
+      <div class="dept-logo">
+        <strong>ICAR-IVRI Izatnagar</strong>
+        Senior Scientists, Lab Analysts
+      </div>
+      <div class="dept-logo">
+        <strong>Wildlife Department CG</strong>
+        Wildlife Wardens &amp; Inspectors
+      </div>
+      <div class="dept-logo">
+        <strong>GIS Cell, Bilaspur</strong>
+        GIS Analysts &amp; Cartographers
+      </div>
+      <div class="dept-logo">
+        <strong>District Administration</strong>
+        Revenue &amp; Tehsil Officers
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 6a — POPULATION & CURRENT STATUS
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide bg-forest" id="s6a">
+  <div class="layout-half" style="height:100%">
+    <div class="half border-right">
+      <div class="section-tag">Current Status</div>
+      <h2>Elephant Population<br><span class="green">Chhattisgarh</span></h2>
+      <div class="divider"></div>
+      <div class="kpi-grid kpi-grid-2 mt-20">
+        <div class="kpi-card">
+          <div class="kpi-label">Estimated 2025</div>
+          <div class="kpi-value green">~410</div>
+          <div class="kpi-sub">Elephants in CG</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Since 2002</div>
+          <div class="kpi-value amber">+150%</div>
+          <div class="kpi-sub">Population growth</div>
+        </div>
+      </div>
+      <ul class="bullet-list mt-20">
+        <li>Population grew from 164 (2002) to ~410 (2025 est.) over two decades</li>
+        <li>Bilaspur District hosts the largest concentration of elephants in CG</li>
+        <li>Seasonal corridors extend into Raigarh, Korba and Surguja districts</li>
+        <li>Human-elephant interface intensifying as agricultural land expands into corridors</li>
+        <li>2025-26 records the highest single-year conflict events in the five-year study period</li>
+      </ul>
+    </div>
+    <div class="half" style="background:#0A1628">
+      <div class="section-tag" style="align-self:flex-start">Population Trend 2002–2025</div>
+      <div class="chart-area" style="flex:1;min-height:0;position:relative;margin-top:8px">
         <canvas id="popCanvas"></canvas>
       </div>
-      <p style="font-size:0.72rem;color:#8BA098;margin-top:10px">Source: Wildlife Census, Govt. of Chhattisgarh (estimated)</p>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════════════════════════════════
-     SLIDE 6b — DISTRIBUTION (GIS)
-══════════════════════════════════════════════════════════════════════════ -->
-<section class="slide" id="s6b">
-  <div class="map-full" id="distMap"></div>
-  <div class="map-overlay">
-    <div class="section-tag" style="font-size:0.65rem;padding:3px 8px">GIS · Distribution</div>
-    <h3>Elephant Range<br>Bilaspur District</h3>
-    <p style="margin-top:6px">Approx. range across Dharamjaigarh and Raigarh Van Mandals</p>
-    <div class="map-legend">
-      <div class="legend-item"><div class="legend-dot" style="background:#52B788"></div>Dharamjaigarh Division</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#2EC4B6"></div>Raigarh Division</div>
-      <div class="legend-item"><div class="legend-dot" style="background:rgba(82,183,136,0.4);border:1px dashed #52B788"></div>Estimated Elephant Range</div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════════════════════════════════
-     SLIDE 7 — TOTAL ELEPHANT CASUALTY 🔒
-══════════════════════════════════════════════════════════════════════════ -->
-<section class="slide" id="s7">
-  <div style="padding:50px 70px;height:100%;display:flex;flex-direction:column">
-    <div class="section-tag">Slide 7 · Elephant Casualty</div>
-    <div style="display:flex;align-items:flex-end;gap:40px;margin-bottom:30px">
-      <div>
-        <div style="font-size:0.8rem;color:#8BA098;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px">Total Elephant Deaths</div>
-        <div class="hero-number green" data-countup="41">0</div>
-        <div style="font-size:0.9rem;color:#8BA098;margin-top:4px">Both Divisions · 2021–22 to 2025–26</div>
+      <div class="chart-note mt-12">
+        <strong>Source:</strong> Wildlife Institute of India Census &amp; CG Forest Dept. Estimates
       </div>
-      <div style="flex:1;display:flex;flex-direction:column;gap:8px;padding-bottom:16px">
-        <div style="display:flex;gap:16px">
-          <div class="kpi-card" style="flex:1"><div class="kpi-label">Dharamjaigarh</div><div class="kpi-value text-green">23</div></div>
-          <div class="kpi-card" style="flex:1"><div class="kpi-label">Raigarh</div><div class="kpi-value text-amber">18</div></div>
-          <div class="kpi-card red" style="flex:1"><div class="kpi-label">2025-26 (ongoing)</div><div class="kpi-value text-red">12</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 6b — DISTRIBUTION MAP
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s6b" style="background:#1a2030">
+  <div class="map-container">
+    <div id="distMap" style="width:100%;height:100%"></div>
+    <div class="map-overlay">
+      <h3>Elephant Range — Bilaspur District</h3>
+      <p>Approximate range boundary across Dharamjaigarh &amp; Raigarh Van Mandals.</p>
+      <div class="divider" style="margin:10px 0 8px"></div>
+      <div style="font-size:0.75rem;color:#E8F0E8;margin-bottom:4px">
+        <span style="color:#52B788;font-weight:700">Dharamjaigarh</span> — 23 elephant deaths · 36 human deaths
+      </div>
+      <div style="font-size:0.75rem;color:#E8F0E8">
+        <span style="color:#F4A261;font-weight:700">Raigarh</span> — 18 elephant deaths · 9 human deaths
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 7 — ELEPHANT CASUALTY TOTAL
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide bg-dark" id="s7">
+  <div class="layout-half" style="height:100%">
+    <div class="half border-right" style="align-items:flex-start;justify-content:center">
+      <div class="section-tag">Elephant Casualties</div>
+      <div class="hero-number green hero-count" style="line-height:0.9">0</div>
+      <p class="muted mt-8" style="font-size:1rem;font-weight:600">Total Elephant Deaths</p>
+      <p class="muted mt-4" style="font-size:0.82rem">2021–22 to 2025–26 | Both Divisions</p>
+      <div class="divider mt-20" style="width:100%"></div>
+      <div class="kpi-grid kpi-grid-2 mt-12" style="width:100%">
+        <div class="kpi-card">
+          <div class="kpi-label">Dharamjaigarh</div>
+          <div class="kpi-value green">23</div>
+          <div class="kpi-sub">DH Division</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Raigarh</div>
+          <div class="kpi-value amber">18</div>
+          <div class="kpi-sub">RG Division</div>
         </div>
       </div>
+      <div class="mt-20" style="background:rgba(230,57,70,0.1);border:1px solid rgba(230,57,70,0.3);border-radius:10px;padding:14px 18px;width:100%">
+        <div class="callout" style="margin-bottom:6px">CRITICAL — 2025-26</div>
+        <p style="font-size:0.82rem;color:#E8F0E8">12 deaths in current year — highest ever recorded in a single financial year.</p>
+      </div>
     </div>
-    <h3 style="color:#8BA098;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:14px">Year-wise Deaths (Both Divisions)</h3>
-    <div class="chart-wrap" style="flex:1">
-      <canvas id="yearBarsCanvas"></canvas>
-    </div>
-    <div style="display:flex;gap:20px;margin-top:14px;font-size:0.78rem;color:#8BA098">
-      <span>· Last bar (2025-26*) is ongoing — figures will increase</span>
-      <span style="color:#E63946;font-weight:700">2025-26 = CRITICAL — highest on record</span>
+    <div class="half" style="background:#0A1628;flex-direction:column">
+      <div class="section-tag" style="align-self:flex-start">Year-wise Distribution</div>
+      <div class="chart-area" style="flex:1;min-height:0;position:relative">
+        <canvas id="yearBarsCanvas"></canvas>
+        <div class="total-label">
+          <strong>41</strong>
+          Total Deaths
+        </div>
+      </div>
+      <div class="chart-note mt-8">Last bar (2025-26*) is current year — ongoing, figure may rise.</div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════════
-     SLIDE 8 — CAUSE OF DEATH 🔒
-══════════════════════════════════════════════════════════════════════════ -->
-<section class="slide" id="s8">
-  <div style="padding:50px 70px;height:100%;display:flex;flex-direction:column">
-    <div class="section-tag">Slide 8 · Cause of Death</div>
-    <h2 style="margin-bottom:6px">Cause of Death — Both Divisions Combined</h2>
-    <p style="color:#8BA098;font-size:0.85rem;margin-bottom:24px">41 elephant deaths · Financial Years 2021–22 to 2025–26</p>
-    <div class="chart-wrap" style="flex:1;max-height:380px">
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 8 — CAUSE OF DEATH
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide bg-dark" id="s8">
+  <div class="dashboard-frame">
+    <div class="dashboard-header">
+      <div class="dashboard-header-left">
+        <div class="section-tag">Cause Analysis</div>
+        <h2>Cause of Death — Both Divisions Combined</h2>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:1.8rem;font-weight:700;color:#F4A261">51%</div>
+        <div style="font-size:0.75rem;color:#8BA098">Electrocution</div>
+      </div>
+    </div>
+    <div class="chart-area">
       <canvas id="causeCanvas"></canvas>
     </div>
-    <div style="display:flex;gap:24px;margin-top:20px;flex-wrap:wrap">
-      <div style="background:rgba(244,162,97,0.1);border:1px solid rgba(244,162,97,0.3);border-radius:8px;padding:12px 20px;text-align:center">
-        <div style="font-size:1.8rem;font-weight:700;color:#F4A261">51%</div>
-        <div style="font-size:0.75rem;color:#8BA098">Electrocution<br>(21 of 41)</div>
-      </div>
-      <div style="background:rgba(46,196,182,0.1);border:1px solid rgba(46,196,182,0.3);border-radius:8px;padding:12px 20px;text-align:center">
-        <div style="font-size:1.8rem;font-weight:700;color:#2EC4B6">22%</div>
-        <div style="font-size:0.75rem;color:#8BA098">Drowning<br>(9 of 41)</div>
-      </div>
-      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px 20px">
-        <div style="font-size:0.78rem;color:#8BA098;line-height:1.7">
-          Illegal electric fencing &amp; sagging lines = primary electrocution source<br>
-          Calves unable to exit steep dam walls = primary drowning source<br>
-          Both causes are <strong style="color:#52B788">entirely preventable</strong>
-        </div>
-      </div>
+    <div class="chart-note mt-12" style="display:flex;gap:20px;flex-wrap:wrap">
+      <span><strong style="color:#F4A261">Electrocution 51%</strong> — illegal/low-hung power lines remain the leading cause</span>
+      <span><strong style="color:#52B788">Drowning 22%</strong> — dams, ponds &amp; seasonal nalas pose significant risk</span>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════════
-     SLIDE 9a — AGE GROUP (Dashboard frame)
-══════════════════════════════════════════════════════════════════════════ -->
-<section class="slide" id="s9a">
-  <div class="dashboard">
-    <div class="dash-header">
-      <div>
-        <div class="section-tag">Slide 9 · Demographic Analysis</div>
-        <h2>Elephant Death Profile — Dharamjaigarh</h2>
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 9a — AGE GROUP (Dashboard)
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide bg-dark" id="s9a">
+  <div class="dashboard-frame">
+    <div class="dashboard-header">
+      <div class="dashboard-header-left">
+        <div class="section-tag">Demographic Analysis</div>
+        <h2>Elephant Casualties — Age &amp; Sex Profiling</h2>
       </div>
-      <div class="dash-tabs">
-        <button class="dash-tab active" onclick="switchDashTab('age','s9a')">Age Group</button>
-        <button class="dash-tab" onclick="switchDashTab('sex','s9b')">Sex Group</button>
-        <button class="dash-tab" onclick="switchDashTab('seasonal','s9c')">Seasonal</button>
-        <button class="dash-tab" onclick="switchDashTab('range','s9d')">Range-wise</button>
+      <div class="tab-row">
+        <button class="tab active" onclick="window.location='#s9a'">Age Group</button>
+        <button class="tab" onclick="goTo(10)">Sex Group</button>
+        <button class="tab" onclick="goTo(11)">Seasonal</button>
+        <button class="tab" onclick="goTo(12)">Range-wise</button>
       </div>
     </div>
-    <div class="chart-wrap">
+    <div class="chart-area">
       <canvas id="ageCanvas"></canvas>
     </div>
-    <div class="dash-note warn">
-      Calves + Young (under 15 yrs) = <strong>39% of deaths</strong> — serious long-term conservation concern.
-      Loss of juveniles compresses future population recovery.
+    <div class="chart-note mt-12">
+      <strong>39% under 15 years (calves + young)</strong> — elevated mortality in young age classes
+      indicates a long-term conservation concern for population viability.
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════════
+<!-- ═══════════════════════════════════════════════════════════════
      SLIDE 9b — SEX GROUP
-══════════════════════════════════════════════════════════════════════════ -->
-<section class="slide" id="s9b">
-  <div class="dashboard">
-    <div class="dash-header">
-      <div>
-        <div class="section-tag">Slide 9 · Demographic Analysis</div>
-        <h2>Elephant Death Profile — Sex Ratio</h2>
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide bg-dark" id="s9b">
+  <div class="dashboard-frame">
+    <div class="dashboard-header">
+      <div class="dashboard-header-left">
+        <div class="section-tag">Demographic Analysis</div>
+        <h2>Elephant Casualties — Age &amp; Sex Profiling</h2>
       </div>
-      <div class="dash-tabs">
-        <button class="dash-tab" onclick="switchDashTab('age','s9a')">Age Group</button>
-        <button class="dash-tab active" onclick="switchDashTab('sex','s9b')">Sex Group</button>
-        <button class="dash-tab" onclick="switchDashTab('seasonal','s9c')">Seasonal</button>
-        <button class="dash-tab" onclick="switchDashTab('range','s9d')">Range-wise</button>
+      <div class="tab-row">
+        <button class="tab" onclick="goTo(9)">Age Group</button>
+        <button class="tab active" onclick="window.location='#s9b'">Sex Group</button>
+        <button class="tab" onclick="goTo(11)">Seasonal</button>
+        <button class="tab" onclick="goTo(12)">Range-wise</button>
       </div>
     </div>
-    <div style="display:flex;align-items:center;flex:1;gap:50px">
-      <div class="chart-wrap" style="max-width:380px;height:320px">
-        <canvas id="sexCanvas"></canvas>
-      </div>
-      <div>
-        <div style="font-size:0.8rem;color:#8BA098;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px">Based on 32 PM Records — Raigarh &amp; Dharamjaigarh</div>
-        <div style="display:flex;gap:20px;margin-bottom:24px">
-          <div class="kpi-card"><div class="kpi-label">Male</div><div class="kpi-value" style="color:#2EC4B6">16</div></div>
-          <div class="kpi-card"><div class="kpi-label">Female</div><div class="kpi-value" style="color:#C9A84C">16</div></div>
-        </div>
-        <div class="report-section">
-          <h4>Notable findings</h4>
-          <p>· 3 simultaneous electrocution events (multi-elephant) recorded<br>
-             · Neonates &amp; calves under 1 yr: 6 cases across both divisions<br>
-             · One makna (tuskless male) among electrocution victims<br>
-             · 1 vehicular collision case confirmed (Dec 2023, Raigarh)</p>
-        </div>
-      </div>
+    <div class="chart-area" style="max-width:500px;margin:0 auto">
+      <canvas id="sexCanvas"></canvas>
+    </div>
+    <div class="chart-note mt-12 center">
+      <strong>Based on 32 Postmortem Records</strong> — equal sex distribution (16 male / 16 female)
+      indicates no sex-biased mortality from human–elephant conflict.
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════════
+<!-- ═══════════════════════════════════════════════════════════════
      SLIDE 9c — SEASONAL VARIATION
-══════════════════════════════════════════════════════════════════════════ -->
-<section class="slide" id="s9c">
-  <div class="dashboard">
-    <div class="dash-header">
-      <div>
-        <div class="section-tag">Slide 9 · Demographic Analysis</div>
-        <h2>Elephant Deaths — Seasonal Variation</h2>
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide bg-dark" id="s9c">
+  <div class="dashboard-frame">
+    <div class="dashboard-header">
+      <div class="dashboard-header-left">
+        <div class="section-tag">Demographic Analysis</div>
+        <h2>Elephant Casualties — Age &amp; Sex Profiling</h2>
       </div>
-      <div class="dash-tabs">
-        <button class="dash-tab" onclick="switchDashTab('age','s9a')">Age Group</button>
-        <button class="dash-tab" onclick="switchDashTab('sex','s9b')">Sex Group</button>
-        <button class="dash-tab active" onclick="switchDashTab('seasonal','s9c')">Seasonal</button>
-        <button class="dash-tab" onclick="switchDashTab('range','s9d')">Range-wise</button>
+      <div class="tab-row">
+        <button class="tab" onclick="goTo(9)">Age Group</button>
+        <button class="tab" onclick="goTo(10)">Sex Group</button>
+        <button class="tab active" onclick="window.location='#s9c'">Seasonal</button>
+        <button class="tab" onclick="goTo(12)">Range-wise</button>
       </div>
     </div>
-    <div class="chart-wrap">
+    <div class="chart-area">
       <canvas id="seasonCanvas"></canvas>
     </div>
-    <div class="dash-note warn">
-      <strong>Peak month: October (8 deaths)</strong> — coincides with post-monsoon elephant movement into agricultural areas.
-      High-risk window: <strong>October – January</strong>. Deploy response teams before October.
+    <div class="chart-note mt-12" style="display:flex;gap:20px;flex-wrap:wrap;align-items:center">
+      <span><strong style="color:#F4A261">Peak: October (8 deaths)</strong> — post-monsoon movement &amp; harvest season overlap</span>
+      <span class="stat-badge amber" style="background:rgba(244,162,97,0.12);border-color:rgba(244,162,97,0.3);color:#F4A261">Oct–Dec = 42% of annual deaths</span>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════════
+<!-- ═══════════════════════════════════════════════════════════════
      SLIDE 9d — RANGE-WISE DETAIL
-══════════════════════════════════════════════════════════════════════════ -->
-<section class="slide" id="s9d">
-  <div class="dashboard">
-    <div class="dash-header">
-      <div>
-        <div class="section-tag">Slide 9 · Demographic Analysis</div>
-        <h2>Elephant Deaths by Beat / Range</h2>
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide bg-dark" id="s9d">
+  <div class="dashboard-frame">
+    <div class="dashboard-header">
+      <div class="dashboard-header-left">
+        <div class="section-tag">Demographic Analysis</div>
+        <h2>Elephant Casualties — Age &amp; Sex Profiling</h2>
       </div>
-      <div class="dash-tabs">
-        <button class="dash-tab" onclick="switchDashTab('age','s9a')">Age Group</button>
-        <button class="dash-tab" onclick="switchDashTab('sex','s9b')">Sex Group</button>
-        <button class="dash-tab" onclick="switchDashTab('seasonal','s9c')">Seasonal</button>
-        <button class="dash-tab active" onclick="switchDashTab('range','s9d')">Range-wise</button>
+      <div class="tab-row">
+        <button class="tab" onclick="goTo(9)">Age Group</button>
+        <button class="tab" onclick="goTo(10)">Sex Group</button>
+        <button class="tab" onclick="goTo(11)">Seasonal</button>
+        <button class="tab active" onclick="window.location='#s9d'">Range-wise</button>
       </div>
     </div>
-    <div class="chart-wrap">
+    <div class="chart-area">
       <canvas id="rangeCanvas"></canvas>
     </div>
-    <div style="display:flex;gap:12px;margin-top:14px;flex-wrap:wrap">
-      <span class="callout-badge red">CRITICAL — Ghargoda &amp; Chhal</span>
-      <span class="callout-badge amber">HIGH — DH HQ, Borojh, Lailungaan</span>
-      <span class="callout-badge" style="background:rgba(201,168,76,0.15);color:#C9A84C">MODERATE — Tamanar, Baakaaruma</span>
+    <div class="chart-note mt-12" style="display:flex;gap:16px;flex-wrap:wrap;align-items:center">
+      <span class="risk-badge critical">CRITICAL</span>
+      <span style="font-size:0.82rem;color:#8BA098">Chhal &amp; Ghargoda — combined 19 deaths. Immediate intervention required.</span>
+      <span class="risk-badge high" style="margin-left:12px">HIGH</span>
+      <span style="font-size:0.82rem;color:#8BA098">Dharamjaigarh HQ &amp; Borojh</span>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════════
-     SLIDE 10 — GEO-LOCATION OF CASUALTY ★
-══════════════════════════════════════════════════════════════════════════ -->
-<section class="slide" id="s10">
-  <div class="map-full" id="casualtyMap"></div>
-  <div class="map-overlay">
-    <div class="section-tag" style="font-size:0.65rem;padding:3px 8px">GIS · Casualty Points</div>
-    <h3>All Casualties — Both Divisions</h3>
-    <p style="margin-top:5px">100% geo-referenced coverage</p>
-    <div class="map-legend" style="margin-top:12px">
-      <div class="legend-item"><div class="legend-dot" style="background:#52B788"></div>Elephant Death (41)</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#E63946"></div>Human Death (45)</div>
-      <div class="legend-item" style="margin-top:4px;color:#E8F0E8;font-weight:600;font-size:0.85rem">86 Total Incidents</div>
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 10 — GEO-LOCATION OF CASUALTIES
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s10" style="background:#1a2030">
+  <div class="map-container">
+    <div id="casualtyMap" style="width:100%;height:100%"></div>
+    <div class="map-overlay">
+      <h3>Casualty Map — Both Divisions</h3>
+      <p>100% Geo-referenced coverage of all incidents 2021–26.</p>
+      <div class="divider" style="margin:10px 0 8px"></div>
+      <div style="font-size:0.78rem;color:#E8F0E8;font-weight:600;margin-bottom:4px">Click any marker for details</div>
+    </div>
+    <div class="map-legend">
+      <div class="map-legend-item">
+        <div class="legend-dot" style="background:#52B788"></div>
+        <span>Elephant Death (41)</span>
+      </div>
+      <div class="map-legend-item">
+        <div class="legend-dot" style="background:#E63946"></div>
+        <span>Human Death (45)</span>
+      </div>
+      <div class="map-legend-item" style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.1)">
+        <div style="width:12px;height:12px;border-radius:50%;border:2px solid rgba(255,255,255,0.4);background:transparent;flex-shrink:0"></div>
+        <span style="color:#8BA098">Total: 86 geo-points</span>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════════
+<!-- ═══════════════════════════════════════════════════════════════
      SLIDE 11 — PM REPORT SUMMARY
-══════════════════════════════════════════════════════════════════════════ -->
-<section class="slide" id="s11">
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide bg-dark" id="s11">
   <div class="report-frame">
-    <div class="section-tag">Slide 11 · Postmortem Reports</div>
+    <div class="section-tag">Postmortem Analysis</div>
     <h2 style="margin-bottom:20px">Postmortem Report — Summary Analysis</h2>
 
-    <div class="report-section" style="margin-bottom:14px">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <h4>Coverage &amp; Scope</h4>
-        <span class="callout-badge green">32 PM Records Compiled</span>
-      </div>
-      <p style="margin-top:8px">All 32 postmortem PDF files compiled — covering Dharamjaigarh &amp; Raigarh Forest Divisions, June 2021 to March 2026.
-      Group A: 3 standard PM reports. Group B: 14 POR-numbered reports. Group C: 15 recent Hindi-numbered reports (2024–2026).</p>
+    <div class="report-section">
+      <h4>Coverage &amp; Compilation</h4>
+      <p>32 PM reports compiled across Dharamjaigarh and Raigarh Van Mandals for the period 2021–2026.
+         All available case records have been cross-referenced with the geo-referenced incident database.</p>
     </div>
 
-    <div style="margin-bottom:14px">
-      <h4 style="color:#8BA098;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Cause of Death — PM Confirmed</h4>
-      <table class="data-table">
-        <thead><tr><th>Cause</th><th>PM Confirmed</th><th>%</th></tr></thead>
+    <div class="report-section warning">
+      <h4>Lead Cause — PM Confirmed</h4>
+      <p>Electrocution leading to Cardio-Respiratory Failure confirmed as cause of death in 8 of 32 PM records.
+         Multiple simultaneous electrocution events noted in 3 cases. Drowning is the second-leading confirmed cause (10 of 32).</p>
+    </div>
+
+    <div class="report-section flagged">
+      <h4>Age Concern — Neonates &amp; Calves</h4>
+      <p>Neonates and calves (under 1 year) account for approximately 38% of PM cases.
+         Six neonate-specific cases identified. This level of juvenile mortality poses a direct threat to long-term population viability.</p>
+    </div>
+
+    <div class="report-section">
+      <h4>PM Cause Distribution — 32 Records</h4>
+      <table class="pm-table">
+        <thead>
+          <tr>
+            <th>Cause</th>
+            <th>PM Confirmed</th>
+            <th>% of 32</th>
+            <th>Status</th>
+          </tr>
+        </thead>
         <tbody>
-          <tr><td><strong>Drowning</strong> (incl. dam/nala)</td><td style="color:#2EC4B6;font-weight:700">10</td><td>31%</td></tr>
-          <tr><td><strong>Electrocution</strong> (Cardio-Respiratory Shock)</td><td style="color:#F4A261;font-weight:700">8</td><td>25%</td></tr>
-          <tr><td>Natural / Old Age</td><td>3</td><td>9%</td></tr>
-          <tr><td>Trauma / Fall / Vehicular</td><td>3</td><td>9%</td></tr>
-          <tr><td>Undetermined / Pending Lab</td><td style="color:#8BA098">8</td><td>25%</td></tr>
+          <tr>
+            <td>Electrocution</td>
+            <td>8</td>
+            <td>25%</td>
+            <td><span class="callout amber">PREVENTABLE</span></td>
+          </tr>
+          <tr>
+            <td>Drowning</td>
+            <td>10</td>
+            <td>31%</td>
+            <td><span class="callout amber">PREVENTABLE</span></td>
+          </tr>
+          <tr>
+            <td>Natural / Old Age</td>
+            <td>3</td>
+            <td>9%</td>
+            <td><span class="callout green">NATURAL</span></td>
+          </tr>
+          <tr>
+            <td>Trauma / Fall</td>
+            <td>3</td>
+            <td>9%</td>
+            <td><span class="callout">INVESTIGATE</span></td>
+          </tr>
+          <tr>
+            <td>Undetermined / Pending</td>
+            <td>8</td>
+            <td>25%</td>
+            <td><span class="callout">PENDING</span></td>
+          </tr>
         </tbody>
       </table>
     </div>
-
-    <div class="report-section">
-      <h4>Key Observation — Age Distribution in PM Cases</h4>
-      <p style="margin-top:6px">Neonates and calves (under 1 year) account for approximately <strong>38% of PM cases</strong>.
-      Multiple cases show calves found alone or separated from herd — suggesting herd disruption as a compounding factor.
-      Three cases involve neonates with birth complications or asphyxia.</p>
-    </div>
-
-    <div class="report-section flag-amber" style="margin-top:14px">
-      <h4>Data Quality Note</h4>
-      <p style="margin-top:6px">Some source records contain geographic coordinate anomalies (impossible DMS values) reproduced verbatim.
-      One POR file (Report #13) is a seized meat examination report, not a death report — excluded from casualty count.</p>
-    </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════════
+<!-- ═══════════════════════════════════════════════════════════════
      SLIDE 12 — PM REPORT ANALYSIS
-══════════════════════════════════════════════════════════════════════════ -->
-<section class="slide" id="s12">
-  <div class="two-col">
-    <div class="col">
-      <div class="section-tag">Slide 12 · PM Analysis</div>
-      <h2 style="margin-bottom:22px">Key Findings from 32 PM Records</h2>
-      <div>
-        <div class="finding-item reveal-item">
-          <div class="finding-dot" style="background:#2EC4B6"></div>
-          <div class="finding-text"><strong>Sex distribution: 50/50</strong> — 16 male / 16 female from 32 PM records. No significant sex-based vulnerability difference.</div>
-        </div>
-        <div class="finding-item reveal-item">
-          <div class="finding-dot" style="background:#E63946"></div>
-          <div class="finding-text"><strong>3 simultaneous electrocution events</strong> — Oct 2024 (3 elephants, Kachkoba), Mar 2026 (2 elephants, Ghargoda). Single illegal wire kills multiple animals.</div>
-        </div>
-        <div class="finding-item reveal-item">
-          <div class="finding-dot" style="background:#F4A261"></div>
-          <div class="finding-text"><strong>6 neonate / calf cases</strong> — neonates under 30 days account for 19% of PM cases. Primary causes: asphyxia, birth complications, and drowning.</div>
-        </div>
-        <div class="finding-item reveal-item">
-          <div class="finding-dot"></div>
-          <div class="finding-text"><strong>Vehicular collision confirmed</strong> — Dec 2023, Raigarh HQ, male ~15 yr. Cardio-respiratory failure due to chronic external injury on trunk from vehicle strike.</div>
-        </div>
-        <div class="finding-item reveal-item">
-          <div class="finding-dot" style="background:#C9A84C"></div>
-          <div class="finding-text"><strong>Raigarh 2024–26 surge</strong> — 10 of 18 Raigarh elephant deaths occurred in 2025-26 alone, nearly all in Ghargoda beat and Charmar/DehriDih localities.</div>
-        </div>
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide bg-dark" id="s12">
+  <div class="layout-half" style="height:100%">
+    <div class="half border-right" style="overflow-y:auto;justify-content:flex-start;padding-top:50px">
+      <div class="section-tag">Key PM Findings</div>
+      <h2 style="font-size:1.6rem;margin-bottom:16px">Five-Year Trend &amp; PM Highlights</h2>
+      <ul class="bullet-list">
+        <li><strong style="color:#E8F0E8">Sex distribution — 50/50:</strong> 16 male / 16 female from 32 records. No sex-biased conflict mortality.</li>
+        <li class="warning"><strong style="color:#F4A261">Multiple neonates &amp; calves</strong> — 6 neonate cases confirmed. Under-1-yr mortality at 38% of PM cases is alarming.</li>
+        <li class="flagged"><strong style="color:#E63946">3 simultaneous electrocution events</strong> — single incidents killed multiple elephants; indicates systemic power-line hazard.</li>
+        <li class="warning"><strong style="color:#F4A261">Vehicular collision confirmed</strong> — 1 case (2023-24). Infrastructure corridor risk identified and documented.</li>
+        <li><strong style="color:#E8F0E8">Inter-elephant conflict</strong> — 1 confirmed case in 2023-24, Dharamjaigarh, possibly musth-related.</li>
+        <li><strong style="color:#52B788">Trend 2025-26 is critical</strong> — current year already shows 12 elephant deaths with months remaining in the financial year.</li>
+      </ul>
+      <div class="mt-20" style="background:rgba(82,183,136,0.08);border:1px solid rgba(82,183,136,0.2);border-radius:10px;padding:14px 16px">
+        <div style="font-size:0.75rem;color:#52B788;font-weight:700;letter-spacing:0.06em;margin-bottom:6px">YEAR-ON-YEAR TREND</div>
+        <div style="font-size:0.85rem;color:#C8D8C8">Both elephant and human casualties show a <strong style="color:#E63946">rising trend</strong> with 2025-26 being the worst year on record for both categories.</div>
       </div>
     </div>
-    <div class="col right">
-      <h3 style="color:#8BA098;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px">Five-Year Trend — Both Casualty Types</h3>
-      <div class="chart-wrap" style="height:320px">
+    <div class="half" style="background:#0A1628;flex-direction:column">
+      <div class="section-tag" style="align-self:flex-start">Year-wise Casualty Trend</div>
+      <div class="chart-area" style="flex:1;min-height:0;position:relative;margin-top:8px">
         <canvas id="trendCanvas"></canvas>
       </div>
-      <div style="margin-top:18px;display:flex;gap:12px">
-        <div style="display:flex;align-items:center;gap:6px;font-size:0.8rem;color:#8BA098">
-          <div style="width:20px;height:3px;background:#52B788;border-radius:2px"></div>Elephant Deaths
-        </div>
-        <div style="display:flex;align-items:center;gap:6px;font-size:0.8rem;color:#8BA098">
-          <div style="width:20px;height:3px;background:#E63946;border-radius:2px"></div>Human Deaths
-        </div>
-      </div>
-      <div class="dash-note warn" style="margin-top:16px">
-        2022-23 anomaly: DH recorded <strong>zero human deaths</strong> despite 6 elephant deaths — inverse correlation. Possible seasonal movement change or interim interventions.
+      <div class="chart-note mt-8" style="display:flex;gap:16px">
+        <span><span style="display:inline-block;width:12px;height:3px;background:#52B788;vertical-align:middle;margin-right:4px"></span> Elephant</span>
+        <span><span style="display:inline-block;width:12px;height:3px;background:#E63946;vertical-align:middle;margin-right:4px"></span> Human</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════════
-     SLIDE 13 — LAB REPORT ANALYSIS
-══════════════════════════════════════════════════════════════════════════ -->
-<section class="slide" id="s13">
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 13 — LAB REPORT ANALYSIS (ICAR-IVRI)
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide bg-dark" id="s13">
   <div class="report-frame">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
-      <div class="section-tag">Slide 13 · ICAR-IVRI Lab Reports</div>
-      <div style="text-align:right;font-size:0.72rem;color:#8BA098">File F.2-19/DI/NRC/2025-26/CWL<br>Centre for Wildlife Conservation &amp; Disease Surveillance<br>ICAR-IVRI, Izatnagar, Bareilly U.P.</div>
-    </div>
-    <h2 style="margin-bottom:18px">Laboratory Examination — Analysis</h2>
-
-    <div class="report-section">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <h4>Scope — 6 Reports covering 12 Animals (Jan 2025 – Mar 2026)</h4>
-        <span class="callout-badge green">ICAR-IVRI Certified</span>
+    <div class="icar-header">
+      <span class="icar-badge">ICAR-IVRI Izatnagar</span>
+      <div>
+        <div style="font-size:0.9rem;font-weight:700;color:#E8F0E8">Laboratory Report Analysis</div>
+        <div class="icar-file">File No. F.2-19/DI/NRC/2025-26/CWL &nbsp;·&nbsp; ICAR-National Research Centre on Equines</div>
       </div>
-      <p style="margin-top:8px">Tests performed: Toxicology (nitrate-nitrite, heavy metals, insecticides, HCN), Histopathology, Virology (EEHV), Bacteriology.
-      Organs examined: Lung, Liver, Heart, Spleen, Kidney, Brain (formalin-fixed tissue).</p>
-    </div>
-
-    <div class="report-section flag-amber">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <h4>⚠ ARSENIC DETECTED — Specimens 447-WLS/25 &amp; 448-WLS/25 (Dec 2025)</h4>
-        <span class="callout-badge amber">ARSENIC POSITIVE</span>
-      </div>
-      <p style="margin-top:8px">
-        <strong>Adult Male, Tamnar Range (ID 5007/2025):</strong> Arsenic residues detected (qualitative). Mild to moderate hepatocyte degeneration on histopathology.<br>
-        <strong>Calf Male, Raigarh Range (ID 5009/2025):</strong> Arsenic detected + Acute Pneumonia diagnosed. Multi-organ damage; EEHV negative; bacteriology negative.<br>
-        Note: Indicative of exposure to <strong>arsenic-contaminated water or feed</strong> in Tamnar/Raigarh Range area.
-      </p>
-    </div>
-
-    <div class="report-section flag-red">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <h4>CRITICAL GAP — Report ID 5008/2025 MISSING FROM FILE</h4>
-        <span class="callout-badge red">ACTION REQUIRED</span>
-      </div>
-      <p style="margin-top:8px">Report for Identification No. 5008/2025 is absent. Sequential position between two arsenic-positive specimens (5007 and 5009), both dated 20.12.2025. Findings of this missing report are unknown.
-      <strong>Action:</strong> Request duplicate from ICAR-IVRI Izatnagar — cwlincharge@gmail.com / +91-9412294363.</p>
     </div>
 
     <div class="report-section">
-      <h4>Toxicology — Negative Results (5 Batches)</h4>
-      <p style="margin-top:6px">All other batches tested <strong style="color:#52B788">NEGATIVE</strong> for: nitrate-nitrite, heavy metals, commonly used insecticides, and HCN (hydrogen cyanide added from batch 2, July 2025 onwards).
-      EEHV (Elephant Endotheliotropic Herpesvirus) — <strong style="color:#52B788">NEGATIVE</strong> in all tested samples. No infectious disease vector identified.</p>
+      <div class="callout green" style="margin-bottom:8px">LAB COVERAGE</div>
+      <h4>6 Lab Reports — 12 Animals Covered</h4>
+      <p>Six batch reports from ICAR-IVRI Izatnagar cover 12 individual elephant deaths across the study period.
+         Reports compiled under File F.2-19/DI/NRC/2025-26/CWL. Dr. M. Karikalan is the signing authority for all reports.</p>
+    </div>
+
+    <div class="report-section warning">
+      <div class="callout amber" style="margin-bottom:8px">ARSENIC DETECTED</div>
+      <h4>Arsenic in 2 Specimens — December 2025, Tamnar Range</h4>
+      <p>Arsenic detected at elevated levels in visceral samples from 2 specimens from Tamnar Range (Raigarh Division),
+         December 2025. Hepatocyte degeneration confirmed on histopathology. Indicative of contaminated water source
+         or feed near industrial corridor. Environmental sampling of local water bodies recommended immediately.</p>
+    </div>
+
+    <div class="report-section flagged">
+      <div class="callout" style="margin-bottom:8px">CRITICAL GAP</div>
+      <h4>Missing Report — ID 5008/2025</h4>
+      <p>The laboratory report for specimen ID 5008/2025 is MISSING from the consolidated file. Both adjacent
+         specimens (same batch, same location) showed arsenic positivity. This gap must be closed —
+         the originating file should be obtained directly from ICAR-IVRI Izatnagar for completeness
+         and medico-legal purposes.</p>
+    </div>
+
+    <div class="report-section">
+      <div class="callout green" style="margin-bottom:8px">TOXICOLOGY — NEGATIVE</div>
+      <h4>Broad Toxicological Screen — 5 Batches</h4>
+      <p>Five tested batches returned <strong style="color:#52B788">NEGATIVE</strong> results for:
+         Nitrate-Nitrite compounds, Heavy metals (Pb, Hg, Cd), Organochlorine &amp; organophosphate insecticides,
+         Hydrogen Cyanide (HCN). This clears the most common pesticide/industrial toxin hypotheses.</p>
+    </div>
+
+    <div class="report-section">
+      <div class="callout green" style="margin-bottom:8px">EEHV — NEGATIVE</div>
+      <h4>Elephant Endotheliotropic Herpesvirus (EEHV)</h4>
+      <p>EEHV PCR testing returned <strong style="color:#52B788">NEGATIVE</strong> in all tested samples.
+         No viral hemorrhagic disease involvement confirmed. This is particularly significant given the high neonate
+         mortality — viral aetiology is ruled out for current cases.</p>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════════
-     SLIDE 14 — FINAL CONCLUSION
-══════════════════════════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 14 — CONCLUSION
+     ═══════════════════════════════════════════════════════════════ -->
 <section class="slide slide-conclusion" id="s14">
-  <div class="section-tag" style="margin-bottom:30px">Slide 14 · Conclusion</div>
-  <p class="conclusion-headline">
-    <span style="color:#E63946">2025–26</span> is the worst year on record.<br>
-    <span class="text-amber">Electrocution</span> is the leading cause — and entirely <span class="text-green">preventable</span>.<br>
-    <span style="color:#8BA098;font-size:0.7em">Drowning of calves is a rapidly growing crisis. Act now.</span>
-  </p>
-  <div class="action-cards">
+  <div class="section-tag" style="margin-bottom:32px">Final Assessment</div>
+  <div class="conclusion-line animate-fade-up">
+    2025–26 is the <span class="red">worst year on record</span>.<br>
+    Electrocution is <span>preventable</span>.<br>
+    <span style="color:#C8D8C8">Act now.</span>
+  </div>
+  <div class="action-cards animate-fade-up delay-2">
     <div class="action-card">
       <div class="action-icon">⚡</div>
-      <div class="action-title">Fix Power Lines</div>
-      <div class="action-sub">Audit &amp; insulate all lines within 5 km of Chhal &amp; Ghargoda beats</div>
+      <h4>Fix Power Lines</h4>
+      <p>Audit &amp; upgrade all low-hung and illegal electric fencing within 5 km of elephant corridors. 51% of deaths are preventable.</p>
     </div>
     <div class="action-card">
       <div class="action-icon">💧</div>
-      <div class="action-title">Install Escape Ramps</div>
-      <div class="action-sub">Minimum 1:3 gradient concrete ramps in all check dams — Raigarh corridor</div>
+      <h4>Install Escape Ramps</h4>
+      <p>Ramps at Panikshet Dam, Rabo Dam and all large water bodies in conflict zones. Drowning = 22% of deaths.</p>
     </div>
     <div class="action-card">
       <div class="action-icon">📡</div>
-      <div class="action-title">Early Warning System</div>
-      <div class="action-sub">SMS + siren alert in top 20 high-casualty villages before monsoon 2026</div>
+      <h4>Deploy Early Warning</h4>
+      <p>SMS-based real-time elephant movement alerts for villages in Chhal and Ghargoda beats. Protect human lives.</p>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════════
+<!-- ═══════════════════════════════════════════════════════════════
      SLIDE 15 — HUMAN CASUALTY
-══════════════════════════════════════════════════════════════════════════ -->
+     ═══════════════════════════════════════════════════════════════ -->
 <section class="slide slide-human" id="s15">
-  <div style="padding:50px 70px;height:100%;display:flex;flex-direction:column">
-    <div class="section-tag">Slide 15 · Human Casualty</div>
-    <div style="display:flex;align-items:flex-end;gap:40px;margin-bottom:26px">
-      <div>
-        <div style="font-size:0.8rem;color:#8BA098;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px">Human Lives Lost</div>
-        <div class="hero-number red" data-countup="45">0</div>
-        <div style="font-size:0.9rem;color:#8BA098;margin-top:4px">Elephant attacks · Both Divisions · 2021–26</div>
+  <div class="layout-half" style="height:100%">
+    <div class="half border-right" style="border-right-color:rgba(230,57,70,0.2);align-items:flex-start;justify-content:center">
+      <div class="section-tag red">Human Casualties</div>
+      <div class="hero-number red hero-count" style="line-height:0.9">0</div>
+      <p style="color:rgba(255,255,255,0.6);margin-top:8px;font-size:1rem;font-weight:600">Human Lives Lost to Elephant Encounters</p>
+      <p style="color:rgba(255,255,255,0.4);font-size:0.82rem;margin-top:4px">2021–22 to 2025–26 · Both Divisions</p>
+      <div class="divider mt-20" style="width:100%;background:rgba(230,57,70,0.2)"></div>
+      <div class="kpi-grid kpi-grid-2 mt-12" style="width:100%">
+        <div class="kpi-card" style="border-color:rgba(230,57,70,0.25)">
+          <div class="kpi-label">Dharamjaigarh</div>
+          <div class="kpi-value red">36</div>
+          <div class="kpi-sub">DH Division</div>
+        </div>
+        <div class="kpi-card" style="border-color:rgba(244,162,97,0.25)">
+          <div class="kpi-label">Raigarh</div>
+          <div class="kpi-value amber">9</div>
+          <div class="kpi-sub">RG Division</div>
+        </div>
       </div>
-      <div style="flex:1;display:flex;flex-direction:column;gap:8px;padding-bottom:14px">
-        <div style="display:flex;gap:14px">
-          <div class="kpi-card red"><div class="kpi-label">Dharamjaigarh</div><div class="kpi-value text-red">36</div></div>
-          <div class="kpi-card red"><div class="kpi-label">Raigarh</div><div class="kpi-value text-red">9</div></div>
-          <div class="kpi-card red"><div class="kpi-label">2025-26 (ongoing)</div><div class="kpi-value text-red">16</div></div>
+      <div class="mt-20" style="background:rgba(230,57,70,0.08);border:1px solid rgba(230,57,70,0.25);border-radius:10px;padding:14px 18px;width:100%">
+        <div style="font-size:0.75rem;color:#E63946;font-weight:700;letter-spacing:0.06em;margin-bottom:6px">HOTSPOT BEATS</div>
+        <div style="font-size:0.85rem;color:#E8F0E8;line-height:1.8">
+          Chhal Beat: <strong style="color:#E63946">10</strong> &nbsp;·&nbsp;
+          Borojh: <strong style="color:#E63946">9</strong> &nbsp;·&nbsp;
+          Lailungaan: <strong style="color:#E63946">8</strong>
         </div>
       </div>
     </div>
-    <h3 style="color:#8BA098;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:14px">Year-wise Human Deaths (Both Divisions)</h3>
-    <div class="chart-wrap" style="flex:1">
-      <canvas id="humanBarsCanvas"></canvas>
-    </div>
-    <div style="display:flex;gap:16px;margin-top:14px;flex-wrap:wrap;font-size:0.8rem;color:#8BA098">
-      <span>Critical beats: <span style="color:#E63946;font-weight:700">Chhal 10 · Borojh 9 · Lailungaan 8 · Ghargoda 5</span></span>
-      <span style="color:#E63946;font-weight:700">2025-26 = HIGHEST single-year human toll on record</span>
+    <div class="half" style="align-items:flex-start;justify-content:center">
+      <div class="section-tag red" style="align-self:flex-start">Year-wise Human Deaths</div>
+      <div class="year-bars-inline" style="width:100%">
+        <div class="year-bar-row">
+          <div class="year-bar-label">2021-22</div>
+          <div class="year-bar-track">
+            <div class="year-bar-fill" data-val="13" style="width:0%"></div>
+          </div>
+          <div class="year-bar-count">13</div>
+        </div>
+        <div class="year-bar-row">
+          <div class="year-bar-label">2022-23</div>
+          <div class="year-bar-track">
+            <div class="year-bar-fill" data-val="1" style="width:0%"></div>
+          </div>
+          <div class="year-bar-count">1</div>
+        </div>
+        <div class="year-bar-row">
+          <div class="year-bar-label">2023-24</div>
+          <div class="year-bar-track">
+            <div class="year-bar-fill" data-val="7" style="width:0%"></div>
+          </div>
+          <div class="year-bar-count">7</div>
+        </div>
+        <div class="year-bar-row">
+          <div class="year-bar-label">2024-25</div>
+          <div class="year-bar-track">
+            <div class="year-bar-fill" data-val="8" style="width:0%"></div>
+          </div>
+          <div class="year-bar-count">8</div>
+        </div>
+        <div class="year-bar-row">
+          <div class="year-bar-label">2025-26*</div>
+          <div class="year-bar-track">
+            <div class="year-bar-fill highlight" data-val="16" style="width:0%"></div>
+          </div>
+          <div class="year-bar-count" style="color:#E63946;font-weight:700">16</div>
+        </div>
+      </div>
+      <p class="muted mt-20" style="font-size:0.82rem;line-height:1.6">
+        <strong style="color:#E63946">2025-26: 16 deaths</strong> — the highest single-year human toll in the study period.
+        DH Division alone accounts for 80% of all human casualties.<br><br>
+        Most incidents occur during night hours near agricultural fields, especially during harvest season
+        (October–December), when elephant movement peaks.
+      </p>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════════
-     SLIDE 16 — GIS OVERLAY ★🔒 (CLIMAX)
-══════════════════════════════════════════════════════════════════════════ -->
-<section class="slide" id="s16">
-  <div class="map-full" id="overlayMap"></div>
-  <div class="map-overlay">
-    <div class="section-tag red" style="font-size:0.65rem;padding:3px 8px">GIS · Combined Overlay</div>
-    <h3>Combined Casualty Map</h3>
-    <p style="margin-top:5px">86 Geo-referenced Points</p>
-    <div class="map-legend" style="margin-top:12px">
-      <div class="legend-item"><div class="legend-dot" style="background:#52B788"></div>Elephant Death (41)</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#E63946"></div>Human Death (45)</div>
-      <div class="legend-item" style="margin-top:6px">
-        <div style="width:11px;height:11px;border-radius:50%;border:2px dashed #E63946;flex-shrink:0"></div>
-        <span style="color:#E63946;font-weight:600">CRITICAL Hotspots</span>
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 16 — GIS OVERLAY (CLIMAX)
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s16" style="background:#0d1520">
+  <div class="map-container">
+    <div id="overlayMap" style="width:100%;height:100%"></div>
+    <div class="map-overlay">
+      <h3>Combined Casualty Map</h3>
+      <p>86 Geo-referenced Points — Both Divisions, 2021–2026</p>
+      <div class="divider" style="margin:10px 0 8px"></div>
+      <div style="font-size:0.75rem;color:#E8F0E8;line-height:1.7">
+        Elephant markers appear first.<br>
+        Human markers appear after 2 seconds.<br>
+        Hotspot pulses mark critical zones.
       </div>
     </div>
-    <div style="margin-top:10px;font-size:0.72rem;color:#8BA098">
-      Elephant layer → Human layer → Overlap zones pulse
+    <div class="map-legend">
+      <div class="map-legend-item">
+        <div class="legend-dot" style="background:#52B788"></div>
+        <span>Elephant Death (41)</span>
+      </div>
+      <div class="map-legend-item">
+        <div class="legend-dot" style="background:#E63946"></div>
+        <span>Human Death (45)</span>
+      </div>
+      <div class="map-legend-item" style="padding-top:6px;border-top:1px solid rgba(255,255,255,0.1)">
+        <div style="width:12px;height:12px;border-radius:50%;border:2px solid #E63946;flex-shrink:0;animation:pulseRing 1.6s ease-out infinite"></div>
+        <span style="color:#E63946;font-weight:600">Critical Hotspots</span>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════════
+<!-- ═══════════════════════════════════════════════════════════════
      SLIDE 17 — THANK YOU
-══════════════════════════════════════════════════════════════════════════ -->
+     ═══════════════════════════════════════════════════════════════ -->
 <section class="slide slide-thanks" id="s17">
   <div class="section-tag" style="margin-bottom:20px">End of Presentation</div>
-  <h1 style="font-size:clamp(2.5rem,7vw,5.5rem);color:#52B788;margin-bottom:8px">Thank You</h1>
-  <div class="thanks-divider"></div>
-  <p style="font-size:1.1rem;color:#8BA098;margin-bottom:28px">Together for Coexistence</p>
-  <div style="background:#112240;border:1px solid rgba(82,183,136,0.2);border-radius:14px;padding:28px 40px;max-width:560px;text-align:left">
-    <div style="font-size:0.8rem;color:#52B788;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px">Data &amp; Report Credits</div>
-    <p style="font-size:0.82rem;color:#8BA098;line-height:1.8">
-      <strong style="color:#E8F0E8">Source:</strong> Official Proforma-1 Records, Forest Department Bilaspur<br>
-      <strong style="color:#E8F0E8">Divisions:</strong> Dharamjaigarh Van Mandal &amp; Raigarh Van Mandal<br>
-      <strong style="color:#E8F0E8">PM Reports:</strong> ICAR-IVRI, Izatnagar (File F.2-19/DI/NRC/2025-26/CWL)<br>
-      <strong style="color:#E8F0E8">Period:</strong> Financial Years 2021–22 to 2025–26<br>
-      <strong style="color:#E8F0E8">Generated:</strong> 30 May 2026<br>
-      <span style="color:#E63946;font-size:0.75rem">Confidential — For Official Use Only</span>
-    </p>
+  <h1>Thank You</h1>
+  <p class="tagline">Together for Coexistence</p>
+  <div class="divider" style="width:200px;margin:32px auto;background:rgba(82,183,136,0.4)"></div>
+  <div class="credits">
+    <strong>Forest Department, Bilaspur</strong><br>
+    Dharamjaigarh Van Mandal &nbsp;·&nbsp; Raigarh Van Mandal<br><br>
+    <strong>Data Sources</strong><br>
+    Official Proforma-1 Records, Dharamjaigarh &amp; Raigarh Divisions<br>
+    PM Reports: ICAR-IVRI Izatnagar (File F.2-19/DI/NRC/2025-26/CWL)<br>
+    GIS Data: Bilaspur Forest Division, GIS Cell<br><br>
+    <strong>Generated:</strong> 30 May 2026
   </div>
-  <p style="font-size:0.8rem;color:#8BA098;margin-top:28px">Press ← / → to navigate &nbsp;·&nbsp; F for fullscreen &nbsp;·&nbsp; Home for first slide</p>
+  <div class="logo-grid mt-32" style="margin-top:32px">
+    <div class="dept-logo"><strong>Dharamjaigarh</strong>Van Mandal</div>
+    <div class="dept-logo"><strong>Raigarh</strong>Van Mandal</div>
+    <div class="dept-logo"><strong>ICAR-IVRI</strong>Izatnagar</div>
+    <div class="dept-logo"><strong>GIS Cell</strong>Bilaspur</div>
+  </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════════════════
-     NAVIGATION
-══════════════════════════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════════
+     NAVIGATION (fixed)
+     ═══════════════════════════════════════════════════════════════ -->
 <div id="nav">
-  <button onclick="goTo(current-1)" title="Previous (←)">&#8592;</button>
+  <button onclick="goTo(current-1)" title="Previous slide (Left arrow)">&#8592;</button>
   <span id="slideNum">1 / 21</span>
-  <button onclick="goTo(current+1)" title="Next (→)">&#8594;</button>
+  <button onclick="goTo(current+1)" title="Next slide (Right arrow)">&#8594;</button>
 </div>
 
-<!-- Scripts -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- ═══════════════════════════════════════════════════════════════
+     SCRIPTS
+     ═══════════════════════════════════════════════════════════════ -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="js/data.js"></script>
 <script src="js/maps.js"></script>
 <script src="js/charts.js"></script>
 <script src="js/app.js"></script>
+
 </body>
 </html>

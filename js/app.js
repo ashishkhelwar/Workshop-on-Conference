@@ -5,7 +5,7 @@
 const slides = [];
 let current = 0;
 const chartsInitialized = new Set();
-const mapsInitialized = {};
+// mapsInitialized is declared in maps.js as window.mapsInitialized
 
 // Spotlight state for Resource Persons slide
 let spotlightInterval = null;
