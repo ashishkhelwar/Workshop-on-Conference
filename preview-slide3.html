@@ -3,92 +3,86 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Slide 3 Preview — Resource Persons</title>
+<title>Slide 3 — Resource Persons</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 html, body { width:100%; height:100%; background:#0A1628; font-family:system-ui,-apple-system,sans-serif; overflow:hidden; }
 
-/* ── Slide shell ── */
+/* ── Full-screen slide ── */
 .slide {
   width:100vw; height:100vh;
-  background:#0A1628;
-  color:#E8F0E8;
-  display:flex;
-  flex-direction:column;
-  padding:28px 72px 30px;
-  gap:16px;
+  display:grid;
+  grid-template-rows: auto 1fr 2fr;
+  padding:32px 80px 36px;
+  gap:20px;
 }
 
-/* ── Header ── */
-.slide-header {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  flex-shrink:0;
-}
+/* ── Section tag ── */
 .section-tag {
+  justify-self:center;
   display:inline-block;
   background:rgba(82,183,136,0.12);
-  border:1px solid rgba(82,183,136,0.35);
+  border:1px solid rgba(82,183,136,0.4);
   color:#52B788;
-  padding:5px 14px;
+  padding:5px 16px;
   border-radius:4px;
   font-size:0.72rem;
   font-weight:700;
-  letter-spacing:0.1em;
+  letter-spacing:0.12em;
   text-transform:uppercase;
 }
-.slide-num { color:rgba(255,255,255,0.22); font-size:0.78rem; }
 
-/* ── Top row: Nigam centred, same card width as grid ── */
-.person-row-top {
+/* ── Row 1: top card centred ── */
+.row-top {
   display:flex;
   justify-content:center;
-  flex-shrink:0;
+  align-items:stretch;
 }
-/* Match grid-card width exactly: (100% - 1 gap) / 2 */
-.person-row-top .card-wrap { width:calc(50% - 8px); }
+/* top card matches a grid-col width */
+.row-top .card-wrap { width:calc(50% - 10px); }
 
-/* ── 2×2 grid ── */
-.person-cards-grid {
+/* ── Row 2+3: 2×2 grid ── */
+.row-grid {
   display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:16px;
-  flex:1;
-  min-height:0;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
 }
 
-/* ── card-wrap: positioning context for transform ── */
+/* ── card-wrap ── */
 .card-wrap {
   position:relative;
-  transition:opacity .45s ease;
+  transition:opacity .4s ease;
+  cursor:pointer;
 }
-.card-wrap.dim { opacity:0.22; pointer-events:none; }
+.card-wrap.dim { opacity:0.2; pointer-events:none; }
 
-/* ── Card ── */
+/* ── Card face ── */
 .person-card {
+  width:100%; height:100%;
   background:#112240;
-  border:1px solid rgba(82,183,136,0.22);
+  border:1.5px solid rgba(82,183,136,0.22);
   border-radius:14px;
-  padding:16px 18px 18px;
+  padding:18px 20px 20px;
   display:flex;
   flex-direction:column;
   align-items:center;
   text-align:center;
-  cursor:pointer;
-  height:100%;
-  transition:border-color .35s ease, box-shadow .35s ease;
-  will-change:transform;
+  transition:border-color .3s, box-shadow .3s;
+  user-select:none;
 }
-.card-wrap.spotlit .person-card {
+.card-wrap:hover .person-card {
+  border-color:rgba(82,183,136,0.55);
+  box-shadow:0 0 0 1px rgba(82,183,136,0.2);
+}
+.card-wrap.active .person-card {
   border-color:#52B788;
   box-shadow:0 0 0 2px rgba(82,183,136,0.25);
 }
 
-/* ── Square photo placeholder ── */
-.photo-placeholder {
+/* ── Photo placeholder (square) ── */
+.photo-box {
   width:100%;
-  aspect-ratio:1 / 1;
+  aspect-ratio:1/1;
   background:#0d1e35;
   border:2px dashed rgba(82,183,136,0.3);
   border-radius:9px;
@@ -96,284 +90,213 @@ html, body { width:100%; height:100%; background:#0A1628; font-family:system-ui,
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  margin-bottom:12px;
   flex-shrink:0;
+  margin-bottom:12px;
   overflow:hidden;
 }
-.photo-placeholder img {
-  width:100%; height:100%; object-fit:cover; border-radius:7px;
-}
-.photo-initials {
-  font-size:2rem; font-weight:800; color:rgba(82,183,136,0.4); line-height:1;
-}
-.photo-label {
-  font-size:0.58rem; color:rgba(82,183,136,0.28);
-  letter-spacing:0.14em; text-transform:uppercase; margin-top:6px;
-}
+.photo-box img { width:100%; height:100%; object-fit:cover; border-radius:7px; }
+.initials { font-size:2rem; font-weight:800; color:rgba(82,183,136,0.38); }
+.photo-label { font-size:0.58rem; color:rgba(82,183,136,0.28); letter-spacing:.14em; text-transform:uppercase; margin-top:5px; }
 
 /* ── Text ── */
-.person-name  { font-size:0.9rem; font-weight:700; color:#E8F0E8; line-height:1.2; }
-.person-title { font-size:0.69rem; color:#8BA098; margin-top:5px; line-height:1.55; }
-.person-badge {
-  display:inline-block;
-  background:rgba(82,183,136,0.12);
-  border:1px solid rgba(82,183,136,0.28);
-  color:#52B788;
-  padding:3px 10px; border-radius:4px;
-  font-size:0.62rem; font-weight:700;
-  letter-spacing:0.06em; text-transform:uppercase; margin-top:10px;
+.name  { font-size:0.88rem; font-weight:700; color:#E8F0E8; line-height:1.2; }
+.title { font-size:0.68rem; color:#8BA098; margin-top:5px; line-height:1.55; }
+.badge {
+  display:inline-block; margin-top:10px;
+  background:rgba(82,183,136,0.1); border:1px solid rgba(82,183,136,0.3);
+  color:#52B788; padding:3px 10px; border-radius:4px;
+  font-size:0.6rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase;
 }
 
-/* ── Backdrop (appears behind zoomed card) ── */
+/* ══ ZOOM LAYER ══════════════════════════════════════════════ */
+/* Dark backdrop */
 #backdrop {
   position:fixed; inset:0;
-  background:rgba(5,12,24,0.82);
+  background:rgba(5,12,24,0.85);
+  backdrop-filter:blur(4px);
   z-index:500;
-  opacity:0;
-  pointer-events:none;
-  transition:opacity .45s ease;
-  backdrop-filter:blur(3px);
+  opacity:0; pointer-events:none;
+  transition:opacity .4s ease;
 }
-#backdrop.visible { opacity:1; pointer-events:all; }
+#backdrop.on { opacity:1; pointer-events:all; }
 
-/* ── Zoom stage: cloned card displayed above backdrop ── */
-#zoom-stage {
+/* Floating card clone that zooms to centre */
+#zoom-card {
   position:fixed;
   z-index:600;
-  pointer-events:none;
-  transition:transform .55s cubic-bezier(.22,1,.36,1),
-             opacity   .35s ease;
-  opacity:0;
-  transform-origin:center center;
+  opacity:0; pointer-events:none;
+  transform-origin:top left;         /* set dynamically */
+  transition:none;
 }
-#zoom-stage.visible   { opacity:1; pointer-events:all; }
-#zoom-stage .person-card {
+#zoom-card.on { opacity:1; pointer-events:all; }
+#zoom-card .person-card {
+  border-color:#52B788 !important;
+  box-shadow:0 0 70px rgba(82,183,136,0.4), 0 30px 70px rgba(0,0,0,0.7) !important;
   cursor:default;
-  border-color:#52B788;
-  box-shadow:0 0 60px rgba(82,183,136,0.35), 0 24px 60px rgba(0,0,0,0.6);
 }
 
-/* ── Dot indicators ── */
-.dot-row {
-  position:fixed; bottom:22px; left:50%; transform:translateX(-50%);
-  display:flex; gap:9px; z-index:999;
-}
-.dot {
-  width:7px; height:7px; border-radius:50%;
-  background:rgba(255,255,255,0.18);
-  transition:background .4s, transform .3s;
-}
-.dot.active { background:#52B788; transform:scale(1.3); }
-
-.hint {
-  position:fixed; bottom:14px; right:24px;
-  font-size:0.65rem; color:rgba(255,255,255,0.2); letter-spacing:0.04em;
+/* ── Hint ── */
+#hint {
+  position:fixed; bottom:16px; left:50%; transform:translateX(-50%);
+  font-size:0.65rem; color:rgba(255,255,255,0.22); letter-spacing:.05em;
+  pointer-events:none;
 }
 </style>
 </head>
 <body>
 
-<!-- Backdrop overlay -->
 <div id="backdrop"></div>
-
-<!-- Zoom stage (populated by JS) -->
-<div id="zoom-stage"></div>
+<div id="zoom-card"></div>
 
 <div class="slide">
-  <!-- Header -->
-  <div class="slide-header">
-    <div class="section-tag">Resource Persons</div>
-    <div class="slide-num">Slide 3 / 21</div>
-  </div>
+  <div class="section-tag">Resource Persons</div>
 
-  <!-- Row 1: Nigam centred, same card width as grid cols -->
-  <div class="person-row-top">
+  <!-- Row 1 — top centre -->
+  <div class="row-top">
     <div class="card-wrap" id="c0">
-      <div class="person-card" onclick="onCardClick(0)">
-        <div class="photo-placeholder">
-          <span class="photo-initials">PN</span>
-          <span class="photo-label">Photo</span>
-        </div>
-        <div class="person-name">Dr. Parag Nigam</div>
-        <div class="person-title">Scientist G &amp; Head<br>Dept. of Wildlife Health Management</div>
-        <span class="person-badge">Session Chair</span>
+      <div class="person-card">
+        <div class="photo-box"><span class="initials">PN</span><span class="photo-label">Photo</span></div>
+        <div class="name">Dr. Parag Nigam</div>
+        <div class="title">Scientist G &amp; Head<br>Dept. of Wildlife Health Management</div>
+        <span class="badge">Session Chair</span>
       </div>
     </div>
   </div>
 
-  <!-- Rows 2 & 3: 2×2 grid -->
-  <div class="person-cards-grid">
+  <!-- Rows 2 & 3 — 2×2 grid -->
+  <div class="row-grid">
     <div class="card-wrap" id="c1">
-      <div class="person-card" onclick="onCardClick(1)">
-        <div class="photo-placeholder">
-          <span class="photo-initials">TS</span>
-          <span class="photo-label">Photo</span>
-        </div>
-        <div class="person-name">Dr. Tapendra Saini</div>
-        <div class="person-title">Scientist-C<br>Dept. of Wildlife Health Management</div>
-        <span class="person-badge">Resource Person</span>
+      <div class="person-card">
+        <div class="photo-box"><span class="initials">TS</span><span class="photo-label">Photo</span></div>
+        <div class="name">Dr. Tapendra Saini</div>
+        <div class="title">Scientist-C<br>Dept. of Wildlife Health Management</div>
+        <span class="badge">Resource Person</span>
       </div>
     </div>
     <div class="card-wrap" id="c2">
-      <div class="person-card" onclick="onCardClick(2)">
-        <div class="photo-placeholder">
-          <span class="photo-initials">CS</span>
-          <span class="photo-label">Photo</span>
-        </div>
-        <div class="person-name">Dr. C.P. Sharma</div>
-        <div class="person-title">Principal Technical Officer<br>Forensic Cell</div>
-        <span class="person-badge">Resource Person</span>
+      <div class="person-card">
+        <div class="photo-box"><span class="initials">CS</span><span class="photo-label">Photo</span></div>
+        <div class="name">Dr. C.P. Sharma</div>
+        <div class="title">Principal Technical Officer<br>Forensic Cell</div>
+        <span class="badge">Resource Person</span>
       </div>
     </div>
     <div class="card-wrap" id="c3">
-      <div class="person-card" onclick="onCardClick(3)">
-        <div class="photo-placeholder">
-          <span class="photo-initials">MK</span>
-          <span class="photo-label">Photo</span>
-        </div>
-        <div class="person-name">Dr. M. Karikalan</div>
-        <div class="person-title">Senior Scientist<br>Centre for Wildlife</div>
-        <span class="person-badge">Lab Reports</span>
+      <div class="person-card">
+        <div class="photo-box"><span class="initials">MK</span><span class="photo-label">Photo</span></div>
+        <div class="name">Dr. M. Karikalan</div>
+        <div class="title">Senior Scientist<br>Centre for Wildlife</div>
+        <span class="badge">Lab Reports</span>
       </div>
     </div>
     <div class="card-wrap" id="c4">
-      <div class="person-card" onclick="onCardClick(4)">
-        <div class="photo-placeholder">
-          <span class="photo-initials">AS</span>
-          <span class="photo-label">Photo</span>
-        </div>
-        <div class="person-name">Dr. A.B. Shrivastav</div>
-        <div class="person-title">Former Director<br>Centre for Wildlife &amp; Forensic Health (CWFH)</div>
-        <span class="person-badge">Resource Person</span>
+      <div class="person-card">
+        <div class="photo-box"><span class="initials">AS</span><span class="photo-label">Photo</span></div>
+        <div class="name">Dr. A.B. Shrivastav</div>
+        <div class="title">Former Director<br>Centre for Wildlife &amp; Forensic Health (CWFH)</div>
+        <span class="badge">Resource Person</span>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Indicators -->
-<div class="dot-row" id="dots"></div>
-<div class="hint">Auto-cycles · Click card to pin · Click backdrop to release</div>
+<div id="hint">Click any card to zoom · card returns automatically after 5 s</div>
 
 <script>
-const cards    = Array.from({length:5}, (_,i) => document.getElementById('c'+i));
-const backdrop = document.getElementById('backdrop');
-const stage    = document.getElementById('zoom-stage');
-const dotRow   = document.getElementById('dots');
+const backdrop  = document.getElementById('backdrop');
+const zoomCard  = document.getElementById('zoom-card');
+const cardWraps = Array.from({length:5}, (_,i) => document.getElementById('c'+i));
 
-// Build indicator dots
-const dots = cards.map(() => {
-  const d = document.createElement('div');
-  d.className = 'dot';
-  dotRow.appendChild(d);
-  return d;
-});
+let busy      = false;   // true while a zoom animation is in progress
+let holdTimer = null;
 
-let current     = -1;
-let pinned      = false;
-let autoTimer   = null;
-let returnTimer = null;
+/* ── helpers ── */
+function allCardsExcept(idx) {
+  return cardWraps.filter((_, i) => i !== idx);
+}
 
-/* ─── show card zoomed to centre ─── */
-function zoomIn(idx) {
-  const wrap = cards[idx];
+/* ── ZOOM IN ── */
+function zoomIn(idx, onHoldEnd) {
+  if (busy) return;
+  busy = true;
+
+  const wrap = cardWraps[idx];
   const card = wrap.querySelector('.person-card');
   const rect = card.getBoundingClientRect();
 
-  // Clone the card into the stage, sized to match original
-  stage.innerHTML = card.outerHTML;
-  stage.style.left   = rect.left   + 'px';
-  stage.style.top    = rect.top    + 'px';
-  stage.style.width  = rect.width  + 'px';
-  stage.style.height = rect.height + 'px';
-  stage.style.transform = 'scale(1)';
-  stage.style.transition = 'none';
-  stage.offsetHeight; // force reflow
+  /* 1. populate zoom-card at EXACT original position & size */
+  zoomCard.innerHTML = card.outerHTML;
+  zoomCard.style.cssText =
+    `left:${rect.left}px; top:${rect.top}px;` +
+    `width:${rect.width}px; height:${rect.height}px;` +
+    `transform:none; transition:none; opacity:0;`;
 
-  // Dim all original cards
-  cards.forEach((c, i) => {
-    c.classList.toggle('dim', i !== idx);
-    c.classList.toggle('spotlit', i === idx);
-  });
-  dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+  zoomCard.classList.add('on');
+  zoomCard.offsetHeight; // force reflow so transition fires from here
 
-  // Show backdrop + stage
-  backdrop.classList.add('visible');
-  stage.classList.add('visible');
+  /* 2. dim other cards */
+  allCardsExcept(idx).forEach(w => w.classList.add('dim'));
+  wrap.classList.add('active');
 
-  // Calculate translate to viewport centre + zoom scale
-  const stageCx = rect.left + rect.width  / 2;
-  const stageCy = rect.top  + rect.height / 2;
-  const dx = window.innerWidth  / 2 - stageCx;
-  const dy = window.innerHeight / 2 - stageCy;
+  /* 3. show backdrop */
+  backdrop.classList.add('on');
 
-  // Scale so card fills ~55% of viewport height, never > 2×
-  const targetH = window.innerHeight * 0.55;
-  const scale   = Math.min(targetH / rect.height, 2.2);
+  /* 4. compute target transform: translate to viewport centre + scale up */
+  const fromCx = rect.left + rect.width  / 2;
+  const fromCy = rect.top  + rect.height / 2;
+  const toCx   = window.innerWidth  / 2;
+  const toCy   = window.innerHeight / 2;
+  const dx     = toCx - fromCx;
+  const dy     = toCy - fromCy;
 
-  // Animate in
+  // Scale so card fills ~58% viewport height, max 2.5×
+  const scale  = Math.min((window.innerHeight * 0.58) / rect.height, 2.5);
+
+  /* 5. animate to centre */
   requestAnimationFrame(() => {
-    stage.style.transition = 'transform .55s cubic-bezier(.22,1,.36,1)';
-    stage.style.transform  = `translate(${dx}px, ${dy}px) scale(${scale})`;
+    zoomCard.style.transition =
+      'transform .6s cubic-bezier(.22,1,.36,1), opacity .25s ease';
+    zoomCard.style.opacity   = '1';
+    // translate is relative to top-left corner, so shift by dx,dy
+    // then scale from centre: also shift by half the card dims × (scale-1)
+    const tx = dx - (rect.width  / 2) * (scale - 1);
+    const ty = dy - (rect.height / 2) * (scale - 1);
+    zoomCard.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
   });
 
-  current = idx;
+  /* 6. hold 5 s then zoom out */
+  holdTimer = setTimeout(() => zoomOut(idx, onHoldEnd), 5000);
 }
 
-/* ─── return stage to original position then hide ─── */
-function zoomOut(onDone) {
-  stage.style.transition = 'transform .45s cubic-bezier(.55,0,1,.45), opacity .3s ease';
-  stage.style.transform  = 'scale(1)';   // back to original position (stage was placed at card rect)
+/* ── ZOOM OUT — card travels back to original position ── */
+function zoomOut(idx, cb) {
+  clearTimeout(holdTimer);
 
-  backdrop.classList.remove('visible');
+  /* animate back to scale(1) at original position = translate(0,0) scale(1) */
+  zoomCard.style.transition =
+    'transform .5s cubic-bezier(.55,0,.45,1), opacity .3s ease .2s';
+  zoomCard.style.transform  = 'none';   // back to original rect
+  zoomCard.style.opacity    = '0';
+
+  backdrop.classList.remove('on');
 
   setTimeout(() => {
-    stage.classList.remove('visible');
-    stage.innerHTML = '';
-    cards.forEach(c => { c.classList.remove('dim','spotlit'); });
-    if (onDone) onDone();
-  }, 460);
+    zoomCard.classList.remove('on');
+    zoomCard.innerHTML = '';
+    cardWraps[idx].classList.remove('active');
+    allCardsExcept(idx).forEach(w => w.classList.remove('dim'));
+    busy = false;
+    if (cb) cb();
+  }, 520);
 }
 
-/* ─── advance cycle ─── */
-function advance() {
-  const next = (current + 1) % cards.length;
-  zoomIn(next);
-  clearReturnTimer();
-  returnTimer = setTimeout(() => zoomOut(() => {
-    if (!pinned) scheduleNext();
-  }), 5000);
-}
-
-function scheduleNext() {
-  autoTimer = setTimeout(advance, 600);
-}
-
-function clearReturnTimer() {
-  if (returnTimer) { clearTimeout(returnTimer); returnTimer = null; }
-}
-
-/* ─── click handler on original cards ─── */
-function onCardClick(idx) {
-  if (pinned && current === idx) return; // already pinned on this card
-  pinned = true;
-  clearTimeout(autoTimer);
-  clearReturnTimer();
-  zoomOut(() => {
+/* ── click handlers ── */
+cardWraps.forEach((wrap, idx) => {
+  wrap.addEventListener('click', () => {
+    if (busy) return;
     zoomIn(idx);
-    // Hold indefinitely until backdrop click
   });
-}
-
-/* ─── click backdrop to release pin & resume ─── */
-backdrop.addEventListener('click', () => {
-  if (!pinned) return;
-  pinned = false;
-  clearReturnTimer();
-  zoomOut(() => scheduleNext());
 });
-
-/* ─── kick off ─── */
-setTimeout(advance, 800);
 </script>
 </body>
 </html>
