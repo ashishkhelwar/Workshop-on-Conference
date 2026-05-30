@@ -185,12 +185,7 @@ function onSlideActivate(index) {
 
     // Slide 6b — Distribution Map
     case 6:
-      setTimeout(() => {
-        if (!mapsInitialized['distMap']) {
-          mapsInitialized['distMap'] = true;
-          initDistributionMap('distMap');
-        }
-      }, 200);
+      setTimeout(() => initDistributionMap('distMap'), 300);
       break;
 
     // Slide 7 — Elephant Casualty Total
@@ -246,12 +241,7 @@ function onSlideActivate(index) {
 
     // Slide 10 — Geo Casualty Map
     case 13:
-      setTimeout(() => {
-        if (!mapsInitialized['casualtyMap']) {
-          mapsInitialized['casualtyMap'] = true;
-          initCasualtyMap('casualtyMap');
-        }
-      }, 200);
+      setTimeout(() => initCasualtyMap('casualtyMap'), 300);
       break;
 
     // Slide 11 — PM Report Summary (no special init)
@@ -281,12 +271,7 @@ function onSlideActivate(index) {
 
     // Slide 16 — Overlay Map
     case 19:
-      setTimeout(() => {
-        if (!mapsInitialized['overlayMap']) {
-          mapsInitialized['overlayMap'] = true;
-          initOverlayMap('overlayMap');
-        }
-      }, 200);
+      setTimeout(() => initOverlayMap('overlayMap'), 300);
       break;
 
     // Slide 17 — Thank You

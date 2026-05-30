@@ -39,7 +39,7 @@ function initDistributionMap(id) {
     fillOpacity: 0.2, fillColor: '#52B788'
   }).addTo(map).bindPopup('Core Forest Area');
 
-  setTimeout(() => map.invalidateSize(), 200);
+  setTimeout(() => map.invalidateSize(), 500);
 }
 
 function initCasualtyMap(id) {
@@ -88,7 +88,7 @@ function initCasualtyMap(id) {
       .bindPopup(`<b style="color:#E63946">Human Death</b><br><span style="color:#999">Raigarh · ${yr}</span><br>${village}`);
   });
 
-  setTimeout(() => map.invalidateSize(), 200);
+  setTimeout(() => map.invalidateSize(), 500);
 }
 
 function initOverlayMap(id) {
@@ -147,7 +147,7 @@ function initOverlayMap(id) {
     }, 1000);
   }, 2000);
 
-  setTimeout(() => map.invalidateSize(), 200);
+  setTimeout(() => map.invalidateSize(), 500);
 }
 
 function addPulsingHotspot(map, lat, lon, label, color) {
