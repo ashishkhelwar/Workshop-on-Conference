@@ -8,6 +8,9 @@
 <link rel="stylesheet" href="css/theme.css">
 </head>
 <body>
+<!-- Slide 3 zoom-spotlight helpers -->
+<div id="s3-backdrop"></div>
+<div id="s3-zoom-stage"></div>
 
 <!-- ═══════════════════════════════════════════════════════════════
      SLIDE 1 — TITLE
@@ -102,22 +105,25 @@
   <div class="person-cards-wrapper">
     <div class="section-tag" style="align-self:center;margin-bottom:4px">Resource Persons</div>
 
-    <!-- Row 1: Featured — top center -->
+    <!-- Row 1: Nigam centred, same width as a grid column -->
     <div class="person-row-top">
-      <div class="person-featured" id="pFeatured">
-        <div class="photo-placeholder">
-          <span class="photo-initials">PN</span>
-          <span class="photo-label">Photo</span>
+      <div class="card-wrap" id="pFeatured">
+        <div class="person-card">
+          <div class="photo-placeholder">
+            <span class="photo-initials">PN</span>
+            <span class="photo-label">Photo</span>
+          </div>
+          <div class="person-name">Dr. Parag Nigam</div>
+          <div class="person-title">Scientist G &amp; Head<br>Dept. of Wildlife Health Management</div>
+          <span class="person-badge">Session Chair</span>
         </div>
-        <div class="person-name">Dr. Parag Nigam</div>
-        <div class="person-title">Scientist G &amp; Head<br>Dept. of Wildlife Health Management</div>
-        <span class="person-badge">Session Chair</span>
       </div>
     </div>
 
     <!-- Rows 2 & 3: 2 × 2 grid -->
     <div class="person-cards-grid">
-      <div class="person-card" id="pCard1">
+      <div class="card-wrap" id="pCard1">
+      <div class="person-card">
         <div class="photo-placeholder">
           <span class="photo-initials">TS</span>
           <span class="photo-label">Photo</span>
@@ -126,7 +132,7 @@
         <div class="person-title">Scientist-C<br>Dept. of Wildlife Health Management</div>
         <span class="person-badge">Resource Person</span>
       </div>
-      <div class="person-card" id="pCard2">
+      </div><div class="card-wrap" id="pCard2"><div class="person-card">
         <div class="photo-placeholder">
           <span class="photo-initials">CS</span>
           <span class="photo-label">Photo</span>
@@ -134,8 +140,8 @@
         <div class="person-name">Dr. C.P. Sharma</div>
         <div class="person-title">Principal Technical Officer<br>Forensic Cell</div>
         <span class="person-badge">Resource Person</span>
-      </div>
-      <div class="person-card" id="pCard3">
+      </div></div>
+      <div class="card-wrap" id="pCard3"><div class="person-card">
         <div class="photo-placeholder">
           <span class="photo-initials">MK</span>
           <span class="photo-label">Photo</span>
@@ -143,8 +149,8 @@
         <div class="person-name">Dr. M. Karikalan</div>
         <div class="person-title">Senior Scientist<br>Centre for Wildlife</div>
         <span class="person-badge">Lab Reports</span>
-      </div>
-      <div class="person-card" id="pCard4">
+      </div></div>
+      <div class="card-wrap" id="pCard4"><div class="person-card">
         <div class="photo-placeholder">
           <span class="photo-initials">AS</span>
           <span class="photo-label">Photo</span>

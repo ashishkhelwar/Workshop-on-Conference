@@ -335,7 +335,7 @@ p { line-height: 1.65; }
    PERSON CARDS (RESOURCE PERSONS)
    ============================================================ */
 .person-cards-wrapper {
-  padding: 28px 60px 32px;
+  padding: 28px 60px 30px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -343,29 +343,13 @@ p { line-height: 1.65; }
   box-sizing: border-box;
 }
 
-/* ── Row 1: single featured card, centred ── */
+/* ── Row 1: Nigam centred, same width as a grid column ── */
 .person-row-top {
   display: flex;
   justify-content: center;
+  flex-shrink: 0;
 }
-.person-featured {
-  background: #112240;
-  border: 1px solid rgba(82,183,136,0.35);
-  border-radius: 16px;
-  padding: 20px 32px 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  width: 340px;
-  transition: all 0.5s ease;
-  cursor: pointer;
-}
-.person-featured.spotlight {
-  border-color: #52B788;
-  box-shadow: 0 0 50px rgba(82,183,136,0.35);
-}
-.person-featured.dim { opacity: 0.35; }
+.person-row-top .card-wrap { width: calc(50% - 8px); }
 
 /* ── Rows 2 & 3: 2-column grid ── */
 .person-cards-grid {
@@ -375,76 +359,88 @@ p { line-height: 1.65; }
   flex: 1;
   min-height: 0;
 }
+
+/* ── card-wrap: positioning context, handles dim ── */
+.card-wrap {
+  position: relative;
+  transition: opacity 0.45s ease;
+}
+.card-wrap.dim     { opacity: 0.22; pointer-events: none; }
+.card-wrap.spotlit .person-card {
+  border-color: #52B788;
+  box-shadow: 0 0 0 2px rgba(82,183,136,0.25);
+}
+
+/* ── Shared card ── */
 .person-card {
   background: #112240;
   border: 1px solid rgba(82,183,136,0.2);
   border-radius: 14px;
-  padding: 18px 20px 20px;
+  padding: 16px 18px 18px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  transition: all 0.5s ease;
   cursor: pointer;
-  min-height: 0;
-}
-.person-card.spotlight {
-  transform: scale(1.04);
-  border-color: #52B788;
-  box-shadow: 0 0 40px rgba(82,183,136,0.35);
-  z-index: 10;
-  position: relative;
-}
-.person-card.dim {
-  opacity: 0.3;
-  transform: scale(0.98);
+  height: 100%;
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
 }
 
-/* ── Photo placeholder ── */
+/* ── Square photo placeholder ── */
 .photo-placeholder {
   width: 100%;
-  height: 130px;
+  aspect-ratio: 1 / 1;
   background: #0d1e35;
-  border: 2px dashed rgba(82,183,136,0.35);
+  border: 2px dashed rgba(82,183,136,0.3);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 14px;
-  position: relative;
-  overflow: hidden;
+  margin-bottom: 12px;
   flex-shrink: 0;
+  overflow: hidden;
 }
-.person-featured .photo-placeholder { height: 150px; }
+.photo-placeholder img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
 .photo-initials {
   font-size: 2rem;
-  font-weight: 700;
-  color: rgba(82,183,136,0.5);
+  font-weight: 800;
+  color: rgba(82,183,136,0.4);
   line-height: 1;
 }
 .photo-label {
-  font-size: 0.65rem;
-  color: rgba(82,183,136,0.35);
-  letter-spacing: 0.12em;
+  font-size: 0.6rem;
+  color: rgba(82,183,136,0.28);
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   margin-top: 6px;
 }
-/* When a real photo is added: .photo-placeholder img { width:100%; height:100%; object-fit:cover; } */
 
-.person-name {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #E8F0E8;
+.person-name  { font-size: 0.9rem; font-weight: 700; color: #E8F0E8; line-height: 1.2; }
+.person-title { font-size: 0.7rem; color: #8BA098; margin-top: 5px; line-height: 1.55; }
+
+/* ── Backdrop + zoom-stage for slide 3 spotlight animation ── */
+#s3-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(5,12,24,0.82);
+  z-index: 500;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.45s ease;
+  backdrop-filter: blur(3px);
 }
-.person-featured .person-name { font-size: 1.1rem; }
-.person-title {
-  font-size: 0.72rem;
-  color: #8BA098;
-  margin-top: 5px;
-  line-height: 1.5;
+#s3-backdrop.visible { opacity: 1; pointer-events: all; }
+#s3-zoom-stage {
+  position: fixed; z-index: 600;
+  pointer-events: none; opacity: 0;
+  transform-origin: center center;
+  transition: transform 0.55s cubic-bezier(.22,1,.36,1), opacity 0.35s ease;
 }
-.person-featured .person-title { font-size: 0.8rem; }
+#s3-zoom-stage.visible { opacity: 1; pointer-events: all; }
+#s3-zoom-stage .person-card {
+  cursor: default;
+  border-color: #52B788;
+  box-shadow: 0 0 60px rgba(82,183,136,0.35), 0 24px 60px rgba(0,0,0,0.6);
+}
 .person-badge {
   display: inline-block;
   background: rgba(82,183,136,0.15);

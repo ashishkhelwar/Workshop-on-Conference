@@ -73,59 +73,130 @@ function countUp(el, target, duration) {
   requestAnimationFrame(step);
 }
 
-// ── Spotlight for Resource Persons (slide index 2) ───────────────────────
+// ── Spotlight / zoom-to-centre for Resource Persons (slide index 2) ─────
+const s3backdrop  = () => document.getElementById('s3-backdrop');
+const s3stage     = () => document.getElementById('s3-zoom-stage');
+const s3CardWraps = () => Array.from(document.querySelectorAll(
+  '#pFeatured, #pCard1, #pCard2, #pCard3, #pCard4'));
+
+let s3pinned      = false;
+let s3returnTimer = null;
+
+function s3ZoomIn(idx) {
+  const wraps = s3CardWraps();
+  const wrap  = wraps[idx];
+  if (!wrap) return;
+  const card  = wrap.querySelector('.person-card');
+  if (!card)  return;
+  const rect  = card.getBoundingClientRect();
+
+  // Populate zoom stage
+  const stage = s3stage();
+  stage.innerHTML = card.outerHTML;
+  stage.style.cssText =
+    `left:${rect.left}px;top:${rect.top}px;` +
+    `width:${rect.width}px;height:${rect.height}px;` +
+    `transform:scale(1);transition:none;`;
+  stage.offsetHeight; // reflow
+
+  // Dim others, mark active
+  wraps.forEach((w, i) => {
+    w.classList.toggle('dim',     i !== idx);
+    w.classList.toggle('spotlit', i === idx);
+  });
+
+  s3backdrop().classList.add('visible');
+  stage.classList.add('visible');
+
+  // Compute translate to viewport centre + scale
+  const cx    = rect.left + rect.width  / 2;
+  const cy    = rect.top  + rect.height / 2;
+  const dx    = window.innerWidth  / 2 - cx;
+  const dy    = window.innerHeight / 2 - cy;
+  const scale = Math.min((window.innerHeight * 0.6) / rect.height, 2.4);
+
+  requestAnimationFrame(() => {
+    stage.style.transition = 'transform .55s cubic-bezier(.22,1,.36,1)';
+    stage.style.transform  = `translate(${dx}px,${dy}px) scale(${scale})`;
+  });
+
+  spotlightIndex = idx;
+}
+
+function s3ZoomOut(onDone) {
+  const stage = s3stage();
+  stage.style.transition = 'transform .45s cubic-bezier(.55,0,1,.45), opacity .3s ease';
+  stage.style.transform  = 'scale(1)';
+  s3backdrop().classList.remove('visible');
+  setTimeout(() => {
+    stage.classList.remove('visible');
+    stage.innerHTML = '';
+    s3CardWraps().forEach(w => w.classList.remove('dim', 'spotlit'));
+    if (onDone) onDone();
+  }, 460);
+}
+
 function startSpotlight() {
   spotlightStopped = false;
-  spotlightIndex = 0;
+  s3pinned         = false;
+  spotlightIndex   = -1;
 
-  const featured  = document.querySelector('.person-featured');
-  const gridCards = Array.from(document.querySelectorAll('.person-cards-grid .person-card'));
-  if (!featured) return;
-
-  // All 5 "persons" — featured + 4 grid cards
-  const allCards = [featured, ...gridCards];
-
-  function applySpotlight(idx) {
-    allCards.forEach((card, i) => {
-      card.classList.remove('spotlight', 'dim');
-      if (i === idx) {
-        card.classList.add('spotlight');
-      } else {
-        card.classList.add('dim');
-      }
-    });
-  }
-
-  applySpotlight(0);
-
-  spotlightInterval = setInterval(() => {
-    if (spotlightStopped) {
+  // Click-to-pin on card wraps
+  s3CardWraps().forEach((wrap, i) => {
+    wrap._s3Click = () => {
+      if (s3pinned && spotlightIndex === i) return;
+      s3pinned = true;
       clearInterval(spotlightInterval);
-      return;
-    }
-    spotlightIndex = (spotlightIndex + 1) % allCards.length;
-    applySpotlight(spotlightIndex);
-  }, 5000);
-
-  // Click to pin
-  allCards.forEach((card, i) => {
-    card.addEventListener('click', () => {
-      spotlightStopped = true;
-      clearInterval(spotlightInterval);
-      allCards.forEach((c, j) => {
-        c.classList.remove('spotlight', 'dim');
-        if (j !== i) c.classList.add('dim');
-        else c.classList.add('spotlight');
-      });
-    });
+      if (s3returnTimer) { clearTimeout(s3returnTimer); s3returnTimer = null; }
+      s3ZoomOut(() => s3ZoomIn(i));
+    };
+    wrap.addEventListener('click', wrap._s3Click);
   });
+
+  // Click backdrop to release pin and resume
+  s3backdrop()._s3Release = () => {
+    if (!s3pinned) return;
+    s3pinned = false;
+    if (s3returnTimer) { clearTimeout(s3returnTimer); s3returnTimer = null; }
+    s3ZoomOut(() => scheduleS3Next());
+  };
+  s3backdrop().addEventListener('click', s3backdrop()._s3Release);
+
+  scheduleS3Advance();
+}
+
+function scheduleS3Advance() {
+  clearInterval(spotlightInterval);
+  spotlightInterval = null;
+  s3Advance();
+}
+
+function scheduleS3Next() {
+  spotlightInterval = setTimeout(s3Advance, 600);
+}
+
+function s3Advance() {
+  const next = (spotlightIndex + 1) % 5;
+  s3ZoomIn(next);
+  if (s3returnTimer) clearTimeout(s3returnTimer);
+  s3returnTimer = setTimeout(() => {
+    s3ZoomOut(() => { if (!s3pinned) scheduleS3Next(); });
+  }, 5000);
 }
 
 function stopSpotlight() {
   spotlightStopped = true;
-  if (spotlightInterval) clearInterval(spotlightInterval);
-  const allCards = document.querySelectorAll('.person-featured, .person-cards-grid .person-card');
-  allCards.forEach(c => c.classList.remove('spotlight', 'dim'));
+  clearInterval(spotlightInterval);
+  if (s3returnTimer) { clearTimeout(s3returnTimer); s3returnTimer = null; }
+
+  // Remove listeners
+  s3CardWraps().forEach(w => {
+    if (w._s3Click) { w.removeEventListener('click', w._s3Click); delete w._s3Click; }
+  });
+  const bd = s3backdrop();
+  if (bd && bd._s3Release) { bd.removeEventListener('click', bd._s3Release); delete bd._s3Release; }
+
+  s3ZoomOut(null);
 }
 
 // ── Human casualty inline bars animation ─────────────────────────────────
