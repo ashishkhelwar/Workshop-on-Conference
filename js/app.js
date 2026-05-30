@@ -7,10 +7,6 @@ let current = 0;
 const chartsInitialized = new Set();
 // mapsInitialized is declared in maps.js as window.mapsInitialized
 
-// Spotlight state for Resource Persons slide
-let spotlightInterval = null;
-let spotlightIndex = 0;
-let spotlightStopped = false;
 
 // ── Collect slides after DOM ready ──────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
@@ -73,130 +69,67 @@ function countUp(el, target, duration) {
   requestAnimationFrame(step);
 }
 
-// ── Spotlight / zoom-to-centre for Resource Persons (slide index 2) ─────
-const s3backdrop  = () => document.getElementById('s3-backdrop');
-const s3stage     = () => document.getElementById('s3-zoom-stage');
-const s3CardWraps = () => Array.from(document.querySelectorAll(
-  '#pFeatured, #pCard1, #pCard2, #pCard3, #pCard4'));
+// ── Slide 3 — click-to-zoom for Resource Persons ────────────────────────
+let s3active    = -1;
+let s3holdTimer = null;
 
-let s3pinned      = false;
-let s3returnTimer = null;
-
-function s3ZoomIn(idx) {
-  const wraps = s3CardWraps();
-  const wrap  = wraps[idx];
-  if (!wrap) return;
-  const card  = wrap.querySelector('.person-card');
-  if (!card)  return;
-  const rect  = card.getBoundingClientRect();
-
-  // Populate zoom stage
-  const stage = s3stage();
-  stage.innerHTML = card.outerHTML;
-  stage.style.cssText =
-    `left:${rect.left}px;top:${rect.top}px;` +
-    `width:${rect.width}px;height:${rect.height}px;` +
-    `transform:scale(1);transition:none;`;
-  stage.offsetHeight; // reflow
-
-  // Dim others, mark active
-  wraps.forEach((w, i) => {
-    w.classList.toggle('dim',     i !== idx);
-    w.classList.toggle('spotlit', i === idx);
-  });
-
-  s3backdrop().classList.add('visible');
-  stage.classList.add('visible');
-
-  // Compute translate to viewport centre + scale
-  const cx    = rect.left + rect.width  / 2;
-  const cy    = rect.top  + rect.height / 2;
-  const dx    = window.innerWidth  / 2 - cx;
-  const dy    = window.innerHeight / 2 - cy;
-  const scale = Math.min((window.innerHeight * 0.6) / rect.height, 2.4);
-
-  requestAnimationFrame(() => {
-    stage.style.transition = 'transform .55s cubic-bezier(.22,1,.36,1)';
-    stage.style.transform  = `translate(${dx}px,${dy}px) scale(${scale})`;
-  });
-
-  spotlightIndex = idx;
+function s3Wraps() {
+  return Array.from({length: 5}, (_, i) => document.getElementById('rp' + i));
 }
 
-function s3ZoomOut(onDone) {
-  const stage = s3stage();
-  stage.style.transition = 'transform .45s cubic-bezier(.55,0,1,.45), opacity .3s ease';
-  stage.style.transform  = 'scale(1)';
-  s3backdrop().classList.remove('visible');
+function s3Zoom(idx) {
+  if (s3active !== -1) return;           // ignore clicks while one is zoomed
+  s3active = idx;
+
+  const wrap = s3Wraps()[idx];
+  const card = wrap.querySelector('.s3-card');
+  const rect = card.getBoundingClientRect();
+
+  // Hide all OTHER cards
+  s3Wraps().forEach((w, i) => { if (i !== idx) w.classList.add('s3-hidden'); });
+
+  // Compute translate + scale so card centre → viewport centre
+  const dx    = (window.innerWidth  / 2) - (rect.left + rect.width  / 2);
+  const dy    = (window.innerHeight / 2) - (rect.top  + rect.height / 2);
+  const scale = Math.min((window.innerHeight * 0.70) / rect.height, 3);
+
+  wrap.classList.add('s3-zooming');
+  card.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
+  card.style.zIndex    = '100';
+
+  s3holdTimer = setTimeout(() => s3ZoomBack(idx), 5000);
+}
+
+function s3ZoomBack(idx) {
+  clearTimeout(s3holdTimer);
+  const wrap = s3Wraps()[idx];
+  const card = wrap.querySelector('.s3-card');
+
+  card.style.transition = 'transform .5s cubic-bezier(.55,0,.45,1), box-shadow .3s';
+  card.style.transform  = '';
+
   setTimeout(() => {
-    stage.classList.remove('visible');
-    stage.innerHTML = '';
-    s3CardWraps().forEach(w => w.classList.remove('dim', 'spotlit'));
-    if (onDone) onDone();
-  }, 460);
-}
-
-function startSpotlight() {
-  spotlightStopped = false;
-  s3pinned         = false;
-  spotlightIndex   = -1;
-
-  // Click-to-pin on card wraps
-  s3CardWraps().forEach((wrap, i) => {
-    wrap._s3Click = () => {
-      if (s3pinned && spotlightIndex === i) return;
-      s3pinned = true;
-      clearInterval(spotlightInterval);
-      if (s3returnTimer) { clearTimeout(s3returnTimer); s3returnTimer = null; }
-      s3ZoomOut(() => s3ZoomIn(i));
-    };
-    wrap.addEventListener('click', wrap._s3Click);
-  });
-
-  // Click backdrop to release pin and resume
-  s3backdrop()._s3Release = () => {
-    if (!s3pinned) return;
-    s3pinned = false;
-    if (s3returnTimer) { clearTimeout(s3returnTimer); s3returnTimer = null; }
-    s3ZoomOut(() => scheduleS3Next());
-  };
-  s3backdrop().addEventListener('click', s3backdrop()._s3Release);
-
-  scheduleS3Advance();
-}
-
-function scheduleS3Advance() {
-  clearInterval(spotlightInterval);
-  spotlightInterval = null;
-  s3Advance();
-}
-
-function scheduleS3Next() {
-  spotlightInterval = setTimeout(s3Advance, 600);
-}
-
-function s3Advance() {
-  const next = (spotlightIndex + 1) % 5;
-  s3ZoomIn(next);
-  if (s3returnTimer) clearTimeout(s3returnTimer);
-  s3returnTimer = setTimeout(() => {
-    s3ZoomOut(() => { if (!s3pinned) scheduleS3Next(); });
-  }, 5000);
+    card.style.transition = '';
+    card.style.zIndex     = '';
+    wrap.classList.remove('s3-zooming');
+    s3Wraps().forEach(w => w.classList.remove('s3-hidden'));
+    s3active = -1;
+  }, 520);
 }
 
 function stopSpotlight() {
-  spotlightStopped = true;
-  clearInterval(spotlightInterval);
-  if (s3returnTimer) { clearTimeout(s3returnTimer); s3returnTimer = null; }
-
-  // Remove listeners
-  s3CardWraps().forEach(w => {
-    if (w._s3Click) { w.removeEventListener('click', w._s3Click); delete w._s3Click; }
-  });
-  const bd = s3backdrop();
-  if (bd && bd._s3Release) { bd.removeEventListener('click', bd._s3Release); delete bd._s3Release; }
-
-  s3ZoomOut(null);
+  // Reset zoom state when leaving slide 3
+  if (s3active !== -1) {
+    clearTimeout(s3holdTimer);
+    const wrap = s3Wraps()[s3active];
+    if (wrap) {
+      const card = wrap.querySelector('.s3-card');
+      if (card) { card.style.transform = ''; card.style.zIndex = ''; card.style.transition = ''; }
+      wrap.classList.remove('s3-zooming');
+    }
+    s3Wraps().forEach(w => w.classList.remove('s3-hidden'));
+    s3active = -1;
+  }
 }
 
 // ── Human casualty inline bars animation ─────────────────────────────────
@@ -231,10 +164,8 @@ function onSlideActivate(index) {
       break;
     }
 
-    // Slide 3 — Resource Persons
-    case 2:
-      setTimeout(startSpotlight, 600);
-      break;
+    // Slide 3 — Resource Persons (click-to-zoom, no auto-cycle)
+    case 2: break;
 
     // Slide 4 — Schedule (timeline, no special anim)
     case 3: break;

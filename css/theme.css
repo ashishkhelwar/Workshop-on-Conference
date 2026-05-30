@@ -419,28 +419,69 @@ p { line-height: 1.65; }
 .person-name  { font-size: 0.9rem; font-weight: 700; color: #E8F0E8; line-height: 1.2; }
 .person-title { font-size: 0.7rem; color: #8BA098; margin-top: 5px; line-height: 1.55; }
 
-/* ── Backdrop + zoom-stage for slide 3 spotlight animation ── */
-#s3-backdrop {
-  position: fixed; inset: 0;
-  background: rgba(5,12,24,0.82);
-  z-index: 500;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.45s ease;
-  backdrop-filter: blur(3px);
+/* ── Slide 3 — new s3- card system ── */
+.s3-wrapper {
+  padding: 28px 80px 32px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
-#s3-backdrop.visible { opacity: 1; pointer-events: all; }
-#s3-zoom-stage {
-  position: fixed; z-index: 600;
-  pointer-events: none; opacity: 0;
+.s3-row-top {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+}
+.s3-row-top .s3-cw { width: 50%; }
+.s3-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  flex: 2;
+}
+.s3-cw {
+  position: relative;
+  transition: opacity .35s ease, visibility .35s ease;
+}
+.s3-cw.s3-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.s3-cw.s3-zooming { z-index: 200; }
+.s3-card {
+  width: 100%; height: 100%;
+  background: #112240;
+  border: 1.5px solid rgba(82,183,136,0.22);
+  border-radius: 14px;
+  padding: 14px 16px 16px;
+  display: flex; flex-direction: column;
+  align-items: center; text-align: center;
+  cursor: pointer;
+  transition: border-color .3s, box-shadow .3s,
+              transform .55s cubic-bezier(.22,1,.36,1);
   transform-origin: center center;
-  transition: transform 0.55s cubic-bezier(.22,1,.36,1), opacity 0.35s ease;
+  will-change: transform;
 }
-#s3-zoom-stage.visible { opacity: 1; pointer-events: all; }
-#s3-zoom-stage .person-card {
-  cursor: default;
+.s3-cw:not(.s3-hidden):not(.s3-zooming) .s3-card:hover {
+  border-color: rgba(82,183,136,.5);
+  box-shadow: 0 0 0 1px rgba(82,183,136,.2);
+}
+.s3-cw.s3-zooming .s3-card {
   border-color: #52B788;
-  box-shadow: 0 0 60px rgba(82,183,136,0.35), 0 24px 60px rgba(0,0,0,0.6);
+  box-shadow: 0 0 80px rgba(82,183,136,.45), 0 30px 80px rgba(0,0,0,.75);
 }
+.s3-photo {
+  width: 100%; aspect-ratio: 1/1; flex-shrink: 0;
+  background: #0d1e35;
+  border: 2px dashed rgba(82,183,136,.28);
+  border-radius: 9px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  margin-bottom: 10px; overflow: hidden;
+}
+.s3-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 7px; }
+.s3-ini { font-size: 1.8rem; font-weight: 800; color: rgba(82,183,136,.35); }
+.s3-lbl { font-size: .55rem; color: rgba(82,183,136,.25); letter-spacing: .14em;
+           text-transform: uppercase; margin-top: 5px; }
+.s3-name  { font-size: .88rem; font-weight: 700; color: #E8F0E8; line-height: 1.2; }
+.s3-title { font-size: .67rem; color: #8BA098; margin-top: 5px; line-height: 1.55; }
 .person-badge {
   display: inline-block;
   background: rgba(82,183,136,0.15);
