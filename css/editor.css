@@ -1,0 +1,245 @@
+/* ============================================================
+   PRESENTATION EDITOR — drawer, tabs, form fields
+   ============================================================ */
+
+/* ── Backdrop overlay ── */
+#cfg-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.58);
+  z-index: 8000;
+  opacity: 0; pointer-events: none;
+  transition: opacity .35s ease;
+}
+#cfg-overlay.open { opacity: 1; pointer-events: all; }
+
+/* ── Drawer panel ── */
+#cfg-panel {
+  position: fixed;
+  top: 0; right: 0; bottom: 0;
+  width: 430px;
+  background: #0b1829;
+  border-left: 1px solid rgba(82,183,136,0.2);
+  box-shadow: -10px 0 50px rgba(0,0,0,0.65);
+  z-index: 9000;
+  display: flex; flex-direction: column;
+  transform: translateX(100%);
+  transition: transform .38s cubic-bezier(.22,1,.36,1);
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+#cfg-panel.open { transform: translateX(0); }
+
+/* ── Header ── */
+.cfg-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 15px 18px;
+  border-bottom: 1px solid rgba(82,183,136,0.14);
+  flex-shrink: 0;
+  background: rgba(82,183,136,0.04);
+}
+.cfg-title {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.82rem; font-weight: 700;
+  color: #E8F0E8; letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.cfg-close {
+  background: none; border: none;
+  color: rgba(255,255,255,0.35); cursor: pointer;
+  font-size: 1.05rem; width: 28px; height: 28px;
+  border-radius: 6px; display: flex; align-items: center; justify-content: center;
+  transition: color .2s, background .2s;
+}
+.cfg-close:hover { color: #fff; background: rgba(255,255,255,0.1); }
+
+/* ── Import / Export buttons ── */
+.cfg-io {
+  display: flex; gap: 10px;
+  padding: 12px 18px;
+  border-bottom: 1px solid rgba(82,183,136,0.1);
+  flex-shrink: 0;
+}
+.cfg-btn-io {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 8px 10px;
+  border-radius: 7px;
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.06em; cursor: pointer;
+  border: 1.5px solid;
+  transition: background .2s;
+}
+.cfg-import {
+  background: rgba(82,183,136,0.07);
+  border-color: rgba(82,183,136,0.3);
+  color: #52B788;
+}
+.cfg-import:hover { background: rgba(82,183,136,0.16); }
+.cfg-export {
+  background: rgba(82,183,136,0.14);
+  border-color: rgba(82,183,136,0.45);
+  color: #52B788;
+}
+.cfg-export:hover { background: rgba(82,183,136,0.26); }
+
+/* ── Tabs ── */
+.cfg-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(82,183,136,0.12);
+  flex-shrink: 0;
+}
+.cfg-tab {
+  flex: 1;
+  background: none; border: none;
+  border-bottom: 2px solid transparent;
+  color: rgba(255,255,255,0.38);
+  padding: 10px 4px;
+  font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  cursor: pointer;
+  transition: color .2s, border-color .2s;
+}
+.cfg-tab:hover   { color: rgba(255,255,255,0.65); }
+.cfg-tab.active  { color: #52B788; border-bottom-color: #52B788; }
+
+/* ── Scrollable body ── */
+.cfg-body {
+  flex: 1; overflow-y: auto;
+  padding: 4px 0 8px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(82,183,136,0.18) transparent;
+}
+.cfg-body::-webkit-scrollbar        { width: 4px; }
+.cfg-body::-webkit-scrollbar-thumb  { background: rgba(82,183,136,0.22); border-radius: 4px; }
+
+/* ── Sections ── */
+.cfg-section {
+  padding: 14px 18px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.055);
+}
+.cfg-section-title {
+  font-size: 0.62rem; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: #52B788;
+  margin-bottom: 12px;
+}
+.cfg-hint {
+  font-size: 0.6rem; font-weight: 400;
+  color: rgba(255,255,255,0.25); letter-spacing: 0; text-transform: none;
+}
+
+/* ── Form fields ── */
+.cfg-field { margin-bottom: 10px; }
+.cfg-field-num { display: grid; grid-template-columns: 1fr 90px; align-items: center; gap: 10px; }
+.cfg-field-num .cfg-label { margin-bottom: 0; }
+
+.cfg-label {
+  display: block; font-size: 0.65rem;
+  color: rgba(255,255,255,0.4); margin-bottom: 4px; letter-spacing: 0.04em;
+}
+
+.cfg-input, .cfg-textarea, .cfg-select {
+  width: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(82,183,136,0.16);
+  border-radius: 6px;
+  color: #E8F0E8;
+  font-size: 0.78rem;
+  padding: 7px 10px;
+  outline: none;
+  transition: border-color .2s, background .2s;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+.cfg-input:focus, .cfg-textarea:focus, .cfg-select:focus {
+  border-color: rgba(82,183,136,.5);
+  background: rgba(82,183,136,0.06);
+}
+.cfg-textarea  { resize: vertical; min-height: 60px; }
+.cfg-num       { text-align: right; }
+.cfg-select option { background: #0b1829; color: #E8F0E8; }
+
+/* ── Schedule rows ── */
+.cfg-sr {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 8px;
+  display: flex; flex-direction: column; gap: 5px;
+}
+.cfg-sr-row1 {
+  display: flex; gap: 6px; align-items: center; margin-bottom: 2px;
+}
+.cfg-sr-time { width: 68px; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+.cfg-sr-type { flex: 1; font-size: 0.72rem; }
+.cfg-sr-sub  { opacity: 0.65; font-size: 0.72rem; }
+
+.cfg-del-row {
+  background: rgba(230,57,70,0.08);
+  border: 1px solid rgba(230,57,70,0.25);
+  color: #E63946; cursor: pointer;
+  border-radius: 5px; padding: 4px 8px;
+  font-size: 0.7rem; flex-shrink: 0;
+  transition: background .2s;
+}
+.cfg-del-row:hover { background: rgba(230,57,70,0.2); }
+
+.cfg-add-row {
+  width: 100%; background: none;
+  border: 1.5px dashed rgba(82,183,136,0.28);
+  color: rgba(82,183,136,0.7); cursor: pointer;
+  border-radius: 7px; padding: 8px;
+  font-size: 0.72rem; margin-top: 6px;
+  transition: background .2s, border-color .2s, color .2s;
+}
+.cfg-add-row:hover { background: rgba(82,183,136,0.07); border-color: rgba(82,183,136,.5); color: #52B788; }
+
+/* ── Footer — apply button ── */
+.cfg-footer {
+  padding: 13px 18px;
+  border-top: 1px solid rgba(82,183,136,0.15);
+  flex-shrink: 0;
+  background: rgba(82,183,136,0.03);
+}
+.cfg-apply {
+  width: 100%;
+  background: rgba(82,183,136,0.16);
+  border: 1.5px solid rgba(82,183,136,0.5);
+  color: #52B788; cursor: pointer;
+  border-radius: 8px; padding: 11px;
+  font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.07em; text-transform: uppercase;
+  transition: background .2s, transform .1s;
+}
+.cfg-apply:hover  { background: rgba(82,183,136,0.28); }
+.cfg-apply:active { transform: scale(.98); }
+
+/* ── Edit button in nav bar ── */
+#cfg-open-btn {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(82,183,136,0.1);
+  border: 1px solid rgba(82,183,136,0.32);
+  color: #52B788; cursor: pointer;
+  padding: 6px 13px; border-radius: 6px;
+  font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 0.07em;
+  transition: background .2s;
+}
+#cfg-open-btn:hover { background: rgba(82,183,136,0.22); }
+
+/* ── Toast notification ── */
+#cfg-toast {
+  position: fixed; bottom: 76px; left: 50%;
+  transform: translateX(-50%) translateY(14px);
+  background: #112240;
+  border: 1px solid rgba(82,183,136,0.4);
+  color: #52B788;
+  padding: 9px 22px;
+  border-radius: 20px;
+  font-size: 0.73rem; font-weight: 600;
+  opacity: 0; pointer-events: none;
+  transition: opacity .3s, transform .3s;
+  z-index: 10000; white-space: nowrap;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+#cfg-toast.show     { opacity: 1; transform: translateX(-50%) translateY(0); }
+#cfg-toast.cfg-toast-err { border-color: rgba(230,57,70,0.4); color: #E63946; }
