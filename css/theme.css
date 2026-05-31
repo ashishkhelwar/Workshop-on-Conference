@@ -1081,7 +1081,7 @@ p { line-height: 1.65; }
 }
 
 .liq-bars {
-  flex: 1; display: flex; align-items: flex-end;
+  flex: 1; display: flex; align-items: stretch;
   justify-content: space-around; gap: 8px;
 }
 
@@ -1101,7 +1101,7 @@ p { line-height: 1.65; }
 .liq-num.liq-num-show { opacity: 1; }
 
 .liq-box {
-  width: 100%; height: 0; flex: 1;
+  width: 100%; flex: 1; min-height: 0;
   background: rgba(0,0,0,0.45);
   border-radius: 8px 8px 5px 5px;
   border: 1px solid rgba(212,168,49,0.15);

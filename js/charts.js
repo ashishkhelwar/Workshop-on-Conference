@@ -52,16 +52,38 @@ function initTrendChart(id) {
   if (!ctx) return;
   destroyChart(id);
 
-  const emptyData = () => Array(DATA.years.length).fill(null);
+  let drawProgress = 0;
+
+  // Clip plugin: reveals both lines from left to right
+  const drawClipPlugin = {
+    id: 'trendDrawClip',
+    beforeDatasetsDraw(chart) {
+      const { ctx: c, chartArea } = chart;
+      if (!chartArea) return;
+      c.save();
+      c.beginPath();
+      c.rect(
+        chartArea.left,
+        chartArea.top - 10,
+        (chartArea.right - chartArea.left) * drawProgress,
+        chartArea.bottom - chartArea.top + 20
+      );
+      c.clip();
+    },
+    afterDatasetsDraw(chart) {
+      chart.ctx.restore();
+    }
+  };
 
   chartInstances[id] = new Chart(ctx, {
     type: 'line',
+    plugins: [drawClipPlugin],
     data: {
       labels: DATA.years,
       datasets: [
         {
           label: 'Elephant Deaths',
-          data: emptyData(),
+          data: DATA.elephantDeaths,
           borderColor: '#52B788',
           backgroundColor: 'rgba(82,183,136,0.12)',
           borderWidth: 3,
@@ -73,7 +95,7 @@ function initTrendChart(id) {
         },
         {
           label: 'Human Deaths',
-          data: emptyData(),
+          data: DATA.humanDeaths,
           borderColor: '#E63946',
           backgroundColor: 'rgba(230,57,70,0.08)',
           borderWidth: 3,
@@ -88,7 +110,7 @@ function initTrendChart(id) {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      animation: { duration: 700, easing: 'easeOutQuart' },
+      animation: { duration: 400 },
       interaction: { mode: 'index', intersect: false },
       plugins: {
         legend: {
@@ -118,18 +140,17 @@ function initTrendChart(id) {
     }
   });
 
-  // Reveal data points one column at a time
-  let col = 0;
+  // Smooth left-to-right draw over 3.5 seconds, starting after initial render
   const chart = chartInstances[id];
-  function revealNext() {
-    if (col >= DATA.years.length) return;
-    chart.data.datasets[0].data[col] = DATA.elephantDeaths[col];
-    chart.data.datasets[1].data[col] = DATA.humanDeaths[col];
-    chart.update();
-    col++;
-    setTimeout(revealNext, 650);
+  const drawDuration = 3500;
+  let drawStart = null;
+  function animateDraw(now) {
+    if (!drawStart) drawStart = now;
+    drawProgress = Math.min((now - drawStart) / drawDuration, 1);
+    chart.update('none');
+    if (drawProgress < 1) requestAnimationFrame(animateDraw);
   }
-  setTimeout(revealNext, 300);
+  setTimeout(() => requestAnimationFrame(animateDraw), 450);
 }
 
 // ── 2. Liquid Fill Bar Chart: elephant deaths per year ────────────────────
@@ -197,14 +218,10 @@ function initYearBarsChart(id) {
 
 function liqStart(container) {
   const fills = container.querySelectorAll('.liq-fill');
-  const boxes = container.querySelectorAll('.liq-box');
   const nums  = container.querySelectorAll('.liq-num');
 
-  fills.forEach((fill, i) => {
-    const boxH    = boxes[i] ? boxes[i].offsetHeight || 180 : 180;
-    const targetH = (parseFloat(fill.dataset.pct) / 100) * boxH;
-    fill.style.height = targetH + 'px';
-    fill.dataset.targetH = targetH;
+  fills.forEach(fill => {
+    fill.style.height = fill.dataset.pct + '%';
   });
 
   nums.forEach((num, i) => {
@@ -219,13 +236,16 @@ function liqReplay(container) {
 
   fills.forEach(fill => {
     fill.style.transition = 'none';
-    fill.style.height     = '0px';
+    fill.style.height = '0';
   });
   nums.forEach(n => n.classList.remove('liq-num-show'));
 
   requestAnimationFrame(() => requestAnimationFrame(() => {
-    fills.forEach(fill => { fill.style.transition = ''; });
-    liqStart(container);
+    fills.forEach(fill => { fill.style.transition = ''; fill.style.height = fill.dataset.pct + '%'; });
+    nums.forEach((num, i) => {
+      const nd = parseFloat(num.style.getPropertyValue('--nd') || (i * 0.7 + 5)) * 1000;
+      setTimeout(() => num.classList.add('liq-num-show'), nd);
+    });
   }));
 }
 
