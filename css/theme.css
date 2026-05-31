@@ -1057,3 +1057,123 @@ p { line-height: 1.65; }
   color: #52B788;
   display: block;
 }
+
+/* ============================================================
+   LIQUID FILL BAR CHART (Slide 8)
+   ============================================================ */
+.liq-wrap {
+  width: 100%; height: 100%;
+  background: #0d1a0e;
+  border-radius: 14px;
+  border: 1px solid rgba(212,168,49,0.25);
+  box-shadow: 0 0 60px rgba(212,168,49,0.07),
+              inset 0 0 80px rgba(0,0,0,0.55);
+  display: flex; flex-direction: column;
+  padding: 12px 16px 10px; gap: 8px;
+  position: relative; overflow: hidden;
+}
+/* grain texture overlay */
+.liq-wrap::before {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.035;
+}
+
+.liq-bars {
+  flex: 1; display: flex; align-items: flex-end;
+  justify-content: space-around; gap: 8px;
+}
+
+.liq-group {
+  flex: 1; max-width: 90px;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 6px;
+}
+
+.liq-num {
+  font-family: 'Bebas Neue', Impact, 'Arial Narrow', sans-serif;
+  font-size: 1.6rem; font-weight: 400;
+  color: #d4a831; letter-spacing: 0.04em;
+  line-height: 1; opacity: 0;
+  transition: opacity 0.6s ease var(--nd, 5s);
+}
+.liq-num.liq-num-show { opacity: 1; }
+
+.liq-box {
+  width: 100%; height: 0; flex: 1;
+  background: rgba(0,0,0,0.45);
+  border-radius: 8px 8px 5px 5px;
+  border: 1px solid rgba(212,168,49,0.15);
+  position: relative; overflow: hidden;
+}
+
+.liq-fill {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 0;
+  background: linear-gradient(to top, #a07800 0%, #c08018 35%, #d4a831 100%);
+  border-radius: 6px 6px 0 0;
+  transition: height 5s cubic-bezier(0.22, 1, 0.36, 1) var(--delay, 0s);
+  overflow: hidden;
+}
+/* wave 1 — white foam */
+.liq-fill::before {
+  content: '';
+  position: absolute; top: -9px; left: -60%;
+  width: 220%; height: 18px;
+  background: rgba(255,255,255,0.18);
+  border-radius: 50%;
+  animation: liqWave1 1.6s ease-in-out infinite alternate;
+}
+/* wave 2 — amber */
+.liq-fill::after {
+  content: '';
+  position: absolute; top: -7px; left: -40%;
+  width: 180%; height: 15px;
+  background: rgba(255,220,80,0.22);
+  border-radius: 50%;
+  animation: liqWave2 2.2s ease-in-out infinite alternate-reverse;
+}
+@keyframes liqWave1 {
+  from { transform: translateX(0)   scaleY(1); }
+  to   { transform: translateX(-30%) scaleY(1.4); }
+}
+@keyframes liqWave2 {
+  from { transform: translateX(0)  scaleY(1); }
+  to   { transform: translateX(22%) scaleY(0.75); }
+}
+
+/* shimmer sweep */
+.liq-shimmer {
+  position: absolute; inset: 0; pointer-events: none;
+  width: 45%; left: -45%;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255,235,120,0.28) 50%,
+    transparent 100%);
+  animation: liqShimmer 3s linear infinite;
+}
+@keyframes liqShimmer {
+  from { left: -45%; }
+  to   { left: 130%; }
+}
+
+.liq-lbl {
+  font-size: 0.68rem; font-weight: 700;
+  color: rgba(212,168,49,0.65);
+  letter-spacing: 0.07em; text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.liq-replay {
+  align-self: center;
+  background: rgba(212,168,49,0.1);
+  border: 1px solid rgba(212,168,49,0.3);
+  color: #d4a831;
+  padding: 4px 18px;
+  border-radius: 20px;
+  font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.07em; cursor: pointer;
+  transition: background 0.2s;
+}
+.liq-replay:hover { background: rgba(212,168,49,0.22); }

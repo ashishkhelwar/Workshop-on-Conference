@@ -106,27 +106,21 @@ function initOverlayMap(id) {
   const elephantIcon = L.divIcon({
     className: '',
     html: `<div style="
-      width:42px;height:42px;border-radius:50%;
-      background:#1B4332;border:3px solid #52B788;
-      display:flex;align-items:center;justify-content:center;
-      font-size:24px;
-      box-shadow:0 3px 10px rgba(0,0,0,0.55),0 0 0 2px rgba(82,183,136,0.4);
-      cursor:pointer;">🐘</div>`,
-    iconSize: [42, 42],
-    iconAnchor: [21, 21]
+  width:16px;height:16px;border-radius:50%;
+  background:#52B788;border:3px solid #fff;
+  box-shadow:0 0 10px rgba(82,183,136,0.9),0 2px 5px rgba(0,0,0,0.5);
+"></div>`,
+    iconSize: [16, 16], iconAnchor: [8, 8]
   });
 
   const humanIcon = L.divIcon({
     className: '',
     html: `<div style="
-      width:42px;height:42px;border-radius:50%;
-      background:#7a0a14;border:3px solid #E63946;
-      display:flex;align-items:center;justify-content:center;
-      font-size:24px;
-      box-shadow:0 3px 10px rgba(0,0,0,0.55),0 0 0 2px rgba(230,57,70,0.4);
-      cursor:pointer;">🧍</div>`,
-    iconSize: [42, 42],
-    iconAnchor: [21, 21]
+  width:16px;height:16px;border-radius:50%;
+  background:#E63946;border:3px solid #fff;
+  box-shadow:0 0 10px rgba(230,57,70,0.9),0 2px 5px rgba(0,0,0,0.5);
+"></div>`,
+    iconSize: [16, 16], iconAnchor: [8, 8]
   });
 
   // Phase 1: elephant markers immediately

@@ -42,28 +42,28 @@ const CONFIG = {
       name     : "Dr. Tapendra Saini",
       title    : "Scientist-C\nDept. of Wildlife Health Management",
       badge    : "Resource Person",
-      color    : "red"
+      color    : "green"
     },
     {
       initials : "CS",
       name     : "Dr. C.P. Sharma",
       title    : "Principal Technical Officer\nForensic Cell",
       badge    : "Resource Person",
-      color    : "red"
+      color    : "green"
     },
     {
       initials : "MK",
       name     : "Dr. M. Karikalan",
       title    : "Senior Scientist\nCentre for Wildlife",
       badge    : "Lab Reports",
-      color    : "red"
+      color    : "green"
     },
     {
       initials : "AS",
       name     : "Dr. A.B. Shrivastav",
       title    : "Former Director\nCentre for Wildlife & Forensic Health",
       badge    : "Resource Person",
-      color    : "red"
+      color    : "green"
     }
   ],
 
