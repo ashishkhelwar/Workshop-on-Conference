@@ -4,7 +4,6 @@
 
 const slides = [];
 let current = 0;
-const chartsInitialized = new Set();
 // mapsInitialized is declared in maps.js as window.mapsInitialized
 
 
@@ -179,10 +178,7 @@ function onSlideActivate(index) {
 
     // Slide 6a — Population
     case 5:
-      if (!chartsInitialized.has('popCanvas')) {
-        chartsInitialized.add('popCanvas');
-        setTimeout(() => initPopChart('popCanvas'), 300);
-      }
+      setTimeout(() => initPopChart('popCanvas'), 300);
       break;
 
     // Slide 6b — Distribution Map
@@ -194,51 +190,33 @@ function onSlideActivate(index) {
     case 7: {
       const el = slides[7].querySelector('.hero-count');
       if (el) countUp(el, 41, 1800);
-      if (!chartsInitialized.has('yearBarsCanvas')) {
-        chartsInitialized.add('yearBarsCanvas');
-        setTimeout(() => initYearBarsChart('yearBarsCanvas'), 400);
-      }
+      setTimeout(() => initYearBarsChart('yearBarsCanvas'), 400);
       break;
     }
 
     // Slide 8 — Cause of Death
     case 8:
-      if (!chartsInitialized.has('causeCanvas')) {
-        chartsInitialized.add('causeCanvas');
-        setTimeout(() => initCauseChart('causeCanvas'), 300);
-      }
+      setTimeout(() => initCauseChart('causeCanvas'), 300);
       break;
 
     // Slide 9a — Age Group
     case 9:
-      if (!chartsInitialized.has('ageCanvas')) {
-        chartsInitialized.add('ageCanvas');
-        setTimeout(() => initAgeChart('ageCanvas'), 300);
-      }
+      setTimeout(() => initAgeChart('ageCanvas'), 300);
       break;
 
     // Slide 9b — Sex Group
     case 10:
-      if (!chartsInitialized.has('sexCanvas')) {
-        chartsInitialized.add('sexCanvas');
-        setTimeout(() => initSexChart('sexCanvas'), 300);
-      }
+      setTimeout(() => initSexChart('sexCanvas'), 300);
       break;
 
     // Slide 9c — Seasonal
     case 11:
-      if (!chartsInitialized.has('seasonCanvas')) {
-        chartsInitialized.add('seasonCanvas');
-        setTimeout(() => initSeasonalChart('seasonCanvas'), 300);
-      }
+      setTimeout(() => initSeasonalChart('seasonCanvas'), 300);
       break;
 
     // Slide 9d — Range-wise
     case 12:
-      if (!chartsInitialized.has('rangeCanvas')) {
-        chartsInitialized.add('rangeCanvas');
-        setTimeout(() => initRangeChart('rangeCanvas'), 300);
-      }
+      setTimeout(() => initRangeChart('rangeCanvas'), 300);
       break;
 
     // Slide 10 — Geo Casualty Map
@@ -251,10 +229,7 @@ function onSlideActivate(index) {
 
     // Slide 12 — PM Analysis
     case 15:
-      if (!chartsInitialized.has('trendCanvas')) {
-        chartsInitialized.add('trendCanvas');
-        setTimeout(() => initTrendChart('trendCanvas'), 300);
-      }
+      setTimeout(() => initTrendChart('trendCanvas'), 300);
       break;
 
     // Slide 13 — Lab Report (no special init)
