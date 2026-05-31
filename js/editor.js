@@ -56,6 +56,7 @@
         <button class="cfg-tab"        data-tab="persons"  onclick="cfgTab(this,'persons')">Persons</button>
         <button class="cfg-tab"        data-tab="stats"    onclick="cfgTab(this,'stats')">Stats</button>
         <button class="cfg-tab"        data-tab="schedule" onclick="cfgTab(this,'schedule')">Schedule</button>
+        <button class="cfg-tab"        data-tab="style"    onclick="cfgTab(this,'style')">Style</button>
       </div>
 
       <div class="cfg-body" id="cfg-body"></div>
@@ -146,6 +147,33 @@
           <button class="cfg-add-row" onclick="cfgAddSchedRow()">+ Add Item</button>
         </div>`;
     }
+
+    else if (tab === 'style') {
+      body.innerHTML =
+        section('Theme Colors', [
+          clr('style.primary',     'Primary Accent',         STYLE.primary),
+          clr('style.primaryDark', 'Dark Accent / Avatar',   STYLE.primaryDark),
+          clr('style.gold',        'Gold / Secondary',       STYLE.gold),
+          clr('style.amber',       'Amber / Warning',        STYLE.amber),
+          clr('style.red',         'Alert / Red',            STYLE.red),
+        ]) +
+        section('Slide Backgrounds', [
+          clr('style.bg',   'Slide Background', STYLE.bg),
+          clr('style.card', 'Card Background',  STYLE.card),
+        ]) +
+        section('Typography', [
+          clr('style.textPrimary', 'Primary Text',  STYLE.textPrimary),
+          clr('style.textMuted',   'Muted / Sub Text', STYLE.textMuted),
+          rng('style.fontScale', 'Body Text Scale', STYLE.fontScale, 0.7, 1.35, 0.05, 'pct'),
+        ]) +
+        section('Layout', [
+          rng('style.cardRadius', 'Card Corner Radius', STYLE.cardRadius, 0, 24, 1, 'px'),
+          rng('style.slideGap',   'Card / Row Gap',     STYLE.slideGap,   8, 40, 2, 'px'),
+        ]) +
+        `<div class="cfg-section">
+          <button class="cfg-reset-style" onclick="cfgResetStyle()">Reset to Defaults</button>
+        </div>`;
+    }
   }
 
   // ── HTML helpers ──────────────────────────────────────────────────────────
@@ -190,6 +218,34 @@
     </div>`;
   }
 
+  function clr(key, label, val) {
+    return `<div class="cfg-field cfg-clr-field">
+      <label class="cfg-label">${esc(label)}</label>
+      <div class="cfg-clr-row">
+        <input class="cfg-clr-swatch" type="color" data-key="${key}"
+               value="${escAttr(val)}" oninput="cfgLive(this)">
+        <input class="cfg-input cfg-clr-hex" data-key="${key}"
+               value="${escAttr(val)}" maxlength="7" placeholder="#rrggbb"
+               oninput="cfgSyncHex(this)">
+        <div class="cfg-clr-preview" style="background:${escAttr(val)}"></div>
+      </div>
+    </div>`;
+  }
+
+  function rng(key, label, val, min, max, step, unit) {
+    const disp = unit === 'pct' ? Math.round(val * 100) + '%' : val + unit;
+    return `<div class="cfg-field">
+      <div class="cfg-label-row">
+        <label class="cfg-label">${esc(label)}</label>
+        <span class="cfg-rng-val" id="rv_${key.replace(/\./g,'_')}">${disp}</span>
+      </div>
+      <input class="cfg-range" type="range" data-key="${key}"
+             min="${min}" max="${max}" step="${step}" value="${val}"
+             data-unit="${unit}"
+             oninput="cfgLive(this)">
+    </div>`;
+  }
+
   function schedRow(item, i) {
     const specOpts = [
       { v: '',      l: 'Normal session' },
@@ -220,10 +276,35 @@
     return String(s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
   }
 
-  // ── Live-write one field to CONFIG ────────────────────────────────────────
+  // ── Live-write one field to CONFIG or STYLE ──────────────────────────────
   window.cfgLive = function (el) {
     const key = el.dataset.key;
     if (!key) return;
+
+    if (key.startsWith('style.')) {
+      const prop = key.slice(6);
+      const rawVal = el.type === 'range' ? parseFloat(el.value) : el.value;
+      STYLE[prop] = rawVal;
+      // Update range display
+      const unit = el.dataset.unit;
+      if (unit) {
+        const dispEl = document.getElementById('rv_' + key.replace(/\./g,'_'));
+        if (dispEl) dispEl.textContent = unit === 'pct' ? Math.round(rawVal*100)+'%' : rawVal+unit;
+      }
+      // Sync color preview
+      if (el.type === 'color') {
+        const row = el.closest('.cfg-clr-row');
+        if (row) {
+          const hex = row.querySelector('.cfg-clr-hex');
+          const prev = row.querySelector('.cfg-clr-preview');
+          if (hex)  hex.value = rawVal;
+          if (prev) prev.style.background = rawVal;
+        }
+      }
+      applyStyle();
+      return;
+    }
+
     const val = el.tagName === 'SELECT' ? el.value
               : el.type === 'number'    ? Number(el.value)
               : el.value;
@@ -233,6 +314,32 @@
     } else if (CONFIG[parts[0]]) {
       CONFIG[parts[0]][parts[1]] = val;
     }
+  };
+
+  // ── Sync hex text input → color picker ───────────────────────────────────
+  window.cfgSyncHex = function (hexEl) {
+    const val = hexEl.value.trim();
+    if (!/^#[0-9a-fA-F]{6}$/.test(val)) return;
+    const row = hexEl.closest('.cfg-clr-row');
+    if (row) {
+      const picker = row.querySelector('input[type="color"]');
+      const prev   = row.querySelector('.cfg-clr-preview');
+      if (picker) picker.value = val;
+      if (prev)   prev.style.background = val;
+    }
+    cfgLive(hexEl);
+  };
+
+  // ── Reset style to defaults ───────────────────────────────────────────────
+  window.cfgResetStyle = function () {
+    Object.assign(STYLE, {
+      primary:'#52B788', primaryDark:'#1B4332', gold:'#C9A84C', amber:'#F4A261',
+      red:'#E63946', bg:'#0A1628', card:'#112240', textPrimary:'#E8F0E8',
+      textMuted:'#8BA098', fontScale:1.0, cardRadius:12, slideGap:20,
+    });
+    applyStyle();
+    cfgRenderTab('style');
+    cfgToast('Style reset to defaults');
   };
 
   // ── Schedule: flush all rows to CONFIG ───────────────────────────────────
@@ -262,6 +369,7 @@
   window.cfgApplyAll = function () {
     flushSchedule();
     applyConfig();
+    applyStyle();
     cfgToast('Changes applied to presentation ✓');
   };
 
@@ -281,7 +389,7 @@
   // ── Export ────────────────────────────────────────────────────────────────
   window.exportConfig = function () {
     flushSchedule();
-    const json = JSON.stringify(CONFIG, null, 2);
+    const json = JSON.stringify({ ...CONFIG, style: STYLE }, null, 2);
     const blob = new Blob([json], { type: 'application/json' });
     const url  = URL.createObjectURL(blob);
     const a    = Object.assign(document.createElement('a'), { href: url, download: 'workshop-config.json' });
@@ -305,7 +413,9 @@
           if (src.stats)           Object.assign(CONFIG.stats, src.stats);
           if (src.resourcePersons) CONFIG.resourcePersons = src.resourcePersons;
           if (src.schedule)        CONFIG.schedule         = src.schedule;
+          if (src.style)           Object.assign(STYLE, src.style);
           applyConfig();
+          applyStyle();
           const activeTab = document.querySelector('.cfg-tab.active');
           cfgRenderTab(activeTab ? activeTab.dataset.tab : 'info');
           cfgToast('Configuration imported ✓');

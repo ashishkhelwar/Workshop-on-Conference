@@ -203,3 +203,125 @@ function applyConfig() {
     s15Hero.dataset.count = CONFIG.stats.humanTotal;
   }
 }
+
+// ============================================================
+//  STYLE CONFIGURATION
+// ============================================================
+const STYLE = {
+  primary     : '#52B788',
+  primaryDark : '#1B4332',
+  gold        : '#C9A84C',
+  amber       : '#F4A261',
+  red         : '#E63946',
+  bg          : '#0A1628',
+  card        : '#112240',
+  textPrimary : '#E8F0E8',
+  textMuted   : '#8BA098',
+  fontScale   : 1.0,
+  cardRadius  : 12,
+  slideGap    : 20,
+};
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return `${r},${g},${b}`;
+}
+
+function applyStyle() {
+  // Font scale: change root font-size so all rem values scale uniformly
+  document.documentElement.style.fontSize = `${STYLE.fontScale * 16}px`;
+
+  let el = document.getElementById('cfg-dyn');
+  if (!el) {
+    el = document.createElement('style');
+    el.id = 'cfg-dyn';
+    document.head.appendChild(el);
+  }
+
+  const g  = STYLE.primary;
+  const gd = STYLE.primaryDark;
+  const go = STYLE.gold;
+  const am = STYLE.amber;
+  const rd = STYLE.red;
+  const bg = STYLE.bg;
+  const cd = STYLE.card;
+  const tx = STYLE.textPrimary;
+  const mt = STYLE.textMuted;
+  const rr = STYLE.cardRadius + 'px';
+
+  el.textContent = `
+    :root {
+      --cfg-green:      ${g};
+      --cfg-green-rgb:  ${hexToRgb(g)};
+      --cfg-green-dark: ${gd};
+      --cfg-gold:       ${go};
+      --cfg-gold-rgb:   ${hexToRgb(go)};
+      --cfg-amber:      ${am};
+      --cfg-red:        ${rd};
+      --cfg-red-rgb:    ${hexToRgb(rd)};
+      --cfg-bg:         ${bg};
+      --cfg-card:       ${cd};
+      --cfg-text:       ${tx};
+      --cfg-muted:      ${mt};
+      --cfg-radius:     ${rr};
+      --cfg-gap:        ${STYLE.slideGap}px;
+    }
+    /* Primary green */
+    .section-tag:not(.red):not(.amber) {
+      color: var(--cfg-green) !important;
+      background: rgba(var(--cfg-green-rgb),.15) !important;
+      border-color: rgba(var(--cfg-green-rgb),.3) !important;
+    }
+    .green, .kpi-value.green, .slide-title h1 span,
+    .slide-thanks h1, .conclusion-line span:not(.red) { color: var(--cfg-green) !important; }
+    .timeline-dot:not([style]) { background: var(--cfg-green) !important; }
+    .timeline-dot:not([style])::after { background: rgba(var(--cfg-green-rgb),.25) !important; }
+    .timeline-time { color: var(--cfg-green) !important; }
+    .person-badge {
+      color: var(--cfg-green) !important;
+      background: rgba(var(--cfg-green-rgb),.15) !important;
+      border-color: rgba(var(--cfg-green-rgb),.3) !important;
+    }
+    .s3-av-green {
+      background: var(--cfg-green-dark) !important;
+      border-color: var(--cfg-green) !important;
+      box-shadow: 0 3px 10px rgba(0,0,0,.55),0 0 0 2px rgba(var(--cfg-green-rgb),.3) !important;
+    }
+    .s3-card { border-color: rgba(var(--cfg-green-rgb),.22) !important; }
+    .s3-cw:not(.s3-hidden):not(.s3-zooming) .s3-card:hover {
+      border-color: rgba(var(--cfg-green-rgb),.5) !important;
+    }
+    .stat-badge:not(.red) {
+      background: rgba(var(--cfg-green-rgb),.12) !important;
+      border-color: rgba(var(--cfg-green-rgb),.25) !important;
+      color: var(--cfg-green) !important;
+    }
+    /* Gold */
+    .gold, .kpi-value.amber { color: var(--cfg-gold) !important; }
+    /* Red */
+    .red, .kpi-value.red, .hero-number.red { color: var(--cfg-red) !important; }
+    .section-tag.red {
+      color: var(--cfg-red) !important;
+      background: rgba(var(--cfg-red-rgb),.15) !important;
+      border-color: rgba(var(--cfg-red-rgb),.35) !important;
+    }
+    /* Backgrounds */
+    .bg-dark { background: var(--cfg-bg) !important; }
+    .bg-forest { background: linear-gradient(135deg, var(--cfg-bg) 0%,
+      color-mix(in srgb, var(--cfg-green) 15%, var(--cfg-bg)) 100%) !important; }
+    /* Card backgrounds + radius */
+    .kpi-card, .s3-card, .report-section, .action-card, .dept-logo {
+      background: var(--cfg-card) !important;
+      border-radius: var(--cfg-radius) !important;
+    }
+    .kpi-card { border-color: rgba(var(--cfg-green-rgb),.2) !important; }
+    /* Typography */
+    .s3-name { color: var(--cfg-text) !important; }
+    .s3-title, .muted { color: var(--cfg-muted) !important; }
+    /* Slide padding gap */
+    .s3-grid4 { gap: var(--cfg-gap) !important; }
+    .s3-wrapper { gap: var(--cfg-gap) !important; }
+  `;
+}
