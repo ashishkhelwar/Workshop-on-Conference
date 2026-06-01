@@ -191,65 +191,73 @@ function onSlideActivate(index) {
       setTimeout(() => initCurrentElephantsMap('s7-live-map'), 300);
       break;
 
+    // Slide 7b — Elephant Casualties
+    case 8: {
+      const el = slides[8].querySelector('.hero-count');
+      if (el) countUp(el, 41, 1800);
+      setTimeout(() => initYearBarsChart('yearBarsCanvas'), 400);
+      break;
+    }
+
     // Slide 8 — Cause of Death
-    case 8:
+    case 9:
       setTimeout(() => initCauseChart('causeCanvas'), 300);
       break;
 
     // Slide 9a — Age Group
-    case 9:
+    case 10:
       setTimeout(() => initAgeChart('ageCanvas'), 300);
       break;
 
     // Slide 9b — Sex Group
-    case 10:
+    case 11:
       setTimeout(() => initSexChart('sexCanvas'), 300);
       break;
 
     // Slide 9c — Seasonal
-    case 11:
+    case 12:
       setTimeout(() => initSeasonalChart('seasonCanvas'), 300);
       break;
 
     // Slide 9d — Range-wise
-    case 12:
+    case 13:
       setTimeout(() => initRangeChart('rangeCanvas'), 300);
       break;
 
     // Slide 10 — Geo Casualty Map
-    case 13:
+    case 14:
       setTimeout(() => initCasualtyMap('casualtyMap'), 300);
       break;
 
     // Slide 11 — PM Report Summary (no special init)
-    case 14: break;
+    case 15: break;
 
     // Slide 12 — PM Analysis
-    case 15:
+    case 16:
       setTimeout(() => initTrendChart('trendCanvas'), 300);
       break;
 
     // Slide 13 — Lab Report (no special init)
-    case 16: break;
-
-    // Slide 14 — Conclusion (no special init)
     case 17: break;
 
+    // Slide 14 — Conclusion (no special init)
+    case 18: break;
+
     // Slide 15 — Human Casualty
-    case 18: {
-      const el = slides[18].querySelector('.hero-count');
+    case 19: {
+      const el = slides[19].querySelector('.hero-count');
       if (el) countUp(el, 45, 1800);
       setTimeout(animateHumanBars, 400);
       break;
     }
 
     // Slide 16 — Overlay Map
-    case 19:
+    case 20:
       setTimeout(() => initOverlayMap('overlayMap'), 300);
       break;
 
     // Slide 17 — Thank You
-    case 20: break;
+    case 21: break;
 
     default: break;
   }
