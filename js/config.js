@@ -217,14 +217,14 @@ const STYLE = {
   card        : '#112240',
   textPrimary : '#E8F0E8',
   textMuted   : '#8BA098',
-  fontScale   : 1.0,
+  fontScale   : 1.2,
   cardRadius  : 12,
   slideGap    : 20,
   h1Size      : 3.2,
   h2Size      : 2.0,
   h3Size      : 1.35,
-  bodySize    : 0.88,
-  captionSize : 0.72,
+  bodySize    : 1.1,
+  captionSize : 1.2,
 };
 
 function hexToRgb(hex) {

@@ -342,8 +342,8 @@
     Object.assign(STYLE, {
       primary:'#52B788', primaryDark:'#1B4332', gold:'#C9A84C', amber:'#F4A261',
       red:'#E63946', bg:'#0A1628', card:'#112240', textPrimary:'#E8F0E8',
-      textMuted:'#8BA098', fontScale:1.0, cardRadius:12, slideGap:20,
-      h1Size:3.2, h2Size:2.0, h3Size:1.35, bodySize:0.88, captionSize:0.72,
+      textMuted:'#8BA098', fontScale:1.2, cardRadius:12, slideGap:20,
+      h1Size:3.2, h2Size:2.0, h3Size:1.35, bodySize:1.1, captionSize:1.2,
     });
     applyStyle();
     cfgRenderTab('style');
