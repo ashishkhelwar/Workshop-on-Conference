@@ -10,7 +10,7 @@ const CONFIG = {
     eventName : "Bilaspur Forest Department Workshop",
     eventDate : "30 May 2026",
     venue     : "Forest Rest House, Bilaspur",
-    title     : "Elephant & Human Casualty",
+    title     : "Workshop on Essentials for Mortality Investigation of Asian Elephant",
     subtitle  : "Dharamjaigarh & Raigarh Forest Divisions | Bilaspur, Chhattisgarh",
     metaLine  : "Financial Years 2021–22 to 2025–26 · 86 Geo-referenced Incidents",
     s2Heading : "Human-Elephant Conflict: Data, Science & Solutions",
@@ -98,7 +98,9 @@ function applyConfig() {
     if (tag) tag.textContent = `${CONFIG.meta.eventName}  ·  ${CONFIG.meta.eventDate}`;
 
     const h1 = s1.querySelector('h1');
-    if (h1) {
+    if (h1 && h1.classList.contains('s1-main-title')) {
+      // Custom cover layout — title set directly in HTML, skip override
+    } else if (h1) {
       const parts = CONFIG.meta.title.split('&');
       h1.innerHTML = parts.length > 1
         ? `${escH(parts[0].trim())} <span>&amp;</span> ${escH(parts[1].trim())}`
