@@ -68,69 +68,6 @@ function countUp(el, target, duration) {
   requestAnimationFrame(step);
 }
 
-// ── Slide 3 — click-to-zoom for Resource Persons ────────────────────────
-let s3active    = -1;
-let s3holdTimer = null;
-
-function s3Wraps() {
-  return Array.from({length: 5}, (_, i) => document.getElementById('rp' + i));
-}
-
-function s3Zoom(idx) {
-  if (s3active !== -1) return;           // ignore clicks while one is zoomed
-  s3active = idx;
-
-  const wrap = s3Wraps()[idx];
-  const card = wrap.querySelector('.s3-card');
-  const rect = card.getBoundingClientRect();
-
-  // Hide all OTHER cards
-  s3Wraps().forEach((w, i) => { if (i !== idx) w.classList.add('s3-hidden'); });
-
-  // Compute translate + scale so card centre → viewport centre
-  const dx    = (window.innerWidth  / 2) - (rect.left + rect.width  / 2);
-  const dy    = (window.innerHeight / 2) - (rect.top  + rect.height / 2);
-  const scale = Math.min((window.innerHeight * 0.70) / rect.height, 3);
-
-  wrap.classList.add('s3-zooming');
-  card.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
-  card.style.zIndex    = '100';
-
-  s3holdTimer = setTimeout(() => s3ZoomBack(idx), 5000);
-}
-
-function s3ZoomBack(idx) {
-  clearTimeout(s3holdTimer);
-  const wrap = s3Wraps()[idx];
-  const card = wrap.querySelector('.s3-card');
-
-  card.style.transition = 'transform .5s cubic-bezier(.55,0,.45,1), box-shadow .3s';
-  card.style.transform  = '';
-
-  setTimeout(() => {
-    card.style.transition = '';
-    card.style.zIndex     = '';
-    wrap.classList.remove('s3-zooming');
-    s3Wraps().forEach(w => w.classList.remove('s3-hidden'));
-    s3active = -1;
-  }, 520);
-}
-
-function stopSpotlight() {
-  // Reset zoom state when leaving slide 3
-  if (s3active !== -1) {
-    clearTimeout(s3holdTimer);
-    const wrap = s3Wraps()[s3active];
-    if (wrap) {
-      const card = wrap.querySelector('.s3-card');
-      if (card) { card.style.transform = ''; card.style.zIndex = ''; card.style.transition = ''; }
-      wrap.classList.remove('s3-zooming');
-    }
-    s3Wraps().forEach(w => w.classList.remove('s3-hidden'));
-    s3active = -1;
-  }
-}
-
 // ── Human casualty inline bars animation ─────────────────────────────────
 function animateHumanBars() {
   const maxVal = 16;
@@ -148,9 +85,6 @@ function animateHumanBars() {
 function onSlideActivate(index) {
   const slideId = slides[index] ? slides[index].id : null;
 
-  // Stop spotlight if leaving slide 3
-  if (index !== 2) stopSpotlight();
-
   switch (index) {
 
     // Slide 1 — Title (no special init)
@@ -163,7 +97,7 @@ function onSlideActivate(index) {
       break;
     }
 
-    // Slide 3 — Resource Persons (click-to-zoom, no auto-cycle)
+    // Slide 3 — Resource Persons
     case 2: break;
 
     // Slide 4 — Schedule (timeline, no special anim)
