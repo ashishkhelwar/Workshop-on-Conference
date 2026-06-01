@@ -203,6 +203,17 @@ function initCurrentElephantsMap(id) {
     );
   });
 
+  // Pulsing red rings on large herds (≥30 elephants)
+  locations.filter(p => p.count >= 30).forEach(p => {
+    const pulseIcon = L.divIcon({
+      className: '',
+      html: `<div class="pulse-ring" style="--pulse-color:#E63946;width:30px;height:30px"></div>`,
+      iconSize: [30, 30],
+      iconAnchor: [15, 15]
+    });
+    L.marker([p.lat, p.lng], { icon: pulseIcon, interactive: false }).addTo(map);
+  });
+
   setTimeout(() => map.invalidateSize(), 500);
 }
 
