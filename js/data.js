@@ -1,39 +1,39 @@
 const DATA = {
   years: ['2021-22','2022-23','2023-24','2024-25','2025-26*'],
 
-  elephantDeaths: [4, 9, 6, 10, 12],
+  elephantDeaths: [4, 12, 6, 10, 12],
   humanDeaths: [13, 1, 7, 8, 16],
 
   divisionTotals: {
     dh: { human: 36, elephant: 23 },
-    rg: { human: 9, elephant: 18 }
+    rg: { human: 9, elephant: 21 }
   },
 
   causeOfDeath: [
-    { cause: 'Electrocution', count: 21, pct: 51 },
-    { cause: 'Drowning', count: 9, pct: 22 },
-    { cause: 'Natural / Old Age', count: 4, pct: 10 },
-    { cause: 'Fall / Trauma', count: 4, pct: 10 },
-    { cause: 'Other', count: 3, pct: 7 }
+    { cause: 'Electrocution', count: 23, pct: 52 },
+    { cause: 'Drowning', count: 9, pct: 20 },
+    { cause: 'Natural / Old Age', count: 4, pct: 9 },
+    { cause: 'Fall / Trauma', count: 4, pct: 9 },
+    { cause: 'Other', count: 4, pct: 9 }
   ],
 
   ageProfile: [
-    { group: 'Calves (<1 yr)', count: 4, pct: 17 },
-    { group: 'Young (1–15 yr)', count: 5, pct: 22 },
-    { group: 'Adults (16–50 yr)', count: 9, pct: 39 },
-    { group: 'Old (50+ yr)', count: 5, pct: 22 }
+    { group: 'Calves (<1 yr)', count: 4, pct: 15 },
+    { group: 'Young (1–15 yr)', count: 7, pct: 27 },
+    { group: 'Adults (16–50 yr)', count: 10, pct: 38 },
+    { group: 'Old (50+ yr)', count: 5, pct: 19 }
   ],
 
-  sexProfile: { male: 16, female: 16 },  // from 32 PM records
+  sexProfile: { male: 18, female: 17 },  // from 35 PM records
 
   // Exact monthly distribution from detailed records
   seasonal: {
     months: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-    counts: [6, 4, 3, 1, 2, 3, 1, 1, 3, 8, 5, 4]
+    counts: [6, 4, 3, 1, 2, 4, 1, 1, 3, 8, 6, 5]
   },
 
   rangeWise: [
-    { beat: 'Ghargoda (RG)', count: 12, div: 'Raigarh', risk: 'CRITICAL' },
+    { beat: 'Ghargoda (RG)', count: 15, div: 'Raigarh', risk: 'CRITICAL' },
     { beat: 'Chhal (DH)', count: 7, div: 'Dharamjaigarh', risk: 'CRITICAL' },
     { beat: 'Dharamjaigarh HQ', count: 7, div: 'Dharamjaigarh', risk: 'HIGH' },
     { beat: 'Tamanar (RG)', count: 5, div: 'Raigarh', risk: 'MODERATE' },
@@ -122,6 +122,9 @@ const DATA = {
     ],
     rgElephant: [
       [22.245, 83.414, 'Heatstroke', '2022-23'],
+      [22.215, 83.470, 'Electrocution', '2022-23'],
+      [22.165, 83.510, 'Electrocution', '2022-23'],
+      [22.090, 83.420, 'Sun stroke', '2022-23'],
       [22.179, 83.518, 'Electrocution', '2022-23'],
       [22.498, 83.501, 'Electrocution', '2022-23'],
       [22.218, 83.564, 'Electrocution(3)', '2024-25'],
