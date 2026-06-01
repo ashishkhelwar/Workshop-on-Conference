@@ -1,0 +1,264 @@
+/* ============================================================
+   INLINE ELEMENT EDITOR — select-on-click inspector
+   ============================================================ */
+
+/* ── Mode indicator bar (top) ── */
+#ie-bar {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #2563eb, #06b6d4);
+  z-index: 11000;
+  opacity: 0;
+  transition: opacity .25s;
+  pointer-events: none;
+}
+#ie-bar.on { opacity: 1; }
+
+/* ── Hover / selected / editing outlines ── */
+.ie-hover {
+  outline: 2px dashed rgba(37,99,235,0.6) !important;
+  outline-offset: 2px !important;
+  cursor: crosshair !important;
+}
+.ie-selected {
+  outline: 2px solid #2563eb !important;
+  outline-offset: 2px !important;
+  cursor: default !important;
+}
+.ie-editing {
+  outline: 2px solid #52B788 !important;
+  outline-offset: 2px !important;
+  cursor: text !important;
+  caret-color: #52B788;
+}
+.ie-editing:focus { outline: 2px solid #52B788 !important; }
+
+/* ── Inspector panel ── */
+#ie-panel {
+  position: fixed;
+  top: 0; right: 0; bottom: 0;
+  width: 285px;
+  background: #071422;
+  border-left: 1px solid rgba(37,99,235,0.3);
+  box-shadow: -8px 0 40px rgba(0,0,0,0.7);
+  z-index: 10500;
+  display: flex; flex-direction: column;
+  transform: translateX(100%);
+  transition: transform .32s cubic-bezier(.22,1,.36,1);
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 0.75rem;
+}
+#ie-panel.open { transform: translateX(0); }
+
+/* header */
+#ie-panel-hdr {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 11px 14px;
+  border-bottom: 1px solid rgba(37,99,235,0.2);
+  flex-shrink: 0;
+  background: rgba(37,99,235,0.06);
+}
+#ie-panel-tag {
+  font-size: 0.6rem; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #60a5fa;
+  background: rgba(37,99,235,0.12);
+  border: 1px solid rgba(37,99,235,0.3);
+  padding: 2px 8px; border-radius: 10px;
+  max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+#ie-panel-close {
+  background: none; border: none;
+  color: rgba(255,255,255,0.3); cursor: pointer;
+  width: 26px; height: 26px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  transition: color .2s, background .2s;
+}
+#ie-panel-close:hover { color: #fff; background: rgba(255,255,255,0.1); }
+
+/* scrollable body */
+#ie-panel-body {
+  flex: 1; overflow-y: auto; padding: 8px 0 12px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(37,99,235,0.2) transparent;
+}
+#ie-panel-body::-webkit-scrollbar { width: 4px; }
+#ie-panel-body::-webkit-scrollbar-thumb { background: rgba(37,99,235,0.25); border-radius: 4px; }
+
+/* sections */
+.ie-section {
+  padding: 10px 14px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.045);
+}
+.ie-section-title {
+  font-size: 0.57rem; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: #60a5fa;
+  margin-bottom: 8px;
+}
+
+/* text area for inline text */
+#ie-text-area {
+  width: 100%; box-sizing: border-box;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(37,99,235,0.2);
+  border-radius: 6px;
+  color: #e2e8f0; font-size: 0.75rem;
+  padding: 6px 9px; resize: vertical;
+  min-height: 55px; outline: none;
+  font-family: inherit;
+  transition: border-color .2s;
+}
+#ie-text-area:focus { border-color: rgba(37,99,235,.5); }
+
+/* edit-inline button */
+#ie-inline-btn {
+  width: 100%; margin-top: 6px;
+  background: rgba(37,99,235,0.1);
+  border: 1px solid rgba(37,99,235,0.35);
+  color: #93c5fd; cursor: pointer;
+  border-radius: 6px; padding: 6px;
+  font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  transition: background .2s;
+}
+#ie-inline-btn:hover { background: rgba(37,99,235,0.22); }
+#ie-inline-btn.active { background: rgba(82,183,136,0.18); border-color: rgba(82,183,136,0.5); color: #52B788; }
+
+/* property rows */
+.ie-row {
+  display: grid; grid-template-columns: 1fr 80px;
+  align-items: center; gap: 8px; margin-bottom: 7px;
+}
+.ie-row-3 {
+  display: grid; grid-template-columns: 1fr 60px 60px;
+  align-items: center; gap: 6px; margin-bottom: 7px;
+}
+.ie-lbl {
+  font-size: 0.63rem; color: rgba(255,255,255,0.38);
+  letter-spacing: 0.03em;
+}
+.ie-inp {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(37,99,235,0.18);
+  border-radius: 5px; color: #e2e8f0;
+  font-size: 0.72rem; padding: 5px 7px;
+  outline: none; width: 100%; box-sizing: border-box;
+  font-family: inherit;
+  transition: border-color .2s;
+}
+.ie-inp:focus { border-color: rgba(37,99,235,.45); }
+.ie-inp-num { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* font size stepper */
+.ie-stepper {
+  display: flex; align-items: center; gap: 4px;
+}
+.ie-step-btn {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #e2e8f0; cursor: pointer;
+  width: 22px; height: 22px; border-radius: 4px;
+  font-size: 0.85rem; display: flex; align-items: center; justify-content: center;
+  transition: background .15s;
+}
+.ie-step-btn:hover { background: rgba(37,99,235,0.2); }
+.ie-step-val {
+  font-size: 0.72rem; font-variant-numeric: tabular-nums;
+  color: #e2e8f0; min-width: 34px; text-align: center;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(37,99,235,0.18);
+  border-radius: 5px; padding: 3px 4px;
+}
+
+/* color row */
+.ie-clr-row { display: flex; align-items: center; gap: 7px; }
+.ie-clr-sw {
+  width: 32px; height: 26px;
+  border-radius: 5px; border: 1px solid rgba(255,255,255,0.15);
+  cursor: pointer; padding: 2px; background: rgba(255,255,255,0.04);
+  flex-shrink: 0;
+}
+.ie-clr-sw::-webkit-color-swatch-wrapper { padding: 0; }
+.ie-clr-sw::-webkit-color-swatch { border-radius: 3px; border: none; }
+.ie-clr-hex {
+  flex: 1; font-family: 'Courier New', monospace !important;
+  font-size: 0.72rem !important; letter-spacing: 0.04em;
+}
+
+/* font weight / align toggles */
+.ie-toggle-row {
+  display: flex; gap: 5px; flex-wrap: wrap;
+}
+.ie-tog {
+  flex: 1; min-width: 34px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.45); cursor: pointer;
+  border-radius: 5px; padding: 5px 4px;
+  font-size: 0.72rem; text-align: center;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.ie-tog:hover { background: rgba(37,99,235,0.14); color: #93c5fd; }
+.ie-tog.on { background: rgba(37,99,235,0.22); border-color: rgba(37,99,235,0.5); color: #60a5fa; }
+
+/* range slider */
+.ie-range-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+.ie-rng-lbl { font-size: 0.63rem; color: rgba(255,255,255,0.38); flex: 1; }
+.ie-rng-val {
+  font-size: 0.68rem; font-weight: 700; color: #60a5fa;
+  font-variant-numeric: tabular-nums;
+  min-width: 30px; text-align: right;
+}
+.ie-rng {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 3px;
+  background: rgba(37,99,235,0.2);
+  border-radius: 2px; outline: none; cursor: pointer;
+  margin-bottom: 5px;
+}
+.ie-rng::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: #2563eb;
+  border: 2px solid #071422;
+  box-shadow: 0 0 0 2px rgba(37,99,235,0.35);
+  cursor: pointer;
+}
+.ie-rng::-moz-range-thumb {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: #2563eb; border: 2px solid #071422;
+  cursor: pointer;
+}
+
+/* action buttons */
+.ie-actions { display: flex; gap: 7px; padding: 10px 14px 4px; }
+.ie-reset-btn {
+  flex: 1; background: none;
+  border: 1px solid rgba(230,57,70,0.25);
+  color: rgba(230,57,70,0.6); cursor: pointer;
+  border-radius: 6px; padding: 7px;
+  font-size: 0.65rem; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  transition: background .2s, color .2s;
+}
+.ie-reset-btn:hover { background: rgba(230,57,70,0.12); color: #E63946; border-color: rgba(230,57,70,.45); }
+
+/* ── Toggle button in nav ── */
+#ie-toggle-btn {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(37,99,235,0.08);
+  border: 1px solid rgba(37,99,235,0.28);
+  color: #60a5fa; cursor: pointer;
+  padding: 6px 13px; border-radius: 6px;
+  font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 0.07em;
+  transition: background .2s, color .2s;
+}
+#ie-toggle-btn:hover { background: rgba(37,99,235,0.18); }
+#ie-toggle-btn.on {
+  background: rgba(37,99,235,0.22);
+  border-color: rgba(37,99,235,0.55);
+  color: #93c5fd;
+  box-shadow: 0 0 0 2px rgba(37,99,235,0.15);
+}
