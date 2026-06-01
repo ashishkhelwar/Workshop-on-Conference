@@ -660,6 +660,30 @@ p { line-height: 1.65; }
 /* Photo avatar */
 .s3-av-photo { object-fit: cover; object-position: center top; }
 
+/* Photo placeholder slot */
+.s3-av-slot {
+  background: rgba(82,183,136,0.06);
+  border: 2px dashed rgba(82,183,136,0.4);
+  flex-direction: column;
+  gap: 3px;
+}
+.s3-av-slot::before {
+  content: '';
+  display: block;
+  width: 22px; height: 18px;
+  background: rgba(82,183,136,0.35);
+  border-radius: 3px;
+  clip-path: polygon(12% 30%, 20% 0%, 80% 0%, 88% 30%, 100% 30%, 100% 100%, 0% 100%, 0% 30%);
+}
+.s3-av-slot::after {
+  content: 'Photo';
+  font-size: 0.48rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: rgba(82,183,136,0.5);
+  text-transform: uppercase;
+}
+
 /* Text inside horizontal card */
 .s3-card-body { display: flex; flex-direction: column; }
 
