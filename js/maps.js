@@ -188,16 +188,22 @@ function initCurrentElephantsMap(id) {
   ];
 
   locations.forEach(p => {
-    const color  = p.count >= 30 ? '#E63946' : p.count >= 10 ? '#F4A261' : p.count >= 5 ? '#C9A84C' : '#52B788';
-    const radius = Math.max(600, Math.sqrt(p.count) * 400);
-    L.circle([p.lat, p.lng], {
-      radius,
-      color,
-      weight: 2,
-      fillColor: color,
-      fillOpacity: 0.45
-    }).addTo(map).bindPopup(
-      `<b style="color:${color}">${p.loc}</b><br>` +
+    const size = Math.max(16, Math.min(46, Math.round(Math.sqrt(p.count) * 7)));
+    const half = Math.round(size / 2);
+    const icon = L.divIcon({
+      className: '',
+      html: `<div style="
+        width:${size}px;height:${size}px;border-radius:50%;
+        background:rgba(230,57,70,0.88);
+        border:2px solid #fff;
+        box-shadow:0 0 8px rgba(230,57,70,0.7),0 2px 5px rgba(0,0,0,0.45);
+        display:flex;align-items:center;justify-content:center;
+      "><div style="width:4px;height:4px;border-radius:50%;background:#fff;opacity:0.9"></div></div>`,
+      iconSize: [size, size],
+      iconAnchor: [half, half]
+    });
+    L.marker([p.lat, p.lng], { icon }).addTo(map).bindPopup(
+      `<b style="color:#E63946">${p.loc}</b><br>` +
       `<span style="color:#555">${p.div} &nbsp;·&nbsp; ${p.count} elephant${p.count > 1 ? 's' : ''}</span><br>` +
       `<small style="color:#777">Herd: ${p.herd}</small>`
     );
