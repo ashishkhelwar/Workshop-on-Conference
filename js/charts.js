@@ -669,7 +669,8 @@ function initPopChart(id) {
         pointRadius: 5,
         pointHoverRadius: 8,
         tension: 0.3,
-        fill: true
+        fill: true,
+        clip: false
       }]
     },
     options: {
@@ -698,8 +699,8 @@ function initPopChart(id) {
           grid: { color: 'rgba(255,255,255,0.06)' },
           ticks: { color: '#8BA098', stepSize: 50 },
           beginAtZero: false,
-          min: 100,
-          max: 450
+          min: 24,
+          max: 480
         }
       }
     }
