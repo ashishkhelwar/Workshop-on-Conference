@@ -28,7 +28,7 @@ function initDistributionMap(id) {
     .bindPopup('<b>Dharamjaigarh Van Mandal</b><br>23 elephant casualties<br>36 human casualties');
 
   L.marker([22.25, 83.58]).addTo(map)
-    .bindPopup('<b>Raigarh Van Mandal</b><br>18 elephant casualties<br>9 human casualties');
+    .bindPopup('<b>Raigarh Van Mandal</b><br>21 elephant casualties<br>9 human casualties');
 
   // Forest patches (rough polygons)
   L.polygon([
