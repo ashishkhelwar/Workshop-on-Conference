@@ -365,17 +365,20 @@ function initSexChart(id) {
   const ctx = document.getElementById(id);
   if (!ctx) return;
   destroyChart(id);
+  const total = DATA.sexProfile.male + DATA.sexProfile.female + (DATA.sexProfile.unknown || 0);
+  const malePct   = Math.round(DATA.sexProfile.male   / total * 100);
+  const femalePct = Math.round(DATA.sexProfile.female / total * 100);
+  const unkPct    = 100 - malePct - femalePct;
   chartInstances[id] = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: ['Male', 'Female'],
+      labels: ['Male', 'Female', 'Unknown'],
       datasets: [{
-        data: [DATA.sexProfile.male, DATA.sexProfile.female],
-        backgroundColor: ['#52B788', '#C9A84C'],
-        borderColor: ['#0A1628', '#0A1628'],
+        data: [DATA.sexProfile.male, DATA.sexProfile.female, DATA.sexProfile.unknown || 0],
+        backgroundColor: ['#52B788', '#C9A84C', 'rgba(139,160,152,0.35)'],
+        borderColor: ['#0A1628', '#0A1628', '#0A1628'],
         borderWidth: 4,
-        hoverOffset: 12,
-        _noLabels: true
+        hoverOffset: 12
       }]
     },
     options: {
@@ -401,7 +404,10 @@ function initSexChart(id) {
           borderWidth: 1,
           padding: 12,
           callbacks: {
-            label: ctx => ` ${ctx.label}: ${ctx.parsed} of 32 PM records`
+            label: ctx => {
+              const pct = Math.round(ctx.parsed / total * 100);
+              return ` ${ctx.label}: ${ctx.parsed} (${pct}%) of ${total} records`;
+            }
           }
         }
       }
@@ -414,13 +420,16 @@ function initSexChart(id) {
         c.textAlign = 'center';
         c.textBaseline = 'middle';
         const cx = width / 2;
-        const cy = (height - 40) / 2; // account for legend
-        c.font = 'bold 2rem system-ui';
-        c.fillStyle = '#E8F0E8';
-        c.fillText('16 / 16', cx, cy - 8);
-        c.font = '0.72rem system-ui';
+        const cy = (height - 40) / 2;
+        c.font = 'bold 1.7rem system-ui';
+        c.fillStyle = '#52B788';
+        c.fillText(malePct + '%', cx, cy - 16);
+        c.font = '0.65rem system-ui';
         c.fillStyle = '#8BA098';
-        c.fillText('M / F', cx, cy + 20);
+        c.fillText('Male', cx, cy + 4);
+        c.font = '0.6rem system-ui';
+        c.fillStyle = '#C9A84C';
+        c.fillText(femalePct + '% Female', cx, cy + 20);
         c.restore();
       }
     }]
