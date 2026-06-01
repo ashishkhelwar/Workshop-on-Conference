@@ -697,9 +697,9 @@ function initPopChart(id) {
         y: {
           grid: { color: 'rgba(255,255,255,0.06)' },
           ticks: { color: '#8BA098', stepSize: 50 },
-          beginAtZero: false,
-          min: 100,
-          max: 450
+          beginAtZero: true,
+          min: 0,
+          max: 500
         }
       }
     }
