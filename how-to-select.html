@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Use the Select Editor</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0a1628;
+    color: #e2e8f0;
+    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    padding: 40px 20px 60px;
+  }
+
+  .page-title {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  .page-title h1 {
+    font-size: 1.6rem; font-weight: 800; letter-spacing: 0.04em;
+    color: #e2e8f0;
+  }
+  .page-title h1 span { color: #60a5fa; }
+  .page-subtitle {
+    text-align: center; color: #64748b; font-size: 0.82rem;
+    margin-bottom: 44px;
+  }
+
+  .steps { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px; }
+
+  /* ── Step card ── */
+  .step {
+    background: #112240;
+    border: 1px solid rgba(37,99,235,0.18);
+    border-radius: 16px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 56px 1fr;
+  }
+
+  .step-num {
+    background: rgba(37,99,235,0.12);
+    border-right: 1px solid rgba(37,99,235,0.18);
+    display: flex; align-items: flex-start; justify-content: center;
+    padding-top: 22px;
+    font-size: 1.6rem; font-weight: 900; color: #2563eb;
+    letter-spacing: -0.02em;
+  }
+
+  .step-content { padding: 22px 24px 24px; }
+  .step-title {
+    font-size: 1rem; font-weight: 700; color: #e2e8f0;
+    margin-bottom: 6px;
+  }
+  .step-desc {
+    font-size: 0.78rem; color: #94a3b8; line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .step-desc strong { color: #cbd5e1; }
+  .step-desc code {
+    background: rgba(37,99,235,0.15); color: #93c5fd;
+    padding: 1px 6px; border-radius: 4px; font-size: 0.75rem;
+  }
+
+  /* ── Visual mock ── */
+  .mock {
+    background: #071422;
+    border: 1px solid rgba(37,99,235,0.2);
+    border-radius: 10px;
+    padding: 16px;
+    position: relative;
+  }
+
+  /* nav mock */
+  .m-nav {
+    display: flex; align-items: center; gap: 8px;
+    background: #0d1f3c;
+    border: 1px solid rgba(37,99,235,0.15);
+    border-radius: 8px;
+    padding: 8px 14px;
+    width: fit-content;
+  }
+  .m-nav-dot { width: 8px; height: 8px; border-radius: 50%; background: #1e3a5f; }
+  .m-nav-dot.g { background: #1b4332; }
+  .m-nav-spacer { flex: 1; min-width: 80px; }
+  .m-btn {
+    display: flex; align-items: center; gap: 5px;
+    padding: 5px 11px; border-radius: 6px;
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em;
+    border: 1px solid;
+    cursor: default;
+  }
+  .m-btn-sel {
+    background: rgba(37,99,235,0.1);
+    border-color: rgba(37,99,235,0.3);
+    color: #60a5fa;
+  }
+  .m-btn-sel.on {
+    background: rgba(37,99,235,0.22);
+    border-color: rgba(37,99,235,0.55);
+    color: #93c5fd;
+    box-shadow: 0 0 0 2px rgba(37,99,235,0.15);
+  }
+  .m-btn-edit {
+    background: rgba(82,183,136,0.1);
+    border-color: rgba(82,183,136,0.32);
+    color: #52B788;
+  }
+
+  /* slide mock */
+  .m-slide {
+    background: #0b1829;
+    border-radius: 8px;
+    padding: 14px;
+    position: relative;
+    margin-top: 10px;
+    min-height: 90px;
+  }
+  .m-bar {
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg,#2563eb,#06b6d4);
+    border-radius: 8px 8px 0 0;
+  }
+  .m-card {
+    background: #112240;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-top: 8px;
+    font-size: 0.72rem; color: #94a3b8;
+  }
+  .m-card-title { font-size: 0.8rem; font-weight: 700; color: #e2e8f0; margin-bottom: 4px; }
+  .m-hovering {
+    outline: 2px dashed rgba(37,99,235,0.65);
+    outline-offset: 2px;
+  }
+  .m-selected {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+  }
+  .m-editing {
+    outline: 2px solid #52B788;
+    outline-offset: 2px;
+    caret-color: #52B788;
+  }
+  .m-cursor-cross { cursor: crosshair; }
+
+  /* inspector mock */
+  .m-inspector {
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 180px;
+    background: #071422;
+    border-left: 1px solid rgba(37,99,235,0.25);
+    border-radius: 0 10px 10px 0;
+    padding: 10px;
+    font-size: 0.65rem;
+  }
+  .m-insp-hdr {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 8px; padding-bottom: 7px;
+    border-bottom: 1px solid rgba(37,99,235,0.15);
+  }
+  .m-insp-tag {
+    background: rgba(37,99,235,0.15); color: #60a5fa;
+    border: 1px solid rgba(37,99,235,0.3);
+    border-radius: 8px; padding: 1px 6px;
+    font-size: 0.58rem; font-weight: 700;
+  }
+  .m-insp-x { color: rgba(255,255,255,0.3); font-size: 0.75rem; }
+  .m-sec-lbl { font-size: 0.55rem; font-weight: 700; letter-spacing: .1em; color: #60a5fa; text-transform: uppercase; margin-bottom: 5px; }
+  .m-insp-sec { margin-bottom: 8px; padding-bottom: 7px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .m-field {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(37,99,235,0.18);
+    border-radius: 4px; padding: 3px 6px;
+    color: #94a3b8; font-size: 0.6rem; width: 100%;
+    margin-bottom: 3px;
+  }
+  .m-row { display: flex; gap: 4px; align-items: center; margin-bottom: 3px; }
+  .m-row-lbl { flex: 1; color: rgba(255,255,255,0.35); font-size: 0.58rem; }
+  .m-color-sw { width: 18px; height: 14px; border-radius: 3px; }
+  .m-hex { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(37,99,235,0.18); border-radius: 3px; padding: 2px 4px; font-size: 0.58rem; color: #94a3b8; }
+  .m-stepper { display: flex; gap: 3px; align-items: center; }
+  .m-step-b { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); color: #e2e8f0; width: 16px; height: 16px; border-radius: 3px; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; }
+  .m-step-v { font-size: 0.6rem; color: #e2e8f0; min-width: 24px; text-align: center; background: rgba(255,255,255,0.05); border: 1px solid rgba(37,99,235,0.18); border-radius: 3px; padding: 2px 2px; }
+  .m-rng { width: 100%; height: 3px; background: rgba(37,99,235,0.2); border-radius: 2px; margin: 2px 0 5px; position: relative; }
+  .m-rng-thumb { position: absolute; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; border-radius: 50%; background: #2563eb; border: 1.5px solid #071422; }
+  .m-tog-row { display: flex; gap: 3px; margin-top: 3px; }
+  .m-tog { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.4); border-radius: 3px; padding: 3px 2px; font-size: 0.56rem; text-align: center; }
+  .m-tog.on { background: rgba(37,99,235,0.22); border-color: rgba(37,99,235,0.5); color: #60a5fa; }
+  .m-inline-btn {
+    width: 100%; background: rgba(37,99,235,0.1); border: 1px solid rgba(37,99,235,0.35);
+    color: #93c5fd; border-radius: 4px; padding: 3px; font-size: 0.58rem; font-weight: 700;
+    text-align: center; margin-top: 3px;
+  }
+  .m-inline-btn.active { background: rgba(82,183,136,0.18); border-color: rgba(82,183,136,0.5); color: #52B788; }
+
+  /* annotation arrows */
+  .annot {
+    display: flex; align-items: center; gap: 8px;
+    margin-top: 10px;
+  }
+  .annot-arrow { color: #2563eb; font-size: 1.1rem; }
+  .annot-text { font-size: 0.72rem; color: #60a5fa; }
+
+  /* keyboard key */
+  .key {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: #1e3a5f; border: 1px solid rgba(37,99,235,0.4);
+    border-bottom: 2px solid rgba(37,99,235,0.6);
+    color: #93c5fd; border-radius: 5px;
+    padding: 2px 8px; font-size: 0.72rem; font-weight: 700;
+    font-family: monospace; letter-spacing: 0.05em;
+  }
+
+  /* tip box */
+  .tip {
+    display: flex; gap: 10px; align-items: flex-start;
+    background: rgba(82,183,136,0.06);
+    border: 1px solid rgba(82,183,136,0.2);
+    border-radius: 8px; padding: 10px 14px;
+    margin-top: 14px; font-size: 0.73rem; color: #94a3b8;
+    line-height: 1.5;
+  }
+  .tip-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+
+  /* escape diagram */
+  .esc-flow {
+    display: flex; align-items: center; gap: 10px;
+    flex-wrap: wrap; margin-top: 12px;
+  }
+  .esc-state {
+    background: rgba(37,99,235,0.1);
+    border: 1px solid rgba(37,99,235,0.25);
+    border-radius: 8px; padding: 6px 12px;
+    font-size: 0.7rem; color: #93c5fd;
+    text-align: center;
+  }
+  .esc-arrow { color: #334155; font-size: 1.1rem; }
+  .esc-key { font-size: 0.65rem; color: #475569; text-align: center; }
+
+  /* two-column layout for some steps */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* highlight chip */
+  .chip {
+    display: inline-block;
+    background: rgba(37,99,235,0.15);
+    border: 1px solid rgba(37,99,235,0.3);
+    color: #60a5fa; border-radius: 20px;
+    padding: 1px 10px; font-size: 0.68rem; font-weight: 700;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-title">
+  <h1>How to Use the <span>Select</span> Editor</h1>
+</div>
+<p class="page-subtitle">Click any element on any slide to inspect and edit it — live, no page reload needed.</p>
+
+<div class="steps">
+
+  <!-- ══ STEP 1 ══ -->
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <div class="step-title">Activate Select Mode</div>
+      <div class="step-desc">
+        Click the <strong>Select</strong> button in the top navigation bar, or press <code>S</code> on your keyboard.
+        A blue gradient bar appears at the top of the screen and your cursor becomes a crosshair — you are now in selection mode.
+      </div>
+
+      <div class="mock">
+        <!-- nav -->
+        <div class="m-nav" style="width:100%">
+          <div class="m-nav-dot"></div>
+          <div class="m-nav-dot"></div>
+          <div class="m-nav-dot g"></div>
+          <div class="m-nav-spacer"></div>
+          <div style="display:flex;gap:6px">
+            <div class="m-btn m-btn-sel on">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              SELECT
+            </div>
+            <div class="m-btn m-btn-edit">✎ EDIT</div>
+          </div>
+        </div>
+        <!-- blue bar -->
+        <div style="height:3px;background:linear-gradient(90deg,#2563eb,#06b6d4);border-radius:2px;margin-top:10px;"></div>
+        <div class="annot">
+          <span class="annot-arrow">↑</span>
+          <span class="annot-text">Blue bar = Select mode is ON</span>
+          <span style="margin-left:20px;font-size:0.7rem;color:#475569">or press</span>
+          <span class="key">S</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STEP 2 ══ -->
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-content">
+      <div class="step-title">Hover to Highlight an Element</div>
+      <div class="step-desc">
+        Move your mouse over any text, heading, card, badge, or stat on a slide.
+        The element you are hovering lights up with a <strong>blue dashed outline</strong>.
+        Only the exact element under your cursor is highlighted — not the whole card or slide.
+      </div>
+
+      <div class="mock">
+        <div class="m-slide">
+          <div class="m-bar"></div>
+          <div style="padding-top:6px">
+            <div class="m-card-title m-hovering" style="display:inline-block;padding:4px 8px;border-radius:4px;cursor:crosshair">
+              Elephant Population & Range Dynamics
+            </div>
+            <div class="m-card" style="margin-top:6px">
+              <div style="font-size:0.65rem;color:#475569">Schedule · 10:30</div>
+              Dr. Parag Nigam — ICAR-IVRI, Izatnagar
+            </div>
+          </div>
+        </div>
+        <div class="annot">
+          <span class="annot-arrow">↑</span>
+          <span class="annot-text">Dashed blue outline = element under cursor</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STEP 3 ══ -->
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-content">
+      <div class="step-title">Click to Select & Open Inspector</div>
+      <div class="step-desc">
+        Click on the highlighted element. It gets a <strong>solid blue outline</strong> and the
+        Inspector panel slides in from the right — showing all editable properties for that element.
+        The tag chip at the top tells you exactly which element is selected (e.g. <code>h4.timeline-text</code>).
+      </div>
+
+      <div class="mock" style="position:relative;min-height:160px">
+        <div class="m-slide" style="margin-right:185px">
+          <div class="m-bar"></div>
+          <div style="padding-top:6px">
+            <div class="m-card-title m-selected" style="display:inline-block;padding:4px 8px;border-radius:4px">
+              Elephant Population & Range Dynamics
+            </div>
+            <div class="m-card" style="margin-top:6px;font-size:0.65rem;color:#64748b">
+              Dr. Parag Nigam — ICAR-IVRI, Izatnagar
+            </div>
+          </div>
+        </div>
+        <!-- inspector -->
+        <div class="m-inspector">
+          <div class="m-insp-hdr">
+            <span class="m-insp-tag">h4.timeline-text</span>
+            <span class="m-insp-x">✕</span>
+          </div>
+          <div class="m-insp-sec">
+            <div class="m-sec-lbl">Text Content</div>
+            <div class="m-field">Elephant Population &amp; Range…</div>
+            <div class="m-inline-btn">✎ Edit Text Inline</div>
+          </div>
+          <div class="m-insp-sec">
+            <div class="m-sec-lbl">Typography</div>
+            <div class="m-row">
+              <span class="m-row-lbl">Font Size</span>
+              <div class="m-stepper">
+                <div class="m-step-b">−</div>
+                <div class="m-step-v">16px</div>
+                <div class="m-step-b">+</div>
+              </div>
+            </div>
+            <div class="m-tog-row">
+              <div class="m-tog">Reg</div>
+              <div class="m-tog on">Bold</div>
+              <div class="m-tog">Align</div>
+            </div>
+          </div>
+        </div>
+        <div class="annot">
+          <span class="annot-arrow">↑</span>
+          <span class="annot-text">Solid blue outline = selected &nbsp;·&nbsp; Inspector slides in from right</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STEP 4 ══ -->
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-content">
+      <div class="step-title">Edit in the Inspector Panel</div>
+      <div class="step-desc">
+        The panel has four sections. Every change is <strong>applied instantly</strong> to the live slide — no save button needed.
+      </div>
+
+      <div class="two-col">
+
+        <div class="mock">
+          <div class="m-sec-lbl" style="margin-bottom:8px">A · Text Content</div>
+          <div class="m-field" style="height:40px;display:flex;align-items:flex-start;padding-top:5px">Type replacement text here…</div>
+          <div class="m-inline-btn" style="margin-top:5px">✎ Edit Text Inline</div>
+          <div style="margin-top:8px;font-size:0.65rem;color:#475569">Typing in the box replaces the element's text on the slide immediately.</div>
+        </div>
+
+        <div class="mock">
+          <div class="m-sec-lbl" style="margin-bottom:8px">B · Typography</div>
+          <div class="m-row" style="margin-bottom:5px">
+            <span class="m-row-lbl">Font Size</span>
+            <div class="m-stepper">
+              <div class="m-step-b">−</div>
+              <div class="m-step-v">18px</div>
+              <div class="m-step-b">+</div>
+            </div>
+          </div>
+          <div class="m-row" style="margin-bottom:3px"><span class="m-row-lbl">Weight</span></div>
+          <div class="m-tog-row" style="margin-bottom:6px">
+            <div class="m-tog">Regular</div><div class="m-tog">Semi</div><div class="m-tog on">Bold</div>
+          </div>
+          <div class="m-row"><span class="m-row-lbl">Align</span></div>
+          <div class="m-tog-row">
+            <div class="m-tog on">Left</div><div class="m-tog">Ctr</div><div class="m-tog">Right</div>
+          </div>
+        </div>
+
+        <div class="mock">
+          <div class="m-sec-lbl" style="margin-bottom:8px">C · Colors</div>
+          <div class="m-row" style="margin-bottom:6px">
+            <span class="m-row-lbl">Text Color</span>
+            <div style="display:flex;gap:4px;align-items:center">
+              <div class="m-color-sw" style="background:#52B788;border:1px solid rgba(255,255,255,0.15)"></div>
+              <div class="m-hex">#52B788</div>
+            </div>
+          </div>
+          <div class="m-row">
+            <span class="m-row-lbl">Background</span>
+            <div style="display:flex;gap:4px;align-items:center">
+              <div class="m-color-sw" style="background:#112240;border:1px solid rgba(255,255,255,0.15)"></div>
+              <div class="m-hex">#112240</div>
+            </div>
+          </div>
+          <div style="margin-top:8px;font-size:0.65rem;color:#475569">Click the swatch to open the colour picker, or type a hex code directly.</div>
+        </div>
+
+        <div class="mock">
+          <div class="m-sec-lbl" style="margin-bottom:8px">D · Spacing & Shape</div>
+          <div style="font-size:0.6rem;color:rgba(255,255,255,0.35);margin-bottom:3px">Border Radius</div>
+          <div class="m-rng"><div class="m-rng-thumb" style="left:25%"></div></div>
+          <div style="font-size:0.6rem;color:#60a5fa;margin-bottom:8px">12px</div>
+          <div style="font-size:0.6rem;color:rgba(255,255,255,0.35);margin-bottom:4px">Padding (T / R / B / L)</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px">
+            <div class="m-field" style="text-align:right">14</div>
+            <div class="m-field" style="text-align:right">18</div>
+            <div class="m-field" style="text-align:right">14</div>
+            <div class="m-field" style="text-align:right">18</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STEP 5 ══ -->
+  <div class="step">
+    <div class="step-num">5</div>
+    <div class="step-content">
+      <div class="step-title">Edit Text Directly on the Slide</div>
+      <div class="step-desc">
+        Click <strong>✎ Edit Text Inline</strong> in the panel (or <strong>click the same element a second time</strong>).
+        The outline turns <strong>green</strong>, a text cursor appears inside the element, and you can type freely.
+        Click <strong>✓ Done Editing</strong> or press <code>Escape</code> when finished.
+      </div>
+
+      <div class="mock">
+        <div class="m-slide" style="margin-right:185px;position:relative">
+          <div class="m-bar" style="background:linear-gradient(90deg,#52B788,#1b4332)"></div>
+          <div style="padding-top:8px">
+            <div class="m-card-title m-editing" style="display:inline-block;padding:4px 8px;border-radius:4px;outline-color:#52B788">
+              Elephant Population &amp; Range Dynamics|
+            </div>
+          </div>
+        </div>
+        <div class="m-inspector" style="top:0;right:0;bottom:0">
+          <div class="m-insp-hdr">
+            <span class="m-insp-tag">h4.timeline-text</span>
+            <span class="m-insp-x">✕</span>
+          </div>
+          <div class="m-insp-sec">
+            <div class="m-sec-lbl">Text Content</div>
+            <div class="m-field" style="height:36px"></div>
+            <div class="m-inline-btn active">✓ Done Editing</div>
+          </div>
+        </div>
+        <div class="annot">
+          <span class="annot-arrow" style="color:#52B788">↑</span>
+          <span class="annot-text" style="color:#52B788">Green outline = inline text editing active · Type directly on the slide</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STEP 6 ══ -->
+  <div class="step">
+    <div class="step-num">6</div>
+    <div class="step-content">
+      <div class="step-title">Reset or Exit</div>
+      <div class="step-desc">
+        <strong>↺ Reset Element</strong> removes all your inline style changes on that element and restores it to its original CSS.
+        Use <code>Escape</code> to step back through modes, or click <strong>Select</strong> again to turn the mode off completely.
+      </div>
+
+      <div class="mock">
+        <div style="font-size:0.7rem;color:#475569;margin-bottom:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase">Press Escape to step back:</div>
+        <div class="esc-flow">
+          <div>
+            <div class="esc-state" style="background:rgba(82,183,136,0.1);border-color:rgba(82,183,136,0.3);color:#52B788">Inline Editing<br><span style="font-size:0.58rem">(green outline)</span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <div class="esc-arrow">→</div>
+            <div class="esc-key"><span class="key" style="font-size:0.6rem">Esc</span></div>
+          </div>
+          <div>
+            <div class="esc-state">Element Selected<br><span style="font-size:0.58rem">(solid blue)</span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <div class="esc-arrow">→</div>
+            <div class="esc-key"><span class="key" style="font-size:0.6rem">Esc</span></div>
+          </div>
+          <div>
+            <div class="esc-state">Select Mode<br><span style="font-size:0.58rem">(crosshair)</span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <div class="esc-arrow">→</div>
+            <div class="esc-key"><span class="key" style="font-size:0.6rem">Esc</span></div>
+          </div>
+          <div>
+            <div class="esc-state" style="background:rgba(30,58,95,0.4);border-color:rgba(37,99,235,0.1);color:#334155">Normal Mode<br><span style="font-size:0.58rem">(off)</span></div>
+          </div>
+        </div>
+
+        <div class="tip">
+          <span class="tip-icon">💡</span>
+          <span><strong style="color:#cbd5e1">Note:</strong> Changes made with the Select editor are <em>visual only</em> — they apply inline CSS to the live page. To make them permanent, use the <strong>✎ Edit</strong> panel's Export button to save your CONFIG/STYLE, or copy the values into <code>config.js</code> / <code>theme.css</code>.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ QUICK REF ══ -->
+  <div style="background:#0d1f3c;border:1px solid rgba(37,99,235,0.2);border-radius:14px;padding:22px 24px">
+    <div style="font-size:0.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#60a5fa;margin-bottom:14px">Quick Reference</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px">
+      <div style="display:flex;gap:10px;align-items:center;font-size:0.73rem;color:#94a3b8">
+        <span class="key">S</span> Toggle Select mode on / off
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;font-size:0.73rem;color:#94a3b8">
+        <span style="font-size:0.9rem">🖱</span> Hover → dashed blue outline
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;font-size:0.73rem;color:#94a3b8">
+        <span style="font-size:0.9rem">🖱</span> 1× click → select (solid blue)
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;font-size:0.73rem;color:#94a3b8">
+        <span style="font-size:0.9rem">🖱</span> 2× click → inline edit (green)
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;font-size:0.73rem;color:#94a3b8">
+        <span class="key">Esc</span> Step back one level
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;font-size:0.73rem;color:#94a3b8">
+        <span style="font-size:0.9rem">↺</span> Reset Element removes overrides
+      </div>
+    </div>
+  </div>
+
+</div><!-- /steps -->
+
+</body>
+</html>
