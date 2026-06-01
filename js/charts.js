@@ -352,7 +352,8 @@ function initAgeChart(id) {
           grid: { color: 'rgba(255,255,255,0.06)' },
           ticks: { color: '#8BA098', stepSize: 2 },
           beginAtZero: true,
-          max: 12
+          min: 0,
+          max: 18
         }
       }
     }
