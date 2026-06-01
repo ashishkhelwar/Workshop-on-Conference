@@ -156,6 +156,56 @@ function initOverlayMap(id) {
   setTimeout(() => map.invalidateSize(), 500);
 }
 
+function initCurrentElephantsMap(id) {
+  if (mapsInitialized[id]) return;
+  mapsInitialized[id] = true;
+
+  const map = L.map(id, { zoomControl: true, scrollWheelZoom: false })
+    .setView([22.25, 83.22], 9);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors',
+    maxZoom: 14
+  }).addTo(map);
+
+  const locations = [
+    { lat: 22.1700, lng: 83.3878, loc: 'Dehri-Dih, Ghargoda',         count: 2,  herd: 'DH-HE07, RG-HE2',           div: 'Raigarh' },
+    { lat: 22.0430, lng: 83.4546, loc: 'Kantajharian East, Raigarh',  count: 2,  herd: 'DJHE07, KBHE4',             div: 'Raigarh' },
+    { lat: 22.3101, lng: 83.3649, loc: 'Barod, Ghargoda',              count: 2,  herd: 'JPHE02',                    div: 'Raigarh' },
+    { lat: 22.0667, lng: 83.1447, loc: 'Gurda, Kharsiya',              count: 35, herd: 'RaigarhHE1',                div: 'Raigarh' },
+    { lat: 22.1953, lng: 83.0958, loc: 'Chainpur, Dharamjaigarh',      count: 30, herd: 'DH-HE7, JPHE2, KorbaHE15', div: 'Dharamjaigarh' },
+    { lat: 22.4076, lng: 83.1385, loc: 'Koylar, Dharamjaigarh',        count: 8,  herd: 'JPHE2',                    div: 'Dharamjaigarh' },
+    { lat: 22.4469, lng: 83.0998, loc: 'Rupunga, Dharamjaigarh',       count: 15, herd: 'JPHE2',                    div: 'Dharamjaigarh' },
+    { lat: 22.4148, lng: 83.2677, loc: 'Ongna, Dharamjaigarh',         count: 1,  herd: 'JPHE2',                    div: 'Dharamjaigarh' },
+    { lat: 22.0788, lng: 83.1433, loc: 'Edu, Chhala Range',            count: 52, herd: 'RaigarhHE1',               div: 'Dharamjaigarh' },
+    { lat: 22.2917, lng: 83.1437, loc: 'Purunga, Chhala Range',        count: 1,  herd: '—',                   div: 'Dharamjaigarh' },
+    { lat: 22.2030, lng: 83.1861, loc: 'Banhar, Chhala Range',         count: 1,  herd: 'DH-HE7',                   div: 'Dharamjaigarh' },
+    { lat: 22.1561, lng: 83.1169, loc: 'Chhala',                       count: 1,  herd: '—',                   div: 'Dharamjaigarh' },
+    { lat: 22.1952, lng: 83.1461, loc: 'Banhar-Narangi, Chhala',       count: 1,  herd: 'RaigarhHE2',               div: 'Dharamjaigarh' },
+    { lat: 22.1766, lng: 83.1723, loc: 'Auranara, Chhala',             count: 1,  herd: 'DJME7',                    div: 'Dharamjaigarh' },
+    { lat: 22.1327, lng: 83.1461, loc: 'Boziya, Chhala',               count: 1,  herd: 'RaigarhHE1',               div: 'Dharamjaigarh' },
+    { lat: 22.2709, lng: 83.1172, loc: 'Behramar, Chhala',             count: 1,  herd: 'DJME13',                   div: 'Dharamjaigarh' },
+  ];
+
+  locations.forEach(p => {
+    const color  = p.count >= 30 ? '#E63946' : p.count >= 10 ? '#F4A261' : p.count >= 5 ? '#C9A84C' : '#52B788';
+    const radius = Math.max(600, Math.sqrt(p.count) * 400);
+    L.circle([p.lat, p.lng], {
+      radius,
+      color,
+      weight: 2,
+      fillColor: color,
+      fillOpacity: 0.45
+    }).addTo(map).bindPopup(
+      `<b style="color:${color}">${p.loc}</b><br>` +
+      `<span style="color:#555">${p.div} &nbsp;·&nbsp; ${p.count} elephant${p.count > 1 ? 's' : ''}</span><br>` +
+      `<small style="color:#777">Herd: ${p.herd}</small>`
+    );
+  });
+
+  setTimeout(() => map.invalidateSize(), 500);
+}
+
 function addPulsingHotspot(map, lat, lon, label, color) {
   // Static circle
   L.circle([lat, lon], {
