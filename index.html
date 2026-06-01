@@ -868,16 +868,216 @@
       <div class="tab-row">
         <button class="tab" onclick="goTo(10)">Age Group</button>
         <button class="tab active" onclick="window.location='#s9b'">Sex Group</button>
-        <button class="tab" onclick="goTo(12)">Seasonal</button>
-        <button class="tab" onclick="goTo(13)">Range-wise</button>
+        <button class="tab" onclick="goTo(13)">Seasonal</button>
+        <button class="tab" onclick="goTo(14)">Range-wise</button>
       </div>
     </div>
     <div class="chart-area" style="max-width:500px;margin:0 auto">
       <canvas id="sexCanvas"></canvas>
     </div>
     <div class="chart-note mt-12 center">
-      <strong>Based on 32 Postmortem Records</strong> — equal sex distribution (16 male / 16 female)
-      indicates no sex-biased mortality from human–elephant conflict.
+      <strong>Based on 45 confirmed records (42 sexed)</strong> — Male 24 (53%) · Female 18 (40%) · Unknown 3 (7%).
+      No strong sex-biased mortality pattern.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 9b-DROWN — DROWNING CASES ANALYSIS
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide bg-dark" id="s9drown">
+  <div style="height:100%;display:flex;flex-direction:column;padding:24px 40px 20px;gap:14px;overflow:hidden">
+
+    <!-- Header -->
+    <div style="flex-shrink:0;display:flex;align-items:flex-end;justify-content:space-between">
+      <div>
+        <div class="section-tag" style="color:#52B788;background:rgba(82,183,136,0.12);border-color:rgba(82,183,136,0.3)">
+          Cause Deep-Dive &nbsp;·&nbsp; Drowning
+        </div>
+        <h2 style="margin-top:6px;line-height:1.1">Drowning Deaths — All Confirmed Cases</h2>
+      </div>
+      <!-- Summary chips -->
+      <div style="display:flex;gap:8px;flex-shrink:0;padding-bottom:4px">
+        <div style="background:rgba(82,183,136,0.1);border:1px solid rgba(82,183,136,0.3);border-radius:8px;padding:6px 14px;text-align:center">
+          <div style="font-size:1.4rem;font-weight:800;color:#52B788;line-height:1">13</div>
+          <div style="font-size:0.55rem;color:#8BA098;text-transform:uppercase;letter-spacing:0.08em;margin-top:2px">Deaths</div>
+        </div>
+        <div style="background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);border-radius:8px;padding:6px 14px;text-align:center">
+          <div style="font-size:1.4rem;font-weight:800;color:#C9A84C;line-height:1">29%</div>
+          <div style="font-size:0.55rem;color:#8BA098;text-transform:uppercase;letter-spacing:0.08em;margin-top:2px">Of Total</div>
+        </div>
+        <div style="background:rgba(230,57,70,0.1);border:1px solid rgba(230,57,70,0.3);border-radius:8px;padding:6px 14px;text-align:center">
+          <div style="font-size:1.4rem;font-weight:800;color:#E63946;line-height:1">92%</div>
+          <div style="font-size:0.55rem;color:#8BA098;text-transform:uppercase;letter-spacing:0.08em;margin-top:2px">Calves</div>
+        </div>
+        <div style="background:rgba(82,183,136,0.1);border:1px solid rgba(82,183,136,0.3);border-radius:8px;padding:6px 14px;text-align:center">
+          <div style="font-size:1.4rem;font-weight:800;color:#52B788;line-height:1">PREVENT</div>
+          <div style="font-size:0.55rem;color:#8BA098;text-transform:uppercase;letter-spacing:0.08em;margin-top:2px">Avoidable</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Two-column body -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;flex:1;min-height:0">
+
+      <!-- LEFT: Dharamjaigarh cases -->
+      <div style="display:flex;flex-direction:column;min-height:0">
+        <div style="font-size:0.58rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;
+          color:#52B788;margin-bottom:6px;display:flex;align-items:center;gap:6px;flex-shrink:0">
+          <span style="display:inline-block;width:16px;height:2px;background:#52B788;border-radius:1px"></span>
+          Dharamjaigarh Division — 6 cases
+        </div>
+        <div style="flex:1;overflow-y:auto;border:1px solid rgba(82,183,136,0.18);border-radius:8px;
+          scrollbar-width:thin;scrollbar-color:rgba(82,183,136,0.2) transparent">
+          <table style="width:100%;border-collapse:collapse;font-size:0.6rem">
+            <thead>
+              <tr style="background:rgba(82,183,136,0.1);position:sticky;top:0">
+                <th style="padding:6px 10px;text-align:left;color:#52B788;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;border-bottom:1px solid rgba(82,183,136,0.2)">Date</th>
+                <th style="padding:6px 10px;text-align:left;color:#52B788;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;border-bottom:1px solid rgba(82,183,136,0.2)">Range / Beat</th>
+                <th style="padding:6px 10px;text-align:center;color:#52B788;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;border-bottom:1px solid rgba(82,183,136,0.2)">Sex</th>
+                <th style="padding:6px 10px;text-align:left;color:#52B788;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;border-bottom:1px solid rgba(82,183,136,0.2)">Age</th>
+                <th style="padding:6px 10px;text-align:left;color:#52B788;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;border-bottom:1px solid rgba(82,183,136,0.2)">Water Body</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05)">
+                <td style="padding:7px 10px;color:#C8D8C8">21/11/24</td>
+                <td style="padding:7px 10px;color:#C8D8C8">Chal / Hati</td>
+                <td style="padding:7px 10px;text-align:center;color:#C9A84C">F</td>
+                <td style="padding:7px 10px;color:#E63946;font-weight:700">~15–20 days</td>
+                <td style="padding:7px 10px;color:#8BA098">Pond</td>
+              </tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05)">
+                <td style="padding:7px 10px;color:#C8D8C8">18/03/25</td>
+                <td style="padding:7px 10px;color:#C8D8C8">Chal / Kida</td>
+                <td style="padding:7px 10px;text-align:center;color:#C9A84C">F</td>
+                <td style="padding:7px 10px;color:#E63946;font-weight:700">~1 yr</td>
+                <td style="padding:7px 10px;color:#8BA098">Pond</td>
+              </tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05)">
+                <td style="padding:7px 10px;color:#C8D8C8">29/10/25</td>
+                <td style="padding:7px 10px;color:#C8D8C8">Chal / Auranara</td>
+                <td style="padding:7px 10px;text-align:center;color:#C9A84C">F</td>
+                <td style="padding:7px 10px;color:#E63946;font-weight:700">~9–11 months</td>
+                <td style="padding:7px 10px;color:#8BA098">Pond</td>
+              </tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05);background:rgba(230,57,70,0.04)">
+                <td style="padding:7px 10px;color:#C8D8C8">08/05/26</td>
+                <td style="padding:7px 10px;color:#C8D8C8">Chal / Singhijhap</td>
+                <td style="padding:7px 10px;text-align:center;color:#52B788">M</td>
+                <td style="padding:7px 10px;color:#E63946;font-weight:700">~6 months</td>
+                <td style="padding:7px 10px;color:#8BA098">Pond</td>
+              </tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05);background:rgba(230,57,70,0.04)">
+                <td style="padding:7px 10px;color:#C8D8C8">11/05/26</td>
+                <td style="padding:7px 10px;color:#C8D8C8">Chal / Chal</td>
+                <td style="padding:7px 10px;text-align:center;color:#52B788">M</td>
+                <td style="padding:7px 10px;color:#E63946;font-weight:700">~5–6 months</td>
+                <td style="padding:7px 10px;color:#8BA098">Asphyxiation</td>
+              </tr>
+              <tr style="background:rgba(230,57,70,0.04)">
+                <td style="padding:7px 10px;color:#C8D8C8">24/05/26</td>
+                <td style="padding:7px 10px;color:#C8D8C8">Chal / Edu</td>
+                <td style="padding:7px 10px;text-align:center;color:#52B788">M</td>
+                <td style="padding:7px 10px;color:#F4A261;font-weight:700">~1.5–2 yrs</td>
+                <td style="padding:7px 10px;color:#8BA098">Pond</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="margin-top:6px;font-size:0.54rem;color:#8BA098;flex-shrink:0">
+          ⚑ Last 3 rows = 2026-27 (ongoing) &nbsp;·&nbsp; Chal Range hotspot
+        </div>
+      </div>
+
+      <!-- RIGHT: Raigarh cases + observations -->
+      <div style="display:flex;flex-direction:column;min-height:0;gap:10px">
+        <div style="font-size:0.58rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;
+          color:#C9A84C;display:flex;align-items:center;gap:6px;flex-shrink:0">
+          <span style="display:inline-block;width:16px;height:2px;background:#C9A84C;border-radius:1px"></span>
+          Raigarh Division — 7 cases
+        </div>
+        <div style="flex:1;overflow-y:auto;border:1px solid rgba(201,168,76,0.2);border-radius:8px;
+          scrollbar-width:thin;scrollbar-color:rgba(201,168,76,0.2) transparent">
+          <table style="width:100%;border-collapse:collapse;font-size:0.6rem">
+            <thead>
+              <tr style="background:rgba(201,168,76,0.08);position:sticky;top:0">
+                <th style="padding:6px 10px;text-align:left;color:#C9A84C;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;border-bottom:1px solid rgba(201,168,76,0.2)">Date</th>
+                <th style="padding:6px 10px;text-align:left;color:#C9A84C;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;border-bottom:1px solid rgba(201,168,76,0.2)">Range / Beat</th>
+                <th style="padding:6px 10px;text-align:center;color:#C9A84C;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;border-bottom:1px solid rgba(201,168,76,0.2)">Sex</th>
+                <th style="padding:6px 10px;text-align:left;color:#C9A84C;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;border-bottom:1px solid rgba(201,168,76,0.2)">Age</th>
+                <th style="padding:6px 10px;text-align:left;color:#C9A84C;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;border-bottom:1px solid rgba(201,168,76,0.2)">Water Body</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05)">
+                <td style="padding:7px 10px;color:#C8D8C8">31/12/24</td>
+                <td style="padding:7px 10px;color:#C8D8C8">Gharghoda / Dehridih</td>
+                <td style="padding:7px 10px;text-align:center;color:#52B788">M</td>
+                <td style="padding:7px 10px;color:#F4A261;font-weight:700">~2 yrs</td>
+                <td style="padding:7px 10px;color:#8BA098">Panikhet dam</td>
+              </tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05)">
+                <td style="padding:7px 10px;color:#C8D8C8">14/01/25</td>
+                <td style="padding:7px 10px;color:#C8D8C8">Gharghoda / Charmar</td>
+                <td style="padding:7px 10px;text-align:center;color:#C9A84C">F</td>
+                <td style="padding:7px 10px;color:#E63946;font-weight:700">~2–3 months</td>
+                <td style="padding:7px 10px;color:#8BA098">Rabo dam</td>
+              </tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05)">
+                <td style="padding:7px 10px;color:#C8D8C8">22/01/25</td>
+                <td style="padding:7px 10px;color:#C8D8C8">Gharghoda / Dehridih</td>
+                <td style="padding:7px 10px;text-align:center;color:#C9A84C">F</td>
+                <td style="padding:7px 10px;color:#F4A261;font-weight:700">~2 yrs</td>
+                <td style="padding:7px 10px;color:#8BA098">Panikhet dam</td>
+              </tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05)">
+                <td style="padding:7px 10px;color:#C8D8C8">25/05/25</td>
+                <td style="padding:7px 10px;color:#C8D8C8">Gharghoda / Charmar</td>
+                <td style="padding:7px 10px;text-align:center;color:#52B788">M</td>
+                <td style="padding:7px 10px;color:#E63946;font-weight:700">~5 months</td>
+                <td style="padding:7px 10px;color:#8BA098">Pond</td>
+              </tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05)">
+                <td style="padding:7px 10px;color:#C8D8C8">25/11/25</td>
+                <td style="padding:7px 10px;color:#C8D8C8">Tamnar / Saraipali</td>
+                <td style="padding:7px 10px;text-align:center;color:#52B788">M</td>
+                <td style="padding:7px 10px;color:#E63946;font-weight:700">~7 months</td>
+                <td style="padding:7px 10px;color:#8BA098">Drowned</td>
+              </tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05)">
+                <td style="padding:7px 10px;color:#C8D8C8">20/12/25</td>
+                <td style="padding:7px 10px;color:#C8D8C8">Raigarh / Bangursiya</td>
+                <td style="padding:7px 10px;text-align:center;color:#52B788">M</td>
+                <td style="padding:7px 10px;color:#E63946;font-weight:700">~6 months</td>
+                <td style="padding:7px 10px;color:#8BA098">Drowned</td>
+              </tr>
+              <tr>
+                <td style="padding:7px 10px;color:#C8D8C8">28/01/26</td>
+                <td style="padding:7px 10px;color:#C8D8C8">Gharghoda / Kya</td>
+                <td style="padding:7px 10px;text-align:center;color:#52B788">M</td>
+                <td style="padding:7px 10px;color:#E63946;font-weight:700">~1 yr</td>
+                <td style="padding:7px 10px;color:#8BA098">Sakra stream</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Key observations -->
+        <div style="flex-shrink:0;background:rgba(230,57,70,0.07);border:1px solid rgba(230,57,70,0.25);
+          border-radius:8px;padding:10px 14px;display:flex;flex-direction:column;gap:5px">
+          <div style="font-size:0.58rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#E63946;margin-bottom:2px">
+            Key Observations
+          </div>
+          <div style="font-size:0.6rem;color:#C8D8C8;line-height:1.6">
+            ▸ <strong style="color:#E8F0E8">92% calves</strong> (12 of 13) — under 2 years, unable to escape steep water edges<br>
+            ▸ <strong style="color:#E8F0E8">Hotspots:</strong> Chal Range (DH) &amp; Gharghoda Range (RG)<br>
+            ▸ <strong style="color:#E8F0E8">Dams at risk:</strong> Panikhet dam &amp; Rabo dam (Raigarh)<br>
+            ▸ <strong style="color:#E63946">2026-27 trend:</strong> 3 of 4 new deaths are drowning — escalating
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>

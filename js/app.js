@@ -148,50 +148,53 @@ function onSlideActivate(index) {
       setTimeout(() => initSexChart('sexCanvas'), 300);
       break;
 
+    // Slide 9b-Drown — Drowning Cases (no special chart init)
+    case 12: break;
+
     // Slide 9c — Seasonal
-    case 12:
+    case 13:
       setTimeout(() => initSeasonalChart('seasonCanvas'), 300);
       break;
 
     // Slide 9d — Range-wise
-    case 13:
+    case 14:
       setTimeout(() => initRangeChart('rangeCanvas'), 300);
       break;
 
     // Slide 10 — Geo Casualty Map
-    case 14:
+    case 15:
       setTimeout(() => initCasualtyMap('casualtyMap'), 300);
       break;
 
     // Slide 11 — PM Report Summary (no special init)
-    case 15: break;
+    case 16: break;
 
     // Slide 12 — PM Analysis
-    case 16:
+    case 17:
       setTimeout(() => initTrendChart('trendCanvas'), 300);
       break;
 
     // Slide 13 — Lab Report (no special init)
-    case 17: break;
-
-    // Slide 14 — Conclusion (no special init)
     case 18: break;
 
+    // Slide 14 — Conclusion (no special init)
+    case 19: break;
+
     // Slide 15 — Human Casualty
-    case 19: {
-      const el = slides[19].querySelector('.hero-count');
+    case 20: {
+      const el = slides[20].querySelector('.hero-count');
       if (el) countUp(el, 45, 1800);
       setTimeout(animateHumanBars, 400);
       break;
     }
 
     // Slide 16 — Overlay Map
-    case 20:
+    case 21:
       setTimeout(() => initOverlayMap('overlayMap'), 300);
       break;
 
     // Slide 17 — Thank You
-    case 21: break;
+    case 22: break;
 
     default: break;
   }
