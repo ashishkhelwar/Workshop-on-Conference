@@ -641,11 +641,8 @@
   <div class="layout-half" style="height:100%">
     <!-- Left stats panel -->
     <div class="half border-right" style="align-items:flex-start;justify-content:center;padding:24px 28px">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
-        <span style="width:10px;height:10px;border-radius:50%;background:#E63946;display:inline-block;flex-shrink:0;animation:pulseDot 1.6s ease-out infinite"></span>
-        <div class="section-tag" style="margin:0;color:#E63946;letter-spacing:0.08em">LIVE TRACKING · 31 May 2026</div>
-      </div>
-      <div class="hero-number" style="line-height:0.9;font-size:4.5rem;font-weight:800;color:#E63946">154</div>
+      <div class="section-tag">Live Elephant Tracking · 31 May 2026</div>
+      <div class="hero-number green" style="line-height:0.9;font-size:4.5rem;font-weight:800">154</div>
       <p class="muted mt-4" style="font-size:0.95rem;font-weight:600">Elephants Currently Tracked</p>
       <div class="divider mt-16" style="width:100%"></div>
       <div class="kpi-grid kpi-grid-2 mt-12" style="width:100%">
@@ -663,31 +660,31 @@
       <div class="mt-16" style="width:100%">
         <p style="font-size:0.72rem;color:#8BA098;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px">Notable Large Herds</p>
         <div style="display:flex;flex-direction:column;gap:6px">
-          <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(230,57,70,0.1);border:1px solid rgba(230,57,70,0.35);border-radius:8px;padding:8px 12px">
+          <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(82,183,136,0.08);border:1px solid rgba(82,183,136,0.2);border-radius:8px;padding:8px 12px">
             <span style="font-size:0.82rem;color:#E8F0E8">Edu, Chhala Range</span>
-            <span style="font-size:1rem;font-weight:800;color:#E63946;animation:pulseDot 1.8s ease-out infinite">52</span>
+            <span style="font-size:0.9rem;font-weight:800;color:#52B788">52</span>
           </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(230,57,70,0.1);border:1px solid rgba(230,57,70,0.35);border-radius:8px;padding:8px 12px">
+          <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(82,183,136,0.08);border:1px solid rgba(82,183,136,0.2);border-radius:8px;padding:8px 12px">
             <span style="font-size:0.82rem;color:#E8F0E8">Chainpur, Dharamjaigarh</span>
-            <span style="font-size:1rem;font-weight:800;color:#E63946;animation:pulseDot 1.8s ease-out infinite">30</span>
+            <span style="font-size:0.9rem;font-weight:800;color:#52B788">30</span>
           </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(230,57,70,0.1);border:1px solid rgba(230,57,70,0.35);border-radius:8px;padding:8px 12px">
+          <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);border-radius:8px;padding:8px 12px">
             <span style="font-size:0.82rem;color:#E8F0E8">Gurda, Kharsiya (RG)</span>
-            <span style="font-size:1rem;font-weight:800;color:#E63946;animation:pulseDot 1.8s ease-out infinite">35</span>
+            <span style="font-size:0.9rem;font-weight:800;color:#C9A84C">35</span>
           </div>
         </div>
-      </div>
-      <div class="mt-12" style="background:rgba(230,57,70,0.08);border:1px solid rgba(230,57,70,0.3);border-radius:10px;padding:10px 14px;width:100%;display:flex;align-items:center;gap:8px">
-        <span style="width:8px;height:8px;border-radius:50%;background:#E63946;flex-shrink:0;animation:pulseDot 1.6s ease-out infinite"></span>
-        <p style="font-size:0.78rem;color:#E63946;font-weight:700;margin:0">16 Active Locations · 2 Divisions Under Real-time Monitoring</p>
       </div>
     </div>
     <!-- Right map -->
     <div class="half" style="flex-direction:column;padding:0">
-      <div style="padding:14px 20px 6px;align-self:flex-start">
+      <div style="padding:14px 20px 6px;display:flex;align-items:center;gap:10px;width:100%">
         <div class="section-tag" style="margin:0">Current GPS Locations · 16 Sites</div>
+        <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(230,57,70,0.12);border:1px solid rgba(230,57,70,0.35);border-radius:20px;padding:3px 10px;font-size:0.62rem;font-weight:800;color:#E63946;letter-spacing:0.08em;flex-shrink:0">
+          <span style="width:6px;height:6px;border-radius:50%;background:#E63946;display:inline-block;animation:pulseDot 1.4s ease-out infinite"></span>
+          LIVE
+        </span>
       </div>
-      <div id="s7-live-map" style="flex:1;width:100%;min-height:0"></div>
+      <div id="s7-live-map" style="flex:1;width:100%;min-height:0;border-top:2px solid rgba(230,57,70,0.4);box-shadow:inset 0 0 60px rgba(230,57,70,0.07)"></div>
       <div style="padding:8px 20px 10px;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
         <span style="font-size:0.7rem;color:#8BA098;display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#E63946;opacity:0.85"></span>≥30 elephants</span>
         <span style="font-size:0.7rem;color:#8BA098;display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#F4A261;opacity:0.85"></span>10–29</span>
@@ -1240,7 +1237,7 @@
      ═══════════════════════════════════════════════════════════════ -->
 <div id="nav">
   <button onclick="goTo(current-1)" title="Previous slide (Left arrow)">&#8592;</button>
-  <span id="slideNum">1 / 22</span>
+  <span id="slideNum">1 / 21</span>
   <button onclick="goTo(current+1)" title="Next slide (Right arrow)">&#8594;</button>
   <button id="cfg-open-btn" onclick="openEditor()" title="Customize presentation content">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
