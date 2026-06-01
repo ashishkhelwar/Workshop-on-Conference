@@ -186,13 +186,10 @@ function onSlideActivate(index) {
       setTimeout(() => initDistributionMap('distMap'), 300);
       break;
 
-    // Slide 7 — Elephant Casualty Total
-    case 7: {
-      const el = slides[7].querySelector('.hero-count');
-      if (el) countUp(el, 41, 1800);
-      setTimeout(() => initYearBarsChart('yearBarsCanvas'), 400);
+    // Slide 7 — Live Elephant GPS Tracking
+    case 7:
+      setTimeout(() => initCurrentElephantsMap('s7-live-map'), 300);
       break;
-    }
 
     // Slide 8 — Cause of Death
     case 8:
