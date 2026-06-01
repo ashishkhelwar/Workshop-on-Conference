@@ -338,3 +338,8 @@ function applyStyle() {
     .slide .timeline-time, .slide .kpi-card .kpi-label { font-size: ${STYLE.captionSize}rem !important; }
   `;
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+  applyConfig();
+  applyStyle();
+});
