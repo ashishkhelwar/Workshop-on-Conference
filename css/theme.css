@@ -505,6 +505,9 @@ p { line-height: 1.65; }
 /* Larger avatar for the featured horizontal card */
 .s3-card-h .s3-av { width: 96px; height: 96px; font-size: 1.6rem; }
 
+/* Photo avatar */
+.s3-av-photo { object-fit: cover; object-position: center top; }
+
 /* Text inside horizontal card */
 .s3-card-body { display: flex; flex-direction: column; }
 
