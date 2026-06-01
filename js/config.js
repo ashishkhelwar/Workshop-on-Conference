@@ -220,6 +220,11 @@ const STYLE = {
   fontScale   : 1.0,
   cardRadius  : 12,
   slideGap    : 20,
+  h1Size      : 3.2,
+  h2Size      : 2.0,
+  h3Size      : 1.35,
+  bodySize    : 0.88,
+  captionSize : 0.72,
 };
 
 function hexToRgb(hex) {
@@ -317,11 +322,19 @@ function applyStyle() {
       border-radius: var(--cfg-radius) !important;
     }
     .kpi-card { border-color: rgba(var(--cfg-green-rgb),.2) !important; }
-    /* Typography */
+    /* Typography colors */
     .s3-name { color: var(--cfg-text) !important; }
     .s3-title, .muted { color: var(--cfg-muted) !important; }
     /* Slide padding gap */
     .s3-grid4 { gap: var(--cfg-gap) !important; }
     .s3-wrapper { gap: var(--cfg-gap) !important; }
+    /* Text sizes — scoped to .slide to avoid affecting editor UI */
+    .slide h1 { font-size: ${STYLE.h1Size}rem !important; }
+    .slide h2 { font-size: ${STYLE.h2Size}rem !important; }
+    .slide h3, .slide h4 { font-size: ${STYLE.h3Size}rem !important; }
+    .slide p, .slide .muted, .slide .s3-title, .slide .timeline-item p,
+    .slide .kpi-label, .slide .report-body, .slide .action-desc { font-size: ${STYLE.bodySize}rem !important; }
+    .slide .section-tag, .slide .person-badge, .slide .stat-badge,
+    .slide .timeline-time, .slide .kpi-card .kpi-label { font-size: ${STYLE.captionSize}rem !important; }
   `;
 }

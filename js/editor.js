@@ -161,10 +161,17 @@
           clr('style.bg',   'Slide Background', STYLE.bg),
           clr('style.card', 'Card Background',  STYLE.card),
         ]) +
-        section('Typography', [
-          clr('style.textPrimary', 'Primary Text',  STYLE.textPrimary),
-          clr('style.textMuted',   'Muted / Sub Text', STYLE.textMuted),
-          rng('style.fontScale', 'Body Text Scale', STYLE.fontScale, 0.7, 1.35, 0.05, 'pct'),
+        section('Text Colors', [
+          clr('style.textPrimary', 'Primary Text Color',  STYLE.textPrimary),
+          clr('style.textMuted',   'Muted / Sub Text Color', STYLE.textMuted),
+        ]) +
+        section('Text Sizes', [
+          rng('style.h1Size',      'Header (H1)',         STYLE.h1Size,      1.5, 5.0,  0.1,  'rem'),
+          rng('style.h2Size',      'Sub-Header (H2)',     STYLE.h2Size,      1.0, 3.5,  0.1,  'rem'),
+          rng('style.h3Size',      'Section Heading (H3/H4)', STYLE.h3Size,  0.8, 2.5,  0.05, 'rem'),
+          rng('style.bodySize',    'Body Text',           STYLE.bodySize,    0.5, 1.5,  0.05, 'rem'),
+          rng('style.captionSize', 'Caption / Label / Badge', STYLE.captionSize, 0.4, 1.2, 0.05, 'rem'),
+          rng('style.fontScale',   'Global Scale (all rem)', STYLE.fontScale, 0.7, 1.35, 0.05, 'pct'),
         ]) +
         section('Layout', [
           rng('style.cardRadius', 'Card Corner Radius', STYLE.cardRadius, 0, 24, 1, 'px'),
@@ -336,6 +343,7 @@
       primary:'#52B788', primaryDark:'#1B4332', gold:'#C9A84C', amber:'#F4A261',
       red:'#E63946', bg:'#0A1628', card:'#112240', textPrimary:'#E8F0E8',
       textMuted:'#8BA098', fontScale:1.0, cardRadius:12, slideGap:20,
+      h1Size:3.2, h2Size:2.0, h3Size:1.35, bodySize:0.88, captionSize:0.72,
     });
     applyStyle();
     cfgRenderTab('style');
