@@ -178,9 +178,9 @@ function initCurrentElephantsMap(id) {
     { lat: 22.4469, lng: 83.0998, loc: 'Rupunga, Dharamjaigarh',       count: 15, herd: 'JPHE2',                    div: 'Dharamjaigarh' },
     { lat: 22.4148, lng: 83.2677, loc: 'Ongna, Dharamjaigarh',         count: 1,  herd: 'JPHE2',                    div: 'Dharamjaigarh' },
     { lat: 22.0788, lng: 83.1433, loc: 'Edu, Chhala Range',            count: 52, herd: 'RaigarhHE1',               div: 'Dharamjaigarh' },
-    { lat: 22.2917, lng: 83.1437, loc: 'Purunga, Chhala Range',        count: 1,  herd: '—',                   div: 'Dharamjaigarh' },
+    { lat: 22.2917, lng: 83.1437, loc: 'Purunga, Chhala Range',        count: 1,  herd: '—',                        div: 'Dharamjaigarh' },
     { lat: 22.2030, lng: 83.1861, loc: 'Banhar, Chhala Range',         count: 1,  herd: 'DH-HE7',                   div: 'Dharamjaigarh' },
-    { lat: 22.1561, lng: 83.1169, loc: 'Chhala',                       count: 1,  herd: '—',                   div: 'Dharamjaigarh' },
+    { lat: 22.1561, lng: 83.1169, loc: 'Chhala',                       count: 1,  herd: '—',                        div: 'Dharamjaigarh' },
     { lat: 22.1952, lng: 83.1461, loc: 'Banhar-Narangi, Chhala',       count: 1,  herd: 'RaigarhHE2',               div: 'Dharamjaigarh' },
     { lat: 22.1766, lng: 83.1723, loc: 'Auranara, Chhala',             count: 1,  herd: 'DJME7',                    div: 'Dharamjaigarh' },
     { lat: 22.1327, lng: 83.1461, loc: 'Boziya, Chhala',               count: 1,  herd: 'RaigarhHE1',               div: 'Dharamjaigarh' },
@@ -201,6 +201,17 @@ function initCurrentElephantsMap(id) {
       `<span style="color:#555">${p.div} &nbsp;·&nbsp; ${p.count} elephant${p.count > 1 ? 's' : ''}</span><br>` +
       `<small style="color:#777">Herd: ${p.herd}</small>`
     );
+  });
+
+  // Pulsing red rings on large herds (≥30 elephants)
+  locations.filter(p => p.count >= 30).forEach(p => {
+    const pulseIcon = L.divIcon({
+      className: '',
+      html: `<div class="pulse-ring" style="--pulse-color:#E63946;width:30px;height:30px"></div>`,
+      iconSize: [30, 30],
+      iconAnchor: [15, 15]
+    });
+    L.marker([p.lat, p.lng], { icon: pulseIcon, interactive: false }).addTo(map);
   });
 
   setTimeout(() => map.invalidateSize(), 500);
