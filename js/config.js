@@ -336,6 +336,7 @@ function applyStyle() {
     .slide .kpi-label, .slide .report-body, .slide .action-desc { font-size: ${STYLE.bodySize}rem !important; }
     .slide .section-tag, .slide .person-badge, .slide .stat-badge,
     .slide .timeline-time, .slide .kpi-card .kpi-label { font-size: ${STYLE.captionSize}rem !important; }
+    .slide .s2-card-title { font-size: ${(STYLE.bodySize * 1.2).toFixed(2)}rem !important; }
   `;
 }
 
