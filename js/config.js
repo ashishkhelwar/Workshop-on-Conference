@@ -55,7 +55,7 @@ const CONFIG = {
       initials : "MK",
       name     : "Dr. M. Karikalan",
       title    : "Senior Scientist\nCentre for Wildlife",
-      badge    : "Lab Reports",
+      badge    : "Resource Person",
       color    : "green"
     },
     {
