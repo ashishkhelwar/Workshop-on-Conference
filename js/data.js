@@ -18,13 +18,13 @@ const DATA = {
   ],
 
   ageProfile: [
-    { group: 'Calves (<1 yr)', count: 7, pct: 23 },
-    { group: 'Young (1–15 yr)', count: 8, pct: 27 },
-    { group: 'Adults (16–50 yr)', count: 10, pct: 33 },
-    { group: 'Old (50+ yr)', count: 5, pct: 17 }
+    { group: 'Calves (<1 yr)', count: 10, pct: 26 },
+    { group: 'Young (1–15 yr)', count: 14, pct: 36 },
+    { group: 'Adults (16–50 yr)', count: 8, pct: 21 },
+    { group: 'Old (50+ yr)', count: 8, pct: 21 }
   ],
 
-  sexProfile: { male: 22, female: 17 },  // from 37 PM records
+  sexProfile: { male: 20, female: 18 },  // from 41 records (3 unknown)
 
   // Exact monthly distribution from detailed records
   seasonal: {
