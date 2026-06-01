@@ -628,7 +628,7 @@
         <span style="color:#52B788;font-weight:700">Dharamjaigarh</span> — 23 elephant deaths · 36 human deaths
       </div>
       <div style="font-size:0.75rem;color:#E8F0E8">
-        <span style="color:#F4A261;font-weight:700">Raigarh</span> — 18 elephant deaths · 9 human deaths
+        <span style="color:#F4A261;font-weight:700">Raigarh</span> — 21 elephant deaths · 9 human deaths
       </div>
     </div>
   </div>
@@ -686,10 +686,14 @@
       </div>
       <div id="s7-live-map" style="flex:1;width:100%;min-height:0;border-top:2px solid rgba(230,57,70,0.4);box-shadow:inset 0 0 60px rgba(230,57,70,0.07)"></div>
       <div style="padding:8px 20px 10px;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
-        <span style="font-size:0.7rem;color:#8BA098;display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#E63946;opacity:0.85"></span>≥30 elephants</span>
-        <span style="font-size:0.7rem;color:#8BA098;display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#F4A261;opacity:0.85"></span>10–29</span>
-        <span style="font-size:0.7rem;color:#8BA098;display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#C9A84C;opacity:0.85"></span>5–9</span>
-        <span style="font-size:0.7rem;color:#8BA098;display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#52B788;opacity:0.85"></span>1–4</span>
+        <span style="font-size:0.7rem;color:#8BA098;display:flex;align-items:center;gap:5px">
+          <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#E63946;border:1px solid rgba(255,255,255,0.6);box-shadow:0 0 4px rgba(230,57,70,0.6)"></span>
+          Current elephant location (icon size = herd count)
+        </span>
+        <span style="font-size:0.7rem;color:#E63946;display:flex;align-items:center;gap:5px">
+          <span style="width:8px;height:8px;border-radius:50%;background:#E63946;display:inline-block;animation:pulseDot 1.6s ease-out infinite"></span>
+          Pulsing = large herd (≥30)
+        </span>
       </div>
     </div>
   </div>
@@ -714,7 +718,7 @@
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Raigarh</div>
-          <div class="kpi-value amber">18</div>
+          <div class="kpi-value amber">21</div>
           <div class="kpi-sub">RG Division</div>
         </div>
       </div>
@@ -727,7 +731,7 @@
       <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-shrink:0">
         <div class="section-tag" style="align-self:flex-start">Year-wise Distribution</div>
         <div style="text-align:right">
-          <div style="font-size:1.8rem;font-weight:700;color:#52B788">41</div>
+          <div style="font-size:1.8rem;font-weight:700;color:#52B788">44</div>
           <div style="font-size:0.75rem;color:#8BA098">Total Deaths</div>
         </div>
       </div>
@@ -810,7 +814,7 @@
       <canvas id="sexCanvas"></canvas>
     </div>
     <div class="chart-note mt-12 center">
-      <strong>Based on 32 Postmortem Records</strong> — equal sex distribution (16 male / 16 female)
+      <strong>Based on 35 Postmortem Records</strong> — equal sex distribution (16 male / 16 female)
       indicates no sex-biased mortality from human–elephant conflict.
     </div>
   </div>
@@ -887,7 +891,7 @@
     <div class="map-legend">
       <div class="map-legend-item">
         <div class="legend-dot" style="background:#52B788"></div>
-        <span>Elephant Death (41)</span>
+        <span>Elephant Death (44)</span>
       </div>
       <div class="map-legend-item">
         <div class="legend-dot" style="background:#E63946"></div>
@@ -911,14 +915,14 @@
 
     <div class="report-section">
       <h4>Coverage &amp; Compilation</h4>
-      <p>32 PM reports compiled across Dharamjaigarh and Raigarh Van Mandals for the period 2021–2026.
+      <p>35 PM reports compiled across Dharamjaigarh and Raigarh Van Mandals for the period 2021–2026.
          All available case records have been cross-referenced with the geo-referenced incident database.</p>
     </div>
 
     <div class="report-section warning">
       <h4>Lead Cause — PM Confirmed</h4>
-      <p>Electrocution leading to Cardio-Respiratory Failure confirmed as cause of death in 8 of 32 PM records.
-         Multiple simultaneous electrocution events noted in 3 cases. Drowning is the second-leading confirmed cause (10 of 32).</p>
+      <p>Electrocution leading to Cardio-Respiratory Failure confirmed as cause of death in 8 of 35 PM records.
+         Multiple simultaneous electrocution events noted in 3 cases. Drowning is the second-leading confirmed cause (10 of 35).</p>
     </div>
 
     <div class="report-section flagged">
@@ -928,13 +932,13 @@
     </div>
 
     <div class="report-section">
-      <h4>PM Cause Distribution — 32 Records</h4>
+      <h4>PM Cause Distribution — 35 Records</h4>
       <table class="pm-table">
         <thead>
           <tr>
             <th>Cause</th>
             <th>PM Confirmed</th>
-            <th>% of 32</th>
+            <th>% of 35</th>
             <th>Status</th>
           </tr>
         </thead>
@@ -942,13 +946,13 @@
           <tr>
             <td>Electrocution</td>
             <td>8</td>
-            <td>25%</td>
+            <td>23%</td>
             <td><span class="callout amber">PREVENTABLE</span></td>
           </tr>
           <tr>
             <td>Drowning</td>
             <td>10</td>
-            <td>31%</td>
+            <td>29%</td>
             <td><span class="callout amber">PREVENTABLE</span></td>
           </tr>
           <tr>
@@ -965,8 +969,8 @@
           </tr>
           <tr>
             <td>Undetermined / Pending</td>
-            <td>8</td>
-            <td>25%</td>
+            <td>11</td>
+            <td>31%</td>
             <td><span class="callout">PENDING</span></td>
           </tr>
         </tbody>
@@ -984,7 +988,7 @@
       <div class="section-tag">Key PM Findings</div>
       <h2 style="font-size:1.6rem;margin-bottom:16px">Five-Year Trend &amp; PM Highlights</h2>
       <ul class="bullet-list">
-        <li><strong style="color:#E8F0E8">Sex distribution — 50/50:</strong> 16 male / 16 female from 32 records. No sex-biased conflict mortality.</li>
+        <li><strong style="color:#E8F0E8">Sex distribution — 50/50:</strong> 16 male / 16 female from 35 records. No sex-biased conflict mortality.</li>
         <li class="warning"><strong style="color:#F4A261">Multiple neonates &amp; calves</strong> — 6 neonate cases confirmed. Under-1-yr mortality at 38% of PM cases is alarming.</li>
         <li class="flagged"><strong style="color:#E63946">3 simultaneous electrocution events</strong> — single incidents killed multiple elephants; indicates systemic power-line hazard.</li>
         <li class="warning"><strong style="color:#F4A261">Vehicular collision confirmed</strong> — 1 case (2023-24). Infrastructure corridor risk identified and documented.</li>
@@ -1193,7 +1197,7 @@
     <div class="map-legend">
       <div class="map-legend-item">
         <div class="legend-dot" style="background:#52B788"></div>
-        <span>Elephant Death (41)</span>
+        <span>Elephant Death (44)</span>
       </div>
       <div class="map-legend-item">
         <div class="legend-dot" style="background:#E63946"></div>
