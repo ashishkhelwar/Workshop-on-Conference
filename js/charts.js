@@ -652,11 +652,21 @@ function initRangeChart(id) {
   });
 }
 
-// ── 8. Population Area Chart ──────────────────────────────────────────────
+// ── 8. Population Area Chart — tree-growth animation ─────────────────────
 function initPopChart(id) {
   const ctx = document.getElementById(id);
   if (!ctx) return;
   destroyChart(id);
+
+  const dataLen = DATA.populationTrend.cg.length;
+  const delay   = 380; // ms between each point sprouting
+
+  // Each new point grows upward from where the previous point was
+  const prevY = (c) =>
+    c.index === 0
+      ? c.chart.scales.y.getPixelForValue(DATA.populationTrend.cg[0])
+      : c.chart.getDatasetMeta(c.datasetIndex).data[c.index - 1].getProps(['y'], true).y;
+
   chartInstances[id] = new Chart(ctx, {
     type: 'line',
     data: {
@@ -670,15 +680,17 @@ function initPopChart(id) {
           const { ctx: c, chartArea } = chart;
           if (!chartArea) return 'transparent';
           const gradient = c.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-          gradient.addColorStop(0, 'rgba(82,183,136,0.5)');
+          gradient.addColorStop(0, 'rgba(82,183,136,0.45)');
           gradient.addColorStop(1, 'rgba(82,183,136,0.02)');
           return gradient;
         },
         borderWidth: 3,
         pointBackgroundColor: '#52B788',
-        pointRadius: 5,
-        pointHoverRadius: 8,
-        tension: 0.3,
+        pointBorderColor: '#fff',
+        pointBorderWidth: 1.5,
+        pointRadius: 6,
+        pointHoverRadius: 9,
+        tension: 0.4,
         fill: true,
         clip: false
       }]
@@ -686,6 +698,30 @@ function initPopChart(id) {
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      animation: {
+        x: {
+          type: 'number',
+          easing: 'linear',
+          duration: delay,
+          from: NaN,
+          delay(c) {
+            if (c.type !== 'data' || c.xStarted) return 0;
+            c.xStarted = true;
+            return c.index * delay;
+          }
+        },
+        y: {
+          type: 'number',
+          easing: 'easeOutElastic',
+          duration: delay * 1.4,
+          from: prevY,
+          delay(c) {
+            if (c.type !== 'data' || c.yStarted) return 0;
+            c.yStarted = true;
+            return c.index * delay;
+          }
+        }
+      },
       plugins: {
         legend: { display: false },
         tooltip: {
