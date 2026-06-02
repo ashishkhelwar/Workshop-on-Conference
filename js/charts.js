@@ -658,7 +658,7 @@ function initRangeChart(id) {
     { year: '2001', val: 24  }, { year: '2005', val: 123 },
     { year: '2007', val: 122 }, { year: '2015', val: 247 },
     { year: '2017', val: 247 }, { year: '2021', val: 279 },
-    { year: '2025', val: 451 },
+    { year: '2026', val: 451 },
   ];
   const Y_TICKS = [24,50,100,150,200,250,300,350,400,450,480];
   const Y_MIN = 24, Y_MAX = 480, DUR = 10000;
