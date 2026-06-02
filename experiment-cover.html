@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COVER PAGE REDESIGN — Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: #060e1a;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ── Preview Banner ──────────────────────────────────────────── */
+#preview-bar {
+  background: rgba(201,168,76,0.12);
+  border-bottom: 1.5px solid #C9A84C;
+  padding: 8px 24px;
+  display: flex; align-items: center; gap: 16px;
+  flex-shrink: 0; z-index: 10;
+}
+#preview-bar .tag {
+  background: #C9A84C; color: #0a0f1a;
+  font-weight: 800; font-size: 0.65rem; letter-spacing: 0.12em;
+  padding: 3px 10px; border-radius: 4px; text-transform: uppercase;
+}
+#preview-bar p { font-size: 0.78rem; color: #8BA09C; }
+#preview-bar a {
+  margin-left: auto; font-size: 0.75rem; color: #52B788;
+  border: 1px solid #52B788; padding: 4px 14px; border-radius: 6px;
+  text-decoration: none; font-weight: 600;
+}
+
+/* ── Slide Wrapper ───────────────────────────────────────────── */
+.slide-frame {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  position: relative;
+  overflow: hidden;
+  background: #060e1a;
+  aspect-ratio: 16/9;
+  max-height: calc(100vh - 42px);
+}
+
+/* ── Background layers ───────────────────────────────────────── */
+.bg-topo {
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 68% 50%, rgba(16,48,30,0.55) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 80% at 10% 50%, rgba(10,30,55,0.6) 0%, transparent 70%);
+}
+
+/* Topo lines SVG */
+.bg-topo-svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  opacity: 0.13;
+}
+
+/* Diagonal slash divider */
+.bg-slash {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  overflow: hidden; pointer-events: none;
+}
+.bg-slash::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 34%; bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent 0%, rgba(201,168,76,0.5) 30%, rgba(201,168,76,0.8) 50%, rgba(201,168,76,0.5) 70%, transparent 100%);
+  transform: skewX(-6deg);
+}
+.bg-slash::after {
+  content: '';
+  position: absolute;
+  top: 0; right: calc(34% + 8px); bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent 0%, rgba(201,168,76,0.2) 30%, rgba(201,168,76,0.35) 50%, rgba(201,168,76,0.2) 70%, transparent 100%);
+  transform: skewX(-6deg);
+}
+
+/* Elephant silhouette watermark */
+.elephant-mark {
+  position: absolute;
+  right: 2%;
+  bottom: 0;
+  width: 66%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0.08;
+}
+.elephant-mark svg {
+  width: 100%;
+  height: 90%;
+  object-fit: contain;
+}
+
+/* Forest map dots */
+.map-dots {
+  position: absolute;
+  top: 0; right: 0; width: 66%; height: 100%;
+  pointer-events: none;
+}
+
+/* ── Left content panel ──────────────────────────────────────── */
+.left-panel {
+  position: relative; z-index: 5;
+  width: 56%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4% 4% 4% 5%;
+}
+
+/* Top badge */
+.top-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-bottom: 3%;
+}
+.top-tag .dot-acc {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #C9A84C;
+  box-shadow: 0 0 8px rgba(201,168,76,0.8);
+  animation: pulse-dot 2.4s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%,100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.6); opacity: 0.6; }
+}
+.top-tag span {
+  font-size: clamp(0.6rem, 0.9vw, 0.78rem);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #C9A84C;
+}
+
+/* Main title */
+.main-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.2rem, 5.2vw, 5rem);
+  line-height: 1.02;
+  color: #E8F0E8;
+  letter-spacing: 0.03em;
+  text-shadow: 0 2px 30px rgba(0,0,0,0.5);
+  margin-bottom: 1%;
+}
+.main-title em {
+  font-style: normal;
+  color: #52B788;
+  display: block;
+}
+.main-title .title-accent {
+  color: #C9A84C;
+}
+
+/* Subtitle line */
+.subtitle {
+  font-size: clamp(0.72rem, 1.1vw, 0.95rem);
+  color: #8BA09C;
+  letter-spacing: 0.04em;
+  margin-bottom: 4%;
+  font-weight: 400;
+}
+
+/* Rule */
+.h-rule {
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(to right, #C9A84C, transparent);
+  margin-bottom: 4%;
+}
+
+/* Info rows */
+.info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2%;
+  margin-bottom: 4%;
+}
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.info-icon {
+  width: clamp(16px,2vw,22px);
+  height: clamp(16px,2vw,22px);
+  border-radius: 50%;
+  background: rgba(82,183,136,0.15);
+  border: 1px solid rgba(82,183,136,0.35);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.info-icon svg { width: 55%; height: 55%; }
+.info-text { display: flex; flex-direction: column; gap: 2px; }
+.info-label {
+  font-size: clamp(0.5rem, 0.75vw, 0.65rem);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(139,160,156,0.7);
+}
+.info-val {
+  font-size: clamp(0.68rem, 1vw, 0.88rem);
+  font-weight: 600;
+  color: #D0DDD9;
+  line-height: 1.4;
+}
+.info-val span { color: #E8F0E8; }
+
+/* Region pills */
+.pills {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  margin-bottom: 4%;
+}
+.pill {
+  font-size: clamp(0.5rem, 0.75vw, 0.65rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #52B788;
+  border: 1px solid rgba(82,183,136,0.4);
+  border-radius: 20px;
+  padding: 3px 10px;
+  background: rgba(82,183,136,0.07);
+}
+
+/* Logo bar */
+.logo-bar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.logo-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+}
+.logo-box img {
+  height: clamp(22px, 3vw, 36px);
+  width: auto;
+  object-fit: contain;
+  filter: brightness(1.05);
+}
+.logo-sep {
+  width: 1px; height: 28px;
+  background: rgba(255,255,255,0.12);
+}
+
+/* ── Right visual panel ──────────────────────────────────────── */
+.right-panel {
+  position: absolute;
+  top: 0; right: 0;
+  width: 48%;
+  height: 100%;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* Animated network SVG */
+.network-svg {
+  width: 90%;
+  height: 85%;
+  overflow: visible;
+}
+
+.nl {
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300;
+  animation: drawLine 2s ease forwards;
+}
+.nl:nth-child(1)  { animation-delay: 0.1s; }
+.nl:nth-child(2)  { animation-delay: 0.2s; }
+.nl:nth-child(3)  { animation-delay: 0.3s; }
+.nl:nth-child(4)  { animation-delay: 0.4s; }
+.nl:nth-child(5)  { animation-delay: 0.5s; }
+.nl:nth-child(6)  { animation-delay: 0.6s; }
+.nl:nth-child(7)  { animation-delay: 0.7s; }
+.nl:nth-child(8)  { animation-delay: 0.8s; }
+.nl:nth-child(9)  { animation-delay: 0.9s; }
+.nl:nth-child(10) { animation-delay: 1.0s; }
+
+@keyframes drawLine {
+  to { stroke-dashoffset: 0; }
+}
+
+.node-pulse {
+  animation: nodePulse 3s ease-in-out infinite;
+  transform-origin: center;
+}
+@keyframes nodePulse {
+  0%,100% { opacity: 0.15; r: 22; }
+  50%      { opacity: 0.4;  r: 28; }
+}
+.node-pulse-sm {
+  animation: nodePulse 3.5s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* date badge in right panel */
+.date-badge {
+  position: absolute;
+  top: 8%;
+  right: 6%;
+  background: rgba(201,168,76,0.12);
+  border: 1px solid rgba(201,168,76,0.5);
+  border-radius: 8px;
+  padding: 10px 16px;
+  text-align: right;
+  z-index: 10;
+}
+.date-badge .db-day {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(1.6rem, 3.5vw, 3rem);
+  color: #C9A84C;
+  line-height: 1;
+}
+.date-badge .db-month {
+  font-size: clamp(0.55rem, 0.85vw, 0.72rem);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8BA09C;
+}
+
+/* Subtle scan line overlay */
+.scanlines {
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgba(0,0,0,0.04) 3px,
+    rgba(0,0,0,0.04) 4px
+  );
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* Bottom ribbon */
+.bottom-ribbon {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(to right,
+    transparent 0%,
+    #52B788 20%,
+    #C9A84C 50%,
+    #52B788 80%,
+    transparent 100%);
+  z-index: 20;
+}
+
+/* corner brackets */
+.corner {
+  position: absolute; width: 20px; height: 20px;
+  z-index: 15; opacity: 0.4;
+}
+.corner.tl { top: 8px; left: 8px; border-top: 1.5px solid #C9A84C; border-left: 1.5px solid #C9A84C; }
+.corner.tr { top: 8px; right: 8px; border-top: 1.5px solid #C9A84C; border-right: 1.5px solid #C9A84C; }
+.corner.bl { bottom: 8px; left: 8px; border-bottom: 1.5px solid #C9A84C; border-left: 1.5px solid #C9A84C; }
+.corner.br { bottom: 8px; right: 8px; border-bottom: 1.5px solid #C9A84C; border-right: 1.5px solid #C9A84C; }
+</style>
+</head>
+<body>
+
+<!-- Preview banner -->
+<div id="preview-bar">
+  <span class="tag">Preview</span>
+  <p>Cover page redesign — for approval only, not in main presentation yet.</p>
+  <a href="index.html">← Main Presentation</a>
+</div>
+
+<!-- Slide frame -->
+<div class="slide-frame">
+
+  <!-- Decorators -->
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+  <div class="scanlines"></div>
+  <div class="bottom-ribbon"></div>
+
+  <!-- Background -->
+  <div class="bg-topo"></div>
+
+  <!-- Topo lines -->
+  <svg class="bg-topo-svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <g fill="none" stroke="#52B788" stroke-width="1">
+      <path d="M0,450 Q200,380 400,420 Q600,460 800,400 Q1000,340 1200,390 Q1400,440 1600,410"/>
+      <path d="M0,480 Q200,400 420,445 Q620,490 820,425 Q1020,360 1220,415 Q1420,470 1600,440"/>
+      <path d="M0,510 Q200,430 440,470 Q640,510 840,445 Q1040,380 1240,440 Q1440,500 1600,468"/>
+      <path d="M0,540 Q200,455 460,498 Q660,540 860,470 Q1060,400 1260,462 Q1460,524 1600,495"/>
+      <path d="M0,420 Q200,360 380,395 Q580,430 780,375 Q980,320 1180,368 Q1380,415 1600,385"/>
+      <path d="M0,390 Q200,335 360,370 Q560,405 760,350 Q960,295 1160,345 Q1360,395 1600,358"/>
+      <path d="M0,570 Q250,480 480,526 Q680,572 880,498 Q1080,424 1280,484 Q1480,544 1600,520"/>
+      <path d="M0,600 Q250,505 500,555 Q700,600 900,524 Q1100,448 1300,506 Q1500,564 1600,545"/>
+    </g>
+  </svg>
+
+  <div class="bg-slash"></div>
+
+  <!-- Elephant silhouette watermark -->
+  <div class="elephant-mark">
+    <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" fill="#52B788">
+      <!-- Simplified elephant silhouette path -->
+      <path d="M480,280 C500,270 520,255 530,235 C545,210 540,185 520,172 C510,165 495,162 480,165
+               C475,150 468,138 458,128 C442,112 420,104 398,100
+               C380,62 352,38 318,28 C290,20 260,24 238,38
+               C218,50 204,70 198,94
+               C180,92 162,96 148,106 C126,120 114,144 114,170
+               C100,174 88,184 82,198 C72,218 76,244 92,258
+               C76,268 66,286 68,306 C70,326 86,342 106,346
+               C118,348 130,344 140,336
+               C148,352 160,364 176,370 C196,378 220,374 238,362
+               C252,376 272,384 294,384 C320,384 344,372 360,352
+               C374,366 394,374 416,372 C440,370 460,356 470,336
+               C486,342 504,338 516,326 C530,312 532,290 522,276 Z"/>
+      <!-- Trunk -->
+      <path d="M198,94 C190,110 182,130 176,152 C170,172 168,192 172,208 C160,212 148,222 140,236"/>
+      <!-- Tusk -->
+      <path d="M220,152 C210,158 196,170 188,186 C180,200 178,216 184,226"/>
+    </svg>
+  </div>
+
+  <!-- Date badge -->
+  <div class="date-badge">
+    <div class="db-day">30</div>
+    <div class="db-month">May &nbsp;2026</div>
+  </div>
+
+  <!-- Right visual: animated network -->
+  <div class="right-panel">
+    <svg class="network-svg" viewBox="0 0 460 520" xmlns="http://www.w3.org/2000/svg">
+      <!-- Grid backdrop -->
+      <g stroke="rgba(82,183,136,0.06)" stroke-width="0.8" fill="none">
+        <line x1="0" y1="130" x2="460" y2="130"/>
+        <line x1="0" y1="260" x2="460" y2="260"/>
+        <line x1="0" y1="390" x2="460" y2="390"/>
+        <line x1="115" y1="0" x2="115" y2="520"/>
+        <line x1="230" y1="0" x2="230" y2="520"/>
+        <line x1="345" y1="0" x2="345" y2="520"/>
+      </g>
+
+      <!-- Connection lines -->
+      <g stroke="rgba(82,183,136,0.28)" stroke-width="1.1" fill="none">
+        <line class="nl" x1="230" y1="260" x2="140" y2="170"/>
+        <line class="nl" x1="230" y1="260" x2="320" y2="180"/>
+        <line class="nl" x1="230" y1="260" x2="155" y2="355"/>
+        <line class="nl" x1="230" y1="260" x2="325" y2="350"/>
+        <line class="nl" x1="230" y1="260" x2="230" y2="130"/>
+        <line class="nl" x1="230" y1="260" x2="95"  y2="275"/>
+        <line class="nl" x1="230" y1="260" x2="365" y2="280"/>
+        <line class="nl" x1="140" y1="170" x2="230" y2="130"/>
+        <line class="nl" x1="320" y1="180" x2="230" y2="130"/>
+        <line class="nl" x1="140" y1="170" x2="95"  y2="275"/>
+      </g>
+
+      <!-- Outer connections -->
+      <g stroke="rgba(82,183,136,0.15)" stroke-width="0.9" fill="none">
+        <line class="nl" x1="320" y1="180" x2="365" y2="280"/>
+        <line class="nl" x1="155" y1="355" x2="95"  y2="275"/>
+        <line class="nl" x1="325" y1="350" x2="365" y2="280"/>
+        <line class="nl" x1="155" y1="355" x2="230" y2="415"/>
+        <line class="nl" x1="325" y1="350" x2="230" y2="415"/>
+      </g>
+
+      <!-- Travel route (red) -->
+      <path d="M55,195 Q95,175 140,170 Q195,230 230,260 Q265,295 325,350 Q368,388 400,374"
+            stroke="rgba(230,57,70,0.55)" stroke-width="1.6" fill="none" stroke-dasharray="7 5"/>
+
+      <!-- Pulse rings — main hub -->
+      <circle class="node-pulse" cx="230" cy="260" r="28" fill="rgba(230,57,70,0.08)" stroke="rgba(230,57,70,0.3)" stroke-width="1"/>
+      <circle class="node-pulse-sm" cx="230" cy="260" r="18" fill="rgba(230,57,70,0.1)" stroke="rgba(230,57,70,0.2)" stroke-width="0.8"/>
+
+      <!-- Main hub -->
+      <circle cx="230" cy="260" r="11" fill="rgba(230,57,70,0.92)" stroke="#fff" stroke-width="2"/>
+      <text x="230" y="247" text-anchor="middle" fill="rgba(255,255,255,0.65)" font-size="9" font-family="Inter,sans-serif">Chhala 52♦</text>
+
+      <!-- Secondary nodes -->
+      <circle cx="140" cy="170" r="9" fill="rgba(230,57,70,0.8)" stroke="#fff" stroke-width="1.5"/>
+      <text x="140" y="158" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="8.5" font-family="Inter,sans-serif">Chainpur 30</text>
+
+      <circle cx="320" cy="180" r="9" fill="rgba(230,57,70,0.8)" stroke="#fff" stroke-width="1.5"/>
+      <text x="320" y="168" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="8.5" font-family="Inter,sans-serif">Gurda 35</text>
+
+      <!-- Small nodes -->
+      <circle cx="230" cy="130" r="6" fill="rgba(82,183,136,0.85)" stroke="#fff" stroke-width="1.2"/>
+      <text x="230" y="120" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="7.5" font-family="Inter,sans-serif">Rupunga 15</text>
+
+      <circle cx="95"  cy="275" r="6" fill="rgba(82,183,136,0.85)" stroke="#fff" stroke-width="1.2"/>
+      <circle cx="365" cy="280" r="6" fill="rgba(82,183,136,0.85)" stroke="#fff" stroke-width="1.2"/>
+      <circle cx="155" cy="355" r="5" fill="rgba(82,183,136,0.75)" stroke="#fff" stroke-width="1"/>
+      <circle cx="325" cy="350" r="5" fill="rgba(82,183,136,0.75)" stroke="#fff" stroke-width="1"/>
+      <circle cx="230" cy="415" r="5" fill="rgba(82,183,136,0.65)" stroke="#fff" stroke-width="1"/>
+
+      <!-- Outer leaf nodes -->
+      <circle cx="55"  cy="195" r="3.5" fill="rgba(82,183,136,0.5)" stroke="rgba(82,183,136,0.5)" stroke-width="0.8"/>
+      <circle cx="400" cy="374" r="3.5" fill="rgba(82,183,136,0.5)" stroke="rgba(82,183,136,0.5)" stroke-width="0.8"/>
+      <circle cx="165" cy="70"  r="3" fill="rgba(82,183,136,0.4)" stroke="rgba(82,183,136,0.4)" stroke-width="0.8"/>
+      <circle cx="295" cy="76"  r="3" fill="rgba(82,183,136,0.4)" stroke="rgba(82,183,136,0.4)" stroke-width="0.8"/>
+
+      <!-- Signal dot -->
+      <circle r="4" fill="#E63946" filter="url(#glow)">
+        <animateMotion dur="4.5s" repeatCount="indefinite" rotate="auto">
+          <mpath href="#tpath"/>
+        </animateMotion>
+      </circle>
+      <path id="tpath" d="M55,195 Q95,175 140,170 Q195,230 230,260 Q265,295 325,350 Q368,388 400,374" fill="none"/>
+
+      <!-- Glow filter -->
+      <defs>
+        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="3" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- Caption -->
+      <text x="230" y="22" text-anchor="middle" fill="rgba(82,183,136,0.45)" font-size="8.5" letter-spacing="2.5" font-weight="700" font-family="Inter,sans-serif">ELEPHANT MOVEMENT NETWORK</text>
+      <text x="230" y="35" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="7" font-family="Inter,sans-serif">Dharamjaigarh · Raigarh · Bilaspur</text>
+    </svg>
+  </div>
+
+  <!-- LEFT: Main content -->
+  <div class="left-panel">
+
+    <div class="top-tag">
+      <div class="dot-acc"></div>
+      <span>Training Workshop &nbsp;·&nbsp; Bilaspur, Chhattisgarh</span>
+    </div>
+
+    <h1 class="main-title">
+      Workshop on<br>
+      <em>Essentials for</em>
+      Mortality<br>
+      Investigation of<br>
+      <span class="title-accent">Asian Elephant</span>
+    </h1>
+
+    <p class="subtitle">For Officials of Chhattisgarh Forest Department</p>
+
+    <div class="h-rule"></div>
+
+    <div class="info-grid">
+      <div class="info-row">
+        <div class="info-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#52B788" stroke-width="2.2" stroke-linecap="round">
+            <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </div>
+        <div class="info-text">
+          <span class="info-label">Date &amp; Venue</span>
+          <span class="info-val"><span>30 May 2026</span> &nbsp;·&nbsp; Bilaspur, Chhattisgarh</span>
+        </div>
+      </div>
+
+      <div class="info-row">
+        <div class="info-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#52B788" stroke-width="2.2" stroke-linecap="round">
+            <path d="M12 2C8 2 4 5.5 4 10c0 6 8 12 8 12s8-6 8-12c0-4.5-4-8-8-8z"/>
+            <circle cx="12" cy="10" r="2.5"/>
+          </svg>
+        </div>
+        <div class="info-text">
+          <span class="info-label">Study Area</span>
+          <span class="info-val"><span>Dharamjaigarh</span> &amp; <span>Raigarh</span> Forest Divisions &nbsp;·&nbsp; 2021–2027</span>
+        </div>
+      </div>
+
+      <div class="info-row">
+        <div class="info-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#52B788" stroke-width="2.2" stroke-linecap="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <div class="info-text">
+          <span class="info-label">Organised By</span>
+          <span class="info-val"><span>Chhattisgarh Forest Department</span>, Bilaspur Circle</span>
+        </div>
+      </div>
+
+      <div class="info-row">
+        <div class="info-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#52B788" stroke-width="2.2" stroke-linecap="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.1 2.7 2 6 2s6-.9 6-2v-5"/>
+          </svg>
+        </div>
+        <div class="info-text">
+          <span class="info-label">Technical Partners</span>
+          <span class="info-val"><span>Wildlife Institute of India</span>, Dehradun &nbsp;·&nbsp; <span>ICAR-IVRI</span>, Bareilly</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pills">
+      <span class="pill">Dharamjaigarh Division</span>
+      <span class="pill">Raigarh Division</span>
+      <span class="pill">48 Elephant Cases</span>
+      <span class="pill">45 Human Cases</span>
+    </div>
+
+    <div class="logo-bar">
+      <div class="logo-box">
+        <img src="img/logo-cg.png" alt="CG Forest Department">
+      </div>
+      <div class="logo-sep"></div>
+      <div class="logo-box">
+        <img src="img/logo-wii.png" alt="Wildlife Institute of India">
+      </div>
+    </div>
+
+  </div><!-- end left-panel -->
+
+</div><!-- end slide-frame -->
+</body>
+</html>
