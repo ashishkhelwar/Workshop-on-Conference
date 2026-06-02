@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EXPERIMENT — Slide 7: Raigarh KMZ Boundary Overlay</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0d1b2a; color: #E8F0E8; font-family: Arial, sans-serif; height: 100vh; display: flex; flex-direction: column; }
+  #banner {
+    background: rgba(201,168,76,0.15);
+    border-bottom: 2px solid #C9A84C;
+    padding: 10px 20px;
+    display: flex; align-items: center; gap: 16px;
+    flex-shrink: 0;
+  }
+  #banner .tag {
+    background: #C9A84C; color: #0d1b2a;
+    font-weight: 800; font-size: 0.7rem;
+    letter-spacing: 0.1em; padding: 3px 10px; border-radius: 4px;
+  }
+  #banner h1 { font-size: 1rem; color: #E8F0E8; }
+  #banner p  { font-size: 0.75rem; color: #8BA09C; }
+  #banner .back { margin-left: auto; background: rgba(82,183,136,0.15); border: 1px solid #52B788; color: #52B788; padding: 6px 14px; border-radius: 6px; text-decoration: none; font-size: 0.78rem; font-weight: 700; }
+  #map { flex: 1; }
+  #legend {
+    position: absolute; bottom: 20px; left: 20px; z-index: 1000;
+    background: rgba(10,22,40,0.9); border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px; padding: 10px 14px; min-width: 180px;
+  }
+  #legend .title { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; color: #8BA09C; text-transform: uppercase; margin-bottom: 8px; }
+  .leg-row { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; margin-bottom: 5px; }
+  .leg-swatch { width: 18px; height: 12px; border-radius: 2px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<div id="banner">
+  <span class="tag">EXPERIMENT</span>
+  <div>
+    <h1>Slide 7 — Distribution Map with Raigarh Division KMZ Boundary</h1>
+    <p>Raigarh KMZ (558 polygons, simplified) overlaid in gold. For review only — not in main presentation.</p>
+  </div>
+  <a class="back" href="index.html">← Back to Presentation</a>
+</div>
+
+<div style="position:relative;flex:1;display:flex">
+  <div id="map"></div>
+  <div id="legend">
+    <div class="title">Legend</div>
+    <div class="leg-row">
+      <div class="leg-swatch" style="background:rgba(201,168,76,0.4);border:1.5px solid #C9A84C"></div>
+      <span>Raigarh Division (KMZ)</span>
+    </div>
+    <div class="leg-row">
+      <div class="leg-swatch" style="background:rgba(82,183,136,0.2);border:2px dashed #52B788"></div>
+      <span>Elephant Range</span>
+    </div>
+    <div class="leg-row">
+      <div class="leg-swatch" style="background:rgba(82,183,136,0.2);border:1px solid #1B4332"></div>
+      <span>Core Forest Area</span>
+    </div>
+    <div class="leg-row" style="margin-top:6px;border-top:1px solid rgba(255,255,255,0.1);padding-top:6px">
+      <div style="width:10px;height:10px;border-radius:50%;background:#52B788;border:2px solid #fff;flex-shrink:0"></div>
+      <span>Dharamjaigarh Division</span>
+    </div>
+    <div class="leg-row">
+      <div style="width:10px;height:10px;border-radius:50%;background:#C9A84C;border:2px solid #fff;flex-shrink:0"></div>
+      <span>Raigarh Division</span>
+    </div>
+    <div id="feature-count" style="margin-top:8px;font-size:0.7rem;color:#8BA09C;border-top:1px solid rgba(255,255,255,0.1);padding-top:6px">Loading boundary…</div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const map = L.map('map', { zoomControl: true, scrollWheelZoom: true })
+  .setView([22.3, 83.4], 8);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap contributors', maxZoom: 14
+}).addTo(map);
+
+// Elephant range rectangle
+L.rectangle([[21.8, 82.8], [22.9, 84.1]], {
+  color: '#52B788', weight: 2, fill: true, fillOpacity: 0.1, dashArray: '6 4'
+}).addTo(map).bindPopup('<b style="color:#52B788">Estimated Elephant Range</b><br>Bilaspur District, Chhattisgarh');
+
+// Division markers
+L.marker([22.55, 83.18]).addTo(map)
+  .bindPopup('<b>Dharamjaigarh Van Mandal</b><br>27 elephant casualties · 36 human casualties');
+L.marker([22.25, 83.58]).addTo(map)
+  .bindPopup('<b>Raigarh Van Mandal</b><br>21 elephant casualties · 9 human casualties');
+
+// Forest patch
+L.polygon([
+  [22.0, 82.9],[22.5, 83.0],[22.8, 83.2],[22.9, 83.5],
+  [22.6, 83.8],[22.2, 83.9],[21.9, 83.6],[21.8, 83.2]
+], {
+  color: '#1B4332', weight: 1, fill: true, fillOpacity: 0.2, fillColor: '#52B788'
+}).addTo(map).bindPopup('Core Forest Area');
+
+// Raigarh KMZ boundary
+fetch('assets/raigarh_boundary.geojson')
+  .then(r => r.json())
+  .then(data => {
+    const layer = L.geoJSON(data, {
+      style: {
+        color: '#C9A84C',
+        weight: 1.2,
+        fill: true,
+        fillColor: '#C9A84C',
+        fillOpacity: 0.15
+      },
+      onEachFeature: (feature, layer) => {
+        if (feature.properties && feature.properties.name) {
+          layer.bindPopup(
+            `<b style="color:#C9A84C">Raigarh Division</b><br>${feature.properties.name}`
+          );
+        }
+        layer.on('mouseover', function() {
+          this.setStyle({ fillOpacity: 0.35, weight: 2 });
+        });
+        layer.on('mouseout', function() {
+          this.setStyle({ fillOpacity: 0.15, weight: 1.2 });
+        });
+      }
+    }).addTo(map);
+
+    const bounds = layer.getBounds();
+    document.getElementById('feature-count').textContent =
+      `${data.features.length} polygons loaded · Raigarh Div`;
+  })
+  .catch(e => {
+    document.getElementById('feature-count').textContent = 'Boundary load failed: ' + e.message;
+  });
+</script>
+</body>
+</html>
