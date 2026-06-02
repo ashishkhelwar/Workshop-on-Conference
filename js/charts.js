@@ -658,14 +658,10 @@ function initPopChart(id) {
   if (!ctx) return;
   destroyChart(id);
 
-  const dataLen = DATA.populationTrend.cg.length;
-  const delay   = 380; // ms between each point sprouting
+  const step = 220; // ms — wave-front advances smoothly
 
-  // Each new point grows upward from where the previous point was
-  const prevY = (c) =>
-    c.index === 0
-      ? c.chart.scales.y.getPixelForValue(DATA.populationTrend.cg[0])
-      : c.chart.getDatasetMeta(c.datasetIndex).data[c.index - 1].getProps(['y'], true).y;
+  // All points flow from the chart baseline (bottom), rising like water
+  const baseY = (c) => c.chart.scales.y.getPixelForValue(24);
 
   chartInstances[id] = new Chart(ctx, {
     type: 'line',
@@ -690,7 +686,7 @@ function initPopChart(id) {
         pointBorderWidth: 1.5,
         pointRadius: 6,
         pointHoverRadius: 9,
-        tension: 0.4,
+        tension: 0.5,
         fill: true,
         clip: false
       }]
@@ -701,24 +697,24 @@ function initPopChart(id) {
       animation: {
         x: {
           type: 'number',
-          easing: 'linear',
-          duration: delay,
+          easing: 'easeInOutSine',
+          duration: step * 2,
           from: NaN,
           delay(c) {
             if (c.type !== 'data' || c.xStarted) return 0;
             c.xStarted = true;
-            return c.index * delay;
+            return c.index * step;
           }
         },
         y: {
           type: 'number',
-          easing: 'easeOutElastic',
-          duration: delay * 1.4,
-          from: prevY,
+          easing: 'easeInOutSine',
+          duration: step * 2.5,
+          from: baseY,
           delay(c) {
             if (c.type !== 'data' || c.yStarted) return 0;
             c.yStarted = true;
-            return c.index * delay;
+            return c.index * step;
           }
         }
       },
