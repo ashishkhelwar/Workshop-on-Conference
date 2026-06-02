@@ -44,21 +44,30 @@ function initDistributionMap(id) {
     .then(r => r.json())
     .then(data => {
       L.geoJSON(data, {
-        style: {
-          color: '#C9A84C',
-          weight: 1.2,
-          fill: true,
-          fillColor: '#C9A84C',
-          fillOpacity: 0.12
-        },
+        style: { color: '#C9A84C', weight: 1.2, fill: true, fillColor: '#C9A84C', fillOpacity: 0.12 },
         onEachFeature: (feature, layer) => {
-          if (feature.properties && feature.properties.name) {
-            layer.bindPopup(`<b style="color:#C9A84C">Raigarh Division</b><br>${feature.properties.name}`);
-          }
+          const p = feature.properties || {};
+          const label = [p.range_name, p.beat_name, p.fdc_name].filter(Boolean).join(' › ') || p.name || '';
+          layer.bindPopup(`<b style="color:#C9A84C">Raigarh Division</b>${label ? '<br>' + label : ''}`);
         }
       }).addTo(map);
     })
     .catch(e => console.warn('Raigarh boundary load failed:', e));
+
+  // Dharamjaigarh division boundary overlay
+  fetch('assets/dharamjaigarh_boundary.geojson')
+    .then(r => r.json())
+    .then(data => {
+      L.geoJSON(data, {
+        style: { color: '#52B788', weight: 1.2, fill: true, fillColor: '#52B788', fillOpacity: 0.12 },
+        onEachFeature: (feature, layer) => {
+          const p = feature.properties || {};
+          const label = [p.range_name, p.beat_name, p.fdc_name].filter(Boolean).join(' › ') || p.name || '';
+          layer.bindPopup(`<b style="color:#52B788">Dharamjaigarh Division</b>${label ? '<br>' + label : ''}`);
+        }
+      }).addTo(map);
+    })
+    .catch(e => console.warn('Dharamjaigarh boundary load failed:', e));
 
   setTimeout(() => map.invalidateSize(), 500);
 }
