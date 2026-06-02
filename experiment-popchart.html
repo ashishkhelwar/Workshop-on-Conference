@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CG Elephant Population Trend</title>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  width: 100%; height: 100%;
+  background: #030810;
+  display: flex; align-items: center; justify-content: center;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+.wrap {
+  position: relative;
+  width: min(96vw, 960px);
+}
+canvas {
+  display: block; width: 100%;
+  border-radius: 14px;
+  cursor: pointer;
+}
+#replayBtn {
+  position: absolute; top: 18px; right: 18px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease;
+  background: rgba(95,207,151,0.12);
+  border: 1px solid rgba(95,207,151,0.45);
+  color: #5fcf97;
+  padding: 5px 14px; border-radius: 20px;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  cursor: pointer; outline: none;
+}
+.wrap:hover #replayBtn,
+#replayBtn:focus { opacity: 1; pointer-events: all; }
+#replayBtn:active { background: rgba(95,207,151,0.22); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <canvas id="c"></canvas>
+  <button id="replayBtn" aria-label="Replay animation">↺ Replay</button>
+</div>
+
+<script>
+// ── Data ────────────────────────────────────────────────────────
+const RAW = [
+  { year: '2001', val: 24  },
+  { year: '2005', val: 123 },
+  { year: '2007', val: 122 },
+  { year: '2015', val: 247 },
+  { year: '2017', val: 247 },
+  { year: '2021', val: 279 },
+  { year: '2025', val: 451 },
+];
+
+const Y_TICKS  = [24, 50, 100, 150, 200, 250, 300, 350, 400, 450, 480];
+const Y_MIN    = 24, Y_MAX = 480;
+const DURATION = 10000;           // 10 s
+const LINE_COL = '#5fcf97';
+const GLOW_COL = 'rgba(95,207,151,0.55)';
+
+// ── Canvas setup ────────────────────────────────────────────────
+const canvas = document.getElementById('c');
+const ctx    = canvas.getContext('2d');
+const DPR    = window.devicePixelRatio || 1;
+
+let W, H, PAD, cW, cH;
+let pts = [];          // { x, y, val, year }
+let segs = [];         // cubic bezier segments { p0,cp1,cp2,p3 }
+let segLen = [];       // arc-length per segment
+let totalLen = 0;
+
+const prefReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// ── Layout helpers ───────────────────────────────────────────────
+function setPad() {
+  const s = W / 700;
+  PAD = { top: 72*s, right: 44*s, bottom: 56*s, left: 70*s };
+  cW  = W - PAD.left - PAD.right;
+  cH  = H - PAD.top  - PAD.bottom;
+}
+function toScreen(val) {
+  return PAD.top + (1 - (val - Y_MIN) / (Y_MAX - Y_MIN)) * cH;
+}
+
+// ── Resize ───────────────────────────────────────────────────────
+function resize() {
+  const cssW = canvas.parentElement.getBoundingClientRect().width;
+  W = Math.round(cssW);
+  H = Math.round(W * 9 / 16);
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+  canvas.width  = Math.round(W * DPR);
+  canvas.height = Math.round(H * DPR);
+  ctx.scale(DPR, DPR);
+  setPad();
+  computePoints();
+  computeSegments();
+  measureLengths();
+}
+
+// ── Curve math ───────────────────────────────────────────────────
+function computePoints() {
+  const n = RAW.length;
+  pts = RAW.map((d, i) => ({
+    x: PAD.left + (i / (n - 1)) * cW,
+    y: toScreen(d.val),
+    val: d.val, year: d.year,
+  }));
+}
+
+// Catmull-Rom α=0.5 → cubic Bezier control points
+function catmullToBezier(p0, p1, p2, p3) {
+  return {
+    p0:  p1,
+    cp1: { x: p1.x + (p2.x - p0.x) / 6, y: p1.y + (p2.y - p0.y) / 6 },
+    cp2: { x: p2.x - (p3.x - p1.x) / 6, y: p2.y - (p3.y - p1.y) / 6 },
+    p3:  p2,
+  };
+}
+
+function computeSegments() {
+  const n = pts.length;
+  segs = [];
+  for (let i = 0; i < n - 1; i++) {
+    const p0 = pts[Math.max(0, i - 1)];
+    const p1 = pts[i];
+    const p2 = pts[i + 1];
+    const p3 = pts[Math.min(n - 1, i + 2)];
+    segs.push(catmullToBezier(p0, p1, p2, p3));
+  }
+}
+
+// Point on cubic bezier at t
+function bezPt(s, t) {
+  const m = 1 - t;
+  return {
+    x: m*m*m*s.p0.x + 3*m*m*t*s.cp1.x + 3*m*t*t*s.cp2.x + t*t*t*s.p3.x,
+    y: m*m*m*s.p0.y + 3*m*m*t*s.cp1.y + 3*m*t*t*s.cp2.y + t*t*t*s.p3.y,
+  };
+}
+
+// Arc-length approximation (adaptive sampling)
+function segArcLen(s, samples = 80) {
+  let len = 0, prev = bezPt(s, 0);
+  for (let i = 1; i <= samples; i++) {
+    const p = bezPt(s, i / samples);
+    const dx = p.x - prev.x, dy = p.y - prev.y;
+    len += Math.sqrt(dx*dx + dy*dy);
+    prev = p;
+  }
+  return len;
+}
+function measureLengths() {
+  segLen   = segs.map(segArcLen);
+  totalLen = segLen.reduce((a, b) => a + b, 0);
+}
+
+// De Casteljau split — returns left sub-curve {p0,cp1,cp2,p3}
+function lerp(a, b, t) { return { x: a.x + (b.x - a.x)*t, y: a.y + (b.y - a.y)*t }; }
+function splitLeft(s, t) {
+  const p01  = lerp(s.p0,  s.cp1, t);
+  const p12  = lerp(s.cp1, s.cp2, t);
+  const p23  = lerp(s.cp2, s.p3,  t);
+  const p012 = lerp(p01,   p12,   t);
+  const p123 = lerp(p12,   p23,   t);
+  const mid  = lerp(p012,  p123,  t);
+  return { p0: s.p0, cp1: p01, cp2: p012, p3: mid };
+}
+
+// Tip position at overall progress [0,1]
+function getTip(progress) {
+  if (progress <= 0) return { si: 0, t: 0, ...pts[0] };
+  if (progress >= 1) return { si: segs.length-1, t: 1, ...pts[pts.length-1] };
+  const target = progress * totalLen;
+  let acc = 0;
+  for (let i = 0; i < segLen.length; i++) {
+    const next = acc + segLen[i];
+    if (next >= target) {
+      const t = (target - acc) / segLen[i];
+      return { si: i, t, ...bezPt(segs[i], t) };
+    }
+    acc = next;
+  }
+  return { si: segs.length-1, t: 1, ...pts[pts.length-1] };
+}
+
+// Progress value at which the line reaches each data point
+function markerProgress(i) { return i / (pts.length - 1); }
+
+// ── Easing ───────────────────────────────────────────────────────
+function easeInOutCubic(t) {
+  return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+}
+
+// ── Draw helpers ─────────────────────────────────────────────────
+function drawBg() {
+  const g = ctx.createRadialGradient(W/2, H*0.45, H*0.05, W/2, H*0.45, Math.hypot(W, H)*0.62);
+  g.addColorStop(0,   '#0d1e35');
+  g.addColorStop(0.6, '#07111f');
+  g.addColorStop(1,   '#030810');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+}
+
+function drawGrid() {
+  const s = W / 700;
+  ctx.save();
+
+  // Y ticks + gridlines
+  ctx.font        = `${Math.round(11.5*s)}px system-ui, sans-serif`;
+  ctx.textAlign   = 'right';
+  ctx.textBaseline = 'middle';
+
+  Y_TICKS.forEach(v => {
+    const y = toScreen(v);
+    ctx.beginPath();
+    ctx.moveTo(PAD.left, y); ctx.lineTo(PAD.left + cW, y);
+    ctx.strokeStyle = 'rgba(255,255,255,0.045)';
+    ctx.lineWidth   = 1;
+    ctx.setLineDash([]);
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(148,175,200,0.55)';
+    ctx.fillText(v, PAD.left - 9*s, y);
+  });
+
+  // X labels
+  ctx.textAlign    = 'center';
+  ctx.textBaseline = 'top';
+  pts.forEach(p => {
+    ctx.fillStyle = 'rgba(148,175,200,0.55)';
+    ctx.fillText(p.year, p.x, PAD.top + cH + 12*s);
+  });
+
+  // Axis lines
+  ctx.beginPath();
+  ctx.moveTo(PAD.left, PAD.top); ctx.lineTo(PAD.left, PAD.top + cH + 4);
+  ctx.moveTo(PAD.left - 4, PAD.top + cH); ctx.lineTo(PAD.left + cW, PAD.top + cH);
+  ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+  ctx.lineWidth   = 1;
+  ctx.stroke();
+
+  // Y-axis label (rotated)
+  ctx.save();
+  ctx.translate(14*s, PAD.top + cH/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.textAlign    = 'center';
+  ctx.textBaseline = 'top';
+  ctx.font         = `${Math.round(10.5*s)}px system-ui, sans-serif`;
+  ctx.fillStyle    = 'rgba(148,175,200,0.4)';
+  ctx.fillText('No. of Elephants', 0, 0);
+  ctx.restore();
+
+  ctx.restore();
+}
+
+function drawTitle() {
+  const s = W / 700;
+  ctx.save();
+  ctx.textAlign    = 'left';
+  ctx.textBaseline = 'top';
+  ctx.font         = `700 ${Math.round(14.5*s)}px system-ui, sans-serif`;
+  ctx.fillStyle    = 'rgba(232,240,232,0.88)';
+  ctx.fillText('Chhattisgarh Elephant Population Trend', PAD.left, PAD.top * 0.22);
+  ctx.font      = `${Math.round(11*s)}px system-ui, sans-serif`;
+  ctx.fillStyle = 'rgba(148,175,200,0.5)';
+  ctx.fillText('2001 – 2025  ·  Source: WII Census & CG Forest Dept. Estimates', PAD.left, PAD.top * 0.22 + Math.round(18*s));
+  ctx.restore();
+}
+
+function drawArea(progress) {
+  if (progress <= 0) return;
+  const tip = getTip(progress);
+
+  ctx.save();
+  // Clip to area left of tip.x
+  ctx.beginPath();
+  ctx.rect(PAD.left - 1, PAD.top - 20, tip.x - PAD.left + 2, cH + 30);
+  ctx.clip();
+
+  const baseY = PAD.top + cH;
+  const grad  = ctx.createLinearGradient(0, PAD.top, 0, baseY);
+  grad.addColorStop(0,   'rgba(95,207,151,0.38)');
+  grad.addColorStop(0.5, 'rgba(95,207,151,0.13)');
+  grad.addColorStop(1,   'rgba(95,207,151,0.02)');
+
+  ctx.beginPath();
+  ctx.moveTo(pts[0].x, baseY);
+  ctx.lineTo(pts[0].x, pts[0].y);
+  segs.forEach(s => ctx.bezierCurveTo(s.cp1.x, s.cp1.y, s.cp2.x, s.cp2.y, s.p3.x, s.p3.y));
+  ctx.lineTo(pts[pts.length-1].x, baseY);
+  ctx.closePath();
+  ctx.fillStyle = grad;
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawLine(progress) {
+  if (progress <= 0) return;
+  const tip = getTip(progress);
+
+  ctx.save();
+  ctx.shadowColor = GLOW_COL;
+  ctx.shadowBlur  = 14;
+  ctx.strokeStyle = LINE_COL;
+  ctx.lineWidth   = 3;
+  ctx.lineJoin    = 'round';
+  ctx.lineCap     = 'round';
+
+  ctx.beginPath();
+  ctx.moveTo(pts[0].x, pts[0].y);
+
+  // Complete segments before the tip segment
+  for (let i = 0; i < tip.si; i++) {
+    const s = segs[i];
+    ctx.bezierCurveTo(s.cp1.x, s.cp1.y, s.cp2.x, s.cp2.y, s.p3.x, s.p3.y);
+  }
+
+  // Partial segment via de Casteljau
+  if (tip.t > 1e-6) {
+    const partial = splitLeft(segs[tip.si], tip.t);
+    ctx.bezierCurveTo(partial.cp1.x, partial.cp1.y, partial.cp2.x, partial.cp2.y, partial.p3.x, partial.p3.y);
+  }
+
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawMarkers(progress) {
+  const s = W / 700;
+  pts.forEach((p, i) => {
+    const mp = markerProgress(i);
+    if (progress < mp - 0.004) return;
+
+    const alpha = Math.min(1, (progress - mp) / 0.04);
+    ctx.save();
+    ctx.globalAlpha = alpha;
+
+    const r = 6.5 * s;
+
+    // Outer glow halo
+    const halo = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r * 2.8);
+    halo.addColorStop(0,   'rgba(95,207,151,0.22)');
+    halo.addColorStop(1,   'rgba(95,207,151,0)');
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, r * 2.8, 0, Math.PI*2);
+    ctx.fillStyle = halo;
+    ctx.fill();
+
+    // Green ring
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, r, 0, Math.PI*2);
+    ctx.strokeStyle  = LINE_COL;
+    ctx.lineWidth    = 2.2 * s;
+    ctx.shadowColor  = GLOW_COL;
+    ctx.shadowBlur   = 10;
+    ctx.stroke();
+
+    // White fill
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, r - 2.2*s, 0, Math.PI*2);
+    ctx.fillStyle   = '#ffffff';
+    ctx.shadowBlur  = 0;
+    ctx.fill();
+
+    // Value label
+    ctx.font         = `700 ${Math.round(12.5*s)}px system-ui, sans-serif`;
+    ctx.textAlign    = 'center';
+    ctx.textBaseline = 'bottom';
+    ctx.fillStyle    = '#ffffff';
+    ctx.shadowColor  = 'rgba(0,0,0,0.9)';
+    ctx.shadowBlur   = 5;
+    ctx.fillText(p.val, p.x, p.y - r - 6*s);
+
+    ctx.restore();
+  });
+}
+
+// Bright tip dot while animating
+function drawTipDot(progress) {
+  if (progress <= 0 || progress >= 1) return;
+  const tip = getTip(progress);
+  const s   = W / 700;
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(tip.x, tip.y, 5*s, 0, Math.PI*2);
+  ctx.fillStyle  = '#ffffff';
+  ctx.shadowColor = LINE_COL;
+  ctx.shadowBlur  = 18;
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawAll(progress) {
+  ctx.clearRect(0, 0, W, H);
+  drawBg();
+  drawTitle();
+  drawGrid();
+  drawArea(progress);
+  drawLine(progress);
+  drawMarkers(progress);
+  drawTipDot(progress);
+}
+
+// ── Animation loop ───────────────────────────────────────────────
+let rafId = null, t0 = null, running = false;
+
+function animate(ts) {
+  if (!t0) t0 = ts;
+  const raw  = Math.min((ts - t0) / DURATION, 1);
+  const ease = easeInOutCubic(raw);
+  drawAll(ease);
+  if (raw < 1) {
+    rafId = requestAnimationFrame(animate);
+  } else {
+    running = false;
+  }
+}
+
+function start() {
+  if (rafId) cancelAnimationFrame(rafId);
+  t0 = null; running = true;
+  rafId = requestAnimationFrame(animate);
+}
+
+// ── Init ─────────────────────────────────────────────────────────
+resize();
+if (prefReduced) {
+  drawAll(1);
+} else {
+  start();
+}
+
+// ── Events ───────────────────────────────────────────────────────
+canvas.addEventListener('click', () => { if (!prefReduced) start(); });
+
+document.getElementById('replayBtn').addEventListener('click', e => {
+  e.stopPropagation();
+  if (!prefReduced) start();
+});
+
+window.addEventListener('resize', () => {
+  // canvas.width assignment in resize() resets ctx transform
+  resize();
+  if (!running) drawAll(1);
+});
+</script>
+</body>
+</html>
