@@ -39,6 +39,27 @@ function initDistributionMap(id) {
     fillOpacity: 0.2, fillColor: '#52B788'
   }).addTo(map).bindPopup('Core Forest Area');
 
+  // Raigarh division KMZ boundary overlay (experimental)
+  fetch('assets/raigarh_boundary.geojson')
+    .then(r => r.json())
+    .then(data => {
+      L.geoJSON(data, {
+        style: {
+          color: '#C9A84C',
+          weight: 1.2,
+          fill: true,
+          fillColor: '#C9A84C',
+          fillOpacity: 0.12
+        },
+        onEachFeature: (feature, layer) => {
+          if (feature.properties && feature.properties.name) {
+            layer.bindPopup(`<b style="color:#C9A84C">Raigarh Division</b><br>${feature.properties.name}`);
+          }
+        }
+      }).addTo(map);
+    })
+    .catch(e => console.warn('Raigarh boundary load failed:', e));
+
   setTimeout(() => map.invalidateSize(), 500);
 }
 
