@@ -652,99 +652,160 @@ function initRangeChart(id) {
   });
 }
 
-// ── 8. Population Area Chart — tree-growth animation ─────────────────────
-function initPopChart(id) {
-  const ctx = document.getElementById(id);
-  if (!ctx) return;
-  destroyChart(id);
+// ── 8. Population Area Chart — vanilla canvas, Catmull-Rom + de Casteljau ──
+(function () {
+  const RAW = [
+    { year: '2001', val: 24  }, { year: '2005', val: 123 },
+    { year: '2007', val: 122 }, { year: '2015', val: 247 },
+    { year: '2017', val: 247 }, { year: '2021', val: 279 },
+    { year: '2025', val: 451 },
+  ];
+  const Y_TICKS = [24,50,100,150,200,250,300,350,400,450,480];
+  const Y_MIN = 24, Y_MAX = 480, DUR = 10000;
+  const LC = '#5fcf97', GC = 'rgba(95,207,151,0.55)';
+  let _cv, _cx, _raf, _t0, _running, _pts, _segs, _slen, _tlen, _W, _H, _PAD, _cW, _cH;
+  const DPR = window.devicePixelRatio || 1;
+  const prefReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const step = 220; // ms — wave-front advances smoothly
+  function pad() {
+    const s = _W/700;
+    _PAD = { top:58*s, right:40*s, bottom:50*s, left:62*s };
+    _cW = _W-_PAD.left-_PAD.right; _cH = _H-_PAD.top-_PAD.bottom;
+  }
+  function toY(v) { return _PAD.top+(1-(v-Y_MIN)/(Y_MAX-Y_MIN))*_cH; }
 
-  // All points flow from the chart baseline (bottom), rising like water
-  const baseY = (c) => c.chart.scales.y.getPixelForValue(24);
-
-  chartInstances[id] = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: DATA.populationTrend.years,
-      datasets: [{
-        label: 'CG Elephant Population',
-        data: DATA.populationTrend.cg,
-        borderColor: '#52B788',
-        backgroundColor: (context) => {
-          const chart = context.chart;
-          const { ctx: c, chartArea } = chart;
-          if (!chartArea) return 'transparent';
-          const gradient = c.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-          gradient.addColorStop(0, 'rgba(82,183,136,0.45)');
-          gradient.addColorStop(1, 'rgba(82,183,136,0.02)');
-          return gradient;
-        },
-        borderWidth: 3,
-        pointBackgroundColor: '#52B788',
-        pointBorderColor: '#fff',
-        pointBorderWidth: 1.5,
-        pointRadius: 6,
-        pointHoverRadius: 9,
-        tension: 0.5,
-        fill: true,
-        clip: false
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: {
-        x: {
-          type: 'number',
-          easing: 'easeInOutSine',
-          duration: step * 2,
-          from: NaN,
-          delay(c) {
-            if (c.type !== 'data' || c.xStarted) return 0;
-            c.xStarted = true;
-            return c.index * step;
-          }
-        },
-        y: {
-          type: 'number',
-          easing: 'easeInOutSine',
-          duration: step * 2.5,
-          from: baseY,
-          delay(c) {
-            if (c.type !== 'data' || c.yStarted) return 0;
-            c.yStarted = true;
-            return c.index * step;
-          }
-        }
-      },
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: 'rgba(17,34,64,0.95)',
-          titleColor: '#E8F0E8',
-          bodyColor: '#8BA098',
-          borderColor: 'rgba(82,183,136,0.3)',
-          borderWidth: 1,
-          padding: 12,
-          callbacks: {
-            label: ctx => ` ${ctx.parsed.y} elephants (est.)`
-          }
-        }
-      },
-      scales: {
-        x: {
-          grid: { color: 'rgba(255,255,255,0.06)' },
-          ticks: { color: '#8BA098' }
-        },
-        y: {
-          grid: { color: 'rgba(255,255,255,0.06)' },
-          ticks: { color: '#8BA098', stepSize: 50 },
-          beginAtZero: false,
-          min: 24,
-          max: 480
-        }
-      }
+  function setup() {
+    const wrap = _cv.parentElement;
+    const cssW = wrap.getBoundingClientRect().width;
+    const cssH = wrap.getBoundingClientRect().height || Math.round(cssW*0.55);
+    _W = cssW; _H = cssH;
+    _cv.style.width=_W+'px'; _cv.style.height=_H+'px';
+    _cv.width=Math.round(_W*DPR); _cv.height=Math.round(_H*DPR);
+    _cx.setTransform(1,0,0,1,0,0); _cx.scale(DPR,DPR);
+    pad();
+    const n=RAW.length;
+    _pts = RAW.map((d,i)=>({ x:_PAD.left+(i/(n-1))*_cW, y:toY(d.val), val:d.val, year:d.year }));
+    _segs=[];
+    for(let i=0;i<n-1;i++){
+      const p0=_pts[Math.max(0,i-1)],p1=_pts[i],p2=_pts[i+1],p3=_pts[Math.min(n-1,i+2)];
+      _segs.push({ p0:p1, cp1:{x:p1.x+(p2.x-p0.x)/6,y:p1.y+(p2.y-p0.y)/6},
+                          cp2:{x:p2.x-(p3.x-p1.x)/6,y:p2.y-(p3.y-p1.y)/6}, p3:p2 });
     }
-  });
-}
+    _slen = _segs.map(s=>{ let l=0,p=bpt(s,0);
+      for(let i=1;i<=80;i++){const q=bpt(s,i/80),dx=q.x-p.x,dy=q.y-p.y;l+=Math.sqrt(dx*dx+dy*dy);p=q;}
+      return l; });
+    _tlen = _slen.reduce((a,b)=>a+b,0);
+  }
+
+  function bpt(s,t){ const m=1-t; return {
+    x:m*m*m*s.p0.x+3*m*m*t*s.cp1.x+3*m*t*t*s.cp2.x+t*t*t*s.p3.x,
+    y:m*m*m*s.p0.y+3*m*m*t*s.cp1.y+3*m*t*t*s.cp2.y+t*t*t*s.p3.y }; }
+
+  function lp(a,b,t){ return {x:a.x+(b.x-a.x)*t, y:a.y+(b.y-a.y)*t}; }
+
+  function splitL(s,t){
+    const p01=lp(s.p0,s.cp1,t),p12=lp(s.cp1,s.cp2,t),p23=lp(s.cp2,s.p3,t);
+    const p012=lp(p01,p12,t),p123=lp(p12,p23,t),mid=lp(p012,p123,t);
+    return {p0:s.p0,cp1:p01,cp2:p012,p3:mid};
+  }
+
+  function tip(prog){
+    if(prog<=0) return {si:0,t:0,..._pts[0]};
+    if(prog>=1) return {si:_segs.length-1,t:1,..._pts[_pts.length-1]};
+    const tgt=prog*_tlen; let acc=0;
+    for(let i=0;i<_slen.length;i++){
+      if(acc+_slen[i]>=tgt){ const t=(tgt-acc)/_slen[i]; return {si:i,t,...bpt(_segs[i],t)}; }
+      acc+=_slen[i];
+    }
+    return {si:_segs.length-1,t:1,..._pts[_pts.length-1]};
+  }
+
+  function ease(t){ return t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2; }
+
+  function draw(prog){
+    _cx.clearRect(0,0,_W,_H);
+    // Grid
+    const s=_W/700;
+    _cx.save();
+    _cx.font=`${Math.round(11*s)}px system-ui,sans-serif`;
+    _cx.textAlign='right'; _cx.textBaseline='middle';
+    Y_TICKS.forEach(v=>{ const y=toY(v);
+      _cx.beginPath(); _cx.moveTo(_PAD.left,y); _cx.lineTo(_PAD.left+_cW,y);
+      _cx.strokeStyle='rgba(255,255,255,0.05)'; _cx.lineWidth=1; _cx.stroke();
+      _cx.fillStyle='rgba(148,175,200,0.55)'; _cx.fillText(v,_PAD.left-8*s,y);
+    });
+    _cx.textAlign='center'; _cx.textBaseline='top';
+    _pts.forEach(p=>{ _cx.fillStyle='rgba(148,175,200,0.55)'; _cx.fillText(p.year,p.x,_PAD.top+_cH+10*s); });
+    _cx.beginPath();
+    _cx.moveTo(_PAD.left,_PAD.top); _cx.lineTo(_PAD.left,_PAD.top+_cH+4);
+    _cx.moveTo(_PAD.left-4,_PAD.top+_cH); _cx.lineTo(_PAD.left+_cW,_PAD.top+_cH);
+    _cx.strokeStyle='rgba(255,255,255,0.1)'; _cx.lineWidth=1; _cx.stroke();
+    _cx.restore();
+
+    if(prog<=0) return;
+    const tp=tip(prog);
+
+    // Area fill
+    _cx.save();
+    _cx.beginPath(); _cx.rect(_PAD.left-1,_PAD.top-20,tp.x-_PAD.left+2,_cH+30); _cx.clip();
+    const ag=_cx.createLinearGradient(0,_PAD.top,0,_PAD.top+_cH);
+    ag.addColorStop(0,'rgba(95,207,151,0.38)'); ag.addColorStop(0.55,'rgba(95,207,151,0.12)'); ag.addColorStop(1,'rgba(95,207,151,0.02)');
+    _cx.beginPath(); _cx.moveTo(_pts[0].x,_PAD.top+_cH); _cx.lineTo(_pts[0].x,_pts[0].y);
+    _segs.forEach(sg=>_cx.bezierCurveTo(sg.cp1.x,sg.cp1.y,sg.cp2.x,sg.cp2.y,sg.p3.x,sg.p3.y));
+    _cx.lineTo(_pts[_pts.length-1].x,_PAD.top+_cH); _cx.closePath();
+    _cx.fillStyle=ag; _cx.fill(); _cx.restore();
+
+    // Line
+    _cx.save();
+    _cx.shadowColor=GC; _cx.shadowBlur=14;
+    _cx.strokeStyle=LC; _cx.lineWidth=3; _cx.lineJoin='round'; _cx.lineCap='round';
+    _cx.beginPath(); _cx.moveTo(_pts[0].x,_pts[0].y);
+    for(let i=0;i<tp.si;i++){ const sg=_segs[i]; _cx.bezierCurveTo(sg.cp1.x,sg.cp1.y,sg.cp2.x,sg.cp2.y,sg.p3.x,sg.p3.y); }
+    if(tp.t>1e-6){ const pl=splitL(_segs[tp.si],tp.t); _cx.bezierCurveTo(pl.cp1.x,pl.cp1.y,pl.cp2.x,pl.cp2.y,pl.p3.x,pl.p3.y); }
+    _cx.stroke(); _cx.restore();
+
+    // Markers
+    const n=_pts.length;
+    _pts.forEach((p,i)=>{
+      const mp=i/(n-1); if(prog<mp-0.004) return;
+      const alpha=Math.min(1,(prog-mp)/0.04); const r=6.5*s;
+      _cx.save(); _cx.globalAlpha=alpha;
+      const halo=_cx.createRadialGradient(p.x,p.y,0,p.x,p.y,r*2.8);
+      halo.addColorStop(0,'rgba(95,207,151,0.2)'); halo.addColorStop(1,'rgba(95,207,151,0)');
+      _cx.beginPath(); _cx.arc(p.x,p.y,r*2.8,0,Math.PI*2); _cx.fillStyle=halo; _cx.fill();
+      _cx.beginPath(); _cx.arc(p.x,p.y,r,0,Math.PI*2);
+      _cx.strokeStyle=LC; _cx.lineWidth=2.2*s; _cx.shadowColor=GC; _cx.shadowBlur=10; _cx.stroke();
+      _cx.beginPath(); _cx.arc(p.x,p.y,r-2.2*s,0,Math.PI*2); _cx.fillStyle='#fff'; _cx.shadowBlur=0; _cx.fill();
+      _cx.font=`700 ${Math.round(12*s)}px system-ui,sans-serif`;
+      _cx.textAlign='center'; _cx.textBaseline='bottom'; _cx.fillStyle='#fff';
+      _cx.shadowColor='rgba(0,0,0,0.9)'; _cx.shadowBlur=5;
+      _cx.fillText(p.val,p.x,p.y-r-5*s); _cx.restore();
+    });
+
+    // Tip glow dot
+    if(prog<1){ _cx.save(); _cx.beginPath(); _cx.arc(tp.x,tp.y,5*s,0,Math.PI*2);
+      _cx.fillStyle='#fff'; _cx.shadowColor=LC; _cx.shadowBlur=18; _cx.fill(); _cx.restore(); }
+  }
+
+  function loop(ts){
+    if(!_t0) _t0=ts;
+    const raw=Math.min((ts-_t0)/DUR,1);
+    draw(ease(raw));
+    if(raw<1) _raf=requestAnimationFrame(loop); else _running=false;
+  }
+
+  function start(){
+    if(_raf) cancelAnimationFrame(_raf);
+    _t0=null; _running=true; _raf=requestAnimationFrame(loop);
+  }
+
+  window.initPopChart = function(id){
+    _cv = document.getElementById(id);
+    if(!_cv) return;
+    if(chartInstances[id] && chartInstances[id].destroy) { chartInstances[id].destroy(); delete chartInstances[id]; }
+    _cx = _cv.getContext('2d');
+    setup();
+    _cv.onclick = ()=>{ if(!prefReduced) start(); };
+    if(prefReduced) draw(1); else start();
+  };
+})();
