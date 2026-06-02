@@ -1,0 +1,112 @@
+/* Resource Persons Intro Slides */
+:root {
+  --navy:#14213D; --navy2:#1B2C4B; --amber:#FCA311; --amber-soft:#FFC15A;
+  --ice:#E9EEF5; --paper:#FFFFFF; --ink:#1B2536; --muted:#7A8699; --line:#ECEFF4;
+}
+.rp-section {
+  display: flex !important;
+  background: var(--paper) !important;
+  transform: translateX(52px);
+  transition: opacity .5s ease, transform .8s cubic-bezier(.16,.84,.32,1), visibility .8s;
+}
+.rp-section.active {
+  transform: translateX(0) !important;
+}
+.rp-section.prev {
+  transform: translateX(-52px) !important;
+}
+
+:root {
+    --navy:#14213D; --navy2:#1B2C4B; --amber:#FCA311; --amber-soft:#FFC15A;
+    --ice:#E9EEF5; --paper:#FFFFFF; --ink:#1B2536; --muted:#7A8699; --line:#ECEFF4;
+  }
+.rp-section * {box-sizing:border-box; margin:0; padding:0}
+.rp-section.slide {
+    position:absolute; inset:0; width:100%; height:100vh; display:flex;
+    background:var(--paper); overflow:hidden;
+    opacity:0; visibility:hidden; transform:translateX(var(--off,52px));
+    transition:opacity .5s ease, transform .8s cubic-bezier(.16,.84,.32,1), visibility .8s;
+    will-change:opacity, transform;
+  }
+.rp-section.slide.active {opacity:1; visibility:visible; transform:translateX(0); z-index:2}
+.rp-section.slide.leaving {opacity:0; visibility:visible; transform:translateX(var(--leave,-52px)); z-index:1}
+.rp-section /* LEFT PANEL */
+  .panel {
+    width:39%; min-width:360px; background:linear-gradient(160deg,#16263F 0%,#11203A 60%,#0E1B30 100%);
+    color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:48px 40px; position:relative;
+  }
+.rp-section .panel-glow {
+    position:absolute; top:18%; left:50%; transform:translateX(-50%);
+    width:420px; height:420px; border-radius:50%;
+    background:radial-gradient(circle, rgba(252,163,17,.22) 0%, rgba(252,163,17,0) 68%);
+    filter:blur(6px); pointer-events:none;
+  }
+.rp-section .badge {position:absolute; top:38px; left:40px; display:flex; align-items:center; gap:14px}
+.rp-section .num {
+    width:60px; height:60px; border-radius:50%; background:var(--amber); color:var(--navy);
+    font-family:"Fraunces",serif; font-weight:700; font-size:26px;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 8px 22px rgba(252,163,17,.35);
+  }
+.rp-section .badge-label {font-size:12px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:#D7E0EE}
+.rp-section .avatar {
+    width:236px; height:236px; border-radius:50%; overflow:hidden; position:relative;
+    border:4px solid var(--amber); background:var(--ice);
+    box-shadow:0 18px 44px rgba(0,0,0,.42); margin-bottom:30px;
+  }
+.rp-section .avatar img {width:100%; height:100%; object-fit:cover; display:block}
+.rp-section .avatar-ph {display:flex; flex-direction:column; align-items:center; justify-content:center; border-style:dashed; border-color:#3C5072; background:#1B2C4B}
+.rp-section .ph-glyph {width:78px; height:78px; opacity:.8}
+.rp-section .ph-glyph svg {width:100%; height:100%}
+.rp-section .ph-text {margin-top:8px; font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:#8295AE; font-weight:600}
+.rp-section .name {font-family:"Fraunces",serif; font-weight:600; font-size:clamp(26px,2.6vw,34px); line-height:1.1; text-align:center; letter-spacing:.2px}
+.rp-section .role {margin-top:12px; font-size:16px; font-weight:600; color:var(--amber-soft); text-align:center; line-height:1.35}
+.rp-section .qual {margin-top:8px; font-size:13.5px; color:#AFBCD0; text-align:center; letter-spacing:.3px}
+.rp-section .ph {font-style:italic; opacity:.62; font-weight:500}
+.rp-section /* RIGHT CONTENT */
+  .content {flex:1; padding:84px clamp(40px,5vw,86px); display:flex; flex-direction:column; justify-content:center}
+.rp-section .eyebrow {font-size:13px; font-weight:700; letter-spacing:4px; text-transform:uppercase; color:var(--amber); display:block}
+.rp-section .eyebrow.sm {font-size:12px; letter-spacing:3px}
+.rp-section .rows {margin-top:34px; display:flex; flex-direction:column; gap:26px}
+.rp-section .row {display:flex; align-items:center; gap:20px}
+.rp-section .ico {
+    flex:none; width:54px; height:54px; border-radius:50%; background:var(--amber);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 16px rgba(252,163,17,.28);
+  }
+.rp-section .ico svg {width:25px; height:25px}
+.rp-section .rtext {display:flex; flex-direction:column; gap:3px}
+.rp-section .label {font-size:11.5px; font-weight:700; letter-spacing:1.3px; text-transform:uppercase; color:var(--muted)}
+.rp-section .value {font-size:18px; font-weight:600; color:var(--ink); line-height:1.3}
+.rp-section .value.ph {font-weight:500}
+.rp-section .bio-block {margin-top:42px; padding-top:30px; border-top:1px solid var(--line)}
+.rp-section .bio {margin-top:14px; font-size:15.5px; line-height:1.72; color:#42505F; max-width:62ch}
+.rp-section .bio.ph {font-style:italic; color:#9AA6B5}
+.rp-section /* NAV */
+  
+  
+  
+  .dot.active {background:var(--amber); border-color:var(--amber); transform:scale(1.25)}
+.rp-section .dot:hover {border-color:var(--amber)}
+.rp-section .hint .arr {display:inline-block; animation:bob 1.8s ease-in-out infinite}
+@keyframes bob {0%,100%{transform:translateY(0)}
+.rp-section 50% {transform:translateY(4px)}
+.rp-section /* reveal animation (replays on each slide entrance) */
+  .reveal {opacity:0; transform:translateY(26px); transition:opacity .75s cubic-bezier(.2,.7,.2,1), transform .75s cubic-bezier(.2,.7,.2,1); transition-delay:var(--d,0s)}
+.rp-section .avatar.reveal {transform:translateY(26px) scale(.92)}
+.rp-section.slide.active .reveal {opacity:1; transform:none}
+.rp-section /* progress + nav buttons */
+  
+  
+  .nav button {width:48px; height:48px; border-radius:50%; border:none; cursor:pointer; background:rgba(255,255,255,.92); color:var(--navy); box-shadow:0 6px 18px rgba(20,33,61,.2); display:flex; align-items:center; justify-content:center; transition:transform .2s, background .2s, opacity .2s}
+.rp-section .nav button:hover {background:var(--amber); transform:translateY(-2px)}
+.rp-section .nav button:disabled {opacity:.32; cursor:default; transform:none; background:rgba(255,255,255,.92)}
+.rp-section .nav svg {width:20px; height:20px}
+.rp-section /* responsive */
+  @media (max-width:860px) {
+    .slide{flex-direction:column; height:100vh; overflow-y:auto}
+.rp-section .panel {width:100%; min-width:0; padding:74px 26px 38px}
+.rp-section .badge {top:22px; left:22px}
+.rp-section .avatar {width:172px; height:172px; margin-bottom:22px}
+.rp-section .content {padding:36px 26px 96px}
