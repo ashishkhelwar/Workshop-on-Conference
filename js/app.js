@@ -148,8 +148,10 @@ function onSlideActivate(index) {
       setTimeout(() => initSexChart('sexCanvas'), 300);
       break;
 
-    // Slide 9b-Drown — Drowning Cases (no special chart init)
-    case 12: break;
+    // Slide 9b-Drown — Drowning Cases map
+    case 12:
+      setTimeout(() => initDrownMap('drownMap'), 300);
+      break;
 
     // Slide 9c — Seasonal
     case 13:

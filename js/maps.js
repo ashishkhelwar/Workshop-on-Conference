@@ -245,3 +245,59 @@ function addPulsingHotspot(map, lat, lon, label, color) {
   L.marker([lat, lon], { icon: pulseIcon }).addTo(map)
     .bindPopup(`<b style="color:${color}">${label}</b>`);
 }
+
+// ── Drowning Cases Map ────────────────────────────────────────────────────────
+function initDrownMap(id) {
+  if (mapsInitialized[id]) return;
+  mapsInitialized[id] = true;
+
+  const map = L.map(id, { zoomControl: true, scrollWheelZoom: false })
+    .setView([22.2, 83.28], 10);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors',
+    maxZoom: 15
+  }).addTo(map);
+
+  function mkIcon(color, ring) {
+    return L.divIcon({
+      className: '',
+      html: `<div style="width:14px;height:14px;border-radius:50%;background:${color};border:2px solid #fff;box-shadow:0 0 0 3px ${ring},0 2px 6px rgba(0,0,0,0.5);"></div>`,
+      iconSize: [14, 14],
+      iconAnchor: [7, 7],
+      popupAnchor: [0, -9]
+    });
+  }
+
+  const dhIcon  = mkIcon('#52B788', 'rgba(82,183,136,0.4)');
+  const rgIcon  = mkIcon('#C9A84C', 'rgba(201,168,76,0.4)');
+  const newIcon = mkIcon('#E63946', 'rgba(230,57,70,0.4)');
+
+  const cases = [
+    // DH — 2024-25 / 2025-26
+    { lat:22.3217, lon:83.0956, label:'DH1', div:'Dharamjaigarh', loc:'Chal / Hati',      date:'21/11/24', age:'~15–20 days', water:'Pond',           icon: dhIcon  },
+    { lat:22.2838, lon:83.1371, label:'DH2', div:'Dharamjaigarh', loc:'Chal / Kida',      date:'18/03/25', age:'~1 yr',       water:'Pond',           icon: dhIcon  },
+    { lat:22.1662, lon:83.1731, label:'DH3', div:'Dharamjaigarh', loc:'Chal / Auranara',  date:'29/10/25', age:'~9–11 months',water:'Pond',           icon: dhIcon  },
+    // DH — 2026-27 (red)
+    { lat:22.1461, lon:83.2119, label:'DH4', div:'Dharamjaigarh', loc:'Chal / Singhijhap',date:'08/05/26', age:'~6 months',   water:'Pond',           icon: newIcon },
+    { lat:22.1655, lon:83.1155, label:'DH5', div:'Dharamjaigarh', loc:'Chal / Chal',      date:'11/05/26', age:'~5–6 months', water:'Asphyxiation',   icon: newIcon },
+    { lat:22.1000, lon:83.1556, label:'DH6', div:'Dharamjaigarh', loc:'Chal / Edu',       date:'24/05/26', age:'~1.5–2 yrs',  water:'Pond',           icon: newIcon },
+    // RG — 2024-25 / 2025-26
+    { lat:22.1060, lon:83.2434, label:'RG1', div:'Raigarh',       loc:'Gharghoda / Dehridih',date:'31/12/24',age:'~2 yrs',    water:'Panikhet dam',   icon: rgIcon  },
+    { lat:22.1983, lon:83.4681, label:'RG2', div:'Raigarh',       loc:'Gharghoda / Charmar', date:'14/01/25',age:'~2–3 months',water:'Rabo dam',      icon: rgIcon  },
+    { lat:22.1017, lon:83.2411, label:'RG3', div:'Raigarh',       loc:'Gharghoda / Dehridih',date:'22/01/25',age:'~2 yrs',    water:'Panikhet dam',   icon: rgIcon  },
+    { lat:22.1522, lon:83.4939, label:'RG4', div:'Raigarh',       loc:'Gharghoda / Charmar', date:'25/05/25',age:'~5 months', water:'Pond',           icon: rgIcon  },
+    { lat:22.0214, lon:83.3322, label:'RG5', div:'Raigarh',       loc:'Tamnar / Saraipali',  date:'25/11/25',age:'~7 months', water:'Drowned',        icon: rgIcon  },
+    { lat:21.9850, lon:83.4617, label:'RG6', div:'Raigarh',       loc:'Raigarh / Bangursiya',date:'20/12/25',age:'~6 months', water:'Drowned',        icon: rgIcon  },
+    { lat:22.5550, lon:83.6153, label:'RG7', div:'Raigarh',       loc:'Gharghoda / Kya',     date:'28/01/26',age:'~1 yr',     water:'Sakra stream',   icon: rgIcon  },
+  ];
+
+  cases.forEach(c => {
+    L.marker([c.lat, c.lon], { icon: c.icon }).addTo(map)
+      .bindPopup(
+        `<b style="color:${c.label.startsWith('DH') ? '#52B788' : '#C9A84C'}">${c.label} — ${c.div}</b><br>` +
+        `<span style="color:#aaa">${c.loc}</span><br>` +
+        `Date: ${c.date}<br>Age: ${c.age}<br>Water: ${c.water}`
+      );
+  });
+}
