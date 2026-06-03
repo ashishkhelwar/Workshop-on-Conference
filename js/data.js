@@ -25,7 +25,7 @@ const DATA = {
     { group: 'Old (55+ yr)',       count: 5,  pct: 11 }
   ],
 
-  sexProfile: { male: 23, female: 21, unknown: 1 },  // 45 total
+  sexProfile: { male: 23, female: 22, unknown: 0 },  // 45 total
 
   // Exact monthly distribution from detailed records
   seasonal: {
