@@ -310,7 +310,7 @@ function initAgeChart(id) {
   const ctx = document.getElementById(id);
   if (!ctx) return;
   destroyChart(id);
-  const colors = ['#2d6a4f','#40916c','#52B788','#74c69d'];
+  const colors = ['#2d6a4f','#40916c','#52B788','#74c69d','#95d5b2'];
   chartInstances[id] = new Chart(ctx, {
     type: 'bar',
     data: {
@@ -350,10 +350,10 @@ function initAgeChart(id) {
         },
         y: {
           grid: { color: 'rgba(255,255,255,0.06)' },
-          ticks: { color: '#8BA098', stepSize: 2 },
+          ticks: { color: '#8BA098', stepSize: 4 },
           beginAtZero: true,
           min: 0,
-          max: 18
+          max: 24
         }
       }
     }
