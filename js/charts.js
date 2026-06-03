@@ -660,8 +660,8 @@ function initRangeChart(id) {
     { year: '2017', val: 247 }, { year: '2021', val: 279 },
     { year: '2026', val: 451 },
   ];
-  const Y_TICKS = [24,50,100,150,200,250,300,350,400,450,480];
-  const Y_MIN = 24, Y_MAX = 480, DUR = 10000;
+  const Y_TICKS = [50,100,150,200,250,300,350,400,450,500];
+  const Y_MIN = 0, Y_MAX = 520, DUR = 10000;
   const LC = '#5fcf97', GC = 'rgba(95,207,151,0.55)';
   let _cv, _cx, _raf, _t0, _running, _pts, _segs, _slen, _tlen, _W, _H, _PAD, _cW, _cH;
   const DPR = window.devicePixelRatio || 1;
@@ -669,7 +669,7 @@ function initRangeChart(id) {
 
   function pad() {
     const s = _W/700;
-    _PAD = { top:58*s, right:40*s, bottom:50*s, left:62*s };
+    _PAD = { top:72*s, right:52*s, bottom:50*s, left:62*s };
     _cW = _W-_PAD.left-_PAD.right; _cH = _H-_PAD.top-_PAD.bottom;
   }
   function toY(v) { return _PAD.top+(1-(v-Y_MIN)/(Y_MAX-Y_MIN))*_cH; }
