@@ -8,8 +8,8 @@ function initDistributionMap(id) {
   if (mapsInitialized[id]) return;
   mapsInitialized[id] = true;
 
-  const map = L.map(id, { zoomControl: true, scrollWheelZoom: false })
-    .setView([22.3, 83.4], 9);
+  const map = L.map(id, { zoomControl: true, scrollWheelZoom: false, zoomSnap: 0.1 })
+    .setView([22.3, 83.4], 9.1);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors',
