@@ -158,21 +158,36 @@ function initYearBarsChart(id) {
   const container = document.getElementById(id);
   if (!container) return;
 
-  const vals   = DATA.elephantDeaths;   // [4, 9, 6, 10, 12]
-  const labels = ['21-22','22-23','23-24','24-25','25-26'];
-  const maxVal = 16;
+  const years  = ['21-22','22-23','23-24','24-25','25-26'];
+  const totals = DATA.elephantDeaths.slice(0, 5);
+  const dhVals = DATA.elephantDeathsByDiv.dh.slice(0, 5);
+  const rgVals = DATA.elephantDeathsByDiv.rg.slice(0, 5);
+  const maxVal = 14;
 
   container.innerHTML = '';
 
   const wrap = document.createElement('div');
   wrap.className = 'liq-wrap';
 
+  // Legend
+  const legend = document.createElement('div');
+  legend.style.cssText = 'display:flex;gap:16px;font-size:0.68rem;color:#8BA098;flex-shrink:0;margin-bottom:2px';
+  legend.innerHTML =
+    '<span style="display:flex;align-items:center;gap:4px">' +
+      '<span style="width:9px;height:9px;border-radius:2px;background:#52B788;display:inline-block"></span>Dharamjaigarh' +
+    '</span>' +
+    '<span style="display:flex;align-items:center;gap:4px">' +
+      '<span style="width:9px;height:9px;border-radius:2px;background:#F4A261;display:inline-block"></span>Raigarh' +
+    '</span>';
+  wrap.appendChild(legend);
+
   const barsEl = document.createElement('div');
   barsEl.className = 'liq-bars';
 
-  vals.forEach((val, i) => {
-    const pct   = (val / maxVal) * 100;
-    const delay = i * 0.7;
+  totals.forEach((total, i) => {
+    const dhPct = (dhVals[i] / maxVal) * 100;
+    const rgPct = (rgVals[i] / maxVal) * 100;
+    const delay    = i * 0.7;
     const numDelay = (delay + 5).toFixed(1);
 
     const group = document.createElement('div');
@@ -180,26 +195,32 @@ function initYearBarsChart(id) {
 
     const numEl = document.createElement('div');
     numEl.className = 'liq-num';
-    numEl.textContent = val;
+    numEl.textContent = total;
     numEl.style.setProperty('--nd', numDelay + 's');
 
     const box = document.createElement('div');
     box.className = 'liq-box';
 
-    const fill = document.createElement('div');
-    fill.className = 'liq-fill';
-    fill.style.setProperty('--delay', delay + 's');
-    fill.dataset.pct = pct;
+    // DH fill — green, anchored to bottom
+    const dhFill = document.createElement('div');
+    dhFill.className = 'liq-fill';
+    dhFill.style.cssText = `background:linear-gradient(to top,#1a5c3a,#52B788);bottom:0;`;
+    dhFill.style.setProperty('--delay', delay + 's');
+    dhFill.dataset.pct = dhPct;
 
-    const shimmer = document.createElement('div');
-    shimmer.className = 'liq-shimmer';
-    shimmer.style.animationDelay = (delay + 5.3) + 's';
-    fill.appendChild(shimmer);
-    box.appendChild(fill);
+    // RG fill — amber, sits on top of DH
+    const rgFill = document.createElement('div');
+    rgFill.className = 'liq-fill';
+    rgFill.style.cssText = `background:linear-gradient(to top,#b06010,#F4A261);bottom:${dhPct}%;`;
+    rgFill.style.setProperty('--delay', delay + 's');
+    rgFill.dataset.pct = rgPct;
+
+    box.appendChild(dhFill);
+    if (rgVals[i] > 0) box.appendChild(rgFill);
 
     const lbl = document.createElement('div');
     lbl.className = 'liq-lbl';
-    lbl.textContent = labels[i];
+    lbl.textContent = years[i];
 
     group.append(numEl, box, lbl);
     barsEl.appendChild(group);
@@ -249,92 +270,6 @@ function liqReplay(container) {
   }));
 }
 
-// ── 2b. Division-wise Elephant Deaths Grouped Bar Chart ──────────────────
-function initDivisionYearChart(id) {
-  const ctx = document.getElementById(id);
-  if (!ctx) return;
-  destroyChart(id);
-  const years = DATA.years;
-  const dh    = DATA.elephantDeathsByDiv.dh;
-  const rg    = DATA.elephantDeathsByDiv.rg;
-  chartInstances[id] = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: years,
-      datasets: [
-        {
-          label: 'Dharamjaigarh',
-          data: dh,
-          backgroundColor: 'rgba(82,183,136,0.82)',
-          borderRadius: 4,
-          borderSkipped: false,
-          _noLabels: true
-        },
-        {
-          label: 'Raigarh',
-          data: rg,
-          backgroundColor: 'rgba(244,162,97,0.82)',
-          borderRadius: 4,
-          borderSkipped: false,
-          _noLabels: true
-        }
-      ]
-    },
-    plugins: [{
-      id: 'divLabels',
-      afterDatasetsDraw(chart) {
-        const { ctx: c } = chart;
-        [0, 1].forEach(dsIdx => {
-          const meta = chart.getDatasetMeta(dsIdx);
-          const vals = dsIdx === 0 ? dh : rg;
-          c.save();
-          c.font = 'bold 11px system-ui,-apple-system,sans-serif';
-          c.textBaseline = 'bottom';
-          c.textAlign = 'center';
-          c.fillStyle = '#E8F0E8';
-          vals.forEach((v, i) => {
-            if (v === 0) return;
-            const el = meta.data[i];
-            c.fillText(v, el.x, el.y - 3);
-          });
-          c.restore();
-        });
-      }
-    }],
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: { duration: 700 },
-      plugins: {
-        legend: {
-          display: true,
-          position: 'top',
-          labels: { color: '#8BA098', padding: 14, usePointStyle: true, pointStyleWidth: 10, font: { size: 11 } }
-        },
-        tooltip: {
-          backgroundColor: 'rgba(17,34,64,0.95)',
-          titleColor: '#E8F0E8',
-          bodyColor: '#8BA098',
-          borderColor: 'rgba(82,183,136,0.3)',
-          borderWidth: 1,
-          padding: 10
-        }
-      },
-      scales: {
-        x: {
-          grid: { color: 'rgba(255,255,255,0.06)' },
-          ticks: { color: '#8BA098', font: { size: 11 } }
-        },
-        y: {
-          grid: { color: 'rgba(255,255,255,0.06)' },
-          ticks: { color: '#8BA098', stepSize: 2 },
-          beginAtZero: true,
-          max: 14
-        }
-      }
-    }
-  });
-}
 
 // ── 3. Cause Chart: horizontal bars, ranked ───────────────────────────────
 function initCauseChart(id) {

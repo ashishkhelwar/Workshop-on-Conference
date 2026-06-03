@@ -130,7 +130,6 @@ function onSlideActivate(index) {
       const el = slides[12].querySelector('.hero-count');
       if (el) countUp(el, 48, 1800);
       setTimeout(() => initYearBarsChart('yearBarsCanvas'), 400);
-      setTimeout(() => initDivisionYearChart('divisionYearCanvas'), 500);
       break;
     }
 
