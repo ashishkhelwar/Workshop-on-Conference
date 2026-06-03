@@ -333,7 +333,7 @@ function initAgeChart(id) {
           color: '#ffffff',
           anchor: 'center',
           align: 'center',
-          font: { size: 14, weight: 'bold' },
+          font: { size: 28, weight: 'bold' },
           formatter: value => value
         },
         tooltip: {
