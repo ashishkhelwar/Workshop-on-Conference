@@ -11,7 +11,7 @@ const DATA = {
 
   causeOfDeath: [
     { cause: 'Electrocution', count: 23, pct: 48 },
-    { cause: 'Drowning', count: 12, pct: 25 },
+    { cause: 'Suspected Drowning', count: 12, pct: 25 },
     { cause: 'Natural / Old Age', count: 4, pct: 8 },
     { cause: 'Fall / Trauma', count: 4, pct: 8 },
     { cause: 'Other', count: 5, pct: 10 }
@@ -102,15 +102,15 @@ const DATA = {
       [22.580, 83.241, 'Electrocution', '2023-24'],
       [22.259, 83.173, 'Calf death at birth', '2024-25'],
       [22.660, 83.354, 'Tusk injury', '2024-25'],
-      [22.322, 83.096, 'Drowning in pond', '2024-25'],
+      [22.322, 83.096, 'Suspected Drowning in pond', '2024-25'],
       [22.373, 83.151, 'Electrocution', '2024-25'],
       [22.259, 83.146, 'Natural death', '2024-25'],
-      [22.284, 83.137, 'Drowning in pond', '2024-25'],
-      [22.166, 83.173, 'Drowning in pond', '2025-26'],
+      [22.284, 83.137, 'Suspected Drowning in pond', '2024-25'],
+      [22.166, 83.173, 'Suspected Drowning in pond', '2025-26'],
       [22.359, 83.452, 'Cardiovascular shock (undetermined)', '2026-27'],
-      [22.146, 83.212, 'Drowning in pond', '2026-27'],
-      [22.166, 83.115, 'Drowning (asphyxia)', '2026-27'],
-      [22.100, 83.159, 'Drowning in pond', '2026-27']
+      [22.146, 83.212, 'Suspected Drowning in pond', '2026-27'],
+      [22.166, 83.115, 'Suspected Drowning (asphyxia)', '2026-27'],
+      [22.100, 83.159, 'Suspected Drowning in pond', '2026-27']
     ],
     rgHuman: [
       [22.113, 83.350, 'Samaruma', '2021-22'],
@@ -131,14 +131,14 @@ const DATA = {
       [22.179, 83.518, 'Electrocution', '2022-23'],
       [22.498, 83.501, 'Electrocution', '2022-23'],
       [22.218, 83.564, 'Electrocution(3)', '2024-25'],
-      [22.104, 83.243, 'Drowning-Panikshet dam', '2024-25'],
-      [22.198, 83.468, 'Drowning-Rabo dam', '2024-25'],
-      [22.102, 83.241, 'Drowning-Panikshet dam', '2024-25'],
+      [22.104, 83.243, 'Suspected Drowning-Panikshet dam', '2024-25'],
+      [22.198, 83.468, 'Suspected Drowning-Rabo dam', '2024-25'],
+      [22.102, 83.241, 'Suspected Drowning-Panikshet dam', '2024-25'],
       [22.211, 83.470, 'Brain injury', '2025-26'],
-      [22.152, 83.494, 'Drowning', '2025-26'],
+      [22.152, 83.494, 'Suspected Drowning', '2025-26'],
       [22.202, 83.418, 'Electrocution', '2025-26'],
-      [22.021, 83.332, 'Drowning', '2025-26'],
-      [21.985, 83.462, 'Drowning', '2025-26'],
+      [22.021, 83.332, 'Suspected Drowning', '2025-26'],
+      [21.985, 83.462, 'Suspected Drowning', '2025-26'],
       [22.555, 83.615, 'Fell in nala', '2025-26'],
       [22.065, 83.392, 'Weakness', '2025-26'],
       [22.181, 83.455, 'Electrocution(2)', '2025-26']
