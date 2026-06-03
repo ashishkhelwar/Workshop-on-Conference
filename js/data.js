@@ -18,10 +18,11 @@ const DATA = {
   ],
 
   ageProfile: [
-    { group: 'Calves (<1 yr)', count: 10, pct: 26 },
-    { group: 'Young (1–15 yr)', count: 14, pct: 36 },
-    { group: 'Adults (16–50 yr)', count: 8, pct: 21 },
-    { group: 'Old (50+ yr)', count: 8, pct: 21 }
+    { group: 'Calf (0–2 yr)',      count: 22, pct: 49 },
+    { group: 'Juvenile (2–15 yr)', count: 5,  pct: 11 },
+    { group: 'Sub-adult (15–30 yr)', count: 2, pct: 4 },
+    { group: 'Adult (30–55 yr)',   count: 11, pct: 24 },
+    { group: 'Old (55+ yr)',       count: 5,  pct: 11 }
   ],
 
   sexProfile: { male: 24, female: 18, unknown: 3 },  // 45 confirmed (41 PDF + 4 from 2026-27)
