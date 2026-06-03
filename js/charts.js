@@ -886,3 +886,107 @@ function initRangeChart(id) {
     if(prefReduced) draw(1); else start();
   };
 })();
+
+function initSeasonDrownChart(id) {
+  const ctx = document.getElementById(id);
+  if (!ctx) return;
+  destroyChart(id);
+  chartInstances[id] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: DATA.seasonalCause.months,
+      datasets: [{
+        label: 'Deaths',
+        data: DATA.seasonalCause.drowning,
+        backgroundColor: DATA.seasonalCause.drowning.map(v =>
+          v >= 3 ? '#4A9EEB' : v >= 1 ? 'rgba(74,158,235,0.6)' : 'rgba(74,158,235,0.15)'
+        ),
+        borderRadius: 5,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        datalabels: {
+          color: ctx => ctx.dataset.data[ctx.dataIndex] > 0 ? '#ffffff' : 'transparent',
+          anchor: 'center',
+          align: 'center',
+          font: { size: 13, weight: 'bold' },
+          formatter: v => v > 0 ? v : ''
+        },
+        tooltip: {
+          backgroundColor: 'rgba(17,34,64,0.95)',
+          titleColor: '#E8F0E8',
+          bodyColor: '#8BA098',
+          borderColor: 'rgba(74,158,235,0.3)',
+          borderWidth: 1,
+          padding: 10
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#8BA098', font: { size: 11 } } },
+        y: {
+          grid: { color: 'rgba(255,255,255,0.06)' },
+          ticks: { color: '#8BA098', stepSize: 1 },
+          beginAtZero: true, min: 0, max: 5
+        }
+      }
+    },
+    plugins: [ChartDataLabels]
+  });
+}
+
+function initSeasonElecChart(id) {
+  const ctx = document.getElementById(id);
+  if (!ctx) return;
+  destroyChart(id);
+  chartInstances[id] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: DATA.seasonalCause.months,
+      datasets: [{
+        label: 'Deaths',
+        data: DATA.seasonalCause.electrocution,
+        backgroundColor: DATA.seasonalCause.electrocution.map(v =>
+          v >= 5 ? '#E63946' : v >= 2 ? 'rgba(230,57,70,0.65)' : v >= 1 ? 'rgba(230,57,70,0.4)' : 'rgba(230,57,70,0.12)'
+        ),
+        borderRadius: 5,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        datalabels: {
+          color: ctx => ctx.dataset.data[ctx.dataIndex] > 0 ? '#ffffff' : 'transparent',
+          anchor: 'center',
+          align: 'center',
+          font: { size: 13, weight: 'bold' },
+          formatter: v => v > 0 ? v : ''
+        },
+        tooltip: {
+          backgroundColor: 'rgba(17,34,64,0.95)',
+          titleColor: '#E8F0E8',
+          bodyColor: '#8BA098',
+          borderColor: 'rgba(230,57,70,0.3)',
+          borderWidth: 1,
+          padding: 10
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#8BA098', font: { size: 11 } } },
+        y: {
+          grid: { color: 'rgba(255,255,255,0.06)' },
+          ticks: { color: '#8BA098', stepSize: 1 },
+          beginAtZero: true, min: 0, max: 8
+        }
+      }
+    },
+    plugins: [ChartDataLabels]
+  });
+}

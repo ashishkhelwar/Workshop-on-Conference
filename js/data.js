@@ -33,6 +33,12 @@ const DATA = {
     counts: [6, 4, 3, 2, 5, 4, 1, 1, 3, 8, 6, 5]
   },
 
+  seasonalCause: {
+    months: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+    drowning:      [3, 0, 1, 0, 4, 0, 0, 0, 0, 1, 2, 2],
+    electrocution: [2, 0, 2, 1, 0, 1, 1, 1, 2, 7, 1, 2]
+  },
+
   rangeWise: [
     { beat: 'Ghargoda (RG)', count: 15, div: 'Raigarh', risk: 'CRITICAL' },
     { beat: 'Chhal (DH)', count: 10, div: 'Dharamjaigarh', risk: 'CRITICAL' },

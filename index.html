@@ -1366,7 +1366,7 @@
         <button class="tab" onclick="goTo(10)">Age Group</button>
         <button class="tab" onclick="goTo(11)">Sex Group</button>
         <button class="tab active" onclick="window.location='#s9c'">Seasonal</button>
-        <button class="tab" onclick="goTo(13)">Range-wise</button>
+        <button class="tab" onclick="goTo(20)">Range-wise</button>
       </div>
     </div>
     <div class="chart-area">
@@ -1375,6 +1375,69 @@
     <div class="chart-note mt-12" style="display:flex;gap:20px;flex-wrap:wrap;align-items:center">
       <span><strong style="color:#F4A261">Peak: October (8 deaths)</strong> — post-monsoon movement &amp; harvest season overlap</span>
       <span class="stat-badge amber" style="background:rgba(244,162,97,0.12);border-color:rgba(244,162,97,0.3);color:#F4A261">Oct–Dec = 42% of annual deaths</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SLIDE 9c-CAUSE — SEASON-WISE CAUSE OF DEATH
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="slide bg-dark" id="s9c-cause">
+  <div style="height:100%;display:flex;flex-direction:column;padding:18px 32px 14px;box-sizing:border-box">
+
+    <!-- HEADER -->
+    <div style="flex-shrink:0;margin-bottom:14px">
+      <div class="section-tag">Seasonal Pattern Analysis</div>
+      <h2 style="margin:4px 0 0;font-size:1.5rem">Season-wise Cause of Death — Suspected Drowning &amp; Electrocution</h2>
+    </div>
+
+    <!-- TWO CHARTS -->
+    <div style="display:flex;gap:24px;flex:1;min-height:0">
+
+      <!-- LEFT: Drowning -->
+      <div style="flex:1;display:flex;flex-direction:column;background:rgba(74,158,235,0.05);border:1px solid rgba(74,158,235,0.2);border-radius:12px;padding:16px 18px">
+        <div style="flex-shrink:0;margin-bottom:10px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-size:0.7rem;color:#4A9EEB;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:2px">Suspected Drowning</div>
+              <div style="font-size:1.8rem;font-weight:800;color:#4A9EEB;line-height:1">13 <span style="font-size:0.9rem;color:#8BA098;font-weight:400">deaths</span></div>
+            </div>
+            <div style="text-align:right;font-size:0.75rem;color:#8BA098">
+              <div><strong style="color:#4A9EEB">Jan–May</strong> = 8 deaths (62%)</div>
+              <div>Peak: <strong style="color:#E8F0E8">May (4)</strong></div>
+            </div>
+          </div>
+        </div>
+        <div style="flex:1;min-height:0;position:relative">
+          <canvas id="seasonDrownCanvas"></canvas>
+        </div>
+        <div style="flex-shrink:0;margin-top:10px;font-size:0.75rem;color:#8BA098;line-height:1.5">
+          <span style="color:#4A9EEB;font-weight:600">Dry season pattern</span> — 62% of drownings occur Jan–May when pond banks are steep &amp; water levels low, trapping young calves
+        </div>
+      </div>
+
+      <!-- RIGHT: Electrocution -->
+      <div style="flex:1;display:flex;flex-direction:column;background:rgba(230,57,70,0.05);border:1px solid rgba(230,57,70,0.2);border-radius:12px;padding:16px 18px">
+        <div style="flex-shrink:0;margin-bottom:10px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-size:0.7rem;color:#E63946;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:2px">Electrocution</div>
+              <div style="font-size:1.8rem;font-weight:800;color:#E63946;line-height:1">20 <span style="font-size:0.9rem;color:#8BA098;font-weight:400">deaths</span></div>
+            </div>
+            <div style="text-align:right;font-size:0.75rem;color:#8BA098">
+              <div><strong style="color:#E63946">Oct–Dec</strong> = 10 deaths (50%)</div>
+              <div>Peak: <strong style="color:#E8F0E8">October (7)</strong></div>
+            </div>
+          </div>
+        </div>
+        <div style="flex:1;min-height:0;position:relative">
+          <canvas id="seasonElecCanvas"></canvas>
+        </div>
+        <div style="flex-shrink:0;margin-top:10px;font-size:0.75rem;color:#8BA098;line-height:1.5">
+          <span style="color:#E63946;font-weight:600">Post-monsoon harvest pattern</span> — 50% of electrocutions occur Oct–Dec when electric fencing around standing crops is most active
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
