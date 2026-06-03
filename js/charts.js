@@ -663,7 +663,7 @@ function initRangeChart(id) {
   const Y_TICKS = [50,100,150,200,250,300,350,400,450,500];
   const Y_MIN = 0, Y_MAX = 520, DUR = 10000;
   const LC = '#5fcf97', GC = 'rgba(95,207,151,0.55)';
-  let _cv, _cx, _raf, _t0, _running, _pts, _segs, _slen, _tlen, _W, _H, _PAD, _cW, _cH;
+  let _cv, _cx, _raf, _t0, _running, _pts, _segs, _slen, _tlen, _W, _H, _PAD, _cW, _cH, _now=0;
   const DPR = window.devicePixelRatio || 1;
   const prefReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -768,18 +768,61 @@ function initRangeChart(id) {
     const n=_pts.length;
     _pts.forEach((p,i)=>{
       const mp=i/(n-1); if(prog<mp-0.004) return;
-      const alpha=Math.min(1,(prog-mp)/0.04); const r=6.5*s;
+      const alpha=Math.min(1,(prog-mp)/0.04);
+      const isLast = i===n-1;
+      const r = isLast ? 9*s : 6.5*s;
+      const mc = isLast ? '#F4A261' : LC;
+      const ms = isLast ? 'rgba(244,162,97,0.6)' : GC;
       _cx.save(); _cx.globalAlpha=alpha;
-      const halo=_cx.createRadialGradient(p.x,p.y,0,p.x,p.y,r*2.8);
-      halo.addColorStop(0,'rgba(95,207,151,0.2)'); halo.addColorStop(1,'rgba(95,207,151,0)');
-      _cx.beginPath(); _cx.arc(p.x,p.y,r*2.8,0,Math.PI*2); _cx.fillStyle=halo; _cx.fill();
+
+      if(isLast && prog>=1){
+        // Pulsing outer ring
+        const pulse=(Math.sin(_now/700)+1)/2;
+        const pr=r*(2.8+pulse*2.2);
+        const pg=_cx.createRadialGradient(p.x,p.y,r*0.8,p.x,p.y,pr);
+        pg.addColorStop(0,`rgba(244,162,97,${0.28*(1-pulse+0.1)}`);
+        pg.addColorStop(1,'rgba(244,162,97,0)');
+        _cx.beginPath(); _cx.arc(p.x,p.y,pr,0,Math.PI*2); _cx.fillStyle=pg; _cx.fill();
+        // Second static ring
+        _cx.beginPath(); _cx.arc(p.x,p.y,r*2.1,0,Math.PI*2);
+        _cx.strokeStyle='rgba(244,162,97,0.25)'; _cx.lineWidth=1.5*s; _cx.stroke();
+      } else {
+        const halo=_cx.createRadialGradient(p.x,p.y,0,p.x,p.y,r*2.8);
+        halo.addColorStop(0,'rgba(95,207,151,0.2)'); halo.addColorStop(1,'rgba(95,207,151,0)');
+        _cx.beginPath(); _cx.arc(p.x,p.y,r*2.8,0,Math.PI*2); _cx.fillStyle=halo; _cx.fill();
+      }
+
       _cx.beginPath(); _cx.arc(p.x,p.y,r,0,Math.PI*2);
-      _cx.strokeStyle=LC; _cx.lineWidth=2.2*s; _cx.shadowColor=GC; _cx.shadowBlur=10; _cx.stroke();
-      _cx.beginPath(); _cx.arc(p.x,p.y,r-2.2*s,0,Math.PI*2); _cx.fillStyle='#fff'; _cx.shadowBlur=0; _cx.fill();
-      _cx.font=`700 ${Math.round(12*s)}px system-ui,sans-serif`;
-      _cx.textAlign='center'; _cx.textBaseline='bottom'; _cx.fillStyle='#fff';
-      _cx.shadowColor='rgba(0,0,0,0.9)'; _cx.shadowBlur=5;
-      _cx.fillText(p.val,p.x,p.y-r-5*s); _cx.restore();
+      _cx.strokeStyle=mc; _cx.lineWidth=isLast?3*s:2.2*s; _cx.shadowColor=ms; _cx.shadowBlur=isLast?18:10; _cx.stroke();
+      _cx.beginPath(); _cx.arc(p.x,p.y,r-(isLast?3:2.2)*s,0,Math.PI*2);
+      _cx.fillStyle=isLast?mc:'#fff'; _cx.shadowBlur=0; _cx.fill();
+
+      if(isLast){
+        // Inner white dot
+        _cx.beginPath(); _cx.arc(p.x,p.y,r*0.32,0,Math.PI*2); _cx.fillStyle='#fff'; _cx.fill();
+        // Value label with background badge
+        const lbl='451';
+        const fs=Math.round(14*s); _cx.font=`800 ${fs}px system-ui,sans-serif`;
+        const tw=_cx.measureText(lbl).width;
+        const bx=p.x-tw/2-6*s, by=p.y-r-28*s, bw=tw+12*s, bh=20*s;
+        _cx.fillStyle='rgba(244,162,97,0.92)'; _cx.shadowBlur=8; _cx.shadowColor='rgba(0,0,0,0.5)';
+        _cx.beginPath();
+        _cx.roundRect(bx,by,bw,bh,4*s);
+        _cx.fill();
+        _cx.fillStyle='#fff'; _cx.shadowBlur=0;
+        _cx.textAlign='center'; _cx.textBaseline='middle';
+        _cx.fillText(lbl,p.x,by+bh/2);
+        // Year sub-label
+        _cx.font=`600 ${Math.round(10*s)}px system-ui,sans-serif`;
+        _cx.fillStyle='rgba(244,162,97,0.9)'; _cx.textBaseline='top'; _cx.shadowColor='rgba(0,0,0,0.7)'; _cx.shadowBlur=4;
+        _cx.fillText('2026 est.',p.x,by+bh+4*s);
+      } else {
+        _cx.font=`700 ${Math.round(12*s)}px system-ui,sans-serif`;
+        _cx.textAlign='center'; _cx.textBaseline='bottom'; _cx.fillStyle='#fff';
+        _cx.shadowColor='rgba(0,0,0,0.9)'; _cx.shadowBlur=5;
+        _cx.fillText(p.val,p.x,p.y-r-5*s);
+      }
+      _cx.restore();
     });
 
     // Tip glow dot
@@ -788,10 +831,12 @@ function initRangeChart(id) {
   }
 
   function loop(ts){
+    _now=ts;
     if(!_t0) _t0=ts;
     const raw=Math.min((ts-_t0)/DUR,1);
     draw(ease(raw));
-    if(raw<1) _raf=requestAnimationFrame(loop); else _running=false;
+    _raf=requestAnimationFrame(loop);
+    if(raw>=1) _running=false;
   }
 
   function start(){
