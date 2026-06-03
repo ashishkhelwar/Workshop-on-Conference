@@ -249,6 +249,93 @@ function liqReplay(container) {
   }));
 }
 
+// ── 2b. Division-wise Elephant Deaths Grouped Bar Chart ──────────────────
+function initDivisionYearChart(id) {
+  const ctx = document.getElementById(id);
+  if (!ctx) return;
+  destroyChart(id);
+  const years = DATA.years;
+  const dh    = DATA.elephantDeathsByDiv.dh;
+  const rg    = DATA.elephantDeathsByDiv.rg;
+  chartInstances[id] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: years,
+      datasets: [
+        {
+          label: 'Dharamjaigarh',
+          data: dh,
+          backgroundColor: 'rgba(82,183,136,0.82)',
+          borderRadius: 4,
+          borderSkipped: false,
+          _noLabels: true
+        },
+        {
+          label: 'Raigarh',
+          data: rg,
+          backgroundColor: 'rgba(244,162,97,0.82)',
+          borderRadius: 4,
+          borderSkipped: false,
+          _noLabels: true
+        }
+      ]
+    },
+    plugins: [{
+      id: 'divLabels',
+      afterDatasetsDraw(chart) {
+        const { ctx: c } = chart;
+        [0, 1].forEach(dsIdx => {
+          const meta = chart.getDatasetMeta(dsIdx);
+          const vals = dsIdx === 0 ? dh : rg;
+          c.save();
+          c.font = 'bold 11px system-ui,-apple-system,sans-serif';
+          c.textBaseline = 'bottom';
+          c.textAlign = 'center';
+          c.fillStyle = '#E8F0E8';
+          vals.forEach((v, i) => {
+            if (v === 0) return;
+            const el = meta.data[i];
+            c.fillText(v, el.x, el.y - 3);
+          });
+          c.restore();
+        });
+      }
+    }],
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 700 },
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top',
+          labels: { color: '#8BA098', padding: 14, usePointStyle: true, pointStyleWidth: 10, font: { size: 11 } }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(17,34,64,0.95)',
+          titleColor: '#E8F0E8',
+          bodyColor: '#8BA098',
+          borderColor: 'rgba(82,183,136,0.3)',
+          borderWidth: 1,
+          padding: 10
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(255,255,255,0.06)' },
+          ticks: { color: '#8BA098', font: { size: 11 } }
+        },
+        y: {
+          grid: { color: 'rgba(255,255,255,0.06)' },
+          ticks: { color: '#8BA098', stepSize: 2 },
+          beginAtZero: true,
+          max: 14
+        }
+      }
+    }
+  });
+}
+
 // ── 3. Cause Chart: horizontal bars, ranked ───────────────────────────────
 function initCauseChart(id) {
   const ctx = document.getElementById(id);

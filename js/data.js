@@ -4,6 +4,12 @@ const DATA = {
   elephantDeaths: [4, 12, 6, 10, 12, 4],
   humanDeaths: [13, 1, 7, 8, 16, 0],
 
+  // Division-wise elephant deaths by year (DH + RG = yearly total)
+  elephantDeathsByDiv: {
+    dh: [4, 6, 6, 6,  1, 4],
+    rg: [0, 6, 0, 4, 11, 0]
+  },
+
   divisionTotals: {
     dh: { human: 36, elephant: 27 },
     rg: { human: 9, elephant: 21 }
