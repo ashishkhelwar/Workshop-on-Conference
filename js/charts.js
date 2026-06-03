@@ -800,22 +800,24 @@ function initRangeChart(id) {
       if(isLast){
         // Inner white dot
         _cx.beginPath(); _cx.arc(p.x,p.y,r*0.32,0,Math.PI*2); _cx.fillStyle='#fff'; _cx.fill();
-        // Value label with background badge
-        const lbl='451';
-        const fs=Math.round(14*s); _cx.font=`800 ${fs}px system-ui,sans-serif`;
-        const tw=_cx.measureText(lbl).width;
-        const bx=p.x-tw/2-6*s, by=p.y-r-28*s, bw=tw+12*s, bh=20*s;
-        _cx.fillStyle='rgba(244,162,97,0.92)'; _cx.shadowBlur=8; _cx.shadowColor='rgba(0,0,0,0.5)';
-        _cx.beginPath();
-        _cx.roundRect(bx,by,bw,bh,4*s);
-        _cx.fill();
-        _cx.fillStyle='#fff'; _cx.shadowBlur=0;
-        _cx.textAlign='center'; _cx.textBaseline='middle';
-        _cx.fillText(lbl,p.x,by+bh/2);
+        // Value label — outline stroke for legibility across all browsers
+        const ly=p.y-r-7*s;
+        const fs=Math.round(15*s);
+        _cx.font=`800 ${fs}px system-ui,sans-serif`;
+        _cx.textAlign='center'; _cx.textBaseline='bottom';
+        _cx.shadowBlur=0;
+        _cx.lineWidth=4*s; _cx.strokeStyle='rgba(10,22,40,0.95)';
+        _cx.strokeText('451',p.x,ly);
+        _cx.fillStyle='#F4A261';
+        _cx.shadowColor='rgba(244,162,97,0.9)'; _cx.shadowBlur=12;
+        _cx.fillText('451',p.x,ly);
+        _cx.shadowBlur=0;
         // Year sub-label
-        _cx.font=`600 ${Math.round(10*s)}px system-ui,sans-serif`;
-        _cx.fillStyle='rgba(244,162,97,0.9)'; _cx.textBaseline='top'; _cx.shadowColor='rgba(0,0,0,0.7)'; _cx.shadowBlur=4;
-        _cx.fillText('2026 est.',p.x,by+bh+4*s);
+        _cx.font=`700 ${Math.round(10*s)}px system-ui,sans-serif`;
+        _cx.fillStyle='rgba(244,162,97,0.95)'; _cx.textBaseline='top';
+        _cx.strokeStyle='rgba(10,22,40,0.9)'; _cx.lineWidth=3*s;
+        _cx.strokeText('2026',p.x,ly+2*s);
+        _cx.fillText('2026',p.x,ly+2*s);
       } else {
         _cx.font=`700 ${Math.round(12*s)}px system-ui,sans-serif`;
         _cx.textAlign='center'; _cx.textBaseline='bottom'; _cx.fillStyle='#fff';
