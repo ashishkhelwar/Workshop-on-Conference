@@ -40,14 +40,14 @@ const DATA = {
   },
 
   rangeWise: [
-    { beat: 'Ghargoda (RG)', count: 15, div: 'Raigarh', risk: 'CRITICAL' },
-    { beat: 'Chhal (DH)', count: 10, div: 'Dharamjaigarh', risk: 'CRITICAL' },
-    { beat: 'Dharamjaigarh HQ', count: 7, div: 'Dharamjaigarh', risk: 'HIGH' },
-    { beat: 'Tamanar (RG)', count: 5, div: 'Raigarh', risk: 'MODERATE' },
-    { beat: 'Borojh (DH)', count: 4, div: 'Dharamjaigarh', risk: 'HIGH' },
-    { beat: 'Lailungaan (DH)', count: 2, div: 'Dharamjaigarh', risk: 'HIGH' },
-    { beat: 'Baakaaruma (DH)', count: 1, div: 'Dharamjaigarh', risk: 'MODERATE' },
-    { beat: 'Raigarh HQ', count: 1, div: 'Raigarh', risk: 'LOW' }
+    { beat: 'Ghargoda (RG)',     count: 15, div: 'Raigarh',       risk: 'CRITICAL', elec: 7, drown: 5, other: 3 },
+    { beat: 'Chhal (DH)',        count: 14, div: 'Dharamjaigarh', risk: 'CRITICAL', elec: 5, drown: 6, other: 3 },
+    { beat: 'Dharamjaigarh HQ', count: 7,  div: 'Dharamjaigarh', risk: 'HIGH',     elec: 5, drown: 0, other: 2 },
+    { beat: 'Tamanar (RG)',      count: 5,  div: 'Raigarh',       risk: 'MODERATE', elec: 4, drown: 1, other: 0 },
+    { beat: 'Borojh (DH)',       count: 4,  div: 'Dharamjaigarh', risk: 'HIGH',     elec: 1, drown: 0, other: 3 },
+    { beat: 'Lailungaan (DH)',   count: 2,  div: 'Dharamjaigarh', risk: 'HIGH',     elec: 0, drown: 0, other: 2 },
+    { beat: 'Baakaaruma (DH)',   count: 1,  div: 'Dharamjaigarh', risk: 'MODERATE', elec: 1, drown: 0, other: 0 },
+    { beat: 'Raigarh HQ',        count: 1,  div: 'Raigarh',       risk: 'LOW',      elec: 0, drown: 1, other: 0 }
   ],
 
   // All 90 geo-points [lat, lon, cause/village, year]

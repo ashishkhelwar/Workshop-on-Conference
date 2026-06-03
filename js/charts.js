@@ -599,59 +599,125 @@ function initSeasonalChart(id) {
   });
 }
 
-// ── 7. Range-wise Horizontal Bars ─────────────────────────────────────────
+// ── 7. Range-wise Stacked Horizontal Bars ─────────────────────────────────
 function initRangeChart(id) {
   const ctx = document.getElementById(id);
   if (!ctx) return;
   destroyChart(id);
-  const riskColors = {
-    CRITICAL: '#E63946',
-    HIGH:     '#F4A261',
-    MODERATE: '#C9A84C',
-    LOW:      '#52B788'
-  };
   const sorted = [...DATA.rangeWise].sort((a, b) => b.count - a.count);
   chartInstances[id] = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: sorted.map(d => d.beat),
-      datasets: [{
-        label: 'Elephant Deaths',
-        data: sorted.map(d => d.count),
-        backgroundColor: sorted.map(d => riskColors[d.risk]),
-        borderRadius: 5,
-        borderSkipped: false
-      }]
+      datasets: [
+        {
+          label: 'Electrocution',
+          data: sorted.map(d => d.elec),
+          backgroundColor: 'rgba(230,57,70,0.85)',
+          borderRadius: 0,
+          borderSkipped: false,
+          _noLabels: true
+        },
+        {
+          label: 'Susp. Drowning',
+          data: sorted.map(d => d.drown),
+          backgroundColor: 'rgba(74,158,235,0.85)',
+          borderRadius: 0,
+          borderSkipped: false,
+          _noLabels: true
+        },
+        {
+          label: 'Other',
+          data: sorted.map(d => d.other),
+          backgroundColor: 'rgba(139,160,152,0.55)',
+          borderRadius: 0,
+          borderSkipped: false,
+          _noLabels: true
+        }
+      ]
     },
+    plugins: [{
+      id: 'rangeLabels',
+      afterDatasetsDraw(chart) {
+        const { ctx: c } = chart;
+        sorted.forEach((item, i) => {
+          const elecMeta  = chart.getDatasetMeta(0);
+          const drownMeta = chart.getDatasetMeta(1);
+          const otherMeta = chart.getDatasetMeta(2);
+          const s = 11;
+          c.save();
+          c.font = `bold ${s}px system-ui,-apple-system,sans-serif`;
+          c.textBaseline = 'middle';
+          // Electrocution label
+          if (item.elec > 0) {
+            const el = elecMeta.data[i];
+            c.fillStyle = '#fff';
+            c.textAlign = 'center';
+            c.fillText(item.elec, (el.base + el.x) / 2, el.y);
+          }
+          // Drowning label
+          if (item.drown > 0) {
+            const el = drownMeta.data[i];
+            c.fillStyle = '#fff';
+            c.textAlign = 'center';
+            c.fillText(item.drown, (el.base + el.x) / 2, el.y);
+          }
+          // Other label
+          if (item.other > 0) {
+            const el = otherMeta.data[i];
+            c.fillStyle = '#E8F0E8';
+            c.textAlign = 'center';
+            c.fillText(item.other, (el.base + el.x) / 2, el.y);
+          }
+          // Total label at end of bar
+          const lastEl = otherMeta.data[i].x || drownMeta.data[i].x || elecMeta.data[i].x;
+          c.fillStyle = '#E8F0E8';
+          c.textAlign = 'left';
+          c.fillText(item.count, lastEl + 5, elecMeta.data[i].y);
+          c.restore();
+        });
+      }
+    }],
     options: {
       indexAxis: 'y',
       responsive: true,
       maintainAspectRatio: false,
+      animation: { duration: 700 },
       plugins: {
-        legend: { display: false },
+        legend: {
+          display: true,
+          position: 'top',
+          labels: {
+            color: '#8BA098',
+            padding: 16,
+            usePointStyle: true,
+            pointStyleWidth: 10,
+            font: { size: 11 }
+          }
+        },
         tooltip: {
           backgroundColor: 'rgba(17,34,64,0.95)',
           titleColor: '#E8F0E8',
           bodyColor: '#8BA098',
           borderColor: 'rgba(82,183,136,0.3)',
           borderWidth: 1,
-          padding: 12,
+          padding: 10,
           callbacks: {
-            label: ctx => {
-              const item = sorted[ctx.dataIndex];
-              return ` ${item.count} deaths · ${item.div} · ${item.risk}`;
-            }
+            title: ctx => sorted[ctx[0].dataIndex].beat,
+            label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.x}`
           }
         }
       },
       scales: {
         x: {
+          stacked: true,
           grid: { color: 'rgba(255,255,255,0.06)' },
           ticks: { color: '#8BA098' },
           beginAtZero: true,
-          max: 14
+          max: 16
         },
         y: {
+          stacked: true,
           grid: { display: false },
           ticks: { color: '#E8F0E8', font: { size: 12 } }
         }
