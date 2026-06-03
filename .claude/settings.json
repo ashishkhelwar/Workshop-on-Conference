@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "mkdir -p ~/.claude/skills/frontend-slides && cp .claude/skills/frontend-slides/SKILL.md ~/.claude/skills/frontend-slides/SKILL.md 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  }
+}
