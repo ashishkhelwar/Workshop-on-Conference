@@ -383,7 +383,7 @@ function initSexChart(id) {
       labels: ['Male', 'Female', 'Unknown'],
       datasets: [{
         data: [DATA.sexProfile.male, DATA.sexProfile.female, DATA.sexProfile.unknown || 0],
-        backgroundColor: ['#52B788', '#C9A84C', 'rgba(139,160,152,0.35)'],
+        backgroundColor: ['#4A9EEB', '#C9A84C', 'rgba(139,160,152,0.35)'],
         borderColor: ['#0A1628', '#0A1628', '#0A1628'],
         borderWidth: 4,
         hoverOffset: 12

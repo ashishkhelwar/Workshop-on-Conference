@@ -943,11 +943,13 @@
      SLIDE 9b — SEX GROUP
      ═══════════════════════════════════════════════════════════════ -->
 <section class="slide bg-dark" id="s9b">
-  <div class="dashboard-frame">
-    <div class="dashboard-header">
-      <div class="dashboard-header-left">
+  <div style="height:100%;display:flex;flex-direction:column;padding:18px 32px 14px;box-sizing:border-box;overflow:hidden">
+
+    <!-- HEADER -->
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-shrink:0;margin-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:10px">
+      <div>
         <div class="section-tag">Demographic Analysis</div>
-        <h2>Elephant Casualties — Age &amp; Sex Profiling</h2>
+        <h2 style="margin:3px 0 0;font-size:1.5rem">Sex Profiling Summary — 45 Elephant Deaths</h2>
       </div>
       <div class="tab-row">
         <button class="tab" onclick="goTo(10)">Age Group</button>
@@ -956,13 +958,129 @@
         <button class="tab" onclick="goTo(14)">Range-wise</button>
       </div>
     </div>
-    <div class="chart-area" style="max-width:500px;margin:0 auto">
-      <canvas id="sexCanvas"></canvas>
-    </div>
-    <div class="chart-note mt-12 center">
-      <strong>Based on 45 confirmed records (42 sexed)</strong> — Male 24 (53%) · Female 18 (40%) · Unknown 3 (7%).
-      No strong sex-biased mortality pattern.
-    </div>
+
+    <!-- BODY -->
+    <div style="display:flex;gap:20px;flex:1;min-height:0">
+
+      <!-- LEFT: Chart + Summary Table -->
+      <div style="flex:0 0 34%;display:flex;flex-direction:column;gap:10px">
+
+        <!-- Donut chart -->
+        <div style="flex:0 0 200px;position:relative">
+          <canvas id="sexCanvas"></canvas>
+        </div>
+
+        <!-- Summary table -->
+        <div style="flex:1;overflow-y:auto;border:1px solid rgba(255,255,255,0.1);border-radius:8px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.1) transparent">
+          <table style="width:100%;border-collapse:collapse;font-size:0.82rem">
+            <thead>
+              <tr style="background:rgba(255,255,255,0.06);position:sticky;top:0;z-index:1">
+                <th style="padding:6px 8px;color:#8BA098;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,0.08);text-align:left">Sex</th>
+                <th style="padding:6px 8px;color:#8BA098;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,0.08);text-align:center">Count</th>
+                <th style="padding:6px 8px;color:#8BA098;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,0.08);text-align:center">%</th>
+                <th style="padding:6px 8px;color:#8BA098;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,0.08);text-align:left">Distribution</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05);border-left:3px solid #4A9EEB">
+                <td style="padding:7px 8px;color:#4A9EEB;font-weight:700">Male</td>
+                <td style="padding:7px 8px;text-align:center;color:#E8F0E8;font-weight:700">23</td>
+                <td style="padding:7px 8px;text-align:center;color:#4A9EEB;font-weight:700">51%</td>
+                <td style="padding:7px 8px;color:#C8D8C8">Broader age range (5–80 yr)</td>
+              </tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05);border-left:3px solid #C9A84C">
+                <td style="padding:7px 8px;color:#C9A84C;font-weight:700">Female</td>
+                <td style="padding:7px 8px;text-align:center;color:#E8F0E8;font-weight:700">21</td>
+                <td style="padding:7px 8px;text-align:center;color:#C9A84C;font-weight:700">47%</td>
+                <td style="padding:7px 8px;color:#C8D8C8">Calves (0–2 yr) &amp; old age (55+ yr)</td>
+              </tr>
+              <tr style="border-left:3px solid #8BA098">
+                <td style="padding:7px 8px;color:#8BA098;font-weight:700">Unknown</td>
+                <td style="padding:7px 8px;text-align:center;color:#E8F0E8;font-weight:700">1</td>
+                <td style="padding:7px 8px;text-align:center;color:#8BA098;font-weight:700">2%</td>
+                <td style="padding:7px 8px;color:#C8D8C8">Newborn, death during birth</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- /LEFT -->
+
+      <!-- RIGHT: Key Findings + Critical Patterns -->
+      <div style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.1) transparent;padding-right:4px">
+
+        <!-- Key Findings heading -->
+        <div style="flex-shrink:0">
+          <div class="callout green" style="margin-bottom:6px">KEY FINDINGS BY SEX</div>
+        </div>
+
+        <!-- Male findings -->
+        <div class="report-section" style="margin:0;flex-shrink:0;border-left:3px solid #4A9EEB">
+          <h4 style="margin:0 0 6px;font-size:0.85rem;color:#4A9EEB">Males — 23 deaths (51%)</h4>
+          <ul class="bullet-list" style="font-size:0.77rem;margin:0;gap:4px">
+            <li><strong style="color:#E8F0E8">Age pattern:</strong> Vulnerable across wider range — 5 juveniles (2–16 yr), 5 adults (30–55 yr), 8 older (41–80 yr)</li>
+            <li><strong style="color:#F4A261">Leading causes:</strong> Electrocution (11), Suspected Drowning (6), Falls (3)</li>
+            <li><strong style="color:#E8F0E8">Division skew:</strong> Dharamjaigarh 59% male (16/27) — reflects electrocution deaths of adult males contacting power lines</li>
+            <li><strong style="color:#E8F0E8">Behavioural risk:</strong> Adult males roaming → higher power line contact; younger males active play → injury/conflict</li>
+          </ul>
+        </div>
+
+        <!-- Female findings -->
+        <div class="report-section" style="margin:0;flex-shrink:0;border-left:3px solid #C9A84C">
+          <h4 style="margin:0 0 6px;font-size:0.85rem;color:#C9A84C">Females — 21 deaths (47%)</h4>
+          <ul class="bullet-list" style="font-size:0.77rem;margin:0;gap:4px">
+            <li><strong style="color:#E8F0E8">Age pattern:</strong> Concentrated at extremes — 12 calves (0–2 yr), 4 old (55–80 yr), only 5 in prime adult years</li>
+            <li><strong style="color:#F4A261">Leading causes:</strong> Electrocution (7), Suspected Drowning (5), Natural/Old age (3)</li>
+            <li><strong style="color:#E8F0E8">Division skew:</strong> Raigarh 56% female (10/18) — driven by calf drowning crisis 2025-26 (8 of 11 drowning victims are young females)</li>
+            <li><strong style="color:#E8F0E8">Behavioural risk:</strong> Young females → maternal stress, separation during water access; older females → post-reproductive vulnerability</li>
+          </ul>
+        </div>
+
+        <!-- Critical Patterns -->
+        <div style="flex-shrink:0">
+          <div class="callout amber" style="margin-bottom:6px">CRITICAL SEX-SPECIFIC PATTERNS</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;flex-shrink:0">
+
+          <div class="report-section" style="margin:0">
+            <h4 style="margin:0 0 5px;font-size:0.8rem;color:#E63946">Calf Vulnerability (12F vs 10M)</h4>
+            <ul class="bullet-list" style="font-size:0.74rem;margin:0;gap:3px">
+              <li>55% of calf deaths are female</li>
+              <li>Raigarh: 8 of 11 drowning deaths are young females (6 months–2 years)</li>
+              <li>Suggests maternal separation during water roaming or higher female water stress</li>
+            </ul>
+          </div>
+
+          <div class="report-section" style="margin:0">
+            <h4 style="margin:0 0 5px;font-size:0.8rem;color:#F4A261">Electrocution (11M, 7F)</h4>
+            <ul class="bullet-list" style="font-size:0.74rem;margin:0;gap:3px">
+              <li>Males at higher risk: 48% of males die from electrocution vs 33% of females</li>
+              <li>Males spend more time in high-risk areas (power lines) or engage in riskier roaming</li>
+            </ul>
+          </div>
+
+          <div class="report-section" style="margin:0">
+            <h4 style="margin:0 0 5px;font-size:0.8rem;color:#52B788">Suspected Drowning (6M, 5F)</h4>
+            <ul class="bullet-list" style="font-size:0.74rem;margin:0;gap:3px">
+              <li>Female-skewed among calves: 5 of 6 drowning females are calves</li>
+              <li>Raigarh pattern: young females trapped in pond access during monsoon/dry season transitions</li>
+            </ul>
+          </div>
+
+          <div class="report-section" style="margin:0">
+            <h4 style="margin:0 0 5px;font-size:0.8rem;color:#8BA098">Old Age Deaths (1M, 4F)</h4>
+            <ul class="bullet-list" style="font-size:0.74rem;margin:0;gap:3px">
+              <li>Female longevity evident — more females survive to 55+ years</li>
+              <li>Natural causes dominate female old-age deaths; males die from infrastructure hazards even at advanced age</li>
+            </ul>
+          </div>
+
+        </div><!-- /grid -->
+
+      </div><!-- /RIGHT -->
+
+    </div><!-- /BODY -->
   </div>
 </section>
 
