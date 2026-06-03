@@ -726,6 +726,81 @@ function initRangeChart(id) {
   });
 }
 
+// ── 7b. Range-wise Human Casualty Chart ─────────────────────────────────────
+function initHumanRangeChart(id) {
+  const ctx = document.getElementById(id);
+  if (!ctx) return;
+  destroyChart(id);
+  const sorted = [...DATA.rangeWiseHuman].sort((a, b) => b.count - a.count);
+  const colors = sorted.map(d =>
+    d.div === 'Dharamjaigarh' ? 'rgba(230,57,70,0.82)' : 'rgba(244,162,97,0.82)'
+  );
+  chartInstances[id] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: sorted.map(d => d.beat),
+      datasets: [{
+        label: 'Human Deaths',
+        data: sorted.map(d => d.count),
+        backgroundColor: colors,
+        borderRadius: 3,
+        borderSkipped: false,
+        _noLabels: true
+      }]
+    },
+    plugins: [{
+      id: 'humanRangeLabels',
+      afterDatasetsDraw(chart) {
+        const { ctx: c } = chart;
+        const meta = chart.getDatasetMeta(0);
+        sorted.forEach((item, i) => {
+          const el = meta.data[i];
+          c.save();
+          c.font = 'bold 11px system-ui,-apple-system,sans-serif';
+          c.textBaseline = 'middle';
+          c.fillStyle = '#fff';
+          c.textAlign = 'center';
+          if (item.count > 0) c.fillText(item.count, (el.base + el.x) / 2, el.y);
+          c.restore();
+        });
+      }
+    }],
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 700 },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(17,34,64,0.95)',
+          titleColor: '#E8F0E8',
+          bodyColor: '#8BA098',
+          borderColor: 'rgba(230,57,70,0.3)',
+          borderWidth: 1,
+          padding: 10,
+          callbacks: {
+            title: ctx => sorted[ctx[0].dataIndex].beat,
+            label: ctx => ` Deaths: ${ctx.parsed.x} (${sorted[ctx[0].dataIndex].div})`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(255,255,255,0.06)' },
+          ticks: { color: '#8BA098', stepSize: 2 },
+          beginAtZero: true,
+          max: 12
+        },
+        y: {
+          grid: { display: false },
+          ticks: { color: '#E8F0E8', font: { size: 11 } }
+        }
+      }
+    }
+  });
+}
+
 // ── 8. Population Area Chart — vanilla canvas, Catmull-Rom + de Casteljau ──
 (function () {
   const RAW = [

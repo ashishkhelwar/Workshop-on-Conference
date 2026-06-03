@@ -1709,51 +1709,57 @@
         </div>
       </div>
     </div>
-    <div class="half" style="align-items:flex-start;justify-content:center">
-      <div class="section-tag red" style="align-self:flex-start">Year-wise Human Deaths</div>
-      <div class="year-bars-inline" style="width:100%">
-        <div class="year-bar-row">
-          <div class="year-bar-label">2021-22</div>
-          <div class="year-bar-track">
-            <div class="year-bar-fill" data-val="13" style="width:0%"></div>
+    <div class="half" style="align-items:flex-start;justify-content:flex-start;gap:0">
+      <div style="width:100%">
+        <div class="section-tag red" style="align-self:flex-start">Year-wise Human Deaths</div>
+        <div class="year-bars-inline" style="width:100%">
+          <div class="year-bar-row">
+            <div class="year-bar-label">2021-22</div>
+            <div class="year-bar-track">
+              <div class="year-bar-fill" data-val="13" style="width:0%"></div>
+            </div>
+            <div class="year-bar-count">13</div>
           </div>
-          <div class="year-bar-count">13</div>
-        </div>
-        <div class="year-bar-row">
-          <div class="year-bar-label">2022-23</div>
-          <div class="year-bar-track">
-            <div class="year-bar-fill" data-val="1" style="width:0%"></div>
+          <div class="year-bar-row">
+            <div class="year-bar-label">2022-23</div>
+            <div class="year-bar-track">
+              <div class="year-bar-fill" data-val="1" style="width:0%"></div>
+            </div>
+            <div class="year-bar-count">1</div>
           </div>
-          <div class="year-bar-count">1</div>
-        </div>
-        <div class="year-bar-row">
-          <div class="year-bar-label">2023-24</div>
-          <div class="year-bar-track">
-            <div class="year-bar-fill" data-val="7" style="width:0%"></div>
+          <div class="year-bar-row">
+            <div class="year-bar-label">2023-24</div>
+            <div class="year-bar-track">
+              <div class="year-bar-fill" data-val="7" style="width:0%"></div>
+            </div>
+            <div class="year-bar-count">7</div>
           </div>
-          <div class="year-bar-count">7</div>
-        </div>
-        <div class="year-bar-row">
-          <div class="year-bar-label">2024-25</div>
-          <div class="year-bar-track">
-            <div class="year-bar-fill" data-val="8" style="width:0%"></div>
+          <div class="year-bar-row">
+            <div class="year-bar-label">2024-25</div>
+            <div class="year-bar-track">
+              <div class="year-bar-fill" data-val="8" style="width:0%"></div>
+            </div>
+            <div class="year-bar-count">8</div>
           </div>
-          <div class="year-bar-count">8</div>
-        </div>
-        <div class="year-bar-row">
-          <div class="year-bar-label">2025-26</div>
-          <div class="year-bar-track">
-            <div class="year-bar-fill highlight" data-val="16" style="width:0%"></div>
+          <div class="year-bar-row">
+            <div class="year-bar-label">2025-26</div>
+            <div class="year-bar-track">
+              <div class="year-bar-fill highlight" data-val="16" style="width:0%"></div>
+            </div>
+            <div class="year-bar-count" style="color:#E63946;font-weight:700">16</div>
           </div>
-          <div class="year-bar-count" style="color:#E63946;font-weight:700">16</div>
         </div>
       </div>
-      <p class="muted mt-20" style="font-size:0.82rem;line-height:1.6">
-        <strong style="color:#E63946">2025-26: 16 deaths</strong> — the highest single-year human toll in the study period.
-        DH Division alone accounts for 80% of all human casualties.<br><br>
-        Most incidents occur during night hours near agricultural fields, especially during harvest season
-        (October–December), when elephant movement peaks.
-      </p>
+      <div style="width:100%;margin-top:18px">
+        <div class="section-tag red" style="align-self:flex-start">Range-wise Human Deaths</div>
+        <div style="display:flex;gap:14px;font-size:0.72rem;margin-bottom:8px">
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:rgba(230,57,70,0.82);display:inline-block"></span>Dharamjaigarh</span>
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:rgba(244,162,97,0.82);display:inline-block"></span>Raigarh</span>
+        </div>
+        <div style="position:relative;height:200px;width:100%">
+          <canvas id="humanRangeCanvas"></canvas>
+        </div>
+      </div>
     </div>
   </div>
 </section>

@@ -9,6 +9,17 @@ const DATA = {
     rg: { human: 9, elephant: 21 }
   },
 
+  rangeWiseHuman: [
+    { beat: 'Chhal (DH)',         count: 10, div: 'Dharamjaigarh' },
+    { beat: 'Borojh (DH)',        count:  9, div: 'Dharamjaigarh' },
+    { beat: 'Lailungaan (DH)',    count:  8, div: 'Dharamjaigarh' },
+    { beat: 'Ghargoda (RG)',      count:  5, div: 'Raigarh'       },
+    { beat: 'Dharamjaigarh HQ',  count:  5, div: 'Dharamjaigarh' },
+    { beat: 'Baakaaruma (DH)',    count:  4, div: 'Dharamjaigarh' },
+    { beat: 'Tamanar (RG)',       count:  3, div: 'Raigarh'       },
+    { beat: 'Raigarh HQ',        count:  1, div: 'Raigarh'       }
+  ],
+
   causeOfDeath: [
     { cause: 'Electrocution', count: 23, pct: 48 },
     { cause: 'Suspected Drowning', count: 12, pct: 25 },

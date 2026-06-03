@@ -198,6 +198,7 @@ function onSlideActivate(index) {
       const el = slides[26].querySelector('.hero-count');
       if (el) countUp(el, 45, 1800);
       setTimeout(animateHumanBars, 400);
+      setTimeout(() => initHumanRangeChart('humanRangeCanvas'), 500);
       break;
     }
 
