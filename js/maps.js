@@ -9,7 +9,7 @@ function initDistributionMap(id) {
   mapsInitialized[id] = true;
 
   const map = L.map(id, { zoomControl: true, scrollWheelZoom: false, zoomSnap: 0.1 })
-    .setView([22.3, 83.4], 9.1);
+    .setView([22.3, 83.4], 9.2);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors',
