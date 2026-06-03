@@ -789,8 +789,8 @@ function initRangeChart(id) {
     // Markers
     const n=_pts.length;
     _pts.forEach((p,i)=>{
-      const mp=i/(n-1); if(prog<mp-0.004) return;
-      const alpha=Math.min(1,(prog-mp)/0.04);
+      const mp=i/(n-1); if(prog<mp-0.04) return;
+      const alpha=Math.min(1,Math.max(0,(prog-mp+0.04)/0.04));
       const isLast = i===n-1;
       const r = isLast ? 9*s : 6.5*s;
       const mc = isLast ? '#F4A261' : LC;
