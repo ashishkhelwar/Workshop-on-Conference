@@ -749,21 +749,30 @@ function initRangeChart(id) {
     const refAlpha=Math.min(1,Math.max(0,(prog-0.88)/0.12));
     if(refAlpha>0){
       const ry=toY(451);
+      const cx=_PAD.left+_cW/2;
+      const fs=Math.round(20*s);
       _cx.save(); _cx.globalAlpha=refAlpha;
       // Glow band
-      const rg=_cx.createLinearGradient(0,ry-6*s,0,ry+6*s);
+      const rg=_cx.createLinearGradient(0,ry-8*s,0,ry+8*s);
       rg.addColorStop(0,'rgba(244,162,97,0)'); rg.addColorStop(0.5,'rgba(244,162,97,0.18)'); rg.addColorStop(1,'rgba(244,162,97,0)');
-      _cx.fillStyle=rg; _cx.fillRect(_PAD.left,ry-6*s,_cW,12*s);
-      // Dashed line
+      _cx.fillStyle=rg; _cx.fillRect(_PAD.left,ry-8*s,_cW,16*s);
+      // Measure text width to create gap
+      _cx.font=`800 ${fs}px system-ui,sans-serif`;
+      const tw=_cx.measureText('451').width;
+      const gap=tw+18*s;
+      // Dashed line — two halves with gap in centre for the label
       _cx.beginPath(); _cx.setLineDash([6*s,4*s]);
-      _cx.moveTo(_PAD.left,ry); _cx.lineTo(_PAD.left+_cW,ry);
-      _cx.strokeStyle='rgba(244,162,97,0.75)'; _cx.lineWidth=1.5*s; _cx.stroke();
+      _cx.moveTo(_PAD.left,ry); _cx.lineTo(cx-gap/2,ry);
+      _cx.moveTo(cx+gap/2,ry); _cx.lineTo(_PAD.left+_cW,ry);
+      _cx.strokeStyle='rgba(244,162,97,0.8)'; _cx.lineWidth=1.8*s; _cx.stroke();
       _cx.setLineDash([]);
-      // Left axis label
-      _cx.font=`700 ${Math.round(10*s)}px system-ui,sans-serif`;
-      _cx.textAlign='right'; _cx.textBaseline='middle';
-      _cx.fillStyle='#F4A261'; _cx.shadowColor='rgba(0,0,0,0.8)'; _cx.shadowBlur=4;
-      _cx.fillText('451',_PAD.left-5*s,ry);
+      // "451" centred on the line — large, amber, outlined
+      _cx.textAlign='center'; _cx.textBaseline='middle';
+      _cx.lineWidth=5*s; _cx.strokeStyle='rgba(10,22,40,0.95)';
+      _cx.strokeText('451',cx,ry);
+      _cx.fillStyle='#F4A261';
+      _cx.shadowColor='rgba(244,162,97,0.95)'; _cx.shadowBlur=14;
+      _cx.fillText('451',cx,ry);
       _cx.restore();
     }
 
@@ -823,23 +832,14 @@ function initRangeChart(id) {
         // Inner white dot
         _cx.beginPath(); _cx.arc(p.x,p.y,r*0.32,0,Math.PI*2); _cx.fillStyle='#fff'; _cx.fill();
         // Value label — outline stroke for legibility across all browsers
-        const ly=p.y-r-7*s;
-        const fs=Math.round(15*s);
-        _cx.font=`800 ${fs}px system-ui,sans-serif`;
-        _cx.textAlign='center'; _cx.textBaseline='bottom';
-        _cx.shadowBlur=0;
-        _cx.lineWidth=4*s; _cx.strokeStyle='rgba(10,22,40,0.95)';
-        _cx.strokeText('451',p.x,ly);
-        _cx.fillStyle='#F4A261';
-        _cx.shadowColor='rgba(244,162,97,0.9)'; _cx.shadowBlur=12;
-        _cx.fillText('451',p.x,ly);
-        _cx.shadowBlur=0;
-        // Year sub-label
+        // "2026 est." label above the marker dot
         _cx.font=`700 ${Math.round(10*s)}px system-ui,sans-serif`;
-        _cx.fillStyle='rgba(244,162,97,0.95)'; _cx.textBaseline='top';
-        _cx.strokeStyle='rgba(10,22,40,0.9)'; _cx.lineWidth=3*s;
-        _cx.strokeText('2026',p.x,ly+2*s);
-        _cx.fillText('2026',p.x,ly+2*s);
+        _cx.textAlign='center'; _cx.textBaseline='bottom'; _cx.shadowBlur=0;
+        _cx.lineWidth=3*s; _cx.strokeStyle='rgba(10,22,40,0.95)';
+        _cx.strokeText('2026 est.',p.x,p.y-r-5*s);
+        _cx.fillStyle='rgba(244,162,97,0.95)';
+        _cx.shadowColor='rgba(0,0,0,0.8)'; _cx.shadowBlur=4;
+        _cx.fillText('2026 est.',p.x,p.y-r-5*s);
       } else {
         _cx.font=`700 ${Math.round(12*s)}px system-ui,sans-serif`;
         _cx.textAlign='center'; _cx.textBaseline='bottom'; _cx.fillStyle='#fff';
