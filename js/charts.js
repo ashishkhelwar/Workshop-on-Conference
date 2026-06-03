@@ -745,6 +745,28 @@ function initRangeChart(id) {
     if(prog<=0) return;
     const tp=tip(prog);
 
+    // Orange reference line at y=451
+    const refAlpha=Math.min(1,Math.max(0,(prog-0.88)/0.12));
+    if(refAlpha>0){
+      const ry=toY(451);
+      _cx.save(); _cx.globalAlpha=refAlpha;
+      // Glow band
+      const rg=_cx.createLinearGradient(0,ry-6*s,0,ry+6*s);
+      rg.addColorStop(0,'rgba(244,162,97,0)'); rg.addColorStop(0.5,'rgba(244,162,97,0.18)'); rg.addColorStop(1,'rgba(244,162,97,0)');
+      _cx.fillStyle=rg; _cx.fillRect(_PAD.left,ry-6*s,_cW,12*s);
+      // Dashed line
+      _cx.beginPath(); _cx.setLineDash([6*s,4*s]);
+      _cx.moveTo(_PAD.left,ry); _cx.lineTo(_PAD.left+_cW,ry);
+      _cx.strokeStyle='rgba(244,162,97,0.75)'; _cx.lineWidth=1.5*s; _cx.stroke();
+      _cx.setLineDash([]);
+      // Left axis label
+      _cx.font=`700 ${Math.round(10*s)}px system-ui,sans-serif`;
+      _cx.textAlign='right'; _cx.textBaseline='middle';
+      _cx.fillStyle='#F4A261'; _cx.shadowColor='rgba(0,0,0,0.8)'; _cx.shadowBlur=4;
+      _cx.fillText('451',_PAD.left-5*s,ry);
+      _cx.restore();
+    }
+
     // Area fill
     _cx.save();
     _cx.beginPath(); _cx.rect(_PAD.left-1,_PAD.top-20,tp.x-_PAD.left+2,_cH+30); _cx.clip();
