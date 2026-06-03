@@ -313,6 +313,7 @@ function initAgeChart(id) {
   const colors = ['#2d6a4f','#40916c','#52B788','#74c69d','#95d5b2'];
   chartInstances[id] = new Chart(ctx, {
     type: 'bar',
+    plugins: [ChartDataLabels],
     data: {
       labels: DATA.ageProfile.map(d => d.group),
       datasets: [{
@@ -328,6 +329,13 @@ function initAgeChart(id) {
       maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
+        datalabels: {
+          color: '#ffffff',
+          anchor: 'center',
+          align: 'center',
+          font: { size: 14, weight: 'bold' },
+          formatter: value => value
+        },
         tooltip: {
           backgroundColor: 'rgba(17,34,64,0.95)',
           titleColor: '#E8F0E8',
