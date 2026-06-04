@@ -346,7 +346,7 @@ function initAgeChart(id) {
       scales: {
         x: {
           grid: { display: false },
-          ticks: { color: '#8BA098', font: { size: 11 }, maxRotation: 0 }
+          ticks: { color: '#8BA098', font: { size: 22 }, maxRotation: 0 }
         },
         y: {
           grid: { color: 'rgba(255,255,255,0.06)' },
