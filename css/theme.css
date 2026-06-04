@@ -80,12 +80,15 @@ html, body {
 .s1o4-toplogo-color {
   filter: none;
   opacity: 1;
-  background: #fff;
-  border-radius: 50%;
-  padding: 2px;
+  height: 42px;
+  width: 42px;
+  object-fit: contain;
 }
 .s1o4-sidelogo-color {
   filter: none;
+  height: 62px;
+  width: 62px;
+  object-fit: contain;
 }
 .s1o4-toptitle {
   font-size: clamp(0.6rem, 1vw, 0.78rem);

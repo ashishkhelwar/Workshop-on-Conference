@@ -716,7 +716,7 @@
         <div style="margin-top:8px;text-align:center;font-size:0.6rem;color:#8BA098">Net addition: <strong style="color:#E8F0E8">+172 elephants</strong> over 5 years</div>
       </div>
 
-      <ul class="bullet-list mt-20">
+      <ul class="bullet-list mt-20" style="font-size:1.5em">
         <li>Population grew from <strong style="color:#E8F0E8">24 (2001)</strong> to <strong style="color:#52B788">~451 (2026 est.)</strong> over two decades</li>
         <li>Bilaspur Circle hosts the largest concentration of elephants in CG</li>
         <li>2025-26 records the highest single-year conflict events in the five-year study period</li>
@@ -758,63 +758,26 @@
      SLIDE 7 — LIVE ELEPHANT GPS TRACKING
      ═══════════════════════════════════════════════════════════════ -->
 <section class="slide bg-dark" id="s7">
-  <div class="layout-half" style="height:100%">
-    <!-- Left stats panel -->
-    <div class="half border-right" style="align-items:flex-start;justify-content:center;padding:24px 28px">
-      <div class="section-tag">Elephant GPS Tracking · Chhattisgarh</div>
-      <div class="divider mt-12" style="width:100%"></div>
-      <div class="kpi-grid kpi-grid-2 mt-16" style="width:100%">
-        <div class="kpi-card" style="border-left:3px solid #52B788">
-          <div class="kpi-label">Herd Locations</div>
-          <div class="kpi-value green">17</div>
-          <div class="kpi-sub">GPS Points</div>
-        </div>
-        <div class="kpi-card" style="border-left:3px solid #F4A261">
-          <div class="kpi-label">Tusker Locations</div>
-          <div class="kpi-value amber">29</div>
-          <div class="kpi-sub">GPS Points</div>
-        </div>
-      </div>
-      <div class="mt-20" style="width:100%">
-        <p style="font-size:0.72rem;color:#8BA098;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:10px">Map Legend</p>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <div style="display:flex;align-items:center;gap:12px;background:rgba(82,183,136,0.08);border:1px solid rgba(82,183,136,0.2);border-radius:8px;padding:10px 14px">
-            <div style="width:16px;height:16px;border-radius:50%;background:#52B788;border:2px solid #fff;flex-shrink:0;box-shadow:0 0 6px rgba(82,183,136,0.7)"></div>
-            <div>
-              <div style="font-size:0.85rem;color:#52B788;font-weight:700">Herd Elephant</div>
-              <div style="font-size:0.72rem;color:#8BA098">Family group GPS location</div>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:12px;background:rgba(244,162,97,0.08);border:1px solid rgba(244,162,97,0.2);border-radius:8px;padding:10px 14px">
-            <div style="width:14px;height:14px;background:#F4A261;border:2px solid #fff;flex-shrink:0;transform:rotate(45deg);box-shadow:0 0 6px rgba(244,162,97,0.7)"></div>
-            <div>
-              <div style="font-size:0.85rem;color:#F4A261;font-weight:700">Tusker Elephant</div>
-              <div style="font-size:0.72rem;color:#8BA098">Solitary bull GPS location</div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div style="position:absolute;inset:0">
+    <div id="s7-live-map" style="width:100%;height:100%"></div>
+    <!-- Top-left title overlay -->
+    <div style="position:absolute;top:16px;left:16px;z-index:1000;background:rgba(10,22,40,0.85);backdrop-filter:blur(6px);border:1px solid rgba(82,183,136,0.3);border-radius:10px;padding:12px 18px;display:flex;align-items:center;gap:12px">
+      <div class="section-tag" style="margin:0">Elephant GPS Tracking · Chhattisgarh</div>
+      <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(230,57,70,0.12);border:1px solid rgba(230,57,70,0.35);border-radius:20px;padding:3px 10px;font-size:0.62rem;font-weight:800;color:#E63946;letter-spacing:0.08em;flex-shrink:0">
+        <span style="width:6px;height:6px;border-radius:50%;background:#E63946;display:inline-block;animation:pulseDot 1.4s ease-out infinite"></span>
+        LIVE
+      </span>
     </div>
-    <!-- Right map -->
-    <div class="half" style="flex-direction:column;padding:0">
-      <div style="padding:14px 20px 6px;display:flex;align-items:center;gap:10px;width:100%">
-        <div class="section-tag" style="margin:0">Current GPS Locations · 46 Points</div>
-        <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(230,57,70,0.12);border:1px solid rgba(230,57,70,0.35);border-radius:20px;padding:3px 10px;font-size:0.62rem;font-weight:800;color:#E63946;letter-spacing:0.08em;flex-shrink:0">
-          <span style="width:6px;height:6px;border-radius:50%;background:#E63946;display:inline-block;animation:pulseDot 1.4s ease-out infinite"></span>
-          LIVE
-        </span>
-      </div>
-      <div id="s7-live-map" style="flex:1;width:100%;min-height:0;border-top:2px solid rgba(230,57,70,0.4);box-shadow:inset 0 0 60px rgba(230,57,70,0.07)"></div>
-      <div style="padding:8px 20px 10px;display:flex;gap:18px;align-items:center;flex-wrap:wrap">
-        <span style="font-size:0.7rem;color:#52B788;display:flex;align-items:center;gap:6px">
-          <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#52B788;border:1.5px solid rgba(255,255,255,0.8);box-shadow:0 0 5px rgba(82,183,136,0.7)"></span>
-          Herd Elephant
-        </span>
-        <span style="font-size:0.7rem;color:#F4A261;display:flex;align-items:center;gap:6px">
-          <span style="display:inline-block;width:10px;height:10px;background:#F4A261;border:1.5px solid rgba(255,255,255,0.8);box-shadow:0 0 5px rgba(244,162,97,0.7);transform:rotate(45deg)"></span>
-          Tusker Elephant
-        </span>
-      </div>
+    <!-- Bottom legend -->
+    <div style="position:absolute;bottom:14px;left:16px;z-index:1000;background:rgba(10,22,40,0.85);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px 16px;display:flex;gap:18px;align-items:center;flex-wrap:wrap">
+      <span style="font-size:0.75rem;color:#52B788;display:flex;align-items:center;gap:6px">
+        <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#52B788;border:1.5px solid rgba(255,255,255,0.8);box-shadow:0 0 5px rgba(82,183,136,0.7)"></span>
+        Herd Elephant (17 GPS Points)
+      </span>
+      <span style="font-size:0.75rem;color:#F4A261;display:flex;align-items:center;gap:6px">
+        <span style="display:inline-block;width:10px;height:10px;background:#F4A261;border:1.5px solid rgba(255,255,255,0.8);box-shadow:0 0 5px rgba(244,162,97,0.7);transform:rotate(45deg)"></span>
+        Tusker Elephant (29 GPS Points)
+      </span>
     </div>
   </div>
 </section>
@@ -1108,8 +1071,8 @@
         <!-- Gross PM -->
         <div class="report-section" style="margin:0;flex-shrink:0">
           <div class="callout green" style="margin-bottom:7px">GROSS PM FINDINGS</div>
-          <h4 style="margin:0 0 8px;font-size:0.85rem">Consistent Findings — All 13 Suspected Drowning Cases</h4>
-          <table class="pm-table" style="font-size:0.78rem">
+          <h4 style="margin:0 0 8px;font-size:1.275rem">Consistent Findings — All 13 Suspected Drowning Cases</h4>
+          <table class="pm-table" style="font-size:1.17rem">
             <thead>
               <tr><th>PM Finding</th><th>Frequency</th></tr>
             </thead>
@@ -1127,8 +1090,8 @@
         <!-- Histopathology -->
         <div class="report-section" style="margin:0;flex-shrink:0">
           <div class="callout" style="margin-bottom:7px">HISTOPATHOLOGY</div>
-          <h4 style="margin:0 0 8px;font-size:0.85rem">Microscopic Confirmation</h4>
-          <ul class="bullet-list" style="font-size:0.8rem;margin:0;gap:5px">
+          <h4 style="margin:0 0 8px;font-size:1.275rem">Microscopic Confirmation</h4>
+          <ul class="bullet-list" style="font-size:1.2rem;margin:0;gap:5px">
             <li>Pulmonary oedema — alveolar flooding with eosinophilic fluid</li>
             <li>Pulmonary haemorrhage — interstitial and alveolar spaces</li>
             <li>Hepatocyte degeneration — 3 confirmed cases (Tamnar range, Dec 2025)</li>
