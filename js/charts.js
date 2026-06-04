@@ -292,13 +292,13 @@ function initCauseChart(id) {
       scales: {
         x: {
           grid: { color: 'rgba(255,255,255,0.06)' },
-          ticks: { color: '#8BA098' },
+          ticks: { color: '#8BA098', font: { size: 24 } },
           beginAtZero: true,
           max: 25
         },
         y: {
           grid: { display: false },
-          ticks: { color: '#E8F0E8', font: { size: 13, weight: '600' } }
+          ticks: { color: '#E8F0E8', font: { size: 26, weight: '600' } }
         }
       }
     }
