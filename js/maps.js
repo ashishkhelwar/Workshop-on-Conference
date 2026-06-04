@@ -181,64 +181,101 @@ function initCurrentElephantsMap(id) {
   mapsInitialized[id] = true;
 
   const map = L.map(id, { zoomControl: true, scrollWheelZoom: false })
-    .setView([22.25, 83.22], 9);
+    .setView([22.5, 83.0], 8);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors',
     maxZoom: 14
   }).addTo(map);
 
-  const locations = [
-    { lat: 22.1700, lng: 83.3878, loc: 'Dehri-Dih, Ghargoda',         count: 2,  herd: 'DH-HE07, RG-HE2',           div: 'Raigarh' },
-    { lat: 22.0430, lng: 83.4546, loc: 'Kantajharian East, Raigarh',  count: 2,  herd: 'DJHE07, KBHE4',             div: 'Raigarh' },
-    { lat: 22.3101, lng: 83.3649, loc: 'Barod, Ghargoda',              count: 2,  herd: 'JPHE02',                    div: 'Raigarh' },
-    { lat: 22.0667, lng: 83.1447, loc: 'Gurda, Kharsiya',              count: 35, herd: 'RaigarhHE1',                div: 'Raigarh' },
-    { lat: 22.1953, lng: 83.0958, loc: 'Chainpur, Dharamjaigarh',      count: 30, herd: 'DH-HE7, JPHE2, KorbaHE15', div: 'Dharamjaigarh' },
-    { lat: 22.4076, lng: 83.1385, loc: 'Koylar, Dharamjaigarh',        count: 8,  herd: 'JPHE2',                    div: 'Dharamjaigarh' },
-    { lat: 22.4469, lng: 83.0998, loc: 'Rupunga, Dharamjaigarh',       count: 15, herd: 'JPHE2',                    div: 'Dharamjaigarh' },
-    { lat: 22.4148, lng: 83.2677, loc: 'Ongna, Dharamjaigarh',         count: 1,  herd: 'JPHE2',                    div: 'Dharamjaigarh' },
-    { lat: 22.0788, lng: 83.1433, loc: 'Edu, Chhala Range',            count: 52, herd: 'RaigarhHE1',               div: 'Dharamjaigarh' },
-    { lat: 22.2917, lng: 83.1437, loc: 'Purunga, Chhala Range',        count: 1,  herd: '—',                        div: 'Dharamjaigarh' },
-    { lat: 22.2030, lng: 83.1861, loc: 'Banhar, Chhala Range',         count: 1,  herd: 'DH-HE7',                   div: 'Dharamjaigarh' },
-    { lat: 22.1561, lng: 83.1169, loc: 'Chhala',                       count: 1,  herd: '—',                        div: 'Dharamjaigarh' },
-    { lat: 22.1952, lng: 83.1461, loc: 'Banhar-Narangi, Chhala',       count: 1,  herd: 'RaigarhHE2',               div: 'Dharamjaigarh' },
-    { lat: 22.1766, lng: 83.1723, loc: 'Auranara, Chhala',             count: 1,  herd: 'DJME7',                    div: 'Dharamjaigarh' },
-    { lat: 22.1327, lng: 83.1461, loc: 'Boziya, Chhala',               count: 1,  herd: 'RaigarhHE1',               div: 'Dharamjaigarh' },
-    { lat: 22.2709, lng: 83.1172, loc: 'Behramar, Chhala',             count: 1,  herd: 'DJME13',                   div: 'Dharamjaigarh' },
+  const herdPts = [
+    [23.6971, 82.998],
+    [23.7437, 83.0037],
+    [23.7169, 82.9018],
+    [23.6971, 82.998],
+    [23.301667, 83.219444],
+    [23.7058, 82.8924],
+    [23.5177, 82.2369],
+    [22.153611, 82.852778],
+    [22.4188, 83.1999],
+    [22.694, 83.1795],
+    [22.4188, 83.1999],
+    [23.829167, 83.373333],
+    [22.43694, 83.3794],
+    [20.3575, 82.370833],
+    [21.45163, 82.4737],
+    [22.453, 81.8194],
+    [22.675, 82.3311]
   ];
 
-  locations.forEach(p => {
-    const size = Math.max(16, Math.min(46, Math.round(Math.sqrt(p.count) * 7)));
-    const half = Math.round(size / 2);
-    const icon = L.divIcon({
-      className: '',
-      html: `<div style="
-        width:${size}px;height:${size}px;border-radius:50%;
-        background:rgba(230,57,70,0.88);
-        border:2px solid #fff;
-        box-shadow:0 0 8px rgba(230,57,70,0.7),0 2px 5px rgba(0,0,0,0.45);
-        display:flex;align-items:center;justify-content:center;
-      "><div style="width:4px;height:4px;border-radius:50%;background:#fff;opacity:0.9"></div></div>`,
-      iconSize: [size, size],
-      iconAnchor: [half, half]
-    });
-    L.marker([p.lat, p.lng], { icon }).addTo(map).bindPopup(
-      `<b style="color:#E63946">${p.loc}</b><br>` +
-      `<span style="color:#555">${p.div} &nbsp;·&nbsp; ${p.count} elephant${p.count > 1 ? 's' : ''}</span><br>` +
-      `<small style="color:#777">Herd: ${p.herd}</small>`
-    );
+  const tuskerPts = [
+    [22.6904, 83.7842],
+    [22.700278, 83.973889],
+    [23.0071, 83.4983],
+    [23.7133, 83.0827],
+    [23.7486, 83.0372],
+    [21.51211, 83.0448],
+    [22.4412, 83.3316],
+    [22.687778, 83.265],
+    [22.546667, 83.620278],
+    [22.686389, 83.298611],
+    [22.7702, 83.1688],
+    [22.686389, 83.298611],
+    [22.335, 83.167222],
+    [22.160556, 82.862222],
+    [22.1255, 82.7833],
+    [20.5061, 82.3451],
+    [20.29, 82.391111],
+    [23.2142, 83.1917],
+    [23.2142, 83.1917],
+    [23.2142, 83.1917],
+    [23.2142, 83.1917],
+    [22.7214, 82.4428],
+    [22.9304, 82.3832],
+    [23.8879, 83.576],
+    [23.8322, 83.5939],
+    [23.7801, 83.1465],
+    [23.51309, 83.3775],
+    [22.793333, 83.134167],
+    [22.793333, 83.134167]
+  ];
+
+  const herdIcon = L.divIcon({
+    className: '',
+    html: `<div style="
+      width:14px;height:14px;border-radius:50%;
+      background:#52B788;
+      border:2.5px solid #fff;
+      box-shadow:0 0 7px rgba(82,183,136,0.85),0 1px 4px rgba(0,0,0,0.4);
+    "></div>`,
+    iconSize: [14, 14], iconAnchor: [7, 7], popupAnchor: [0, -9]
   });
 
-  // Pulsing red rings on large herds (≥30 elephants)
-  locations.filter(p => p.count >= 30).forEach(p => {
-    const pulseIcon = L.divIcon({
-      className: '',
-      html: `<div class="pulse-ring" style="--pulse-color:#E63946;width:30px;height:30px"></div>`,
-      iconSize: [30, 30],
-      iconAnchor: [15, 15]
-    });
-    L.marker([p.lat, p.lng], { icon: pulseIcon, interactive: false }).addTo(map);
+  const tuskerIcon = L.divIcon({
+    className: '',
+    html: `<div style="
+      width:13px;height:13px;
+      background:#F4A261;
+      border:2.5px solid #fff;
+      box-shadow:0 0 7px rgba(244,162,97,0.85),0 1px 4px rgba(0,0,0,0.4);
+      transform:rotate(45deg);
+      margin:1px;
+    "></div>`,
+    iconSize: [15, 15], iconAnchor: [7, 7], popupAnchor: [0, -9]
   });
+
+  herdPts.forEach(([lat, lng]) => {
+    L.marker([lat, lng], { icon: herdIcon }).addTo(map)
+      .bindPopup(`<b style="color:#52B788">Herd Elephant</b><br><small style="color:#888">${lat.toFixed(5)}, ${lng.toFixed(5)}</small>`);
+  });
+
+  tuskerPts.forEach(([lat, lng]) => {
+    L.marker([lat, lng], { icon: tuskerIcon }).addTo(map)
+      .bindPopup(`<b style="color:#F4A261">Tusker Elephant</b><br><small style="color:#888">${lat.toFixed(5)}, ${lng.toFixed(5)}</small>`);
+  });
+
+  const bounds = L.latLngBounds([...herdPts, ...tuskerPts]);
+  map.fitBounds(bounds, { padding: [28, 28] });
 
   setTimeout(() => map.invalidateSize(), 500);
 }
