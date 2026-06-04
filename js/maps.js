@@ -77,7 +77,7 @@ function initCasualtyMap(id) {
   mapsInitialized[id] = true;
 
   const map = L.map(id, { zoomControl: true, scrollWheelZoom: false, zoomSnap: 0.5 })
-    .setView([22.3, 83.4], 9.5);
+    .setView([22.3, 83.4], 10);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors',
