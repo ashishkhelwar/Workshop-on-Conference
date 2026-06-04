@@ -1701,6 +1701,36 @@ p { line-height: 1.65; }
   to   { left: 130%; }
 }
 
+/* rising current bands — moves upward inside fill */
+.liq-current {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 200%; pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px, transparent 10px,
+    rgba(255,255,255,0.04) 10px, rgba(255,255,255,0.04) 12px
+  );
+  animation: liqCurrentMove 2.4s linear infinite;
+}
+@keyframes liqCurrentMove {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+/* rising bubbles */
+.liq-bubble {
+  position: absolute; bottom: 6%;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.38);
+  animation: liqBubbleRise 2s ease-in infinite;
+  pointer-events: none;
+}
+@keyframes liqBubbleRise {
+  0%   { transform: translateY(0)      scale(1);   opacity: 0.65; }
+  75%  { opacity: 0.3; }
+  100% { transform: translateY(-120px) scale(0.5); opacity: 0;   }
+}
+
 .liq-lbl {
   font-size: 0.68rem; font-weight: 700;
   color: rgba(212,168,49,0.65);
@@ -1722,9 +1752,10 @@ p { line-height: 1.65; }
 .liq-replay:hover { background: rgba(212,168,49,0.22); }
 
 /* Drowning variant — blue */
-.liq-drown .liq-fill { background: linear-gradient(180deg, #2980c4 0%, #4A9EEB 60%, #7bb8f0 100%); }
-.liq-drown .liq-fill::before { background: radial-gradient(ellipse 120% 40% at 50% 0%, rgba(74,158,235,0.55) 0%, transparent 70%); }
-.liq-drown .liq-fill::after  { background: rgba(74,158,235,0.18); }
+.liq-drown .liq-fill { background: linear-gradient(to top, #1a5a9a 0%, #2980c4 40%, #4A9EEB 80%, #7bb8f0 100%); }
+.liq-drown .liq-fill::before { background: rgba(255,255,255,0.16); }
+.liq-drown .liq-fill::after  { background: rgba(74,158,235,0.22); }
+.liq-drown .liq-shimmer { background: linear-gradient(90deg, transparent 0%, rgba(74,158,235,0.3) 50%, transparent 100%); }
 .liq-drown .liq-box   { border-color: rgba(74,158,235,0.35); background: rgba(74,158,235,0.07); }
 .liq-drown .liq-num   { color: #4A9EEB; }
 .liq-drown .liq-lbl   { color: rgba(74,158,235,0.65); }
@@ -1732,9 +1763,10 @@ p { line-height: 1.65; }
 .liq-drown .liq-replay:hover { background: rgba(74,158,235,0.22); }
 
 /* Electrocution variant — red */
-.liq-elec .liq-fill { background: linear-gradient(180deg, #b02030 0%, #E63946 60%, #f07078 100%); }
-.liq-elec .liq-fill::before { background: radial-gradient(ellipse 120% 40% at 50% 0%, rgba(230,57,70,0.55) 0%, transparent 70%); }
-.liq-elec .liq-fill::after  { background: rgba(230,57,70,0.18); }
+.liq-elec .liq-fill { background: linear-gradient(to top, #7a1020 0%, #b02030 40%, #E63946 80%, #f07078 100%); }
+.liq-elec .liq-fill::before { background: rgba(255,255,255,0.16); }
+.liq-elec .liq-fill::after  { background: rgba(230,57,70,0.22); }
+.liq-elec .liq-shimmer { background: linear-gradient(90deg, transparent 0%, rgba(230,57,70,0.3) 50%, transparent 100%); }
 .liq-elec .liq-box   { border-color: rgba(230,57,70,0.35); background: rgba(230,57,70,0.07); }
 .liq-elec .liq-num   { color: #E63946; }
 .liq-elec .liq-lbl   { color: rgba(230,57,70,0.65); }

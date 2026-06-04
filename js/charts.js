@@ -1091,6 +1091,23 @@ function buildSeasonLiqChart(id, values, maxVal, colorClass) {
     shimmer.className = 'liq-shimmer';
     shimmer.style.animationDelay = (delay + 2.8) + 's';
     fill.appendChild(shimmer);
+
+    // upward current bands
+    const curr = document.createElement('div');
+    curr.className = 'liq-current';
+    curr.style.animationDelay = delay + 's';
+    fill.appendChild(curr);
+
+    // rising bubbles
+    [[13, 2.5, 0.0], [38, 3.5, 0.6], [62, 2, 1.2], [82, 3, 0.3]].forEach(([left, size, bd]) => {
+      const bbl = document.createElement('div');
+      bbl.className = 'liq-bubble';
+      bbl.style.cssText = `left:${left}%;width:${size}px;height:${size}px;` +
+        `animation-delay:${(delay + bd + 0.8).toFixed(2)}s;` +
+        `animation-duration:${(1.8 + bd * 0.5).toFixed(2)}s;`;
+      fill.appendChild(bbl);
+    });
+
     box.appendChild(fill);
 
     const lbl = document.createElement('div');
