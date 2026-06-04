@@ -18,143 +18,54 @@
 <!-- ═══════════════════════════════════════════════════════════════
      SLIDE 1 — TITLE
      ═══════════════════════════════════════════════════════════════ -->
-<section class="slide s1-brochure active" id="s1">
+<section class="slide s1-opt4 active" id="s1">
 
-  <!-- Botanical corner ornaments — same SVG, CSS-mirrored for each corner -->
-  <svg class="s1b-orn s1b-tl" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none">
-    <path d="M5,5 C38,32 72,62 105,105" stroke="#5a7030" stroke-width="2.2" stroke-linecap="round"/>
-    <path d="M5,5 C38,4 75,7 115,22" stroke="#5a7030" stroke-width="1.8" stroke-linecap="round"/>
-    <path d="M5,5 C4,38 7,75 22,115" stroke="#5a7030" stroke-width="1.8" stroke-linecap="round"/>
-    <!-- Corner cluster leaves -->
-    <ellipse cx="26" cy="13" rx="16" ry="7" fill="#6e8c38" stroke="#4a6020" stroke-width="0.8" transform="rotate(-22 26 13)"/>
-    <ellipse cx="13" cy="26" rx="7" ry="16" fill="#7a9e44" stroke="#4a6020" stroke-width="0.8" transform="rotate(-22 13 26)"/>
-    <ellipse cx="23" cy="23" rx="18" ry="8" fill="#8aad4a" stroke="#4a6020" stroke-width="0.8" transform="rotate(-45 23 23)"/>
-    <!-- Top-branch leaves -->
-    <ellipse cx="52" cy="11" rx="14" ry="6"  fill="#7a9e44" stroke="#4a6020" stroke-width="0.7" transform="rotate(-8  52 11)"/>
-    <ellipse cx="82" cy="15" rx="13" ry="5.5" fill="#6e8c38" stroke="#4a6020" stroke-width="0.7" transform="rotate(-14 82 15)"/>
-    <ellipse cx="110" cy="22" rx="11" ry="5" fill="#8aad4a" stroke="#4a6020" stroke-width="0.7" transform="rotate(-20 110 22)"/>
-    <!-- Left-branch leaves -->
-    <ellipse cx="11" cy="52" rx="6"   ry="14" fill="#7a9e44" stroke="#4a6020" stroke-width="0.7" transform="rotate(-8  11 52)"/>
-    <ellipse cx="15" cy="82" rx="5.5" ry="13" fill="#6e8c38" stroke="#4a6020" stroke-width="0.7" transform="rotate(-14 15 82)"/>
-    <ellipse cx="22" cy="110" rx="5"  ry="11" fill="#8aad4a" stroke="#4a6020" stroke-width="0.7" transform="rotate(-20 22 110)"/>
-    <!-- Diagonal leaves -->
-    <ellipse cx="50"  cy="50"  rx="16" ry="7" fill="#6e8c38" stroke="#4a6020" stroke-width="0.7" transform="rotate(-45 50  50)"/>
-    <ellipse cx="75"  cy="75"  rx="14" ry="6.5" fill="#7a9e44" stroke="#4a6020" stroke-width="0.7" transform="rotate(-45 75  75)"/>
-    <ellipse cx="100" cy="100" rx="12" ry="6" fill="#8aad4a" stroke="#4a6020" stroke-width="0.7" transform="rotate(-45 100 100)"/>
-    <!-- Berry dots -->
-    <circle cx="14" cy="7"  r="2.8" fill="#3d5218"/>
-    <circle cx="7"  cy="14" r="2.8" fill="#3d5218"/>
-    <circle cx="34" cy="34" r="2.2" fill="#3d5218"/>
-    <circle cx="60" cy="24" r="1.8" fill="#3d5218"/>
-    <circle cx="24" cy="60" r="1.8" fill="#3d5218"/>
-  </svg>
-  <svg class="s1b-orn s1b-tr" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none">
-    <path d="M195,5 C162,32 128,62 95,105" stroke="#5a7030" stroke-width="2.2" stroke-linecap="round"/>
-    <path d="M195,5 C162,4 125,7 85,22" stroke="#5a7030" stroke-width="1.8" stroke-linecap="round"/>
-    <path d="M195,5 C196,38 193,75 178,115" stroke="#5a7030" stroke-width="1.8" stroke-linecap="round"/>
-    <ellipse cx="174" cy="13" rx="16" ry="7" fill="#6e8c38" stroke="#4a6020" stroke-width="0.8" transform="rotate(22 174 13)"/>
-    <ellipse cx="187" cy="26" rx="7" ry="16" fill="#7a9e44" stroke="#4a6020" stroke-width="0.8" transform="rotate(22 187 26)"/>
-    <ellipse cx="177" cy="23" rx="18" ry="8" fill="#8aad4a" stroke="#4a6020" stroke-width="0.8" transform="rotate(45 177 23)"/>
-    <ellipse cx="148" cy="11" rx="14" ry="6"  fill="#7a9e44" stroke="#4a6020" stroke-width="0.7" transform="rotate(8  148 11)"/>
-    <ellipse cx="118" cy="15" rx="13" ry="5.5" fill="#6e8c38" stroke="#4a6020" stroke-width="0.7" transform="rotate(14 118 15)"/>
-    <ellipse cx="90"  cy="22" rx="11" ry="5"  fill="#8aad4a" stroke="#4a6020" stroke-width="0.7" transform="rotate(20 90 22)"/>
-    <ellipse cx="189" cy="52" rx="6"   ry="14" fill="#7a9e44" stroke="#4a6020" stroke-width="0.7" transform="rotate(8  189 52)"/>
-    <ellipse cx="185" cy="82" rx="5.5" ry="13" fill="#6e8c38" stroke="#4a6020" stroke-width="0.7" transform="rotate(14 185 82)"/>
-    <ellipse cx="178" cy="110" rx="5"  ry="11" fill="#8aad4a" stroke="#4a6020" stroke-width="0.7" transform="rotate(20 178 110)"/>
-    <ellipse cx="150" cy="50"  rx="16" ry="7" fill="#6e8c38" stroke="#4a6020" stroke-width="0.7" transform="rotate(45 150 50)"/>
-    <ellipse cx="125" cy="75"  rx="14" ry="6.5" fill="#7a9e44" stroke="#4a6020" stroke-width="0.7" transform="rotate(45 125 75)"/>
-    <ellipse cx="100" cy="100" rx="12" ry="6"  fill="#8aad4a" stroke="#4a6020" stroke-width="0.7" transform="rotate(45 100 100)"/>
-    <circle cx="186" cy="7"  r="2.8" fill="#3d5218"/>
-    <circle cx="193" cy="14" r="2.8" fill="#3d5218"/>
-    <circle cx="166" cy="34" r="2.2" fill="#3d5218"/>
-    <circle cx="140" cy="24" r="1.8" fill="#3d5218"/>
-    <circle cx="176" cy="60" r="1.8" fill="#3d5218"/>
-  </svg>
-  <svg class="s1b-orn s1b-bl" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none">
-    <path d="M5,195 C38,168 72,138 105,95" stroke="#5a7030" stroke-width="2.2" stroke-linecap="round"/>
-    <path d="M5,195 C38,196 75,193 115,178" stroke="#5a7030" stroke-width="1.8" stroke-linecap="round"/>
-    <path d="M5,195 C4,162 7,125 22,85" stroke="#5a7030" stroke-width="1.8" stroke-linecap="round"/>
-    <ellipse cx="26" cy="187" rx="16" ry="7" fill="#6e8c38" stroke="#4a6020" stroke-width="0.8" transform="rotate(22 26 187)"/>
-    <ellipse cx="13" cy="174" rx="7" ry="16" fill="#7a9e44" stroke="#4a6020" stroke-width="0.8" transform="rotate(22 13 174)"/>
-    <ellipse cx="23" cy="177" rx="18" ry="8" fill="#8aad4a" stroke="#4a6020" stroke-width="0.8" transform="rotate(45 23 177)"/>
-    <ellipse cx="52"  cy="189" rx="14" ry="6"  fill="#7a9e44" stroke="#4a6020" stroke-width="0.7" transform="rotate(8  52 189)"/>
-    <ellipse cx="82"  cy="185" rx="13" ry="5.5" fill="#6e8c38" stroke="#4a6020" stroke-width="0.7" transform="rotate(14 82 185)"/>
-    <ellipse cx="110" cy="178" rx="11" ry="5"  fill="#8aad4a" stroke="#4a6020" stroke-width="0.7" transform="rotate(20 110 178)"/>
-    <ellipse cx="11"  cy="148" rx="6"   ry="14" fill="#7a9e44" stroke="#4a6020" stroke-width="0.7" transform="rotate(8  11 148)"/>
-    <ellipse cx="15"  cy="118" rx="5.5" ry="13" fill="#6e8c38" stroke="#4a6020" stroke-width="0.7" transform="rotate(14 15 118)"/>
-    <ellipse cx="22"  cy="90"  rx="5"   ry="11" fill="#8aad4a" stroke="#4a6020" stroke-width="0.7" transform="rotate(20 22 90)"/>
-    <ellipse cx="50"  cy="150" rx="16"  ry="7"  fill="#6e8c38" stroke="#4a6020" stroke-width="0.7" transform="rotate(45 50 150)"/>
-    <ellipse cx="75"  cy="125" rx="14"  ry="6.5" fill="#7a9e44" stroke="#4a6020" stroke-width="0.7" transform="rotate(45 75 125)"/>
-    <ellipse cx="100" cy="100" rx="12"  ry="6"  fill="#8aad4a" stroke="#4a6020" stroke-width="0.7" transform="rotate(45 100 100)"/>
-    <circle cx="14"  cy="193" r="2.8" fill="#3d5218"/>
-    <circle cx="7"   cy="186" r="2.8" fill="#3d5218"/>
-    <circle cx="34"  cy="166" r="2.2" fill="#3d5218"/>
-    <circle cx="60"  cy="176" r="1.8" fill="#3d5218"/>
-    <circle cx="24"  cy="140" r="1.8" fill="#3d5218"/>
-  </svg>
-  <svg class="s1b-orn s1b-br" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none">
-    <path d="M195,195 C162,168 128,138 95,95" stroke="#5a7030" stroke-width="2.2" stroke-linecap="round"/>
-    <path d="M195,195 C162,196 125,193 85,178" stroke="#5a7030" stroke-width="1.8" stroke-linecap="round"/>
-    <path d="M195,195 C196,162 193,125 178,85" stroke="#5a7030" stroke-width="1.8" stroke-linecap="round"/>
-    <ellipse cx="174" cy="187" rx="16" ry="7" fill="#6e8c38" stroke="#4a6020" stroke-width="0.8" transform="rotate(-22 174 187)"/>
-    <ellipse cx="187" cy="174" rx="7" ry="16" fill="#7a9e44" stroke="#4a6020" stroke-width="0.8" transform="rotate(-22 187 174)"/>
-    <ellipse cx="177" cy="177" rx="18" ry="8" fill="#8aad4a" stroke="#4a6020" stroke-width="0.8" transform="rotate(-45 177 177)"/>
-    <ellipse cx="148" cy="189" rx="14" ry="6"  fill="#7a9e44" stroke="#4a6020" stroke-width="0.7" transform="rotate(-8  148 189)"/>
-    <ellipse cx="118" cy="185" rx="13" ry="5.5" fill="#6e8c38" stroke="#4a6020" stroke-width="0.7" transform="rotate(-14 118 185)"/>
-    <ellipse cx="90"  cy="178" rx="11" ry="5"  fill="#8aad4a" stroke="#4a6020" stroke-width="0.7" transform="rotate(-20 90 178)"/>
-    <ellipse cx="189" cy="148" rx="6"   ry="14" fill="#7a9e44" stroke="#4a6020" stroke-width="0.7" transform="rotate(-8  189 148)"/>
-    <ellipse cx="185" cy="118" rx="5.5" ry="13" fill="#6e8c38" stroke="#4a6020" stroke-width="0.7" transform="rotate(-14 185 118)"/>
-    <ellipse cx="178" cy="90"  rx="5"   ry="11" fill="#8aad4a" stroke="#4a6020" stroke-width="0.7" transform="rotate(-20 178 90)"/>
-    <ellipse cx="150" cy="150" rx="16"  ry="7"  fill="#6e8c38" stroke="#4a6020" stroke-width="0.7" transform="rotate(-45 150 150)"/>
-    <ellipse cx="125" cy="125" rx="14"  ry="6.5" fill="#7a9e44" stroke="#4a6020" stroke-width="0.7" transform="rotate(-45 125 125)"/>
-    <ellipse cx="100" cy="100" rx="12"  ry="6"  fill="#8aad4a" stroke="#4a6020" stroke-width="0.7" transform="rotate(-45 100 100)"/>
-    <circle cx="186" cy="193" r="2.8" fill="#3d5218"/>
-    <circle cx="193" cy="186" r="2.8" fill="#3d5218"/>
-    <circle cx="166" cy="166" r="2.2" fill="#3d5218"/>
-    <circle cx="140" cy="176" r="1.8" fill="#3d5218"/>
-    <circle cx="176" cy="140" r="1.8" fill="#3d5218"/>
-  </svg>
+  <!-- Dark green top bar with logos -->
+  <div class="s1o4-topbar">
+    <img src="img/logo-wii.png" alt="WII" class="s1o4-toplogo">
+    <div class="s1o4-toptitle">
+      Workshop on Essentials of Mortality Investigation of Asian Elephant
+    </div>
+    <img src="img/logo-cg.png" alt="CG Forest" class="s1o4-toplogo">
+  </div>
 
-  <!-- Main layout -->
-  <div class="s1b-wrap">
+  <!-- Main body -->
+  <div class="s1o4-body">
 
-    <!-- Logo row: WII left, CG right -->
-    <div class="s1b-logorow">
-      <div class="s1b-logoitem">
-        <img src="img/logo-wii.png" alt="WII" class="s1b-logoimg">
-        <div class="s1b-logotext">
-          <span class="s1b-hi">भारतीय वन्यजीव संस्थान</span>
-          <span class="s1b-en">Wildlife Institute of India</span>
-        </div>
+    <!-- Green vertical accent stripe -->
+    <div class="s1o4-stripe"></div>
+
+    <!-- Title text block -->
+    <div class="s1o4-textblock">
+      <div class="s1o4-pre">Workshop On</div>
+      <h1 class="s1o4-headline">Learning<br>from <span>Dead</span></h1>
+      <p class="s1o4-sub">Essentials of Mortality Investigation<br>of Asian Elephant</p>
+      <div class="s1o4-date">5<sup>th</sup>–6<sup>th</sup> June, 2026</div>
+    </div>
+
+    <!-- Right logos column -->
+    <div class="s1o4-logos">
+      <img src="img/logo-wii.png" alt="WII" class="s1o4-sidelogo">
+      <div class="s1o4-logotext">
+        <span class="s1o4-hi">भारतीय वन्यजीव संस्थान</span>
+        <span class="s1o4-en">Wildlife Institute of India</span>
       </div>
-      <div class="s1b-logoitem s1b-logoitem-r">
-        <img src="img/logo-cg.png" alt="CG Forest" class="s1b-logoimg s1b-logoimg-r">
-        <div class="s1b-logotext s1b-logotext-r">
-          <span class="s1b-hi">छत्तीसगढ़ शासन</span>
-          <span class="s1b-en">वन विभाग</span>
-        </div>
+      <div class="s1o4-logosep"></div>
+      <img src="img/logo-cg.png" alt="CG Forest" class="s1o4-sidelogo">
+      <div class="s1o4-logotext">
+        <span class="s1o4-hi">छत्तीसगढ़ शासन</span>
+        <span class="s1o4-en">वन विभाग</span>
       </div>
     </div>
 
-    <!-- Body: title centered -->
-    <div class="s1b-body s1b-body-center">
+  </div>
 
-      <div class="s1b-titlecol s1b-titlecol-full">
-        <p class="s1b-wkshop">Workshop</p>
-        <p class="s1b-on">On</p>
-        <h1 class="s1b-headline">Learning from Dead</h1>
-        <div class="s1b-uline"></div>
-        <p class="s1b-subline">Essentials of Mortality</p>
-        <div class="s1b-uline s1b-uline-thin"></div>
-        <p class="s1b-subline">Investigation of Asian Elephant</p>
-        <div class="s1b-uline s1b-uline-thin"></div>
-      </div>
-
-    </div>
-
-    <!-- Date -->
-    <p class="s1b-date">5<sup>th</sup>–6<sup>th</sup> June, 2026</p>
-
+  <!-- Bottom pill bar -->
+  <div class="s1o4-pills">
+    <span class="s1o4-pill">Dharamjaigarh Division</span>
+    <span class="s1o4-pill">Raigarh Division</span>
+    <span class="s1o4-pill">Chhattisgarh Forest Department</span>
+    <span class="s1o4-pill">Wildlife Institute of India, Dehradun</span>
   </div>
 
 </section>
