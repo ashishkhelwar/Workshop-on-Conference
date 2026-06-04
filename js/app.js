@@ -131,7 +131,7 @@ function onSlideActivate(index) {
     // Slide 7b — Elephant Casualties
     case 13: {
       const el = slides[13].querySelector('.hero-count');
-      if (el) countUp(el, 48, 1800);
+      if (el) countUp(el, 49, 1800);
       setTimeout(() => initYearBarsChart('yearBarsCanvas'), 400);
       break;
     }

@@ -1,18 +1,18 @@
 const DATA = {
   years: ['2021-22','2022-23','2023-24','2024-25','2025-26','2026-27*'],
 
-  elephantDeaths: [4, 12, 6, 10, 12, 4],
+  elephantDeaths: [4, 12, 6, 10, 12, 5],
   humanDeaths: [13, 1, 7, 8, 16, 0],
 
   // Division-wise elephant deaths by year (DH + RG = yearly total)
   elephantDeathsByDiv: {
     dh: [4, 6, 6, 6,  1, 4],
-    rg: [0, 6, 0, 4, 11, 0]
+    rg: [0, 6, 0, 4, 11, 1]
   },
 
   divisionTotals: {
     dh: { human: 36, elephant: 27 },
-    rg: { human: 9, elephant: 21 }
+    rg: { human: 9, elephant: 22 }
   },
 
   rangeWiseHuman: [
@@ -27,47 +27,48 @@ const DATA = {
   ],
 
   causeOfDeath: [
-    { cause: 'Electrocution', count: 23, pct: 48 },
-    { cause: 'Suspected Drowning', count: 12, pct: 25 },
-    { cause: 'Natural / Old Age', count: 4, pct: 8 },
-    { cause: 'Fall / Trauma', count: 4, pct: 8 },
-    { cause: 'Other', count: 5, pct: 10 }
+    { cause: 'Electrocution',      count: 23, pct: 47 },
+    { cause: 'Suspected Drowning', count: 13, pct: 27 },
+    { cause: 'Natural / Old Age',  count: 4,  pct: 8  },
+    { cause: 'Fall / Trauma',      count: 4,  pct: 8  },
+    { cause: 'Other',              count: 5,  pct: 10 }
   ],
 
   ageProfile: [
-    { group: 'Calf (0–2 yr)',      count: 22, pct: 49 },
-    { group: 'Juvenile (2–15 yr)', count: 5,  pct: 11 },
-    { group: 'Sub-adult (15–30 yr)', count: 2, pct: 4 },
-    { group: 'Adult (30–55 yr)',   count: 11, pct: 24 },
-    { group: 'Old (55+ yr)',       count: 5,  pct: 11 }
+    { group: 'Calf (0–2 yr)',        count: 23, pct: 50 },
+    { group: 'Juvenile (2–15 yr)',   count: 5,  pct: 11 },
+    { group: 'Sub-adult (15–30 yr)', count: 2,  pct: 4  },
+    { group: 'Adult (30–55 yr)',     count: 11, pct: 24 },
+    { group: 'Old (55+ yr)',         count: 5,  pct: 11 }
   ],
 
-  sexProfile: { male: 23, female: 22, unknown: 0 },  // 45 total
+  sexProfile: { male: 24, female: 22, unknown: 0 },  // 46 known
 
   // Exact monthly distribution from detailed records
   seasonal: {
     months: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-    counts: [6, 4, 3, 2, 5, 4, 1, 1, 3, 8, 6, 5]
+    counts: [6, 4, 3, 2, 5, 5, 1, 1, 3, 8, 6, 5]
   },
 
   seasonalCause: {
     months: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-    drowning:      [3, 0, 1, 0, 4, 0, 0, 0, 0, 1, 2, 2],
+    drowning:      [3, 0, 1, 0, 4, 1, 0, 0, 0, 1, 2, 2],
     electrocution: [2, 0, 2, 1, 0, 1, 1, 1, 2, 7, 1, 2]
   },
 
   rangeWise: [
-    { beat: 'Ghargoda (RG)',     count: 15, div: 'Raigarh',       risk: 'CRITICAL', elec: 7, drown: 5, other: 3 },
-    { beat: 'Chhal (DH)',        count: 14, div: 'Dharamjaigarh', risk: 'CRITICAL', elec: 5, drown: 6, other: 3 },
-    { beat: 'Dharamjaigarh HQ', count: 7,  div: 'Dharamjaigarh', risk: 'HIGH',     elec: 5, drown: 0, other: 2 },
-    { beat: 'Tamanar (RG)',      count: 5,  div: 'Raigarh',       risk: 'MODERATE', elec: 4, drown: 1, other: 0 },
-    { beat: 'Borojh (DH)',       count: 4,  div: 'Dharamjaigarh', risk: 'HIGH',     elec: 1, drown: 0, other: 3 },
-    { beat: 'Lailungaan (DH)',   count: 2,  div: 'Dharamjaigarh', risk: 'HIGH',     elec: 0, drown: 0, other: 2 },
-    { beat: 'Baakaaruma (DH)',   count: 1,  div: 'Dharamjaigarh', risk: 'MODERATE', elec: 1, drown: 0, other: 0 },
-    { beat: 'Raigarh HQ',        count: 1,  div: 'Raigarh',       risk: 'LOW',      elec: 0, drown: 1, other: 0 }
+    { beat: 'Ghargoda (RG)',     count: 15, div: 'Raigarh',       risk: 'CRITICAL',  elec: 7, drown: 5, other: 3 },
+    { beat: 'Chhal (DH)',        count: 14, div: 'Dharamjaigarh', risk: 'CRITICAL',  elec: 5, drown: 6, other: 3 },
+    { beat: 'Dharamjaigarh HQ', count: 7,  div: 'Dharamjaigarh', risk: 'HIGH',      elec: 5, drown: 0, other: 2 },
+    { beat: 'Tamanar (RG)',      count: 5,  div: 'Raigarh',       risk: 'MODERATE',  elec: 4, drown: 1, other: 0 },
+    { beat: 'Borojh (DH)',       count: 4,  div: 'Dharamjaigarh', risk: 'HIGH',      elec: 1, drown: 0, other: 3 },
+    { beat: 'Lailungaan (DH)',   count: 2,  div: 'Dharamjaigarh', risk: 'HIGH',      elec: 0, drown: 0, other: 2 },
+    { beat: 'Baakaaruma (DH)',   count: 1,  div: 'Dharamjaigarh', risk: 'MODERATE',  elec: 1, drown: 0, other: 0 },
+    { beat: 'Raigarh HQ',       count: 1,  div: 'Raigarh',       risk: 'LOW',       elec: 0, drown: 1, other: 0 },
+    { beat: 'Kharsiya (RG)',     count: 1,  div: 'Raigarh',       risk: 'LOW',       elec: 0, drown: 1, other: 0 }
   ],
 
-  // All 90 geo-points [lat, lon, cause/village, year]
+  // All geo-points [lat, lon, cause/village, year]
   geoPoints: {
     dhHuman: [
       [22.408, 83.187, 'Krondha', '2021-22'],
@@ -165,7 +166,8 @@ const DATA = {
       [21.985, 83.462, 'Suspected Drowning', '2025-26'],
       [22.555, 83.615, 'Fell in nala', '2025-26'],
       [22.065, 83.392, 'Weakness', '2025-26'],
-      [22.181, 83.455, 'Electrocution(2)', '2025-26']
+      [22.181, 83.455, 'Electrocution(2)', '2025-26'],
+      [22.138, 83.120, 'Suspected Drowning-Mond River (pelvic fracture)', '2026-27']
     ]
   },
 
