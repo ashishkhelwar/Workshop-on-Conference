@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cover Page Options — 5 Designs</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800&family=Hanken+Grotesk:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;0,800;1,600&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#1a1a1a; font-family: sans-serif; padding: 40px 24px; }
+h1 { color:#fff; text-align:center; font-size:1.4rem; font-weight:400; letter-spacing:0.1em; text-transform:uppercase; margin-bottom: 40px; opacity:0.6; }
+
+.options-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.option-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.option-label {
+  color: rgba(255,255,255,0.5);
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.option-label strong { color: #fff; font-size: 1rem; }
+
+/* Slide container: 16:9 */
+.slide-box {
+  width: 100%;
+  aspect-ratio: 16/9;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+
+/* ═══════════════════════════════════════
+   OPTION 1 — Parchment Heritage
+   ═══════════════════════════════════════ */
+.opt1 {
+  background: #EAE2CC;
+  color: #1A1208;
+  font-family: 'EB Garamond', Georgia, serif;
+  display: flex;
+  flex-direction: column;
+}
+.opt1 .top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3% 6% 2%;
+  border-bottom: 1.5px solid rgba(90,80,50,0.25);
+}
+.opt1 .logo-unit {
+  display: flex; align-items: center; gap: 10px;
+}
+.opt1 .logo-unit img { height: 52px; width: auto; }
+.opt1 .logo-unit-r { flex-direction: row-reverse; }
+.opt1 .logo-text { font-size: 0.72rem; color: #4A3C20; line-height: 1.5; }
+.opt1 .logo-text .hi { display:block; font-size: 0.82rem; font-weight:600; }
+.opt1 .logo-text-r { text-align: right; }
+.opt1 .center-body {
+  flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding: 1% 8%;
+}
+.opt1 .pre { font-size: 1.5rem; color: #2A1F0E; line-height: 1.2; margin: 0; font-style:italic; }
+.opt1 .headline { font-size: clamp(2rem,4vw,3.2rem); font-weight:700; color:#1A1208; line-height:1.05; margin:6px 0 4px; letter-spacing:-0.01em; }
+.opt1 .rule { width:88%; height:2px; background:#1A1208; margin: 3px auto 8px; }
+.opt1 .rule-thin { width:88%; height:1.5px; background:#1A1208; margin: 2px auto 6px; opacity:0.7; }
+.opt1 .sub { font-size: clamp(1.1rem,2vw,1.5rem); color:#2A1F0E; line-height:1.2; }
+.opt1 .date-bar {
+  text-align:center; padding: 2% 0 2.5%;
+  border-top: 1.5px solid rgba(90,80,50,0.25);
+  font-size: clamp(1rem,1.6vw,1.3rem); font-weight:700; color:#1A1208;
+  letter-spacing:0.04em;
+}
+/* SVG corners */
+.opt1-corn {
+  position:absolute; width:14%; height:auto; pointer-events:none;
+}
+.opt1-corn.tl { top:0; left:0; }
+.opt1-corn.tr { top:0; right:0; }
+.opt1-corn.bl { bottom:0; left:0; }
+.opt1-corn.br { bottom:0; right:0; }
+
+/* ═══════════════════════════════════════
+   OPTION 2 — Dark Forest
+   ═══════════════════════════════════════ */
+.opt2 {
+  background: linear-gradient(145deg, #0d2818 0%, #112e1a 40%, #0a1f12 100%);
+  color: #E8F0E8;
+  font-family: 'Playfair Display', Georgia, serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5%;
+}
+/* Elephant watermark */
+.opt2::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 55%, rgba(82,183,136,0.06) 0%, transparent 70%);
+}
+.opt2 .gold-line {
+  width: 60px; height: 2px;
+  background: linear-gradient(90deg, transparent, #C9A84C, transparent);
+  margin: 10px auto;
+}
+.opt2 .tag2 {
+  font-size: 0.65rem; font-family: 'Hanken Grotesk', sans-serif;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: #C9A84C; font-weight:700; margin-bottom: 10px;
+}
+.opt2 .headline2 {
+  font-size: clamp(1.8rem,3.6vw,3rem); font-weight:700; color: #f0f8f2;
+  text-align:center; line-height:1.1; margin: 6px 0;
+}
+.opt2 .sub2 {
+  font-size: clamp(0.85rem,1.5vw,1.2rem); color: rgba(232,240,232,0.7);
+  text-align:center; line-height:1.4; font-style:italic; margin: 4px 0;
+}
+.opt2 .date2 {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: clamp(0.85rem,1.3vw,1.1rem); font-weight:600; color:#C9A84C;
+  letter-spacing:0.08em; margin-top: 12px;
+}
+.opt2 .logos2 {
+  display:flex; gap:28px; align-items:center; margin-top: 14px;
+  padding-top: 12px; border-top: 1px solid rgba(201,168,76,0.25);
+}
+.opt2 .logos2 img { height: 38px; filter: brightness(0) invert(1); opacity:0.7; }
+.opt2 .logos2 .sep { width:1px; height:30px; background:rgba(201,168,76,0.3); }
+/* Leaf frame */
+.opt2 .frame-tl, .opt2 .frame-tr, .opt2 .frame-bl, .opt2 .frame-br {
+  position:absolute; width:80px; height:80px; pointer-events:none;
+}
+.opt2 .frame-tl { top:0; left:0; border-top:2px solid rgba(201,168,76,0.4); border-left:2px solid rgba(201,168,76,0.4); }
+.opt2 .frame-tr { top:0; right:0; border-top:2px solid rgba(201,168,76,0.4); border-right:2px solid rgba(201,168,76,0.4); }
+.opt2 .frame-bl { bottom:0; left:0; border-bottom:2px solid rgba(201,168,76,0.4); border-left:2px solid rgba(201,168,76,0.4); }
+.opt2 .frame-br { bottom:0; right:0; border-bottom:2px solid rgba(201,168,76,0.4); border-right:2px solid rgba(201,168,76,0.4); }
+/* Elephant silhouette watermark */
+.opt2 .eleph-wm {
+  position:absolute; font-size: 22vw; opacity:0.03;
+  color:#52B788; user-select:none; pointer-events:none;
+  bottom:-4%; left:50%; transform:translateX(-50%);
+  line-height:1;
+}
+
+/* ═══════════════════════════════════════
+   OPTION 3 — Split Banner
+   ═══════════════════════════════════════ */
+.opt3 {
+  background: #fff;
+  font-family: 'Hanken Grotesk', sans-serif;
+  display: flex;
+}
+.opt3 .left3 {
+  width: 52%;
+  background: linear-gradient(160deg, #0d3320 0%, #1B4332 60%, #2d5a40 100%);
+  display: flex; flex-direction:column; justify-content:center;
+  padding: 6% 7%;
+  position: relative; overflow: hidden;
+}
+.opt3 .left3::after {
+  content:''; position:absolute; right:-40px; top:0; bottom:0; width:80px;
+  background: #fff; transform: skewX(-6deg); z-index:1;
+}
+.opt3 .tag3 {
+  font-size: 0.6rem; font-weight:800; letter-spacing:0.2em;
+  text-transform:uppercase; color:#52B788; margin-bottom:14px;
+}
+.opt3 .headline3 {
+  font-size: clamp(1.6rem,3.2vw,2.6rem); font-weight:800; color:#fff;
+  line-height:1.1; margin-bottom:6px;
+}
+.opt3 .sub3 {
+  font-size: clamp(0.8rem,1.35vw,1.05rem); color:rgba(255,255,255,0.65);
+  line-height:1.5; margin-bottom:18px;
+}
+.opt3 .accent3 {
+  width:50px; height:4px; background:#C9A84C; border-radius:2px; margin-bottom:18px;
+}
+.opt3 .date3 {
+  font-size: clamp(0.9rem,1.5vw,1.15rem); font-weight:700; color:#C9A84C;
+}
+.opt3 .right3 {
+  flex:1; background:#f8f6f0;
+  display:flex; flex-direction:column;
+  justify-content:center; align-items:center;
+  padding: 5% 6%;
+  z-index:2; position:relative;
+}
+.opt3 .logo3 { display:flex; flex-direction:column; align-items:center; gap:14px; }
+.opt3 .logo3 img { height: 58px; }
+.opt3 .logo3-sep { width:1px; height:50px; background:rgba(0,0,0,0.12); }
+.opt3 .logo3-text { font-size:0.72rem; color:#4A3C20; text-align:center; line-height:1.5; }
+.opt3 .logo3-text strong { display:block; font-size:0.8rem; color:#1a1a1a; }
+.opt3 .decorline3 { width:80%; height:1px; background:rgba(0,0,0,0.1); margin:14px 0; }
+
+/* ═══════════════════════════════════════
+   OPTION 4 — Ivory Academic
+   ═══════════════════════════════════════ */
+.opt4 {
+  background: #FAFAF7;
+  font-family: 'Hanken Grotesk', sans-serif;
+  color: #111;
+  display:flex; flex-direction:column;
+}
+.opt4 .top4 {
+  background: #1B4332;
+  padding: 2% 5%;
+  display: flex; justify-content:space-between; align-items:center;
+}
+.opt4 .top4 img { height:38px; filter: brightness(0) invert(1); opacity:0.9; }
+.opt4 .top4-title {
+  font-size: 0.65rem; font-weight:700; letter-spacing:0.18em;
+  text-transform:uppercase; color:rgba(255,255,255,0.65);
+  text-align:center;
+}
+.opt4 .body4 {
+  flex:1; display:flex; align-items:center;
+  padding: 3% 8%;
+  gap: 6%;
+}
+.opt4 .vline4 {
+  width:4px; background: linear-gradient(180deg,#52B788,#1B4332);
+  border-radius:2px; align-self:stretch; flex-shrink:0;
+}
+.opt4 .text4 { flex:1; }
+.opt4 .pre4 {
+  font-size: 0.7rem; font-weight:700; letter-spacing:0.2em;
+  text-transform:uppercase; color:#52B788; margin-bottom:14px;
+}
+.opt4 .headline4 {
+  font-size: clamp(1.8rem,3.4vw,2.8rem); font-weight:800; color:#0d2818;
+  line-height:1.08; margin-bottom:10px; letter-spacing:-0.02em;
+}
+.opt4 .headline4 span { color:#52B788; }
+.opt4 .sub4 {
+  font-size: clamp(0.85rem,1.4vw,1.1rem); color:#444; line-height:1.5;
+  margin-bottom:18px;
+}
+.opt4 .date4 {
+  display:inline-block; font-size: clamp(0.85rem,1.3vw,1rem);
+  font-weight:700; background:#1B4332; color:#fff;
+  padding:6px 18px; border-radius:4px;
+}
+.opt4 .right4 {
+  display:flex; flex-direction:column; align-items:center;
+  gap: 20px; flex-shrink:0;
+}
+.opt4 .right4 img { height:68px; }
+.opt4 .right4-sep { width:60px; height:1px; background:rgba(0,0,0,0.12); }
+.opt4 .bottom4 {
+  background:#f0ede4; border-top:1px solid #ddd;
+  padding: 1.5% 5%;
+  display:flex; justify-content:center; align-items:center; gap:30px;
+}
+.opt4 .pill4 {
+  font-size:0.68rem; font-weight:600; letter-spacing:0.08em;
+  text-transform:uppercase; color:#52B788;
+  border:1px solid #52B788; padding:3px 12px; border-radius:20px;
+}
+
+/* ═══════════════════════════════════════
+   OPTION 5 — Photo Drama
+   ═══════════════════════════════════════ */
+.opt5 {
+  background: #0d1a0f;
+  font-family: 'Fraunces', Georgia, serif;
+  color: #fff;
+  display:flex; flex-direction:column; justify-content:space-between;
+}
+.opt5 .photo-bg {
+  position:absolute; inset:0;
+  background: url('img/cover-photo-main.jpg') center/cover no-repeat;
+  filter: brightness(0.28) saturate(0.6);
+}
+.opt5 .green-vignette {
+  position:absolute; inset:0;
+  background: radial-gradient(ellipse 80% 80% at 50% 50%, transparent 30%, rgba(5,20,10,0.6) 100%);
+}
+.opt5 .top5 {
+  position:relative; z-index:2;
+  display:flex; justify-content:space-between; align-items:center;
+  padding: 3% 5%;
+  border-bottom: 1px solid rgba(82,183,136,0.2);
+}
+.opt5 .top5 img { height:42px; filter:brightness(0) invert(1); opacity:0.85; }
+.opt5 .top5-tag {
+  font-family:'Hanken Grotesk', sans-serif;
+  font-size:0.62rem; font-weight:700; letter-spacing:0.22em;
+  text-transform:uppercase; color:#52B788;
+}
+.opt5 .center5 {
+  position:relative; z-index:2;
+  flex:1; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  padding: 2% 8%;
+  text-align:center;
+}
+.opt5 .kicker5 {
+  font-family:'Hanken Grotesk', sans-serif;
+  font-size:0.65rem; font-weight:700; letter-spacing:0.22em;
+  text-transform:uppercase; color:rgba(82,183,136,0.8); margin-bottom:10px;
+}
+.opt5 .headline5 {
+  font-size: clamp(2rem,4.2vw,3.4rem); font-weight:700; color:#fff;
+  line-height:1.05; margin-bottom:8px;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.6);
+}
+.opt5 .divline5 {
+  width:80px; height:2px; background:linear-gradient(90deg,transparent,#52B788,transparent);
+  margin:10px auto;
+}
+.opt5 .sub5 {
+  font-size: clamp(0.9rem,1.6vw,1.25rem); color:rgba(255,255,255,0.75);
+  line-height:1.4; font-style:italic;
+}
+.opt5 .date5 {
+  font-family:'Hanken Grotesk', sans-serif;
+  font-size: clamp(0.9rem,1.4vw,1.1rem); font-weight:700;
+  color:#C9A84C; margin-top:14px; letter-spacing:0.06em;
+}
+.opt5 .bottom5 {
+  position:relative; z-index:2;
+  display:flex; justify-content:center; align-items:center; gap:20px;
+  padding:2% 5%;
+  border-top:1px solid rgba(82,183,136,0.2);
+  background:rgba(0,0,0,0.2);
+}
+.opt5 .bottom5 img { height:34px; filter:brightness(0) invert(1); opacity:0.7; }
+.opt5 .bottom5-sep { width:1px; height:28px; background:rgba(255,255,255,0.15); }
+.opt5 .bottom5-text {
+  font-family:'Hanken Grotesk', sans-serif;
+  font-size:0.65rem; color:rgba(255,255,255,0.45); text-align:center; line-height:1.4;
+}
+</style>
+</head>
+<body>
+
+<h1>Cover Page Options — Choose One (1–5)</h1>
+
+<div class="options-grid">
+
+  <!-- ═══ OPTION 1 ═══ -->
+  <div class="option-wrap">
+    <div class="option-label"><strong>Option 1</strong> — Parchment Heritage &nbsp;·&nbsp; Warm, classical, botanical ornaments</div>
+    <div class="slide-box opt1">
+      <!-- Corner ornaments -->
+      <svg class="opt1-corn tl" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <path d="M5,5 C38,32 72,62 105,105" stroke="#5a7030" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="M5,5 C38,4 75,7 115,22" stroke="#5a7030" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M5,5 C4,38 7,75 22,115" stroke="#5a7030" stroke-width="1.8" stroke-linecap="round"/>
+        <ellipse cx="26" cy="13" rx="16" ry="7" fill="#6e8c38" stroke="#4a6020" stroke-width="0.8" transform="rotate(-22 26 13)"/>
+        <ellipse cx="13" cy="26" rx="7" ry="16" fill="#7a9e44" stroke="#4a6020" stroke-width="0.8" transform="rotate(-22 13 26)"/>
+        <ellipse cx="23" cy="23" rx="18" ry="8" fill="#8aad4a" stroke="#4a6020" stroke-width="0.8" transform="rotate(-45 23 23)"/>
+        <ellipse cx="52" cy="11" rx="14" ry="6" fill="#7a9e44" stroke="#4a6020" stroke-width="0.7" transform="rotate(-8 52 11)"/>
+        <ellipse cx="82" cy="15" rx="13" ry="5.5" fill="#6e8c38" stroke="#4a6020" stroke-width="0.7" transform="rotate(-14 82 15)"/>
+        <ellipse cx="11" cy="52" rx="6" ry="14" fill="#7a9e44" stroke="#4a6020" stroke-width="0.7" transform="rotate(-8 11 52)"/>
+        <ellipse cx="15" cy="82" rx="5.5" ry="13" fill="#6e8c38" stroke="#4a6020" stroke-width="0.7" transform="rotate(-14 15 82)"/>
+        <ellipse cx="50" cy="50" rx="16" ry="7" fill="#6e8c38" stroke="#4a6020" stroke-width="0.7" transform="rotate(-45 50 50)"/>
+        <ellipse cx="75" cy="75" rx="14" ry="6.5" fill="#7a9e44" stroke="#4a6020" stroke-width="0.7" transform="rotate(-45 75 75)"/>
+        <circle cx="14" cy="7" r="2.8" fill="#3d5218"/><circle cx="7" cy="14" r="2.8" fill="#3d5218"/>
+      </svg>
+      <svg class="opt1-corn tr" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <path d="M195,5 C162,32 128,62 95,105" stroke="#5a7030" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="M195,5 C162,4 125,7 85,22" stroke="#5a7030" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M195,5 C196,38 193,75 178,115" stroke="#5a7030" stroke-width="1.8" stroke-linecap="round"/>
+        <ellipse cx="174" cy="13" rx="16" ry="7" fill="#6e8c38" stroke="#4a6020" stroke-width="0.8" transform="rotate(22 174 13)"/>
+        <ellipse cx="187" cy="26" rx="7" ry="16" fill="#7a9e44" stroke="#4a6020" stroke-width="0.8" transform="rotate(22 187 26)"/>
+        <ellipse cx="177" cy="23" rx="18" ry="8" fill="#8aad4a" stroke="#4a6020" stroke-width="0.8" transform="rotate(45 177 23)"/>
+        <ellipse cx="148" cy="11" rx="14" ry="6" fill="#7a9e44" stroke="#4a6020" stroke-width="0.7" transform="rotate(8 148 11)"/>
+        <ellipse cx="118" cy="15" rx="13" ry="5.5" fill="#6e8c38" stroke="#4a6020" stroke-width="0.7" transform="rotate(14 118 15)"/>
+        <ellipse cx="189" cy="52" rx="6" ry="14" fill="#7a9e44" stroke="#4a6020" stroke-width="0.7" transform="rotate(8 189 52)"/>
+        <ellipse cx="185" cy="82" rx="5.5" ry="13" fill="#6e8c38" stroke="#4a6020" stroke-width="0.7" transform="rotate(14 185 82)"/>
+        <ellipse cx="150" cy="50" rx="16" ry="7" fill="#6e8c38" stroke="#4a6020" stroke-width="0.7" transform="rotate(45 150 50)"/>
+        <ellipse cx="125" cy="75" rx="14" ry="6.5" fill="#7a9e44" stroke="#4a6020" stroke-width="0.7" transform="rotate(45 125 75)"/>
+        <circle cx="186" cy="7" r="2.8" fill="#3d5218"/><circle cx="193" cy="14" r="2.8" fill="#3d5218"/>
+      </svg>
+      <svg class="opt1-corn bl" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <path d="M5,195 C38,168 72,138 105,95" stroke="#5a7030" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="M5,195 C38,196 75,193 115,178" stroke="#5a7030" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M5,195 C4,162 7,125 22,85" stroke="#5a7030" stroke-width="1.8" stroke-linecap="round"/>
+        <ellipse cx="26" cy="187" rx="16" ry="7" fill="#6e8c38" stroke="#4a6020" stroke-width="0.8" transform="rotate(22 26 187)"/>
+        <ellipse cx="13" cy="174" rx="7" ry="16" fill="#7a9e44" stroke="#4a6020" stroke-width="0.8" transform="rotate(22 13 174)"/>
+        <ellipse cx="23" cy="177" rx="18" ry="8" fill="#8aad4a" stroke="#4a6020" stroke-width="0.8" transform="rotate(45 23 177)"/>
+        <ellipse cx="52" cy="189" rx="14" ry="6" fill="#7a9e44" stroke="#4a6020" stroke-width="0.7" transform="rotate(8 52 189)"/>
+        <ellipse cx="11" cy="148" rx="6" ry="14" fill="#7a9e44" stroke="#4a6020" stroke-width="0.7" transform="rotate(8 11 148)"/>
+        <ellipse cx="50" cy="150" rx="16" ry="7" fill="#6e8c38" stroke="#4a6020" stroke-width="0.7" transform="rotate(45 50 150)"/>
+        <ellipse cx="75" cy="125" rx="14" ry="6.5" fill="#7a9e44" stroke="#4a6020" stroke-width="0.7" transform="rotate(45 75 125)"/>
+        <circle cx="14" cy="193" r="2.8" fill="#3d5218"/><circle cx="7" cy="186" r="2.8" fill="#3d5218"/>
+      </svg>
+      <svg class="opt1-corn br" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <path d="M195,195 C162,168 128,138 95,95" stroke="#5a7030" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="M195,195 C162,196 125,193 85,178" stroke="#5a7030" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M195,195 C196,162 193,125 178,85" stroke="#5a7030" stroke-width="1.8" stroke-linecap="round"/>
+        <ellipse cx="174" cy="187" rx="16" ry="7" fill="#6e8c38" stroke="#4a6020" stroke-width="0.8" transform="rotate(-22 174 187)"/>
+        <ellipse cx="187" cy="174" rx="7" ry="16" fill="#7a9e44" stroke="#4a6020" stroke-width="0.8" transform="rotate(-22 187 174)"/>
+        <ellipse cx="177" cy="177" rx="18" ry="8" fill="#8aad4a" stroke="#4a6020" stroke-width="0.8" transform="rotate(-45 177 177)"/>
+        <ellipse cx="148" cy="189" rx="14" ry="6" fill="#7a9e44" stroke="#4a6020" stroke-width="0.7" transform="rotate(-8 148 189)"/>
+        <ellipse cx="189" cy="148" rx="6" ry="14" fill="#7a9e44" stroke="#4a6020" stroke-width="0.7" transform="rotate(-8 189 148)"/>
+        <ellipse cx="150" cy="150" rx="16" ry="7" fill="#6e8c38" stroke="#4a6020" stroke-width="0.7" transform="rotate(-45 150 150)"/>
+        <ellipse cx="125" cy="125" rx="14" ry="6.5" fill="#7a9e44" stroke="#4a6020" stroke-width="0.7" transform="rotate(-45 125 125)"/>
+        <circle cx="186" cy="193" r="2.8" fill="#3d5218"/><circle cx="193" cy="186" r="2.8" fill="#3d5218"/>
+      </svg>
+      <!-- Content -->
+      <div class="top-bar">
+        <div class="logo-unit">
+          <img src="img/logo-wii.png" alt="WII">
+          <div class="logo-text"><span class="hi">भारतीय वन्यजीव संस्थान</span>Wildlife Institute of India</div>
+        </div>
+        <div class="logo-unit logo-unit-r">
+          <img src="img/logo-cg.png" alt="CG">
+          <div class="logo-text logo-text-r"><span class="hi">छत्तीसगढ़ शासन</span>वन विभाग</div>
+        </div>
+      </div>
+      <div class="center-body">
+        <p class="pre">Workshop</p>
+        <p class="pre">On</p>
+        <h1 class="headline">Learning from Dead</h1>
+        <div class="rule"></div>
+        <p class="sub">Essentials of Mortality</p>
+        <div class="rule-thin"></div>
+        <p class="sub">Investigation of Asian Elephant</p>
+        <div class="rule-thin"></div>
+      </div>
+      <div class="date-bar">5<sup>th</sup>–6<sup>th</sup> June, 2026</div>
+    </div>
+  </div>
+
+  <!-- ═══ OPTION 2 ═══ -->
+  <div class="option-wrap">
+    <div class="option-label"><strong>Option 2</strong> — Dark Forest &nbsp;·&nbsp; Deep green, gold accents, elegant and formal</div>
+    <div class="slide-box opt2">
+      <div class="eleph-wm">🐘</div>
+      <div class="frame-tl"></div><div class="frame-tr"></div>
+      <div class="frame-bl"></div><div class="frame-br"></div>
+      <div class="tag2">Wildlife Institute of India &nbsp;·&nbsp; Chhattisgarh Forest Department</div>
+      <div class="gold-line"></div>
+      <p style="font-family:'Fraunces',serif;font-size:clamp(1rem,1.8vw,1.4rem);color:rgba(232,240,232,0.6);font-style:italic;margin-bottom:6px">Workshop On</p>
+      <h1 class="headline2">Learning from Dead</h1>
+      <p class="sub2">Essentials of Mortality Investigation<br>of Asian Elephant</p>
+      <div class="gold-line" style="margin-top:12px"></div>
+      <p class="date2">5<sup>th</sup>–6<sup>th</sup> June, 2026</p>
+      <div class="logos2">
+        <img src="img/logo-wii.png" alt="WII">
+        <div class="sep"></div>
+        <img src="img/logo-cg.png" alt="CG">
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ OPTION 3 ═══ -->
+  <div class="option-wrap">
+    <div class="option-label"><strong>Option 3</strong> — Split Banner &nbsp;·&nbsp; Bold two-tone, modern government style</div>
+    <div class="slide-box opt3">
+      <div class="left3">
+        <div class="tag3">Wildlife Institute of India &nbsp;·&nbsp; Chhattisgarh Forest Dept.</div>
+        <div class="accent3"></div>
+        <h1 class="headline3">Learning<br>from Dead</h1>
+        <p class="sub3">Essentials of Mortality Investigation<br>of Asian Elephant</p>
+        <div class="date3">5<sup>th</sup>–6<sup>th</sup> June, 2026</div>
+      </div>
+      <div class="right3">
+        <div class="logo3">
+          <img src="img/logo-wii.png" alt="WII">
+          <div class="decorline3"></div>
+          <div class="logo3-text"><strong>भारतीय वन्यजीव संस्थान</strong>Wildlife Institute of India</div>
+          <div class="decorline3"></div>
+          <img src="img/logo-cg.png" alt="CG">
+          <div class="logo3-text"><strong>छत्तीसगढ़ शासन</strong>वन विभाग</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ OPTION 4 ═══ -->
+  <div class="option-wrap">
+    <div class="option-label"><strong>Option 4</strong> — Ivory Academic &nbsp;·&nbsp; Clean, professional, strong typography</div>
+    <div class="slide-box opt4">
+      <div class="top4">
+        <img src="img/logo-wii.png" alt="WII">
+        <div class="top4-title">Workshop on Essentials of Mortality Investigation of Asian Elephant</div>
+        <img src="img/logo-cg.png" alt="CG">
+      </div>
+      <div class="body4">
+        <div class="vline4"></div>
+        <div class="text4">
+          <div class="pre4">Workshop On</div>
+          <h1 class="headline4">Learning<br>from <span>Dead</span></h1>
+          <p class="sub4">Essentials of Mortality Investigation<br>of Asian Elephant</p>
+          <div class="date4">5<sup>th</sup>–6<sup>th</sup> June, 2026</div>
+        </div>
+        <div class="right4">
+          <img src="img/logo-wii.png" alt="WII">
+          <div class="right4-sep"></div>
+          <img src="img/logo-cg.png" alt="CG">
+        </div>
+      </div>
+      <div class="bottom4">
+        <span class="pill4">Dharamjaigarh</span>
+        <span class="pill4">Raigarh</span>
+        <span class="pill4">Chhattisgarh Forest Department</span>
+        <span class="pill4">WII Dehradun</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ OPTION 5 ═══ -->
+  <div class="option-wrap">
+    <div class="option-label"><strong>Option 5</strong> — Photo Drama &nbsp;·&nbsp; Immersive, cinematic, elephant photo background</div>
+    <div class="slide-box opt5">
+      <div class="photo-bg"></div>
+      <div class="green-vignette"></div>
+      <div class="top5">
+        <img src="img/logo-wii.png" alt="WII">
+        <div class="top5-tag">Workshop · Chhattisgarh Forest Department · 2026</div>
+        <img src="img/logo-cg.png" alt="CG">
+      </div>
+      <div class="center5">
+        <div class="kicker5">Workshop On</div>
+        <h1 class="headline5">Learning from Dead</h1>
+        <div class="divline5"></div>
+        <p class="sub5">Essentials of Mortality Investigation of Asian Elephant</p>
+        <div class="date5">5<sup>th</sup>–6<sup>th</sup> June, 2026</div>
+      </div>
+      <div class="bottom5">
+        <img src="img/logo-wii.png" alt="WII">
+        <div class="bottom5-sep"></div>
+        <div class="bottom5-text">भारतीय वन्यजीव संस्थान · Wildlife Institute of India<br>छत्तीसगढ़ शासन · वन विभाग</div>
+        <div class="bottom5-sep"></div>
+        <img src="img/logo-cg.png" alt="CG">
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
