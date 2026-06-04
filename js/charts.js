@@ -1050,106 +1050,72 @@ function initHumanRangeChart(id) {
   };
 })();
 
-function initSeasonDrownChart(id) {
-  const ctx = document.getElementById(id);
-  if (!ctx) return;
-  destroyChart(id);
-  chartInstances[id] = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: DATA.seasonalCause.months,
-      datasets: [{
-        label: 'Deaths',
-        data: DATA.seasonalCause.drowning,
-        backgroundColor: DATA.seasonalCause.drowning.map(v =>
-          v >= 3 ? '#4A9EEB' : v >= 1 ? 'rgba(74,158,235,0.6)' : 'rgba(74,158,235,0.15)'
-        ),
-        borderRadius: 5,
-        borderSkipped: false
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        datalabels: {
-          color: ctx => ctx.dataset.data[ctx.dataIndex] > 0 ? '#ffffff' : 'transparent',
-          anchor: 'center',
-          align: 'center',
-          font: { size: 13, weight: 'bold' },
-          formatter: v => v > 0 ? v : ''
-        },
-        tooltip: {
-          backgroundColor: 'rgba(17,34,64,0.95)',
-          titleColor: '#E8F0E8',
-          bodyColor: '#8BA098',
-          borderColor: 'rgba(74,158,235,0.3)',
-          borderWidth: 1,
-          padding: 10
-        }
-      },
-      scales: {
-        x: { grid: { display: false }, ticks: { color: '#8BA098', font: { size: 11 } } },
-        y: {
-          grid: { color: 'rgba(255,255,255,0.06)' },
-          ticks: { color: '#8BA098', stepSize: 1 },
-          beginAtZero: true, min: 0, max: 5
-        }
-      }
-    },
-    plugins: [ChartDataLabels]
+function buildSeasonLiqChart(id, values, maxVal, colorClass) {
+  const container = document.getElementById(id);
+  if (!container) return;
+  container.innerHTML = '';
+
+  const wrap = document.createElement('div');
+  wrap.className = 'liq-wrap ' + colorClass;
+
+  const barsEl = document.createElement('div');
+  barsEl.className = 'liq-bars';
+  barsEl.style.gap = '4px';
+
+  DATA.seasonalCause.months.forEach((month, i) => {
+    const val = values[i];
+    const pct = (val / maxVal) * 100;
+    const delay = i * 0.18;
+    const numDelay = (delay + 2.5).toFixed(2);
+
+    const group = document.createElement('div');
+    group.className = 'liq-group';
+    group.style.maxWidth = '999px';
+
+    const numEl = document.createElement('div');
+    numEl.className = 'liq-num';
+    numEl.textContent = val > 0 ? val : '';
+    numEl.style.setProperty('--nd', numDelay + 's');
+    numEl.style.fontSize = '1rem';
+
+    const box = document.createElement('div');
+    box.className = 'liq-box';
+
+    const fill = document.createElement('div');
+    fill.className = 'liq-fill';
+    fill.style.cssText = `bottom:0;`;
+    fill.style.setProperty('--delay', delay + 's');
+    fill.dataset.pct = pct;
+
+    const shimmer = document.createElement('div');
+    shimmer.className = 'liq-shimmer';
+    shimmer.style.animationDelay = (delay + 2.8) + 's';
+    fill.appendChild(shimmer);
+    box.appendChild(fill);
+
+    const lbl = document.createElement('div');
+    lbl.className = 'liq-lbl';
+    lbl.style.fontSize = '0.6rem';
+    lbl.textContent = month;
+
+    group.append(numEl, box, lbl);
+    barsEl.appendChild(group);
   });
+
+  const replayBtn = document.createElement('button');
+  replayBtn.className = 'liq-replay';
+  replayBtn.textContent = '↺  Replay';
+  replayBtn.onclick = () => liqReplay(container);
+
+  wrap.append(barsEl, replayBtn);
+  container.appendChild(wrap);
+  setTimeout(() => liqStart(container), 200);
+}
+
+function initSeasonDrownChart(id) {
+  buildSeasonLiqChart(id, DATA.seasonalCause.drowning, 4, 'liq-drown');
 }
 
 function initSeasonElecChart(id) {
-  const ctx = document.getElementById(id);
-  if (!ctx) return;
-  destroyChart(id);
-  chartInstances[id] = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: DATA.seasonalCause.months,
-      datasets: [{
-        label: 'Deaths',
-        data: DATA.seasonalCause.electrocution,
-        backgroundColor: DATA.seasonalCause.electrocution.map(v =>
-          v >= 5 ? '#E63946' : v >= 2 ? 'rgba(230,57,70,0.65)' : v >= 1 ? 'rgba(230,57,70,0.4)' : 'rgba(230,57,70,0.12)'
-        ),
-        borderRadius: 5,
-        borderSkipped: false
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        datalabels: {
-          color: ctx => ctx.dataset.data[ctx.dataIndex] > 0 ? '#ffffff' : 'transparent',
-          anchor: 'center',
-          align: 'center',
-          font: { size: 13, weight: 'bold' },
-          formatter: v => v > 0 ? v : ''
-        },
-        tooltip: {
-          backgroundColor: 'rgba(17,34,64,0.95)',
-          titleColor: '#E8F0E8',
-          bodyColor: '#8BA098',
-          borderColor: 'rgba(230,57,70,0.3)',
-          borderWidth: 1,
-          padding: 10
-        }
-      },
-      scales: {
-        x: { grid: { display: false }, ticks: { color: '#8BA098', font: { size: 11 } } },
-        y: {
-          grid: { color: 'rgba(255,255,255,0.06)' },
-          ticks: { color: '#8BA098', stepSize: 1 },
-          beginAtZero: true, min: 0, max: 8
-        }
-      }
-    },
-    plugins: [ChartDataLabels]
-  });
+  buildSeasonLiqChart(id, DATA.seasonalCause.electrocution, 7, 'liq-elec');
 }
