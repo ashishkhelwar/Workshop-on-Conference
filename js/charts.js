@@ -703,11 +703,11 @@ function initPopChart(id) {
       scales: {
         x: {
           grid: { color: 'rgba(255,255,255,0.06)' },
-          ticks: { color: '#8BA098' }
+          ticks: { color: '#8BA098', font: { size: 22 } }
         },
         y: {
           grid: { color: 'rgba(255,255,255,0.06)' },
-          ticks: { color: '#8BA098', stepSize: 50 },
+          ticks: { color: '#8BA098', stepSize: 50, font: { size: 22 } },
           beginAtZero: false,
           min: 24,
           max: 480
