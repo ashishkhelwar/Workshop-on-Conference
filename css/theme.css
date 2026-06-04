@@ -1573,6 +1573,17 @@ p { line-height: 1.65; }
 }
 .leaflet-popup-tip { background: #112240 !important; }
 .leaflet-popup-content { font-size: 0.82rem; line-height: 1.6; }
+.dist-label {
+  background: rgba(10,22,40,0.8) !important;
+  border: 1px solid rgba(82,183,136,0.4) !important;
+  color: #52B788 !important;
+  font-size: 0.65rem !important;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 2px 7px !important;
+  border-radius: 4px;
+  box-shadow: none !important;
+}
 
 /* ============================================================
    TOTAL LABEL ABOVE CHART

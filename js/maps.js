@@ -275,6 +275,27 @@ function initCurrentElephantsMap(id) {
       .bindPopup(`<b style="color:#F4A261">Tusker Elephant</b><br><small style="color:#888">${lat.toFixed(5)}, ${lng.toFixed(5)}</small>`);
   });
 
+  // District boundaries — Chhattisgarh
+  fetch('https://raw.githubusercontent.com/datameet/maps/master/Districts/chhattisgarh.geojson')
+    .then(r => r.json())
+    .then(data => {
+      L.geoJSON(data, {
+        style: {
+          color: '#52B788',
+          weight: 1.5,
+          opacity: 0.6,
+          fillOpacity: 0.04,
+          fillColor: '#52B788',
+          dashArray: '4 3'
+        },
+        onEachFeature(feature, layer) {
+          const name = feature.properties.DISTRICT || feature.properties.district || feature.properties.NAME_2 || '';
+          if (name) layer.bindTooltip(name, { permanent: false, direction: 'center', className: 'dist-label' });
+        }
+      }).addTo(map);
+    })
+    .catch(() => {});
+
   const bounds = L.latLngBounds([...herdPts, ...tuskerPts]);
   map.fitBounds(bounds, { padding: [28, 28] });
 
