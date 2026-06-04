@@ -185,16 +185,11 @@ function onSlideActivate(index) {
     // Slide 11 — PM Report Summary (no special init)
     case 23: break;
 
-    // Slide 12 — PM Analysis
-    case 24:
-      setTimeout(() => initTrendChart('trendCanvas'), 300);
-      break;
-
     // Slide 13 — Lab Report (no special init)
-    case 25: break;
+    case 24: break;
 
     // Slide 17 — Thank You
-    case 26: break;
+    case 25: break;
 
     default: break;
   }
