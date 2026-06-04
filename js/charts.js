@@ -158,21 +158,36 @@ function initYearBarsChart(id) {
   const container = document.getElementById(id);
   if (!container) return;
 
-  const vals   = DATA.elephantDeaths;   // [4, 9, 6, 10, 12]
-  const labels = ['21-22','22-23','23-24','24-25','25-26'];
-  const maxVal = 16;
+  const years  = ['21-22','22-23','23-24','24-25','25-26'];
+  const totals = DATA.elephantDeaths.slice(0, 5);
+  const dhVals = DATA.elephantDeathsByDiv.dh.slice(0, 5);
+  const rgVals = DATA.elephantDeathsByDiv.rg.slice(0, 5);
+  const maxVal = 14;
 
   container.innerHTML = '';
 
   const wrap = document.createElement('div');
   wrap.className = 'liq-wrap';
 
+  // Legend
+  const legend = document.createElement('div');
+  legend.style.cssText = 'display:flex;gap:16px;font-size:0.68rem;color:#8BA098;flex-shrink:0;margin-bottom:2px';
+  legend.innerHTML =
+    '<span style="display:flex;align-items:center;gap:4px">' +
+      '<span style="width:9px;height:9px;border-radius:2px;background:#52B788;display:inline-block"></span>Dharamjaigarh' +
+    '</span>' +
+    '<span style="display:flex;align-items:center;gap:4px">' +
+      '<span style="width:9px;height:9px;border-radius:2px;background:#F4A261;display:inline-block"></span>Raigarh' +
+    '</span>';
+  wrap.appendChild(legend);
+
   const barsEl = document.createElement('div');
   barsEl.className = 'liq-bars';
 
-  vals.forEach((val, i) => {
-    const pct   = (val / maxVal) * 100;
-    const delay = i * 0.7;
+  totals.forEach((total, i) => {
+    const dhPct = (dhVals[i] / maxVal) * 100;
+    const rgPct = (rgVals[i] / maxVal) * 100;
+    const delay    = i * 0.7;
     const numDelay = (delay + 5).toFixed(1);
 
     const group = document.createElement('div');
@@ -180,26 +195,32 @@ function initYearBarsChart(id) {
 
     const numEl = document.createElement('div');
     numEl.className = 'liq-num';
-    numEl.textContent = val;
+    numEl.textContent = total;
     numEl.style.setProperty('--nd', numDelay + 's');
 
     const box = document.createElement('div');
     box.className = 'liq-box';
 
-    const fill = document.createElement('div');
-    fill.className = 'liq-fill';
-    fill.style.setProperty('--delay', delay + 's');
-    fill.dataset.pct = pct;
+    // DH fill — green, anchored to bottom
+    const dhFill = document.createElement('div');
+    dhFill.className = 'liq-fill';
+    dhFill.style.cssText = `background:linear-gradient(to top,#1a5c3a,#52B788);bottom:0;`;
+    dhFill.style.setProperty('--delay', delay + 's');
+    dhFill.dataset.pct = dhPct;
 
-    const shimmer = document.createElement('div');
-    shimmer.className = 'liq-shimmer';
-    shimmer.style.animationDelay = (delay + 5.3) + 's';
-    fill.appendChild(shimmer);
-    box.appendChild(fill);
+    // RG fill — amber, sits on top of DH
+    const rgFill = document.createElement('div');
+    rgFill.className = 'liq-fill';
+    rgFill.style.cssText = `background:linear-gradient(to top,#b06010,#F4A261);bottom:${dhPct}%;`;
+    rgFill.style.setProperty('--delay', delay + 's');
+    rgFill.dataset.pct = rgPct;
+
+    box.appendChild(dhFill);
+    if (rgVals[i] > 0) box.appendChild(rgFill);
 
     const lbl = document.createElement('div');
     lbl.className = 'liq-lbl';
-    lbl.textContent = labels[i];
+    lbl.textContent = years[i];
 
     group.append(numEl, box, lbl);
     barsEl.appendChild(group);
@@ -248,6 +269,7 @@ function liqReplay(container) {
     });
   }));
 }
+
 
 // ── 3. Cause Chart: horizontal bars, ranked ───────────────────────────────
 function initCauseChart(id) {
@@ -310,9 +332,10 @@ function initAgeChart(id) {
   const ctx = document.getElementById(id);
   if (!ctx) return;
   destroyChart(id);
-  const colors = ['#2d6a4f','#40916c','#52B788','#74c69d'];
+  const colors = ['#2d6a4f','#40916c','#52B788','#74c69d','#95d5b2'];
   chartInstances[id] = new Chart(ctx, {
     type: 'bar',
+    plugins: [ChartDataLabels],
     data: {
       labels: DATA.ageProfile.map(d => d.group),
       datasets: [{
@@ -328,6 +351,13 @@ function initAgeChart(id) {
       maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
+        datalabels: {
+          color: '#ffffff',
+          anchor: 'center',
+          align: 'center',
+          font: { size: 28, weight: 'bold' },
+          formatter: value => value
+        },
         tooltip: {
           backgroundColor: 'rgba(17,34,64,0.95)',
           titleColor: '#E8F0E8',
@@ -350,10 +380,10 @@ function initAgeChart(id) {
         },
         y: {
           grid: { color: 'rgba(255,255,255,0.06)' },
-          ticks: { color: '#8BA098', stepSize: 2 },
+          ticks: { color: '#8BA098', stepSize: 4 },
           beginAtZero: true,
           min: 0,
-          max: 18
+          max: 24
         }
       }
     }
@@ -375,7 +405,7 @@ function initSexChart(id) {
       labels: ['Male', 'Female', 'Unknown'],
       datasets: [{
         data: [DATA.sexProfile.male, DATA.sexProfile.female, DATA.sexProfile.unknown || 0],
-        backgroundColor: ['#52B788', '#C9A84C', 'rgba(139,160,152,0.35)'],
+        backgroundColor: ['#4A9EEB', '#C9A84C', 'rgba(139,160,152,0.35)'],
         borderColor: ['#0A1628', '#0A1628', '#0A1628'],
         borderWidth: 4,
         hoverOffset: 12
@@ -591,59 +621,125 @@ function initSeasonalChart(id) {
   });
 }
 
-// ── 7. Range-wise Horizontal Bars ─────────────────────────────────────────
+// ── 7. Range-wise Stacked Horizontal Bars ─────────────────────────────────
 function initRangeChart(id) {
   const ctx = document.getElementById(id);
   if (!ctx) return;
   destroyChart(id);
-  const riskColors = {
-    CRITICAL: '#E63946',
-    HIGH:     '#F4A261',
-    MODERATE: '#C9A84C',
-    LOW:      '#52B788'
-  };
   const sorted = [...DATA.rangeWise].sort((a, b) => b.count - a.count);
   chartInstances[id] = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: sorted.map(d => d.beat),
-      datasets: [{
-        label: 'Elephant Deaths',
-        data: sorted.map(d => d.count),
-        backgroundColor: sorted.map(d => riskColors[d.risk]),
-        borderRadius: 5,
-        borderSkipped: false
-      }]
+      datasets: [
+        {
+          label: 'Electrocution',
+          data: sorted.map(d => d.elec),
+          backgroundColor: 'rgba(230,57,70,0.85)',
+          borderRadius: 0,
+          borderSkipped: false,
+          _noLabels: true
+        },
+        {
+          label: 'Susp. Drowning',
+          data: sorted.map(d => d.drown),
+          backgroundColor: 'rgba(74,158,235,0.85)',
+          borderRadius: 0,
+          borderSkipped: false,
+          _noLabels: true
+        },
+        {
+          label: 'Other',
+          data: sorted.map(d => d.other),
+          backgroundColor: 'rgba(139,160,152,0.55)',
+          borderRadius: 0,
+          borderSkipped: false,
+          _noLabels: true
+        }
+      ]
     },
+    plugins: [{
+      id: 'rangeLabels',
+      afterDatasetsDraw(chart) {
+        const { ctx: c } = chart;
+        sorted.forEach((item, i) => {
+          const elecMeta  = chart.getDatasetMeta(0);
+          const drownMeta = chart.getDatasetMeta(1);
+          const otherMeta = chart.getDatasetMeta(2);
+          const s = 11;
+          c.save();
+          c.font = `bold ${s}px system-ui,-apple-system,sans-serif`;
+          c.textBaseline = 'middle';
+          // Electrocution label
+          if (item.elec > 0) {
+            const el = elecMeta.data[i];
+            c.fillStyle = '#fff';
+            c.textAlign = 'center';
+            c.fillText(item.elec, (el.base + el.x) / 2, el.y);
+          }
+          // Drowning label
+          if (item.drown > 0) {
+            const el = drownMeta.data[i];
+            c.fillStyle = '#fff';
+            c.textAlign = 'center';
+            c.fillText(item.drown, (el.base + el.x) / 2, el.y);
+          }
+          // Other label
+          if (item.other > 0) {
+            const el = otherMeta.data[i];
+            c.fillStyle = '#E8F0E8';
+            c.textAlign = 'center';
+            c.fillText(item.other, (el.base + el.x) / 2, el.y);
+          }
+          // Total label at end of bar
+          const lastEl = otherMeta.data[i].x || drownMeta.data[i].x || elecMeta.data[i].x;
+          c.fillStyle = '#E8F0E8';
+          c.textAlign = 'left';
+          c.fillText(item.count, lastEl + 5, elecMeta.data[i].y);
+          c.restore();
+        });
+      }
+    }],
     options: {
       indexAxis: 'y',
       responsive: true,
       maintainAspectRatio: false,
+      animation: { duration: 700 },
       plugins: {
-        legend: { display: false },
+        legend: {
+          display: true,
+          position: 'top',
+          labels: {
+            color: '#8BA098',
+            padding: 16,
+            usePointStyle: true,
+            pointStyleWidth: 10,
+            font: { size: 11 }
+          }
+        },
         tooltip: {
           backgroundColor: 'rgba(17,34,64,0.95)',
           titleColor: '#E8F0E8',
           bodyColor: '#8BA098',
           borderColor: 'rgba(82,183,136,0.3)',
           borderWidth: 1,
-          padding: 12,
+          padding: 10,
           callbacks: {
-            label: ctx => {
-              const item = sorted[ctx.dataIndex];
-              return ` ${item.count} deaths · ${item.div} · ${item.risk}`;
-            }
+            title: ctx => sorted[ctx[0].dataIndex].beat,
+            label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.x}`
           }
         }
       },
       scales: {
         x: {
+          stacked: true,
           grid: { color: 'rgba(255,255,255,0.06)' },
           ticks: { color: '#8BA098' },
           beginAtZero: true,
-          max: 14
+          max: 16
         },
         y: {
+          stacked: true,
           grid: { display: false },
           ticks: { color: '#E8F0E8', font: { size: 12 } }
         }
@@ -652,35 +748,324 @@ function initRangeChart(id) {
   });
 }
 
-// ── 8. Population Area Chart ──────────────────────────────────────────────
-function initPopChart(id) {
+// ── 7b. Range-wise Human Casualty Chart ─────────────────────────────────────
+function initHumanRangeChart(id) {
+  const ctx = document.getElementById(id);
+  if (!ctx) return;
+  destroyChart(id);
+  const sorted = [...DATA.rangeWiseHuman].sort((a, b) => b.count - a.count);
+  const colors = sorted.map(d =>
+    d.div === 'Dharamjaigarh' ? 'rgba(230,57,70,0.82)' : 'rgba(244,162,97,0.82)'
+  );
+  chartInstances[id] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: sorted.map(d => d.beat),
+      datasets: [{
+        label: 'Human Deaths',
+        data: sorted.map(d => d.count),
+        backgroundColor: colors,
+        borderRadius: 3,
+        borderSkipped: false,
+        _noLabels: true
+      }]
+    },
+    plugins: [{
+      id: 'humanRangeLabels',
+      afterDatasetsDraw(chart) {
+        const { ctx: c } = chart;
+        const meta = chart.getDatasetMeta(0);
+        sorted.forEach((item, i) => {
+          const el = meta.data[i];
+          c.save();
+          c.font = 'bold 11px system-ui,-apple-system,sans-serif';
+          c.textBaseline = 'middle';
+          c.fillStyle = '#fff';
+          c.textAlign = 'center';
+          if (item.count > 0) c.fillText(item.count, (el.base + el.x) / 2, el.y);
+          c.restore();
+        });
+      }
+    }],
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 700 },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(17,34,64,0.95)',
+          titleColor: '#E8F0E8',
+          bodyColor: '#8BA098',
+          borderColor: 'rgba(230,57,70,0.3)',
+          borderWidth: 1,
+          padding: 10,
+          callbacks: {
+            title: ctx => sorted[ctx[0].dataIndex].beat,
+            label: ctx => ` Deaths: ${ctx.parsed.x} (${sorted[ctx[0].dataIndex].div})`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(255,255,255,0.06)' },
+          ticks: { color: '#8BA098', stepSize: 2 },
+          beginAtZero: true,
+          max: 12
+        },
+        y: {
+          grid: { display: false },
+          ticks: { color: '#E8F0E8', font: { size: 11 } }
+        }
+      }
+    }
+  });
+}
+
+// ── 8. Population Area Chart — vanilla canvas, Catmull-Rom + de Casteljau ──
+(function () {
+  const RAW = [
+    { year: '2001', val: 24  }, { year: '2005', val: 123 },
+    { year: '2007', val: 122 }, { year: '2015', val: 247 },
+    { year: '2017', val: 247 }, { year: '2021', val: 279 },
+    { year: '2026', val: 451 },
+  ];
+  const Y_TICKS = [50,100,150,200,250,300,350,400,450,500];
+  const Y_MIN = 0, Y_MAX = 520, DUR = 10000;
+  const LC = '#5fcf97', GC = 'rgba(95,207,151,0.55)';
+  let _cv, _cx, _raf, _t0, _running, _pts, _segs, _slen, _tlen, _W, _H, _PAD, _cW, _cH, _now=0;
+  const DPR = window.devicePixelRatio || 1;
+  const prefReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function pad() {
+    const s = _W/700;
+    _PAD = { top:72*s, right:52*s, bottom:50*s, left:62*s };
+    _cW = _W-_PAD.left-_PAD.right; _cH = _H-_PAD.top-_PAD.bottom;
+  }
+  function toY(v) { return _PAD.top+(1-(v-Y_MIN)/(Y_MAX-Y_MIN))*_cH; }
+
+  function setup() {
+    const wrap = _cv.parentElement;
+    const cssW = wrap.getBoundingClientRect().width;
+    const cssH = wrap.getBoundingClientRect().height || Math.round(cssW*0.55);
+    _W = cssW; _H = cssH;
+    _cv.style.width=_W+'px'; _cv.style.height=_H+'px';
+    _cv.width=Math.round(_W*DPR); _cv.height=Math.round(_H*DPR);
+    _cx.setTransform(1,0,0,1,0,0); _cx.scale(DPR,DPR);
+    pad();
+    const n=RAW.length;
+    _pts = RAW.map((d,i)=>({ x:_PAD.left+(i/(n-1))*_cW, y:toY(d.val), val:d.val, year:d.year }));
+    _segs=[];
+    for(let i=0;i<n-1;i++){
+      const p0=_pts[Math.max(0,i-1)],p1=_pts[i],p2=_pts[i+1],p3=_pts[Math.min(n-1,i+2)];
+      _segs.push({ p0:p1, cp1:{x:p1.x+(p2.x-p0.x)/6,y:p1.y+(p2.y-p0.y)/6},
+                          cp2:{x:p2.x-(p3.x-p1.x)/6,y:p2.y-(p3.y-p1.y)/6}, p3:p2 });
+    }
+    _slen = _segs.map(s=>{ let l=0,p=bpt(s,0);
+      for(let i=1;i<=80;i++){const q=bpt(s,i/80),dx=q.x-p.x,dy=q.y-p.y;l+=Math.sqrt(dx*dx+dy*dy);p=q;}
+      return l; });
+    _tlen = _slen.reduce((a,b)=>a+b,0);
+  }
+
+  function bpt(s,t){ const m=1-t; return {
+    x:m*m*m*s.p0.x+3*m*m*t*s.cp1.x+3*m*t*t*s.cp2.x+t*t*t*s.p3.x,
+    y:m*m*m*s.p0.y+3*m*m*t*s.cp1.y+3*m*t*t*s.cp2.y+t*t*t*s.p3.y }; }
+
+  function lp(a,b,t){ return {x:a.x+(b.x-a.x)*t, y:a.y+(b.y-a.y)*t}; }
+
+  function splitL(s,t){
+    const p01=lp(s.p0,s.cp1,t),p12=lp(s.cp1,s.cp2,t),p23=lp(s.cp2,s.p3,t);
+    const p012=lp(p01,p12,t),p123=lp(p12,p23,t),mid=lp(p012,p123,t);
+    return {p0:s.p0,cp1:p01,cp2:p012,p3:mid};
+  }
+
+  function tip(prog){
+    if(prog<=0) return {si:0,t:0,..._pts[0]};
+    if(prog>=1) return {si:_segs.length-1,t:1,..._pts[_pts.length-1]};
+    const tgt=prog*_tlen; let acc=0;
+    for(let i=0;i<_slen.length;i++){
+      if(acc+_slen[i]>=tgt){ const t=(tgt-acc)/_slen[i]; return {si:i,t,...bpt(_segs[i],t)}; }
+      acc+=_slen[i];
+    }
+    return {si:_segs.length-1,t:1,..._pts[_pts.length-1]};
+  }
+
+  function ease(t){ return t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2; }
+
+  function draw(prog){
+    _cx.clearRect(0,0,_W,_H);
+    // Grid
+    const s=_W/700;
+    _cx.save();
+    _cx.font=`${Math.round(20*s)}px system-ui,sans-serif`;
+    _cx.textAlign='right'; _cx.textBaseline='middle';
+    Y_TICKS.forEach(v=>{ const y=toY(v);
+      _cx.beginPath(); _cx.moveTo(_PAD.left,y); _cx.lineTo(_PAD.left+_cW,y);
+      _cx.strokeStyle='rgba(255,255,255,0.05)'; _cx.lineWidth=1; _cx.stroke();
+      _cx.fillStyle='rgba(148,175,200,0.55)'; _cx.fillText(v,_PAD.left-8*s,y);
+    });
+    _cx.textAlign='center'; _cx.textBaseline='top';
+    _pts.forEach(p=>{ _cx.fillStyle='rgba(148,175,200,0.55)'; _cx.fillText(p.year,p.x,_PAD.top+_cH+10*s); });
+    _cx.beginPath();
+    _cx.moveTo(_PAD.left,_PAD.top); _cx.lineTo(_PAD.left,_PAD.top+_cH+4);
+    _cx.moveTo(_PAD.left-4,_PAD.top+_cH); _cx.lineTo(_PAD.left+_cW,_PAD.top+_cH);
+    _cx.strokeStyle='rgba(255,255,255,0.1)'; _cx.lineWidth=1; _cx.stroke();
+    _cx.restore();
+
+    if(prog<=0) return;
+    const tp=tip(prog);
+
+    // Orange reference line at y=451
+    const refAlpha=Math.min(1,Math.max(0,(prog-0.88)/0.12));
+    if(refAlpha>0){
+      const ry=toY(451);
+      const cx=_PAD.left+_cW/2;
+      const fs=Math.round(20*s);
+      _cx.save(); _cx.globalAlpha=refAlpha;
+      // Glow band
+      const rg=_cx.createLinearGradient(0,ry-8*s,0,ry+8*s);
+      rg.addColorStop(0,'rgba(244,162,97,0)'); rg.addColorStop(0.5,'rgba(244,162,97,0.18)'); rg.addColorStop(1,'rgba(244,162,97,0)');
+      _cx.fillStyle=rg; _cx.fillRect(_PAD.left,ry-8*s,_cW,16*s);
+      // Measure text width to create gap
+      _cx.font=`800 ${fs}px system-ui,sans-serif`;
+      const tw=_cx.measureText('451').width;
+      const gap=tw+18*s;
+      // Dashed line — two halves with gap in centre for the label
+      _cx.beginPath(); _cx.setLineDash([6*s,4*s]);
+      _cx.moveTo(_PAD.left,ry); _cx.lineTo(cx-gap/2,ry);
+      _cx.moveTo(cx+gap/2,ry); _cx.lineTo(_PAD.left+_cW,ry);
+      _cx.strokeStyle='rgba(244,162,97,0.8)'; _cx.lineWidth=1.8*s; _cx.stroke();
+      _cx.setLineDash([]);
+      // "451" centred on the line — large, amber, outlined
+      _cx.textAlign='center'; _cx.textBaseline='middle';
+      _cx.lineWidth=5*s; _cx.strokeStyle='rgba(10,22,40,0.95)';
+      _cx.strokeText('451',cx,ry);
+      _cx.fillStyle='#F4A261';
+      _cx.shadowColor='rgba(244,162,97,0.95)'; _cx.shadowBlur=14;
+      _cx.fillText('451',cx,ry);
+      _cx.restore();
+    }
+
+    // Area fill
+    _cx.save();
+    _cx.beginPath(); _cx.rect(_PAD.left-1,_PAD.top-20,tp.x-_PAD.left+2,_cH+30); _cx.clip();
+    const ag=_cx.createLinearGradient(0,_PAD.top,0,_PAD.top+_cH);
+    ag.addColorStop(0,'rgba(95,207,151,0.38)'); ag.addColorStop(0.55,'rgba(95,207,151,0.12)'); ag.addColorStop(1,'rgba(95,207,151,0.02)');
+    _cx.beginPath(); _cx.moveTo(_pts[0].x,_PAD.top+_cH); _cx.lineTo(_pts[0].x,_pts[0].y);
+    _segs.forEach(sg=>_cx.bezierCurveTo(sg.cp1.x,sg.cp1.y,sg.cp2.x,sg.cp2.y,sg.p3.x,sg.p3.y));
+    _cx.lineTo(_pts[_pts.length-1].x,_PAD.top+_cH); _cx.closePath();
+    _cx.fillStyle=ag; _cx.fill(); _cx.restore();
+
+    // Line
+    _cx.save();
+    _cx.shadowColor=GC; _cx.shadowBlur=14;
+    _cx.strokeStyle=LC; _cx.lineWidth=3; _cx.lineJoin='round'; _cx.lineCap='round';
+    _cx.beginPath(); _cx.moveTo(_pts[0].x,_pts[0].y);
+    for(let i=0;i<tp.si;i++){ const sg=_segs[i]; _cx.bezierCurveTo(sg.cp1.x,sg.cp1.y,sg.cp2.x,sg.cp2.y,sg.p3.x,sg.p3.y); }
+    if(tp.t>1e-6){ const pl=splitL(_segs[tp.si],tp.t); _cx.bezierCurveTo(pl.cp1.x,pl.cp1.y,pl.cp2.x,pl.cp2.y,pl.p3.x,pl.p3.y); }
+    _cx.stroke(); _cx.restore();
+
+    // Markers
+    const n=_pts.length;
+    _pts.forEach((p,i)=>{
+      const mp=i/(n-1); if(prog<mp-0.04) return;
+      const alpha=Math.min(1,Math.max(0,(prog-mp+0.04)/0.04));
+      const isLast = i===n-1;
+      const r = isLast ? 9*s : 6.5*s;
+      const mc = isLast ? '#F4A261' : LC;
+      const ms = isLast ? 'rgba(244,162,97,0.6)' : GC;
+      _cx.save(); _cx.globalAlpha=alpha;
+
+      if(isLast && prog>=1){
+        // Pulsing outer ring
+        const pulse=(Math.sin(_now/700)+1)/2;
+        const pr=r*(2.8+pulse*2.2);
+        const pg=_cx.createRadialGradient(p.x,p.y,r*0.8,p.x,p.y,pr);
+        pg.addColorStop(0,`rgba(244,162,97,${0.28*(1-pulse+0.1)}`);
+        pg.addColorStop(1,'rgba(244,162,97,0)');
+        _cx.beginPath(); _cx.arc(p.x,p.y,pr,0,Math.PI*2); _cx.fillStyle=pg; _cx.fill();
+        // Second static ring
+        _cx.beginPath(); _cx.arc(p.x,p.y,r*2.1,0,Math.PI*2);
+        _cx.strokeStyle='rgba(244,162,97,0.25)'; _cx.lineWidth=1.5*s; _cx.stroke();
+      } else {
+        const halo=_cx.createRadialGradient(p.x,p.y,0,p.x,p.y,r*2.8);
+        halo.addColorStop(0,'rgba(95,207,151,0.2)'); halo.addColorStop(1,'rgba(95,207,151,0)');
+        _cx.beginPath(); _cx.arc(p.x,p.y,r*2.8,0,Math.PI*2); _cx.fillStyle=halo; _cx.fill();
+      }
+
+      _cx.beginPath(); _cx.arc(p.x,p.y,r,0,Math.PI*2);
+      _cx.strokeStyle=mc; _cx.lineWidth=isLast?3*s:2.2*s; _cx.shadowColor=ms; _cx.shadowBlur=isLast?18:10; _cx.stroke();
+      _cx.beginPath(); _cx.arc(p.x,p.y,r-(isLast?3:2.2)*s,0,Math.PI*2);
+      _cx.fillStyle=isLast?mc:'#fff'; _cx.shadowBlur=0; _cx.fill();
+
+      if(isLast){
+        // Inner white dot
+        _cx.beginPath(); _cx.arc(p.x,p.y,r*0.32,0,Math.PI*2); _cx.fillStyle='#fff'; _cx.fill();
+        // Value label — outline stroke for legibility across all browsers
+        // "2026 est." label above the marker dot
+        _cx.font=`700 ${Math.round(10*s)}px system-ui,sans-serif`;
+        _cx.textAlign='center'; _cx.textBaseline='bottom'; _cx.shadowBlur=0;
+        _cx.lineWidth=3*s; _cx.strokeStyle='rgba(10,22,40,0.95)';
+        _cx.strokeText('2026 est.',p.x,p.y-r-5*s);
+        _cx.fillStyle='rgba(244,162,97,0.95)';
+        _cx.shadowColor='rgba(0,0,0,0.8)'; _cx.shadowBlur=4;
+        _cx.fillText('2026 est.',p.x,p.y-r-5*s);
+      } else {
+        _cx.font=`700 ${Math.round(12*s)}px system-ui,sans-serif`;
+        _cx.textAlign='center'; _cx.textBaseline='bottom'; _cx.fillStyle='#fff';
+        _cx.shadowColor='rgba(0,0,0,0.9)'; _cx.shadowBlur=5;
+        _cx.fillText(p.val,p.x,p.y-r-5*s);
+      }
+      _cx.restore();
+    });
+
+    // Tip glow dot
+    if(prog<1){ _cx.save(); _cx.beginPath(); _cx.arc(tp.x,tp.y,5*s,0,Math.PI*2);
+      _cx.fillStyle='#fff'; _cx.shadowColor=LC; _cx.shadowBlur=18; _cx.fill(); _cx.restore(); }
+  }
+
+  function loop(ts){
+    _now=ts;
+    if(!_t0) _t0=ts;
+    const raw=Math.min((ts-_t0)/DUR,1);
+    draw(ease(raw));
+    _raf=requestAnimationFrame(loop);
+    if(raw>=1) _running=false;
+  }
+
+  function start(){
+    if(_raf) cancelAnimationFrame(_raf);
+    _t0=null; _running=true; _raf=requestAnimationFrame(loop);
+  }
+
+  window.initPopChart = function(id){
+    _cv = document.getElementById(id);
+    if(!_cv) return;
+    if(chartInstances[id] && chartInstances[id].destroy) { chartInstances[id].destroy(); delete chartInstances[id]; }
+    _cx = _cv.getContext('2d');
+    setup();
+    _cv.onclick = ()=>{ if(!prefReduced) start(); };
+    if(prefReduced) draw(1); else start();
+  };
+})();
+
+function initSeasonDrownChart(id) {
   const ctx = document.getElementById(id);
   if (!ctx) return;
   destroyChart(id);
   chartInstances[id] = new Chart(ctx, {
-    type: 'line',
+    type: 'bar',
     data: {
-      labels: DATA.populationTrend.years,
+      labels: DATA.seasonalCause.months,
       datasets: [{
-        label: 'CG Elephant Population',
-        data: DATA.populationTrend.cg,
-        borderColor: '#52B788',
-        backgroundColor: (context) => {
-          const chart = context.chart;
-          const { ctx: c, chartArea } = chart;
-          if (!chartArea) return 'transparent';
-          const gradient = c.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-          gradient.addColorStop(0, 'rgba(82,183,136,0.5)');
-          gradient.addColorStop(1, 'rgba(82,183,136,0.02)');
-          return gradient;
-        },
-        borderWidth: 3,
-        pointBackgroundColor: '#52B788',
-        pointRadius: 5,
-        pointHoverRadius: 8,
-        tension: 0.3,
-        fill: true,
-        clip: false
+        label: 'Deaths',
+        data: DATA.seasonalCause.drowning,
+        backgroundColor: DATA.seasonalCause.drowning.map(v =>
+          v >= 3 ? '#4A9EEB' : v >= 1 ? 'rgba(74,158,235,0.6)' : 'rgba(74,158,235,0.15)'
+        ),
+        borderRadius: 5,
+        borderSkipped: false
       }]
     },
     options: {
@@ -688,31 +1073,83 @@ function initPopChart(id) {
       maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
+        datalabels: {
+          color: ctx => ctx.dataset.data[ctx.dataIndex] > 0 ? '#ffffff' : 'transparent',
+          anchor: 'center',
+          align: 'center',
+          font: { size: 13, weight: 'bold' },
+          formatter: v => v > 0 ? v : ''
+        },
         tooltip: {
           backgroundColor: 'rgba(17,34,64,0.95)',
           titleColor: '#E8F0E8',
           bodyColor: '#8BA098',
-          borderColor: 'rgba(82,183,136,0.3)',
+          borderColor: 'rgba(74,158,235,0.3)',
           borderWidth: 1,
-          padding: 12,
-          callbacks: {
-            label: ctx => ` ${ctx.parsed.y} elephants (est.)`
-          }
+          padding: 10
         }
       },
       scales: {
-        x: {
-          grid: { color: 'rgba(255,255,255,0.06)' },
-          ticks: { color: '#8BA098', font: { size: 22 } }
-        },
+        x: { grid: { display: false }, ticks: { color: '#8BA098', font: { size: 11 } } },
         y: {
           grid: { color: 'rgba(255,255,255,0.06)' },
-          ticks: { color: '#8BA098', stepSize: 50, font: { size: 22 } },
-          beginAtZero: false,
-          min: 24,
-          max: 480
+          ticks: { color: '#8BA098', stepSize: 1 },
+          beginAtZero: true, min: 0, max: 5
         }
       }
-    }
+    },
+    plugins: [ChartDataLabels]
+  });
+}
+
+function initSeasonElecChart(id) {
+  const ctx = document.getElementById(id);
+  if (!ctx) return;
+  destroyChart(id);
+  chartInstances[id] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: DATA.seasonalCause.months,
+      datasets: [{
+        label: 'Deaths',
+        data: DATA.seasonalCause.electrocution,
+        backgroundColor: DATA.seasonalCause.electrocution.map(v =>
+          v >= 5 ? '#E63946' : v >= 2 ? 'rgba(230,57,70,0.65)' : v >= 1 ? 'rgba(230,57,70,0.4)' : 'rgba(230,57,70,0.12)'
+        ),
+        borderRadius: 5,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        datalabels: {
+          color: ctx => ctx.dataset.data[ctx.dataIndex] > 0 ? '#ffffff' : 'transparent',
+          anchor: 'center',
+          align: 'center',
+          font: { size: 13, weight: 'bold' },
+          formatter: v => v > 0 ? v : ''
+        },
+        tooltip: {
+          backgroundColor: 'rgba(17,34,64,0.95)',
+          titleColor: '#E8F0E8',
+          bodyColor: '#8BA098',
+          borderColor: 'rgba(230,57,70,0.3)',
+          borderWidth: 1,
+          padding: 10
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#8BA098', font: { size: 11 } } },
+        y: {
+          grid: { color: 'rgba(255,255,255,0.06)' },
+          ticks: { color: '#8BA098', stepSize: 1 },
+          beginAtZero: true, min: 0, max: 8
+        }
+      }
+    },
+    plugins: [ChartDataLabels]
   });
 }
