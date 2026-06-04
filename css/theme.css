@@ -149,6 +149,8 @@ html, body {
   text-align: center;
   padding-right: 10px;
 }
+.s1b-body-center { justify-content: center; }
+.s1b-titlecol-full { flex: 0 0 70%; padding-right: 0; }
 .s1b-wkshop {
   font-size: 1.55rem;
   font-weight: 400;
