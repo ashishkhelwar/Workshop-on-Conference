@@ -244,9 +244,9 @@ function initCurrentElephantsMap(id) {
     className: '',
     html: `<div style="
       width:14px;height:14px;border-radius:50%;
-      background:#52B788;
+      background:#E63946;
       border:2.5px solid #fff;
-      box-shadow:0 0 7px rgba(82,183,136,0.85),0 1px 4px rgba(0,0,0,0.4);
+      box-shadow:0 0 7px rgba(230,57,70,0.85),0 1px 4px rgba(0,0,0,0.4);
     "></div>`,
     iconSize: [14, 14], iconAnchor: [7, 7], popupAnchor: [0, -9]
   });
@@ -260,6 +260,7 @@ function initCurrentElephantsMap(id) {
       box-shadow:0 0 7px rgba(244,162,97,0.85),0 1px 4px rgba(0,0,0,0.4);
       transform:rotate(45deg);
       margin:1px;
+      animation:tuskerBlink 1.2s ease-in-out infinite;
     "></div>`,
     iconSize: [15, 15], iconAnchor: [7, 7], popupAnchor: [0, -9]
   });
