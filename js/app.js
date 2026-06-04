@@ -193,11 +193,8 @@ function onSlideActivate(index) {
     // Slide 13 — Lab Report (no special init)
     case 25: break;
 
-    // Slide 14 — Conclusion (no special init)
-    case 26: break;
-
     // Slide 17 — Thank You
-    case 27: break;
+    case 26: break;
 
     default: break;
   }
