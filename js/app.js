@@ -9,7 +9,7 @@ let current = 0;
 
 // ── Collect slides after DOM ready ──────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.slide').forEach(s => slides.push(s));
+  document.querySelectorAll('.slide:not(.slide--hidden)').forEach(s => slides.push(s));
   // Set first slide active
   if (slides.length > 0) {
     slides[0].classList.add('active');
@@ -196,22 +196,8 @@ function onSlideActivate(index) {
     // Slide 14 — Conclusion (no special init)
     case 26: break;
 
-    // Slide 15 — Human Casualty
-    case 27: {
-      const el = slides[27].querySelector('.hero-count');
-      if (el) countUp(el, 45, 1800);
-      setTimeout(animateHumanBars, 400);
-      setTimeout(() => initHumanRangeChart('humanRangeCanvas'), 500);
-      break;
-    }
-
-    // Slide 16 — Overlay Map
-    case 28:
-      setTimeout(() => initOverlayMap('overlayMap'), 300);
-      break;
-
     // Slide 17 — Thank You
-    case 29: break;
+    case 27: break;
 
     default: break;
   }

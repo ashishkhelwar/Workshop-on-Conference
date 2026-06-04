@@ -25,10 +25,10 @@ function initDistributionMap(id) {
 
   // Division markers
   L.marker([22.55, 83.18]).addTo(map)
-    .bindPopup('<b>Dharamjaigarh Van Mandal</b><br>27 elephant casualties<br>36 human casualties');
+    .bindPopup('<b>Dharamjaigarh Van Mandal</b><br>27 elephant casualties');
 
   L.marker([22.25, 83.58]).addTo(map)
-    .bindPopup('<b>Raigarh Van Mandal</b><br>21 elephant casualties<br>9 human casualties');
+    .bindPopup('<b>Raigarh Van Mandal</b><br>21 elephant casualties');
 
   // Forest patches (rough polygons)
   L.polygon([
@@ -106,16 +106,6 @@ function initCasualtyMap(id) {
   DATA.geoPoints.rgElephant.forEach(([lat, lon, cause, yr]) => {
     L.marker([lat, lon], { icon: elephantIcon }).addTo(map)
       .bindPopup(`<b style="color:#52B788">Elephant Death</b><br><span style="color:#999">Raigarh · ${yr}</span><br>${cause}`);
-  });
-
-  DATA.geoPoints.dhHuman.forEach(([lat, lon, village, yr]) => {
-    L.marker([lat, lon], { icon: humanIcon }).addTo(map)
-      .bindPopup(`<b style="color:#E63946">Human Death</b><br><span style="color:#999">Dharamjaigarh · ${yr}</span><br>${village}`);
-  });
-
-  DATA.geoPoints.rgHuman.forEach(([lat, lon, village, yr]) => {
-    L.marker([lat, lon], { icon: humanIcon }).addTo(map)
-      .bindPopup(`<b style="color:#E63946">Human Death</b><br><span style="color:#999">Raigarh · ${yr}</span><br>${village}`);
   });
 
   setTimeout(() => map.invalidateSize(), 500);
