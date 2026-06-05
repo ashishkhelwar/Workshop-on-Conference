@@ -106,7 +106,7 @@ function onSlideActivate(index) {
     // Slide 5 — Participants
     case 8: {
       const el = slides[8].querySelector('.hero-count');
-      if (el) countUp(el, 48, 1800);
+      if (el) countUp(el, 84, 1800);
       break;
     }
 
