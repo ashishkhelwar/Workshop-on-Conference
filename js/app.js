@@ -118,54 +118,49 @@ function onSlideActivate(index) {
       setTimeout(() => initPopChart('popCanvas'), 300);
       break;
 
-    // Slide 6b — Distribution Map
-    case 11:
-      setTimeout(() => initDistributionMap('distMap'), 300);
-      break;
-
     // Slide 7 — Live Elephant GPS Tracking
-    case 12:
+    case 11:
       setTimeout(() => initCurrentElephantsMap('s7-live-map'), 300);
       break;
 
     // Slide 7b — Elephant Casualties
-    case 13: {
-      const el = slides[13].querySelector('.hero-count');
+    case 12: {
+      const el = slides[12].querySelector('.hero-count');
       if (el) countUp(el, 49, 1800);
       setTimeout(() => initYearBarsChart('yearBarsCanvas'), 400);
       break;
     }
 
     // Slide 8 — Cause of Death
-    case 14:
+    case 13:
       setTimeout(() => initCauseChart('causeCanvas'), 300);
       break;
 
     // Slide 9a — Age Group
-    case 15:
+    case 14:
       setTimeout(() => initAgeChart('ageCanvas'), 300);
       break;
 
     // Slide 9b — Sex Group
-    case 16:
+    case 15:
       setTimeout(() => initSexChart('sexCanvas'), 300);
       break;
 
     // Slide 9b-Drown — Drowning Cases map
-    case 17:
+    case 16:
       setTimeout(() => initDrownMap('drownMap'), 300);
       break;
 
     // Slide 9drown-PM — Drowning PM & Lab Report Analysis
-    case 18: break;
+    case 17: break;
 
     // Slide 9c — Seasonal
-    case 19:
+    case 18:
       setTimeout(() => initSeasonalChart('seasonCanvas'), 300);
       break;
 
     // Slide 9c-cause — Season-wise Cause of Death
-    case 20:
+    case 19:
       setTimeout(() => {
         initSeasonDrownChart('seasonDrownCanvas');
         initSeasonElecChart('seasonElecCanvas');
@@ -173,26 +168,26 @@ function onSlideActivate(index) {
       break;
 
     // Slide 9d — Range-wise
-    case 21:
+    case 20:
       setTimeout(() => initRangeChart('rangeCanvas'), 300);
       break;
 
     // Slide 10 — Geo Casualty Map
-    case 22:
+    case 21:
       setTimeout(() => initCasualtyMap('casualtyMap'), 300);
       break;
 
     // Slide 11 — PM Report Summary (no special init)
-    case 23: break;
+    case 22: break;
 
     // Slide 13 — Lab Report (no special init)
-    case 24: break;
+    case 23: break;
 
     // Slide 14 — Gurda Case Photos & PM Report (no special init)
-    case 25: break;
+    case 24: break;
 
     // Slide 17 — Thank You
-    case 26: break;
+    case 25: break;
 
     default: break;
   }
