@@ -158,10 +158,10 @@ function initYearBarsChart(id) {
   const container = document.getElementById(id);
   if (!container) return;
 
-  const years  = ['21-22','22-23','23-24','24-25','25-26'];
-  const totals = DATA.elephantDeaths.slice(0, 5);
-  const dhVals = DATA.elephantDeathsByDiv.dh.slice(0, 5);
-  const rgVals = DATA.elephantDeathsByDiv.rg.slice(0, 5);
+  const years  = ['21-22','22-23','23-24','24-25','25-26','26-27*'];
+  const totals = DATA.elephantDeaths;
+  const dhVals = DATA.elephantDeathsByDiv.dh;
+  const rgVals = DATA.elephantDeathsByDiv.rg;
   const maxVal = 14;
 
   container.innerHTML = '';
