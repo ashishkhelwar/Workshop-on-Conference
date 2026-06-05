@@ -188,8 +188,11 @@ function onSlideActivate(index) {
     // Slide 13 — Lab Report (no special init)
     case 24: break;
 
-    // Slide 17 — Thank You
+    // Slide 14 — Gurda Case Photos & PM Report (no special init)
     case 25: break;
+
+    // Slide 17 — Thank You
+    case 26: break;
 
     default: break;
   }
