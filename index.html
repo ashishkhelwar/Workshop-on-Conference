@@ -1526,9 +1526,13 @@
       <div style="flex:1.1;display:flex;flex-direction:column;gap:12px;min-height:0">
 
         <!-- Aerial photo -->
-        <div style="flex:1;min-height:0;border-radius:10px;overflow:hidden;position:relative;background:#0d1a0e;border:1px solid rgba(82,183,136,0.2)">
+        <div style="flex:1;min-height:0;border-radius:10px;overflow:hidden;position:relative;background:#0d1a0e;border:1px solid rgba(82,183,136,0.2);display:flex;align-items:center;justify-content:center">
           <img src="img/gurda-aerial.jpg" alt="Aerial view — Gurda river sandbank"
-            style="width:100%;height:100%;object-fit:cover">
+            style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0"
+            onerror="this.style.display='none'">
+          <div style="text-align:center;color:#52B788;font-size:0.85rem;z-index:1;pointer-events:none">
+            📷 Upload <strong>img/gurda-aerial.jpg</strong>
+          </div>
           <div style="position:absolute;bottom:0;left:0;right:0;
             background:linear-gradient(transparent,rgba(0,0,0,0.75));
             padding:8px 12px;font-size:0.7rem;color:#C8D8C8">
@@ -1539,9 +1543,13 @@
         </div>
 
         <!-- Close-up photo -->
-        <div style="flex:1;min-height:0;border-radius:10px;overflow:hidden;position:relative;background:#0d1a0e;border:1px solid rgba(82,183,136,0.2)">
+        <div style="flex:1;min-height:0;border-radius:10px;overflow:hidden;position:relative;background:#0d1a0e;border:1px solid rgba(82,183,136,0.2);display:flex;align-items:center;justify-content:center">
           <img src="img/gurda-casualty.jpg" alt="Dead elephant calf — Gurda riverbank"
-            style="width:100%;height:100%;object-fit:cover">
+            style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0"
+            onerror="this.style.display='none'">
+          <div style="text-align:center;color:#E63946;font-size:0.85rem;z-index:1;pointer-events:none">
+            📷 Upload <strong>img/gurda-casualty.jpg</strong>
+          </div>
           <div style="position:absolute;bottom:0;left:0;right:0;
             background:linear-gradient(transparent,rgba(0,0,0,0.75));
             padding:8px 12px;font-size:0.7rem;color:#C8D8C8">
