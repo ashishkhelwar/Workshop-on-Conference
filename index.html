@@ -1635,6 +1635,7 @@
   <button onclick="goTo(current-1)" title="Previous slide (Left arrow)">&#8592;</button>
   <span id="slideNum">1 / 21</span>
   <button onclick="goTo(current+1)" title="Next slide (Right arrow)">&#8594;</button>
+  <button id="soundBtn" onclick="AudioManager.toggle()" title="Enable sound" style="font-size:1rem;padding:4px 8px">🔇</button>
   <button id="cfg-open-btn" onclick="openEditor()" title="Customize presentation content">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
          stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1655,6 +1656,7 @@
 <script src="js/data.js"></script>
 <script src="js/maps.js"></script>
 <script src="js/charts.js"></script>
+<script src="js/audio.js"></script>
 <script src="js/app.js"></script>
 <script src="js/editor.js"></script>
 <script src="js/inline-editor.js"></script>

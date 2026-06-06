@@ -32,6 +32,7 @@ function goTo(n) {
   current = next;
   slides[current].classList.add('active');
   document.getElementById('slideNum').textContent = `${current + 1} / ${slides.length}`;
+  if (typeof AudioManager !== 'undefined') AudioManager.playTransition();
   onSlideActivate(current);
 }
 
