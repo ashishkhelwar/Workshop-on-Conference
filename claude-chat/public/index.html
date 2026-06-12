@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Claude — personal chat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css" />
+  <!-- Markdown rendering (graceful fallback to plain text if offline) -->
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js" defer></script>
+</head>
+<body>
+  <div id="app">
+    <!-- ───────────── Sidebar: conversations ───────────── -->
+    <aside id="sidebar">
+      <div class="sidebar-head">
+        <div class="brand">
+          <span class="brand-dot"></span>
+          <span class="brand-name">My&nbsp;Claude</span>
+        </div>
+        <button id="new-chat" class="btn btn-accent" title="Start a new chat">+ New chat</button>
+      </div>
+      <nav id="convo-list" aria-label="Conversations"></nav>
+      <div class="sidebar-foot">
+        <button id="clear-all" class="btn btn-ghost btn-small" title="Delete all conversations">Clear all chats</button>
+      </div>
+    </aside>
+
+    <!-- ───────────── Main: chat ───────────── -->
+    <main id="main">
+      <header id="topbar">
+        <button id="sidebar-toggle" class="btn btn-ghost btn-icon" title="Toggle conversations">☰</button>
+        <div id="model-chip" title="Current model — open settings to change">
+          <span id="model-chip-label">Claude</span>
+        </div>
+        <div class="topbar-spacer"></div>
+        <span id="key-warning" class="key-warning hidden" title="Set ANTHROPIC_API_KEY on the server">⚠ API key not set</span>
+        <button id="open-settings" class="btn btn-ghost" title="Customize Claude">⚙ Customize</button>
+      </header>
+
+      <div id="messages" aria-live="polite"></div>
+
+      <div id="composer">
+        <div class="composer-inner">
+          <textarea
+            id="input"
+            rows="1"
+            placeholder="Message Claude…   (Enter to send, Shift+Enter for a new line)"
+          ></textarea>
+          <button id="send" class="btn btn-accent btn-send" title="Send (Enter)">Send&nbsp;↑</button>
+          <button id="stop" class="btn btn-danger btn-send hidden" title="Stop generating">Stop&nbsp;■</button>
+        </div>
+        <div class="composer-hint">
+          Your messages go to your own server, which calls the Claude API — the key never reaches the browser.
+        </div>
+      </div>
+    </main>
+
+    <!-- ───────────── Settings drawer: customize Claude ───────────── -->
+    <aside id="settings" class="hidden" aria-label="Customize Claude">
+      <div class="settings-head">
+        <h2>Customize Claude</h2>
+        <button id="close-settings" class="btn btn-ghost btn-icon" title="Close">✕</button>
+      </div>
+
+      <div class="settings-body">
+        <section class="setting">
+          <label for="set-model">Model</label>
+          <select id="set-model"></select>
+          <p id="model-note" class="hint"></p>
+        </section>
+
+        <section class="setting">
+          <label for="set-system">System prompt <span class="muted">(Claude's persona &amp; rules)</span></label>
+          <div id="preset-row" class="preset-row"></div>
+          <textarea
+            id="set-system"
+            rows="6"
+            placeholder="e.g. You are a friendly expert tutor. Explain step by step, use simple words, and give one example for every concept."
+          ></textarea>
+        </section>
+
+        <section class="setting" id="row-thinking">
+          <label class="check-row">
+            <input type="checkbox" id="set-thinking" />
+            <span>Extended thinking <span class="muted">(deeper reasoning, shows a summary)</span></span>
+          </label>
+          <p id="thinking-note" class="hint"></p>
+        </section>
+
+        <section class="setting" id="row-effort">
+          <label for="set-effort">Effort <span class="muted">(depth vs. speed &amp; cost)</span></label>
+          <select id="set-effort">
+            <option value="low">Low — quickest, cheapest</option>
+            <option value="medium">Medium — balanced</option>
+            <option value="high" selected>High — default quality</option>
+            <option value="max">Max — most thorough</option>
+          </select>
+        </section>
+
+        <section class="setting" id="row-temp">
+          <label class="check-row">
+            <input type="checkbox" id="set-temp-on" />
+            <span>Custom temperature <span class="muted">(creativity)</span></span>
+          </label>
+          <div class="slider-row">
+            <input type="range" id="set-temp" min="0" max="1" step="0.05" value="0.7" disabled />
+            <span id="temp-value" class="mono">0.70</span>
+          </div>
+          <p id="temp-note" class="hint"></p>
+        </section>
+
+        <section class="setting">
+          <label for="set-maxtokens">Max response tokens</label>
+          <input type="number" id="set-maxtokens" min="256" step="256" value="64000" />
+          <p class="hint">Upper limit on answer length. Long answers stream in live.</p>
+        </section>
+
+        <button id="reset-settings" class="btn btn-ghost btn-small">Reset to defaults</button>
+      </div>
+    </aside>
+  </div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
