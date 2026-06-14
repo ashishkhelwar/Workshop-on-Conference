@@ -11,8 +11,17 @@ from reportlab.lib.utils import ImageReader
 from reportlab.platypus import Paragraph
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.enums import TA_JUSTIFY, TA_CENTER, TA_LEFT, TA_RIGHT
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 from PIL import Image as PILImage
 import io, os, textwrap
+
+# Register Devanagari font for Hindi text
+_DEVA_REG  = '/tmp/NotoSansDevanagari-Regular.ttf'
+_DEVA_BOLD = '/tmp/NotoSansDevanagari-Bold.ttf'
+if os.path.exists(_DEVA_REG):
+    pdfmetrics.registerFont(TTFont('Devanagari',     _DEVA_REG))
+    pdfmetrics.registerFont(TTFont('Devanagari-Bold', _DEVA_BOLD))
 
 PW, PH = A4   # 595.3 × 841.9 pt
 
@@ -406,6 +415,62 @@ class PB:
         self._rule()
         self.y -= 6
 
+    # ── Hindi text box (Devanagari) ───────────────────────────────────────────
+    def hindi_box(self, text, size=10.5, bg=HexColor('#1A2840'), attrib=None):
+        """Render Hindi text in a dark box using Devanagari font."""
+        lines = text.replace('\n', ' ').split('। ')
+        # Draw each sentence as separate para for wrapping
+        style = ParagraphStyle(
+            'hi', fontName='Devanagari', fontSize=size,
+            textColor=white, alignment=TA_JUSTIFY, leading=size * 1.6,
+        )
+        paras = []
+        for i, sent in enumerate(lines):
+            s = sent.strip()
+            if not s:
+                continue
+            if i < len(lines) - 1:
+                s += '।'
+            p = Paragraph(s, style)
+            w, h = p.wrap(INN_W - 28, 2000)
+            paras.append((p, h))
+
+        total_h = sum(h for _, h in paras) + (len(paras) - 1) * 4
+        bh = total_h + 26 + (16 if attrib else 0)
+
+        self.c.setFillColor(bg)
+        self.c.roundRect(INN_L, self.y - bh, INN_W, bh, 6, fill=1, stroke=0)
+
+        cy = self.y - 14
+        for p, h in paras:
+            p.drawOn(self.c, INN_L + 14, cy - h)
+            cy -= h + 4
+
+        if attrib:
+            self.c.setFillColor(C_GOLD)
+            self.c.setFont('Helvetica-Bold', 8.5)
+            self.c.drawRightString(INN_R - 10, self.y - bh + 7, attrib)
+
+        self.y -= bh + 10
+
+    # ── Officer address card (Minister / PCCF / CCF) ─────────────────────────
+    def officer_heading(self, name, designation, dept=''):
+        """Full-width highlighted name block for a speaker."""
+        bh = 52 if dept else 38
+        self.c.setFillColor(HexColor('#EBF5EE'))
+        self.c.roundRect(INN_L, self.y - bh, INN_W, bh, 5, fill=1, stroke=0)
+        self.c.setFillColor(C_GRN)
+        self.c.setFont('Helvetica-Bold', 12)
+        self.c.drawString(INN_L + 12, self.y - 18, name)
+        self.c.setFillColor(C_DARK)
+        self.c.setFont('Helvetica-Bold', 9.5)
+        self.c.drawString(INN_L + 12, self.y - 30, designation)
+        if dept:
+            self.c.setFillColor(C_MUTED)
+            self.c.setFont('Helvetica', 8.5)
+            self.c.drawString(INN_L + 12, self.y - 42, dept)
+        self.y -= bh + 8
+
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # CONTENT
@@ -413,6 +478,30 @@ class PB:
 
 def build(c):
     pb = PB(c)
+
+    # ── HINDI SPEECH TEXT ────────────────────────────────────────────────────
+    MINISTER_HINDI = (
+        'छत्तीसगढ़ में हाथियों की संख्या पिछले 5 वर्षों से लगातार बढ़ रही है और वर्तमान में '
+        'राज्य में लगभग 450 हाथी विचरण कर रहे हैं। ये हाथी सरगुजा, बिलासपुर, रायपुर और दुर्ग '
+        'संभाग के वन क्षेत्रों में स्थाई रूप से विचरण कर रहे हैं। छत्तीसगढ़ शासन का वन एवं '
+        'जलवायु परिवर्तन विभाग इन हाथियों के संरक्षण, संवर्धन और सुरक्षा के साथ-साथ जन समुदाय '
+        'की सुरक्षा को भी ध्यान में रखते हुए लगातार कार्य कर रहा है। माननीय वन मंत्री, वन एवं '
+        'जलवायु परिवर्तन विभाग, छत्तीसगढ़ शासन के निर्देशानुसार वन एवं जलवायु परिवर्तन विभाग '
+        'हाथी-मानव द्वंद्व को शून्य की स्थिति में लाने का प्रयास कर रहा है, जिसमें सकारात्मक '
+        'परिणाम भी सामने आए हैं। विगत कुछ दिनों से रायगढ़ जिले के रायगढ़ एवं धरमजयगढ़ '
+        'वनमंडल में हाथी शावकों की मृत्यु की घटनाओं को ध्यान में रखते हुए तथा मृत्यु के कारणों '
+        'को जानने के लिए माननीय वन मंत्री श्री केदार कश्यप के विशेष प्रयास से एक राष्ट्रीय स्तर '
+        'की कार्यशाला का आयोजन दिनांक 05 एवं 06 जून 2026 को रायगढ़ जिले में किया जा रहा है। '
+        'इस कार्यशाला में राष्ट्रीय स्तर के पशुचिकित्सक, वैज्ञानिक, हाथी विशेषज्ञ तथा '
+        'छत्तीसगढ़ राज्य के पशुचिकित्सक भाग लेंगे। साथ ही राज्य के हाथी प्रभावित जिलों से '
+        'वन एवं जलवायु परिवर्तन विभाग एवं पशु संसाधन विभाग के अधिकारी भी इस प्रशिक्षण में '
+        'हिस्सा ले रहे हैं। कार्यशाला का उद्देश्य जंगली हाथियों की मृत्यु के कारणों का '
+        'वैज्ञानिक अन्वेषण करना और भविष्य में प्रबंधन की रणनीति तैयार करना है। इसके अंतर्गत '
+        'प्रतिभागियों को मृत हाथी की जांच, नमूने इकट्ठा करने और उन्हें सुरक्षित ढंग से भेजने '
+        'का व्यावहारिक प्रशिक्षण दिया जाएगा। साथ ही शव संभालने में सुरक्षा, शव के उचित '
+        'निपटान तथा हाथियों की मौत की घटनाओं और स्वास्थ्य निगरानी के लिए तैयारी को '
+        'मज़बूत किया जाएगा।'
+    )
 
     # ────────────────────────────────────────────────────────────────────────
     # PAGE 1: Workshop at a Glance
@@ -439,7 +528,7 @@ def build(c):
     pb.y -= 13
     pb.c.setFillColor(C_DARK)
     pb.c.setFont('Helvetica-Bold', 10)
-    pb.c.drawCentredString(PW / 2, pb.y, '30 – 31 May 2026  ·  Bilaspur, Chhattisgarh')
+    pb.c.drawCentredString(PW / 2, pb.y, '05 – 06 June 2026  ·  Raigarh, Chhattisgarh')
     pb.y -= 20
 
     pb.stats_row([
@@ -451,23 +540,23 @@ def build(c):
     ])
 
     pb.image(f'{IMG_DIR}/cover-photo-main.jpg', 185,
-             'Inaugural session — Workshop on Mortality Investigation of Asian Elephant, Bilaspur, May 2026.')
+             'Inaugural session — Workshop on Mortality Investigation of Asian Elephant, Raigarh, June 2026.')
     pb.gap(4)
 
     pb.para(
         'The <b>Workshop on Essentials for Mortality Investigation of Asian Elephant</b> was organized '
-        'by the Chhattisgarh Forest Department, Bilaspur Circle, in technical partnership with the '
+        'by the Chhattisgarh Forest Department, Bilaspur Circle, through the special initiative of '
+        '<b>Hon\'ble Forest Minister Shri Kedar Kashyap</b>, in technical partnership with the '
         '<b>Wildlife Institute of India</b>, Dehradun, and <b>ICAR-IVRI</b>, Bareilly. Held on '
-        '30–31 May 2026 at Bilaspur, the two-day workshop brought together five nationally eminent '
-        'experts in wildlife health, veterinary pathology, and forensic science to equip field officers '
-        'from the Dharamjaigarh and Raigarh Van Mandals with systematic, evidence-based skills for '
-        'elephant mortality investigation.'
+        '05–06 June 2026 at Raigarh, Chhattisgarh, the two-day workshop brought together five '
+        'nationally eminent experts to equip field officers with systematic, evidence-based skills '
+        'for elephant mortality investigation.'
     )
 
     c.showPage()
 
     # ────────────────────────────────────────────────────────────────────────
-    # PAGE 2: Organizing Team & Technical Partners
+    # PAGE 2: Organizing Team
     # ────────────────────────────────────────────────────────────────────────
     pb.new_page(2)
 
@@ -478,42 +567,77 @@ def build(c):
     pb.y -= 62
 
     pb.banner('Organizing Team')
-    pb.gap(4)
+    pb.gap(6)
 
-    pb.c.setFillColor(C_NAVY)
-    pb.c.setFont('Helvetica-Bold', 11)
-    pb.c.drawCentredString(PW / 2, pb.y, 'Under the Guidance of')
-    pb.y -= 15
-    pb.c.setFillColor(C_GRN)
-    pb.c.setFont('Helvetica-Bold', 10.5)
-    pb.c.drawCentredString(PW / 2, pb.y,
-        'Principal Chief Conservator of Forests & Head of Forest Force, Chhattisgarh')
-    pb.y -= 14
-    pb.c.setFillColor(C_MUTED)
-    pb.c.setFont('Helvetica', 9.5)
-    pb.c.drawCentredString(PW / 2, pb.y,
-        'Chief Conservator of Forests, Bilaspur Circle  ·  Conservator of Forests, Bilaspur')
-    pb.y -= 20
+    # Forest Minister
+    pb.officer_heading(
+        'Shri Kedar Kashyap',
+        'Hon\'ble Forest Minister',
+        'Department of Forest & Climate Change, Government of Chhattisgarh'
+    )
+
+    # PCCF & HoFF
+    pb.officer_heading(
+        'Shri Arun Kumar Pandey, IFS',
+        'Principal Chief Conservator of Forests & Head of Forest Force',
+        'Department of Forest & Climate Change, Government of Chhattisgarh'
+    )
+
+    pb.gap(4)
+    pb.hline()
+
+    pb.section_heading('Senior Officers')
+
+    # Three officers in a 3-col layout
+    officers = [
+        ('Shri Matheshwaran V., IFS', 'APCCF Wildlife', 'CG Forest Dept.'),
+        ('Shri Manoj Kumar Pandey, IFS', 'CCF, Bilaspur Circle', 'CG Forest Dept.'),
+        ('Smt. Priyanka Pandey, IFS', 'CCF Wildlife Bilaspur\n& Field Director ATR', 'CG Forest Dept.'),
+    ]
+    n = len(officers)
+    bw = (INN_W - (n - 1) * 8) / n
+    bh = 64
+    x = INN_L
+    for name, desg, org in officers:
+        pb.c.setFillColor(HexColor('#EBF5EE'))
+        pb.c.roundRect(x, pb.y - bh, bw, bh, 5, fill=1, stroke=0)
+        pb.c.setFillColor(C_GRN)
+        pb.c.rect(x, pb.y - bh, 4, bh, fill=1, stroke=0)
+        pb.c.setFillColor(C_NAVY)
+        pb.c.setFont('Helvetica-Bold', 9)
+        # Wrap name
+        max_chars = int(bw / 5.2)
+        lines = textwrap.wrap(name, max_chars)
+        for i, ln in enumerate(lines[:2]):
+            pb.c.drawString(x + 10, pb.y - 14 - i * 12, ln)
+        pb.c.setFillColor(C_DARK)
+        pb.c.setFont('Helvetica', 8.5)
+        for i, dl in enumerate(desg.split('\n')):
+            pb.c.drawString(x + 10, pb.y - 38 - i * 11, dl)
+        pb.c.setFillColor(HexColor('#888888'))
+        pb.c.setFont('Helvetica', 7.5)
+        pb.c.drawString(x + 10, pb.y - bh + 9, org)
+        x += bw + 8
+    pb.y -= bh + 12
     pb.hline()
 
     pb.section_heading('Technical Partners')
     pb.para(
         '<b>Wildlife Institute of India (WII)</b>, Dehradun — India\'s premier institution for '
-        'wildlife research and training, contributing faculty expertise in wildlife health management, '
-        'chemical capture of wild animals, and wildlife forensic science.'
+        'wildlife research and training, contributing expertise in wildlife health management, '
+        'chemical capture, and wildlife forensic science.'
     )
     pb.gap(4)
     pb.para(
         '<b>ICAR–Indian Veterinary Research Institute (IVRI)</b>, Bareilly — National centre for '
-        'veterinary pathology, disease diagnosis, and wildlife health surveillance, contributing '
-        'expertise in field necropsy, molecular diagnostics, comprehensive sampling protocols, '
-        'and disease outbreak investigation.'
+        'veterinary pathology, wildlife disease diagnosis, and health surveillance, contributing '
+        'expertise in necropsy, molecular diagnostics, and sampling protocols.'
     )
     pb.gap(4)
     pb.para(
         '<b>Nanaji Deshmukh Veterinary Science University (NDVSU)</b>, Jabalpur — Contributing '
         'expertise in wildlife forensics and health management drawn from three decades of '
-        'field experience across Central India\'s forest landscapes.'
+        'field experience across Central India.'
     )
     pb.gap(8)
     pb.hline()
@@ -577,10 +701,11 @@ def build(c):
         '<b>Chhattisgarh has emerged as one of India\'s most significant elephant habitats</b>, '
         'with the Bilaspur Circle — encompassing the Dharamjaigarh and Raigarh Van Mandals — '
         'hosting the state\'s highest concentration of wild elephants. The elephant population '
-        'has grown remarkably, from an estimated 24 individuals in 2001 to approximately 451 '
-        'elephants in 2026, reflecting nearly 10% compound annual growth. This rapid expansion '
-        'has intensified the human-elephant interface and, critically, raised the toll of '
-        'elephant mortalities to a level demanding systematic institutional response.'
+        'has grown remarkably, from an estimated 24 individuals in 2001 to approximately 450 '
+        'elephants in 2026, reflecting nearly 10% compound annual growth. These elephants '
+        'inhabit forest areas across the Surguja, Bilaspur, Raipur, and Durg divisions. '
+        'This rapid expansion has intensified the human-elephant interface and, critically, '
+        'raised the toll of elephant mortalities to a level demanding systematic institutional response.'
     )
     pb.gap(6)
 
@@ -588,27 +713,20 @@ def build(c):
         'Between 2021–22 and 2026–27, a total of 48 elephant deaths were recorded across '
         'Dharamjaigarh (27 deaths) and Raigarh (21 deaths) Van Mandals. Electrocution (51%) '
         'and drowning (22%) account for the majority. The 2025–26 season recorded the highest '
-        'single-year toll in the five-year study period, with 2026–27 already showing a '
-        'disturbing pattern of calf drowning deaths in the early months.',
+        'single-year toll, with 2026–27 already showing a disturbing pattern of calf drowning '
+        'deaths in the early months of the year.',
         '— Chhattisgarh Forest Department Data, 2021–2026'
     )
 
     pb.para(
-        'Despite this growing urgency, field officers across both divisions faced significant '
-        'gaps in standardized procedures for elephant mortality investigation. The absence of '
-        'structured training in necropsy protocols, sample collection, forensic documentation, '
-        'and legal frameworks meant that critical evidence was often lost in the immediate '
-        'aftermath of deaths — limiting the department\'s ability to determine cause of death, '
-        'prevent future incidents, and pursue legal action where warranted.'
+        'In view of the incidents of elephant calf deaths in the Raigarh and Dharamjaigarh '
+        'Forest Divisions, and to understand the causes of such deaths, a national-level '
+        'workshop was organized on 05–06 June 2026 in Raigarh district through the special '
+        'initiative of <b>Hon\'ble Forest Minister Shri Kedar Kashyap</b>. The Department of '
+        'Forest & Climate Change is working to bring human-elephant conflict to zero, '
+        'with positive results already witnessed in the field.'
     )
-    pb.gap(6)
-    pb.para(
-        'Recognizing this critical gap, the Chhattisgarh Forest Department, Bilaspur Circle, '
-        'conceptualized and executed this intensive two-day capacity-building workshop. The '
-        'initiative drew on the expertise of the Wildlife Institute of India and ICAR-IVRI '
-        'to bridge the knowledge gap and build lasting institutional capacity.'
-    )
-    pb.gap(10)
+    pb.gap(8)
 
     pb.section_heading('Workshop Objectives')
     pb.bullet(
@@ -624,77 +742,208 @@ def build(c):
         'electrocution, drowning, infectious diseases, and poisoning — and implement targeted '
         'preventive measures.'
     )
-    pb.gap(10)
+    pb.gap(8)
 
-    pb.section_heading('Expected Outcomes')
+    pb.section_heading('Participants')
     pb.bullet(
-        'A trained cadre of field officers capable of conducting scientifically rigorous elephant '
-        'mortality investigations across both Van Mandals.'
+        '<b>Chhattisgarh Forest Department:</b> Range Officers, Beat Guards, and Wildlife Wardens '
+        'from Dharamjaigarh and Raigarh Van Mandals, and officers from elephant-affected districts.'
     )
     pb.bullet(
-        'Standardized field protocols and checklists adopted by the Bilaspur Circle for all '
-        'future elephant mortality investigations.'
+        '<b>Animal Resources Department, Chhattisgarh:</b> Veterinary officers from '
+        'elephant-affected districts of the state.'
     )
     pb.bullet(
-        'Strengthened institutional linkages between the Chhattisgarh Forest Department, WII, '
-        'and ICAR-IVRI for ongoing technical support and diagnostic laboratory access.'
+        '<b>National Technical Experts:</b> Veterinarians, scientists, and elephant specialists '
+        'from Wildlife Institute of India, ICAR-IVRI, and NDVSU Jabalpur.'
     )
 
     c.showPage()
 
     # ────────────────────────────────────────────────────────────────────────
-    # PAGE 5: Inaugural Session — Part 1
+    # PAGE 5: Inaugural Address — Forest Minister Shri Kedar Kashyap
     # ────────────────────────────────────────────────────────────────────────
     pb.new_page(5)
     pb.section_heading('Inaugural Session')
     pb.c.setFillColor(C_MUTED)
     pb.c.setFont('Helvetica-Bold', 9.5)
-    pb.c.drawString(INN_L, pb.y, '30 May 2026  ·  10:00 – 11:00 hrs  ·  Bilaspur, Chhattisgarh')
-    pb.y -= 16
+    pb.c.drawString(INN_L, pb.y,
+        '05 June 2026  ·  10:00 – 11:00 hrs  ·  Raigarh, Chhattisgarh')
+    pb.y -= 18
+
+    pb.officer_heading(
+        'Shri Kedar Kashyap',
+        'Hon\'ble Forest Minister — Inaugural Address',
+        'Department of Forest & Climate Change, Government of Chhattisgarh'
+    )
 
     pb.para(
-        'The workshop commenced with a formal inaugural session attended by senior officers of '
-        'the Chhattisgarh Forest Department, field staff from both Van Mandals, and all five '
-        'national resource persons. The session was presided over by the Chief Conservator of '
-        'Forests, Bilaspur Circle, with Dr. Parag Nigam, Senior Scientist & Head of Wildlife '
-        'Health Management at WII, serving as Session Chair.'
+        'The workshop was formally inaugurated by <b>Hon\'ble Forest Minister Shri Kedar Kashyap</b>, '
+        'whose special initiative drove the organization of this national-level event in response '
+        'to the recent incidents of elephant calf deaths in the Raigarh and Dharamjaigarh Forest '
+        'Divisions. In his inaugural address, the Hon\'ble Minister spoke directly to the '
+        'significance of this workshop — both as a conservation imperative and as a commitment '
+        'to the communities living alongside Chhattisgarh\'s growing elephant population.'
     )
     pb.gap(8)
 
-    pb.section_heading('Welcome Address', 13)
-    pb.para(
-        'The welcome address set the context for the two-day programme. The organizing officer '
-        'extended a warm welcome to all participants and resource persons, acknowledging the '
-        'significance of bringing national expertise directly to the field level in Chhattisgarh. '
-        'He highlighted the acute challenge facing the Bilaspur Circle: a growing elephant '
-        'population navigating an increasingly fragmented landscape, with mortality records '
-        'pointing to preventable causes as the dominant threat. '
-    )
-    pb.gap(4)
-    pb.para(
-        'He emphasized that field officers are the first responders at any elephant mortality '
-        'site, and that the quality of investigation in those initial hours determines everything '
-        'that follows — from legal proceedings to conservation interventions. The workshop, he '
-        'noted, was designed not merely as a training exercise but as the foundation for a '
-        'permanent, institutionalized protocol that would serve the department for years to come.'
-    )
-    pb.gap(4)
-    pb.pull_quote(
-        'Our field officers are not just administrators — they are the first scientists on scene '
-        'at every elephant death. This workshop exists to give them the tools, knowledge, and '
-        'confidence to do that job with the precision and accountability it demands.',
-        '— Welcome Address, Inaugural Session'
-    )
+    # Subheading for Hindi text
+    pb.c.setFillColor(C_MUTED)
+    pb.c.setFont('Helvetica-BoldOblique', 9)
+    pb.c.drawString(INN_L, pb.y, 'Address in original Hindi | मूल हिंदी में उद्बोधन')
+    pb.y -= 14
 
-    pb.image(f'{IMG_DIR}/cover-photo-sm1.jpg', 155,
-             'Inaugural ceremony — Workshop on Mortality Investigation of Asian Elephant, Bilaspur, May 2026.')
+    pb.hindi_box(MINISTER_HINDI, size=10, attrib='— माननीय वन मंत्री श्री केदार कश्यप')
+
+    pb.gap(6)
+    pb.c.setFillColor(C_MUTED)
+    pb.c.setFont('Helvetica-BoldOblique', 9)
+    pb.c.drawString(INN_L, pb.y, 'English Summary')
+    pb.y -= 14
+
+    pb.para(
+        'The Hon\'ble Minister noted that Chhattisgarh\'s elephant population has grown steadily '
+        'over the last five years to approximately 450 individuals, inhabiting the forest areas '
+        'of Surguja, Bilaspur, Raipur, and Durg divisions. The Department of Forest & Climate '
+        'Change is continuously working for their conservation and protection while ensuring '
+        'community safety, and is striving to bring human-elephant conflict to zero. The workshop '
+        'aims to scientifically investigate causes of wild elephant deaths, provide practical '
+        'training in mortality examination, sample collection and safe dispatch, and strengthen '
+        'preparedness for future mortality incidents and health surveillance.'
+    )
 
     c.showPage()
 
     # ────────────────────────────────────────────────────────────────────────
-    # PAGE 6: Inaugural Session — Faculty & Inaugural Address
+    # PAGE 6: Address by PCCF & HoFF Shri Arun Kumar Pandey
     # ────────────────────────────────────────────────────────────────────────
     pb.new_page(6)
+    pb.section_heading('Address by PCCF & Head of Forest Force')
+
+    pb.officer_heading(
+        'Shri Arun Kumar Pandey, IFS',
+        'Principal Chief Conservator of Forests & Head of Forest Force',
+        'Department of Forest & Climate Change, Government of Chhattisgarh'
+    )
+
+    pb.para(
+        'Shri Arun Kumar Pandey, IFS, Principal Chief Conservator of Forests and Head of '
+        'Forest Force, Chhattisgarh, addressed the workshop with a comprehensive overview '
+        'of the state\'s elephant conservation efforts and the critical institutional context '
+        'that made this workshop necessary and timely.'
+    )
+    pb.gap(6)
+    pb.para(
+        'Shri Pandey outlined the remarkable growth of Chhattisgarh\'s elephant population — '
+        'from 24 individuals in 2001 to approximately 450 today — as a testament to the '
+        'department\'s sustained conservation work over two decades. He acknowledged, however, '
+        'that this population growth also brought new and complex challenges: increasing '
+        'human-elephant conflict, expanding corridor pressure, and, most urgently, a rising '
+        'toll of elephant deaths that demanded systematic investigation.'
+    )
+    pb.gap(6)
+    pb.para(
+        'He emphasized that the Chhattisgarh Forest Department, under the direction of '
+        'Hon\'ble Forest Minister Shri Kedar Kashyap, is committed to understanding the '
+        'precise causes of every elephant death — particularly the recent incidents of calf '
+        'mortality in the Raigarh and Dharamjaigarh Van Mandals. He expressed that bringing '
+        'national-level expertise from WII, ICAR-IVRI, and NDVSU to the field — rather than '
+        'sending samples to distant laboratories without trained local personnel — represented '
+        'a fundamental shift in the department\'s approach to wildlife health management.'
+    )
+    pb.gap(6)
+    pb.pull_quote(
+        'The strength of our forest department lies in its field officers. This workshop '
+        'will give them the scientific tools to do their duty with the precision and '
+        'accountability that these magnificent animals — and the communities living with '
+        'them — deserve.',
+        '— Shri Arun Kumar Pandey, IFS, PCCF & HoFF'
+    )
+    pb.para(
+        'Shri Pandey called upon all participants to engage actively in both the theoretical '
+        'and practical sessions, and to carry the learning back to their divisions with the '
+        'commitment to establish standardized investigation protocols. He assured the resource '
+        'persons of the department\'s full support in implementing the workshop\'s recommendations '
+        'and developing a formal SOP for elephant mortality investigation in Chhattisgarh.'
+    )
+    pb.gap(10)
+
+    pb.image(f'{IMG_DIR}/cover-photo-sm1.jpg', 150,
+             'Inaugural ceremony — Workshop on Mortality Investigation of Asian Elephant, Raigarh, June 2026.')
+
+    c.showPage()
+
+    # ────────────────────────────────────────────────────────────────────────
+    # PAGE 7: Addresses by APCCF & CCF Officers
+    # ────────────────────────────────────────────────────────────────────────
+    pb.new_page(7)
+    pb.section_heading('Addresses by Senior Officers')
+
+    # APCCF Wildlife
+    pb.officer_heading(
+        'Shri Matheshwaran V., IFS',
+        'Additional Principal Chief Conservator of Forests (Wildlife)',
+        'Department of Forest & Climate Change, Government of Chhattisgarh'
+    )
+    pb.para(
+        'Shri Matheshwaran V., APCCF Wildlife, addressed the gathering from the perspective '
+        'of wildlife management across the state. He highlighted that the elephant mortality '
+        'challenge in Chhattisgarh is inseparable from the broader question of wildlife corridor '
+        'management and human-wildlife coexistence. He emphasized the critical role of systematic '
+        'mortality investigation in building an evidence base that directly informs policy and '
+        'management interventions. He expressed the Wildlife Wing\'s commitment to institutionalizing '
+        'the protocols developed through this workshop and extending the training to other '
+        'elephant-affected divisions across the state.'
+    )
+    pb.gap(10)
+
+    # CCF Bilaspur Circle
+    pb.officer_heading(
+        'Shri Manoj Kumar Pandey, IFS',
+        'Chief Conservator of Forests, Bilaspur Circle',
+        'Department of Forest & Climate Change, Government of Chhattisgarh'
+    )
+    pb.para(
+        'As the hosting officer for the workshop, Shri Manoj Kumar Pandey, CCF Bilaspur Circle, '
+        'welcomed all resource persons, participants, and senior officers. He placed the workshop '
+        'in the immediate operational context of the Bilaspur Circle, where the Dharamjaigarh '
+        'and Raigarh Van Mandals have recorded 48 elephant deaths over the past five years. '
+        'He acknowledged that while the Circle\'s field officers are dedicated and experienced, '
+        'the specialized knowledge required for systematic elephant mortality investigation — '
+        'particularly in disease diagnosis, forensic documentation, and sample chain-of-custody '
+        '— had long been a gap that this workshop was specifically designed to address. '
+        'He expressed gratitude to the Hon\'ble Minister and PCCF for their initiative and '
+        'support in organizing this event.'
+    )
+    pb.gap(10)
+
+    # CCF Wildlife & FD ATR
+    pb.officer_heading(
+        'Smt. Priyanka Pandey, IFS',
+        'CCF Wildlife, Bilaspur  &  Field Director, Achanakmar Tiger Reserve',
+        'Department of Forest & Climate Change, Government of Chhattisgarh'
+    )
+    pb.para(
+        'Smt. Priyanka Pandey, CCF Wildlife Bilaspur and Field Director of the Achanakmar '
+        'Tiger Reserve, brought a unique perspective to the inaugural session, highlighting '
+        'the intersection of elephant mortality investigation with tiger reserve management. '
+        'She emphasized that the movement of elephants through the ATR landscape made robust '
+        'mortality investigation protocols essential not just for elephant conservation, but '
+        'also for the integrity of tiger reserve management. She welcomed the national faculty '
+        'and expressed confidence that the two-day workshop would lay the foundation for '
+        'a new standard of scientific rigour in wildlife mortality investigation '
+        'across Chhattisgarh\'s protected area network.'
+    )
+
+    pb.image(f'{IMG_DIR}/cover-photo-sm2.jpg', 130,
+             'Inaugural session with senior officers and resource persons, Raigarh, 05 June 2026.')
+
+    c.showPage()
+
+    # ────────────────────────────────────────────────────────────────────────
+    # PAGE 8: Inaugural Remarks by Resource Persons
+    # ────────────────────────────────────────────────────────────────────────
+    pb.new_page(8)
     pb.section_heading('Inaugural Remarks by Resource Persons')
 
     pb.subhead('Dr. Parag Nigam — Senior Scientist & Head, Wildlife Health Management, WII')
@@ -703,12 +952,10 @@ def build(c):
         'investigation of wildlife mortalities. Drawing from nearly three decades of field '
         'experience — including India\'s first tiger reintroduction at Sariska and landmark '
         'Indian Gaur reintroductions — he spoke to the critical importance of systematic field '
-        'necropsy as the cornerstone of wildlife conservation medicine. He noted that '
-        'Chhattisgarh\'s elephant population growth was a conservation success story, but one '
-        'that came with new responsibilities for the forest department in managing mortalities '
-        'with scientific rigor. Dr. Nigam expressed that the WII–ICAR-IVRI partnership for '
-        'this workshop represented a model of institutional collaboration that could be replicated '
-        'across other states facing similar challenges.'
+        'necropsy as the cornerstone of wildlife conservation medicine. He commended the '
+        'Chhattisgarh Forest Department for its proactive approach and expressed that the '
+        'WII–ICAR-IVRI partnership for this workshop represented a model of institutional '
+        'collaboration that could be replicated across other states facing similar challenges.'
     )
     pb.gap(8)
 
@@ -718,55 +965,57 @@ def build(c):
         'dimension of elephant mortalities. He emphasized that diseases transmissible between '
         'elephants, livestock, and humans — particularly tuberculosis and anthrax — make '
         'systematic mortality investigation a public health imperative, not merely a wildlife '
-        'conservation concern. He also highlighted that Chhattisgarh\'s forests, with their unique '
-        'biodiversity and tribal communities, demand locally adapted investigation protocols. '
-        'He called for the workshop\'s outcomes to be converted into a formal State-level Standard '
-        'Operating Procedure, backed by departmental order, that would outlast individual officers.'
+        'conservation concern. He called for the workshop\'s outcomes to be converted into a '
+        'formal State-level Standard Operating Procedure, backed by departmental order.'
+    )
+    pb.gap(8)
+
+    pb.subhead('Dr. Karikalan Mathesh — Senior Scientist, ICAR-IVRI, Bareilly')
+    pb.para(
+        'Dr. Karikalan spoke on the diagnostic laboratory\'s perspective on field-collected '
+        'samples. He emphasized that the quality of samples received from field mortality sites '
+        'determines what can and cannot be diagnosed — and that poor sample collection is the '
+        'single most common reason why causes of death remain undetermined. He expressed that '
+        'equipping Chhattisgarh\'s field officers with proper sampling knowledge would directly '
+        'improve the diagnostic yield from every future mortality case referred to ICAR-IVRI.'
+    )
+    pb.gap(8)
+
+    pb.subhead('Dr. Chandra Prakash Sharma — Principal Technical Officer, WII')
+    pb.para(
+        'Dr. Sharma brought the forensic scientist\'s perspective to the inaugural session. '
+        'He noted that in his decades of work supporting enforcement agencies across India, '
+        'the most common weakness in wildlife mortality cases reaching courts was inadequate '
+        'field documentation. He expressed confidence that the forensic and legal sessions of '
+        'the workshop would address this gap directly, equipping officers to build cases that '
+        'could survive legal scrutiny.'
     )
     pb.gap(10)
-    pb.hline()
 
-    pb.section_heading('Inaugural Address')
-    pb.para(
-        'The inaugural address by the presiding senior officer placed the workshop within '
-        'Chhattisgarh\'s broader wildlife governance trajectory. He noted that the state\'s '
-        '44.2% forest cover and the remarkable growth of its elephant population reflected '
-        'the dedication of field staff across decades of service. However, he acknowledged '
-        'that the intensification of human-elephant conflict and the rising mortality figures '
-        'demanded a new quality of response from the department — one grounded in science '
-        'rather than routine documentation.'
+    pb.pull_quote(
+        'This workshop is not just about learning what to do — it is about learning what the '
+        'law requires of you. Every forest officer at a mortality site is simultaneously a '
+        'scientist, a custodian of evidence, and an officer of the law.',
+        '— Dr. Chandra Prakash Sharma, Wildlife Institute of India'
     )
-    pb.gap(6)
-    pb.para(
-        'The address concluded with the formal lighting of the lamp by all resource persons '
-        'and senior departmental officers, marking the official commencement of the workshop. '
-        'A group photograph of all participants, faculty, and organizing officers was taken '
-        'following the inaugural ceremony, and the session set a tone of collaborative learning '
-        'and scientific discipline that characterized the two-day programme.'
-    )
-    pb.gap(6)
-
-    pb.image(f'{IMG_DIR}/cover-photo-sm2.jpg', 145,
-             'Resource persons and participants at the inaugural ceremony, Bilaspur, 30 May 2026.')
 
     c.showPage()
 
     # ────────────────────────────────────────────────────────────────────────
-    # PAGE 7: Workshop Programme
+    # PAGE 9: Workshop Programme
     # ────────────────────────────────────────────────────────────────────────
-    pb.new_page(7)
+    pb.new_page(9)
     pb.section_heading('Workshop Programme')
     pb.c.setFillColor(C_MUTED)
     pb.c.setFont('Helvetica', 9.5)
     pb.c.drawString(INN_L, pb.y,
-        'Two-Day Programme  ·  30–31 May 2026  ·  Bilaspur, Chhattisgarh  ·  18 Sessions')
+        'Two-Day Programme  ·  05–06 June 2026  ·  Raigarh, Chhattisgarh  ·  18 Sessions')
     pb.y -= 16
 
-    # Day 1
-    pb.day_header('Day 1', '30 May 2026', '10:00 – 17:30')
+    pb.day_header('Day 1', '05 June 2026', '10:00 – 17:30')
     pb.sched_row('10:00\n11:00', 'Inauguration',
-        'Official opening, workshop objectives, introduction of experts & participants.',
-        '—')
+        'Official opening, address by Forest Minister, PCCF & HoFF, senior officers, and resource persons.',
+        'Forest Minister · PCCF · Senior Officers')
     pb.sched_row('11:00\n11:30', 'Elephant Status & Human-Elephant Interface in Chhattisgarh',
         'Population dynamics, corridor use, conflict and mortality trends.',
         'CG Forest Dept.')
@@ -789,8 +1038,7 @@ def build(c):
 
     pb.gap(12)
 
-    # Day 2
-    pb.day_header('Day 2', '31 May 2026', '09:30 – 17:30', gold=True)
+    pb.day_header('Day 2', '06 June 2026', '09:30 – 17:30', gold=True)
     pb.sched_row('09:30\n10:15', 'Biosafety & Biosecurity at Elephant Mortality Sites',
         'Zoonotic risks, PPE requirements, safe carcass disposal, site sanitation.',
         'Dr. K. Mathesh, Dr. Saini, Dr. Nigam', gold=True)
@@ -821,166 +1069,117 @@ def build(c):
     c.showPage()
 
     # ────────────────────────────────────────────────────────────────────────
-    # PAGE 8: Session Highlights — Day 1
-    # ────────────────────────────────────────────────────────────────────────
-    pb.new_page(8)
-    pb.section_heading('Session Highlights · Day 1 · 30 May 2026')
-
-    pb.highlight(
-        'Elephant Status & Human-Elephant Interface in Chhattisgarh',
-        'The opening technical session presented a comprehensive overview of elephant population '
-        'dynamics in the Bilaspur Circle. Data revealed a remarkable growth trajectory from '
-        '24 elephants in 2001 to an estimated 451 by 2026, with the Dharamjaigarh and Raigarh '
-        'Van Mandals emerging as the primary habitat zone. Participants were presented with '
-        'year-wise mortality data showing 48 deaths over five years, with electrocution (51%) '
-        'and drowning (22%) as the dominant causes. The intensification of conflict as '
-        'agricultural expansion encroaches on traditional corridors was identified as the '
-        'central management challenge for the coming decade.'
-    )
-
-    pb.highlight(
-        'Biological & Anatomical Aspects of Elephants',
-        'Dr. Parag Nigam delivered an engaging session on the unique anatomy and physiology of '
-        'Asian elephants, with a focus on features directly relevant to field investigation. '
-        'Topics covered included the elephant\'s unusual foot structure, dental formula and tusk '
-        'anatomy, the position and size of major organs, and the challenges posed by the animal\'s '
-        'great bulk for necropsy procedures. Officers learned to identify key anatomical landmarks '
-        'that guide incision sequences during post-mortem examination, and gained an appreciation '
-        'for why elephant necropsy requires specialized equipment and a coordinated multi-person team.'
-    )
-
-    pb.highlight(
-        'Understanding Wildlife Mortalities: The Veterinary Perspective',
-        'This session introduced participants to the fundamental framework for classifying wildlife '
-        'deaths — natural versus unnatural, acute versus chronic. Dr. Nigam covered ante-mortem '
-        'and post-mortem changes in detail, helping officers understand how ambient temperature, '
-        'sun exposure, and time since death alter the carcass and what evidence can still be '
-        'recovered under various decomposition conditions. The session was particularly valued by '
-        'field officers who routinely encounter carcasses in advanced decomposition and have '
-        'struggled to determine cause of death under such conditions.'
-    )
-
-    pb.highlight(
-        'Infectious Causes of Mortality in Elephants',
-        'The afternoon\'s most extensive session — co-delivered by Dr. Karikalan Mathesh and '
-        'Dr. A.B. Shrivastav — provided a systematic review of infectious diseases known to '
-        'cause mortality in Asian elephants. Elephant Endotheliotropic Herpesvirus (EEHV) '
-        'received particular attention, with Dr. Karikalan presenting diagnosed case data and '
-        'emphasizing the critical role of whole blood PCR in confirming infection. Foot and '
-        'Mouth Disease, Rabies, Tuberculosis, Anthrax, and Haemorrhagic Septicaemia were also '
-        'covered, with participants equipped to recognize field signs and gross pathological '
-        'changes indicative of each disease.'
-    )
-
-    pb.highlight(
-        'Non-Infectious & Disaster Mortalities',
-        'This session addressed the dominant cause of elephant deaths in Chhattisgarh: '
-        'electrocution. Dr. Shrivastav presented a systematic framework for distinguishing '
-        'electrocution deaths from other causes, including the characteristic lesions — entry '
-        'and exit burns, supra-orbital lesions, internal haemorrhages — and the critical role '
-        'of the investigative report in triggering action against illegal power line installations. '
-        'Lightning strikes, train collision deaths, drowning, and infighting-related fatalities '
-        'were also covered, with emphasis on the pathological features that distinguish each.'
-    )
-
-    pb.highlight(
-        'Non-Infectious Diseases in Elephants',
-        'The final Day 1 session addressed toxicological causes of elephant deaths — a critically '
-        'under-investigated category in the Indian context. Dr. Karikalan presented detailed '
-        'information on mycotoxicosis, with particular attention to kodo millet toxicity (a '
-        'documented cause of elephant deaths in central India), and reviewed environmental '
-        'bio-toxins. Officers left equipped with a framework for considering toxicological '
-        'causes when initial investigation reveals no clear evidence of trauma, infectious '
-        'disease, or natural illness.'
-    )
-
-    c.showPage()
-
-    # ────────────────────────────────────────────────────────────────────────
-    # PAGE 9: Session Highlights — Day 2
-    # ────────────────────────────────────────────────────────────────────────
-    pb.new_page(9)
-    pb.section_heading('Session Highlights · Day 2 · 31 May 2026')
-
-    pb.highlight(
-        'Biosafety & Biosecurity at Elephant Mortality Sites',
-        'Day 2 opened with a critical session on the biosafety risks associated with elephant '
-        'carcasses and the systematic measures required to protect field staff. Dr. Karikalan '
-        'outlined the spectrum of zoonotic risks — from anthrax and tuberculosis to other '
-        'pathogens transmissible through carcass contact — and the standard PPE requirements '
-        'for all personnel at a mortality site. The session covered safe carcass disposal, '
-        'site decontamination protocols, and the specific biosecurity measures required when '
-        'infectious disease is suspected as the cause of death.',
-        accent=C_GOLD
-    )
-
-    pb.highlight(
-        'Equipment Familiarization & Site Preparation',
-        'A hands-on session focused on the practical challenges of elephant necropsy under '
-        'field conditions. Participants were introduced to the heavy-duty equipment required '
-        '— chain saws, large-blade axes, winches, and block-and-tackle systems — and the '
-        'sequence for their use during necropsy. The critical importance of establishing a '
-        'secure investigation perimeter, controlling access, and documenting the site before '
-        'any physical intervention was emphasized. Participants practiced identifying where '
-        'to position equipment and personnel at a simulated mortality site.',
-        accent=C_GOLD
-    )
-
-    pb.highlight(
-        'Comprehensive Sampling Protocols',
-        'This session addressed one of the most critical gaps in current practice: the '
-        'collection, preservation, and transport of biological samples from elephant carcasses. '
-        'The full spectrum of sample types was covered — fresh tissue for histopathology, blood '
-        'for virology and haematology, swabs for bacteriology, rumen contents for toxicology, '
-        'and environmental samples. Participants received detailed instruction on container '
-        'types, preservation media, cold chain requirements, and the documentation and labelling '
-        'standards required for samples to be accepted by ICAR-IVRI\'s diagnostic laboratory.',
-        accent=C_GOLD
-    )
-
-    pb.highlight(
-        'Recording Information During Necropsy',
-        'Dr. Karikalan and Dr. Shrivastav covered the systematic documentation requirements for '
-        'a complete necropsy record. Participants learned the standard format for field necropsy '
-        'reports — including carcass condition scoring, gross pathological findings by organ '
-        'system, preliminary cause-of-death assessment, and a complete sample inventory. '
-        'The critical importance of photographic documentation was emphasized, with guidance '
-        'on the specific images required at each stage to create a complete visual record '
-        'admissible as evidence in legal proceedings.',
-        accent=C_GOLD
-    )
-
-    pb.highlight(
-        'Vetro-Legal & Forensic Aspects of Mortality Investigation',
-        'Dr. Chandra Prakash Sharma delivered this pivotal session on the legal and forensic '
-        'dimensions of wildlife mortality investigation. Topics included chain-of-custody '
-        'protocols for evidence, the legal framework for ivory/tusk extraction and custody '
-        'under the Wildlife Protection Act, and the standards for forensic reports that '
-        'withstand court scrutiny. Participants gained clarity on their legal obligations '
-        'at a mortality site and the precise procedures for coordinating with police '
-        'and revenue authorities in multi-agency investigations.',
-        accent=C_GOLD
-    )
-
-    pb.highlight(
-        'Practical: Crime Scene Investigation',
-        'The workshop\'s practical session was its highlight for field officers. Dr. Sharma '
-        'led participants through a simulated crime scene investigation exercise covering '
-        'evidence marking, photography, chain-of-custody documentation, and evidence packaging. '
-        'Officers practiced the specific procedures for ivory/tusk extraction — a process with '
-        'legal, forensic, and conservation dimensions — and were guided through the documentation '
-        'sequence that creates a legally defensible investigation record. The practical was '
-        'evaluated by all faculty, with additional guidance provided on forensic sample '
-        'collection at the simulated site.',
-        accent=C_GOLD
-    )
-
-    c.showPage()
-
-    # ────────────────────────────────────────────────────────────────────────
-    # PAGE 10: Key Outcomes & Recommendations
+    # PAGE 10: Session Highlights — Day 1
     # ────────────────────────────────────────────────────────────────────────
     pb.new_page(10)
+    pb.section_heading('Session Highlights · Day 1 · 05 June 2026')
+
+    pb.highlight('Elephant Status & Human-Elephant Interface in Chhattisgarh',
+        'The opening technical session presented a comprehensive overview of elephant population '
+        'dynamics in the Bilaspur Circle. Data revealed a growth trajectory from 24 elephants '
+        'in 2001 to approximately 450 by 2026, with the Dharamjaigarh and Raigarh Van Mandals '
+        'as the primary habitat zone. Year-wise mortality data showing 48 deaths over five years '
+        'was presented, with electrocution (51%) and drowning (22%) as dominant causes. '
+        'The intensification of conflict as agricultural expansion encroaches on corridors was '
+        'identified as the central management challenge.')
+
+    pb.highlight('Biological & Anatomical Aspects of Elephants',
+        'Dr. Parag Nigam delivered an engaging session on the unique anatomy and physiology of '
+        'Asian elephants relevant to field investigation — including foot structure, dental formula '
+        'and tusk anatomy, organ positions, and why elephant necropsy requires specialized equipment '
+        'and a coordinated multi-person team. Officers learned to identify anatomical landmarks '
+        'that guide incision sequences during post-mortem examination.')
+
+    pb.highlight('Understanding Wildlife Mortalities: The Veterinary Perspective',
+        'This session introduced the fundamental framework for classifying wildlife deaths — '
+        'natural versus unnatural, acute versus chronic. Dr. Nigam covered ante-mortem and '
+        'post-mortem changes in detail, helping officers understand how ambient temperature, '
+        'sun exposure, and time since death alter the carcass. The session was particularly '
+        'valued by officers who routinely encounter carcasses in advanced decomposition.')
+
+    pb.highlight('Infectious Causes of Mortality in Elephants',
+        'Co-delivered by Dr. Karikalan Mathesh and Dr. A.B. Shrivastav, this session provided '
+        'a systematic review of infectious diseases known to cause elephant mortality. EEHV '
+        'received particular attention, with the critical role of whole blood PCR emphasized. '
+        'FMD, Rabies, Tuberculosis, Anthrax, and Haemorrhagic Septicaemia were also covered, '
+        'with participants equipped to recognize field signs and gross pathological changes '
+        'indicative of each disease.')
+
+    pb.highlight('Non-Infectious & Disaster Mortalities',
+        'Dr. Shrivastav presented a systematic framework for distinguishing electrocution deaths '
+        'from other causes — characteristic lesions (entry/exit burns, supra-orbital lesions, '
+        'internal haemorrhages) and the investigative report\'s role in triggering action against '
+        'illegal power lines. Lightning strikes, train collisions, drowning, and infighting deaths '
+        'were also covered with emphasis on distinguishing pathological features.')
+
+    pb.highlight('Non-Infectious Diseases in Elephants',
+        'The final Day 1 session addressed toxicological causes — a critically under-investigated '
+        'category in the Indian context. Dr. Karikalan presented detailed information on '
+        'mycotoxicosis, with particular attention to kodo millet toxicity (a documented cause '
+        'of elephant deaths in central India), and reviewed environmental bio-toxins. Officers '
+        'received a framework for considering toxicological causes when initial investigation '
+        'reveals no clear evidence of trauma, infectious disease, or natural illness.')
+
+    c.showPage()
+
+    # ────────────────────────────────────────────────────────────────────────
+    # PAGE 11: Session Highlights — Day 2
+    # ────────────────────────────────────────────────────────────────────────
+    pb.new_page(11)
+    pb.section_heading('Session Highlights · Day 2 · 06 June 2026')
+
+    pb.highlight('Biosafety & Biosecurity at Elephant Mortality Sites',
+        'Day 2 opened with a critical session on the biosafety risks associated with elephant '
+        'carcasses. Dr. Karikalan outlined the spectrum of zoonotic risks — from anthrax and '
+        'tuberculosis to other pathogens transmissible through carcass contact — and the '
+        'standard PPE requirements for all personnel. The session covered safe carcass disposal, '
+        'site decontamination protocols, and biosecurity measures required when infectious '
+        'disease is suspected.', accent=C_GOLD)
+
+    pb.highlight('Equipment Familiarization & Site Preparation',
+        'A hands-on session focused on the practical challenges of elephant necropsy under field '
+        'conditions. Participants were introduced to heavy-duty equipment required — chain saws, '
+        'axes, winches, block-and-tackle systems — and the sequence for their use. The critical '
+        'importance of establishing a secure investigation perimeter and documenting the site '
+        'before any physical intervention was emphasized.', accent=C_GOLD)
+
+    pb.highlight('Comprehensive Sampling Protocols',
+        'This session addressed one of the most critical gaps in current practice: collection, '
+        'preservation, and transport of biological samples from elephant carcasses. The full '
+        'spectrum of sample types was covered — fresh tissue for histopathology, blood for '
+        'virology, swabs for bacteriology, rumen contents for toxicology. Participants received '
+        'detailed instruction on container types, preservation media, cold chain requirements, '
+        'and documentation standards required for ICAR-IVRI\'s diagnostic laboratory.', accent=C_GOLD)
+
+    pb.highlight('Recording Information During Necropsy',
+        'Dr. Karikalan and Dr. Shrivastav covered systematic documentation requirements for a '
+        'complete necropsy record — including carcass condition scoring, gross pathological '
+        'findings by organ system, preliminary cause-of-death assessment, and sample inventory. '
+        'Guidance was provided on the specific photographs required at each stage to create a '
+        'complete visual record admissible as evidence in legal proceedings.', accent=C_GOLD)
+
+    pb.highlight('Vetro-Legal & Forensic Aspects of Mortality Investigation',
+        'Dr. Chandra Prakash Sharma delivered this pivotal session on legal and forensic '
+        'dimensions of mortality investigation: chain-of-custody protocols, the legal framework '
+        'for ivory/tusk custody under the Wildlife Protection Act, and forensic report standards '
+        'that withstand court scrutiny. Participants gained clarity on their legal obligations '
+        'at a mortality site and procedures for coordinating with police and revenue authorities.',
+        accent=C_GOLD)
+
+    pb.highlight('Practical: Crime Scene Investigation & Panel Discussion',
+        'Dr. Sharma led participants through a simulated crime scene investigation covering '
+        'evidence marking, photography, chain-of-custody documentation, and evidence packaging. '
+        'Officers practiced ivory/tusk extraction procedures and the documentation sequence that '
+        'creates a legally defensible investigation record. The subsequent Panel Discussion '
+        'addressed specific operational challenges raised by field officers — from accessing '
+        'remote mortality sites to multi-agency coordination protocols.', accent=C_GOLD)
+
+    c.showPage()
+
+    # ────────────────────────────────────────────────────────────────────────
+    # PAGE 12: Key Outcomes & Recommendations
+    # ────────────────────────────────────────────────────────────────────────
+    pb.new_page(12)
     pb.section_heading('Key Outcomes & Recommendations')
 
     pb.para(
@@ -991,8 +1190,8 @@ def build(c):
 
     pb.section_heading('Key Outcomes', 13)
     pb.bullet(
-        'Thirty-plus field officers from Dharamjaigarh and Raigarh Van Mandals trained in '
-        'systematic elephant mortality investigation across veterinary, forensic, and legal dimensions.'
+        'Thirty-plus field officers from Dharamjaigarh and Raigarh Van Mandals and officers '
+        'from elephant-affected districts trained in systematic elephant mortality investigation.'
     )
     pb.bullet(
         'A standardized <b>Field Necropsy Checklist</b> and <b>Sample Collection Protocol</b> '
@@ -1000,17 +1199,16 @@ def build(c):
     )
     pb.bullet(
         'Consensus reached on a <b>Minimum Evidence Standard</b> for elephant mortality '
-        'investigation reports submitted to the department — covering carcass documentation, '
-        'sample inventory, photographic record, and preliminary cause-of-death assessment.'
+        'investigation reports — covering carcass documentation, sample inventory, photographic '
+        'record, and preliminary cause-of-death assessment.'
     )
     pb.bullet(
-        'Strengthened institutional relationships established between the Chhattisgarh Forest '
-        'Department, WII, and ICAR-IVRI for ongoing technical support and diagnostic laboratory access.'
+        'Strengthened institutional relationships between the Chhattisgarh Forest Department, '
+        'WII, ICAR-IVRI, and NDVSU for ongoing technical support and diagnostic laboratory access.'
     )
     pb.bullet(
         'A framework for a <b>dedicated Elephant Mortality Investigation Cell</b> within the '
-        'Bilaspur Circle proposed, with defined roles, equipment requirements, and laboratory '
-        'referral pathways.'
+        'Bilaspur Circle proposed, with defined roles, equipment requirements, and referral pathways.'
     )
     pb.gap(10)
 
@@ -1037,27 +1235,26 @@ def build(c):
     pb.gap(4)
     pb.rec_block('Electrocution Prevention as Priority',
         'With electrocution accounting for 51% of elephant deaths in the study period, the '
-        'workshop strongly endorses prioritizing identification and removal of illegal / '
-        'low-hung power lines as the single most impactful conservation intervention '
-        'available to the department.')
+        'workshop strongly endorses prioritizing identification and removal of illegal and '
+        'low-hung power lines as the single most impactful intervention available.')
 
     c.showPage()
 
     # ────────────────────────────────────────────────────────────────────────
-    # PAGE 11: Valedictory
+    # PAGE 13: Valedictory
     # ────────────────────────────────────────────────────────────────────────
-    pb.new_page(11)
+    pb.new_page(13)
     pb.section_heading('Valedictory Session')
     pb.c.setFillColor(C_MUTED)
     pb.c.setFont('Helvetica-Bold', 9.5)
-    pb.c.drawString(INN_L, pb.y, '31 May 2026  ·  16:45 – 17:30 hrs')
+    pb.c.drawString(INN_L, pb.y, '06 June 2026  ·  16:45 – 17:30 hrs  ·  Raigarh, Chhattisgarh')
     pb.y -= 16
 
     pb.para(
         'The valedictory session brought the two-day workshop to a formal and reflective close. '
-        'Presided over by the senior officer of the Bilaspur Circle, the session provided an '
-        'opportunity for participants and faculty alike to reflect on the learning journey of '
-        'the preceding two days and articulate commitments for applying that learning in the field.'
+        'Presided over by the CCF, Bilaspur Circle, and attended by all senior officers and '
+        'resource persons, the session provided an opportunity for participants and faculty to '
+        'reflect on the learning journey of the preceding two days.'
     )
     pb.gap(8)
 
@@ -1066,52 +1263,46 @@ def build(c):
         'Selected field officers from both Van Mandals shared their key learnings. Recurring '
         'themes included: the transformative clarity gained on the necropsy procedure and its '
         'legal significance; new appreciation for the forensic value of initial site documentation; '
-        'and the confidence gained from understanding the disease framework — particularly around '
-        'EEHV, electrocution lesions, and toxicological causes — that had previously felt '
-        'inaccessible without veterinary training. Several officers expressed that the practical '
-        'crime scene investigation exercise was among the most valuable sessions of their careers.'
+        'and the confidence gained from understanding disease frameworks — particularly around '
+        'EEHV, electrocution lesions, and toxicological causes. Several officers expressed '
+        'that the practical crime scene investigation exercise was among the most valuable '
+        'sessions of their careers.'
     )
     pb.gap(8)
 
     pb.section_heading('Closing Remarks by Faculty', 13)
     pb.para(
-        'Dr. A. B. Shrivastav, in the closing faculty address, expressed that the quality of '
-        'engagement from Chhattisgarh\'s field officers was exceptional and reflected genuine '
-        'commitment to conservation excellence. He recommended that future editions include a '
-        'practical necropsy demonstration on a wild animal carcass, and called for the workshop '
-        'to become an annual fixture in the Bilaspur Circle\'s capacity-building calendar.'
-    )
-    pb.gap(6)
-    pb.para(
+        'Dr. A. B. Shrivastav expressed that the quality of engagement from Chhattisgarh\'s '
+        'field officers was exceptional. He recommended that future editions include a live '
+        'necropsy demonstration and called for the workshop to become an annual event. '
         'Dr. Parag Nigam emphasized that the most important next step was institutional — '
-        'converting the workshop\'s learning into formal departmental protocols that would '
-        'survive officer transfers and administrative changes. He offered WII\'s ongoing '
-        'technical support for the development of a Chhattisgarh SOP and for future training.'
+        'converting the workshop\'s learning into formal departmental protocols. He offered '
+        'WII\'s ongoing technical support for the development of a Chhattisgarh SOP and '
+        'for future training iterations.'
     )
     pb.gap(8)
 
     pb.section_heading('Closing Address', 13)
     pb.para(
-        'The closing address by the senior departmental officer highlighted the significance '
-        'of the workshop in Chhattisgarh\'s elephant conservation trajectory. He expressed '
-        'gratitude to all five resource persons, noting that the calibre of national expertise '
-        'assembled was a testament to the importance that institutions attach to Chhattisgarh\'s '
-        'growing elephant population.'
+        'The closing address by Shri Manoj Kumar Pandey, CCF Bilaspur Circle, highlighted the '
+        'significance of the workshop in Chhattisgarh\'s elephant conservation trajectory. '
+        'He expressed gratitude to Hon\'ble Forest Minister Shri Kedar Kashyap for his vision '
+        'in initiating this workshop, to PCCF Shri Arun Kumar Pandey for his leadership, '
+        'and to all five resource persons for their dedicated engagement over two intensive days.'
     )
     pb.gap(6)
     pb.pull_quote(
-        'What we have built in these two days is not just knowledge — it is the foundation of '
-        'a system. The 48 elephant deaths we have analyzed here must be the last generation '
-        'of deaths that go uninvestigated. From this workshop forward, every death in our '
-        'forests will be accounted for.',
-        '— Closing Address, Valedictory Session'
+        'What we have built in these two days is not just knowledge — it is the foundation '
+        'of a system. The 48 elephant deaths we have analyzed here must be the last generation '
+        'that go uninvestigated. From this workshop forward, every death in our forests '
+        'will be accounted for.',
+        '— Closing Address, Valedictory Session, 06 June 2026'
     )
-    pb.gap(4)
+    pb.gap(6)
     pb.para(
         'Participation certificates were presented to all field officers by the senior faculty '
-        'and departmental officers. A group photograph of all participants, faculty, and '
-        'organizing staff was taken in closing. The workshop formally concluded at 17:30 hrs '
-        'on 31 May 2026.'
+        'and departmental officers. A group photograph of all participants and faculty was taken '
+        'in closing. The workshop formally concluded at 17:30 hrs on 06 June 2026.'
     )
 
     c.showPage()
