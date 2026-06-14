@@ -713,7 +713,7 @@ def normal_page(canvas,doc):
     canvas.setFillColor(colors.HexColor(LG)); canvas.rect(0,H-31,W,3,fill=1,stroke=0)
     canvas.setFillColor(colors.white)
     canvas.setFont('Helvetica-Bold',7.5)
-    canvas.drawString(36,H-19,'Workshop — Mortality Investigation of Asian Elephant · Bilaspur 2026')
+    canvas.drawString(36,H-19,'Chapter 1 — Mortality Investigation of Asian Elephant · Bilaspur 2026')
     canvas.setFont('Helvetica',7.5)
     canvas.drawRightString(W-36,H-19,'Notes with GIS Maps &amp; Data Charts')
     canvas.setFillColor(colors.HexColor(DG)); canvas.rect(0,0,W,22,fill=1,stroke=0)
@@ -760,7 +760,14 @@ story = []
 
 # ─── COVER ────────────────────────────────────────────────────────────────────
 story += [
-    SP(105),
+    SP(90),
+    Paragraph('CHAPTER 1',
+              sty('CH_NUM', fontSize=14, textColor=colors.HexColor(LG),
+                  leading=18, alignment=TA_CENTER, fontName='Helvetica-Bold',
+                  spaceAfter=6)),
+    Paragraph('─' * 38,
+              sty('CH_RULE', fontSize=10, textColor=colors.HexColor(MG),
+                  alignment=TA_CENTER, spaceAfter=10)),
     Paragraph('Workshop on Essentials of Mortality<br/>Investigation of Asian Elephant', COVER_T),
     SP(12),
     Paragraph('Illustrated Notes · GIS Maps · Data Analysis', COVER_S),
@@ -1190,7 +1197,7 @@ story += [
 out='/home/user/Workshop-on-Conference/Workshop_GIS_Notes_2026.pdf'
 doc=SimpleDocTemplate(out,pagesize=A4,leftMargin=36,rightMargin=36,
                       topMargin=48,bottomMargin=36,
-                      title='Workshop Notes with GIS Maps — Elephant Mortality Investigation',
+                      title='Chapter 1 — Workshop Notes with GIS Maps — Elephant Mortality Investigation',
                       author='CG Forest Dept / WII')
 doc.build(story,onFirstPage=on_page,onLaterPages=on_page)
 print(f'PDF saved: {out}')
