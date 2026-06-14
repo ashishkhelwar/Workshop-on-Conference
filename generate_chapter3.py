@@ -87,6 +87,8 @@ def pdf_page_img(page_num, width=INNER_W, caption=None, styles=None):
         return []
     try:
         pil = PILImage.open(fname)
+        # Rotate 90° clockwise
+        pil = pil.transpose(PILImage.Transpose.ROTATE_270)
         pw, ph = pil.size
         aspect = ph / pw
         h = width * aspect
@@ -94,7 +96,10 @@ def pdf_page_img(page_num, width=INNER_W, caption=None, styles=None):
         if h > 14 * cm:
             h = 14 * cm
             width = h / aspect
-        items = [Image(fname, width=width, height=h)]
+        buf = io.BytesIO()
+        pil.save(buf, format='JPEG', quality=82)
+        buf.seek(0)
+        items = [Image(buf, width=width, height=h)]
         if caption and styles:
             items.append(Paragraph(caption, styles['caption']))
         return items
@@ -116,12 +121,14 @@ def pdf_page_crop(page_num, left_frac=0, top_frac=0, right_frac=1, bottom_frac=1
         return []
     try:
         pil = PILImage.open(fname)
+        # Crop first, then rotate 90° clockwise
         pw, ph = pil.size
         box = (int(pw * left_frac), int(ph * top_frac),
                int(pw * right_frac), int(ph * bottom_frac))
         cropped = pil.crop(box)
+        cropped = cropped.transpose(PILImage.Transpose.ROTATE_270)
         buf = io.BytesIO()
-        cropped.save(buf, format='PNG')
+        cropped.save(buf, format='JPEG', quality=82)
         buf.seek(0)
         cw, ch = cropped.size
         aspect = ch / cw
