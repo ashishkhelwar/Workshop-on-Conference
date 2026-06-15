@@ -415,44 +415,6 @@ class PB:
         self._rule()
         self.y -= 6
 
-    # ── Hindi text box (Devanagari) ───────────────────────────────────────────
-    def hindi_box(self, text, size=10.5, bg=HexColor('#1A2840'), attrib=None):
-        """Render Hindi text in a dark box using Devanagari font."""
-        lines = text.replace('\n', ' ').split('। ')
-        # Draw each sentence as separate para for wrapping
-        style = ParagraphStyle(
-            'hi', fontName='Devanagari', fontSize=size,
-            textColor=white, alignment=TA_JUSTIFY, leading=size * 1.6,
-        )
-        paras = []
-        for i, sent in enumerate(lines):
-            s = sent.strip()
-            if not s:
-                continue
-            if i < len(lines) - 1:
-                s += '।'
-            p = Paragraph(s, style)
-            w, h = p.wrap(INN_W - 28, 2000)
-            paras.append((p, h))
-
-        total_h = sum(h for _, h in paras) + (len(paras) - 1) * 4
-        bh = total_h + 26 + (16 if attrib else 0)
-
-        self.c.setFillColor(bg)
-        self.c.roundRect(INN_L, self.y - bh, INN_W, bh, 6, fill=1, stroke=0)
-
-        cy = self.y - 14
-        for p, h in paras:
-            p.drawOn(self.c, INN_L + 14, cy - h)
-            cy -= h + 4
-
-        if attrib:
-            self.c.setFillColor(C_GOLD)
-            self.c.setFont('Helvetica-Bold', 8.5)
-            self.c.drawRightString(INN_R - 10, self.y - bh + 7, attrib)
-
-        self.y -= bh + 10
-
     # ── Officer address card (Minister / PCCF / CCF) ─────────────────────────
     def officer_heading(self, name, designation, dept=''):
         """Full-width highlighted name block for a speaker."""
@@ -478,30 +440,6 @@ class PB:
 
 def build(c):
     pb = PB(c)
-
-    # ── HINDI SPEECH TEXT ────────────────────────────────────────────────────
-    MINISTER_HINDI = (
-        'छत्तीसगढ़ में हाथियों की संख्या पिछले 5 वर्षों से लगातार बढ़ रही है और वर्तमान में '
-        'राज्य में लगभग 450 हाथी विचरण कर रहे हैं। ये हाथी सरगुजा, बिलासपुर, रायपुर और दुर्ग '
-        'संभाग के वन क्षेत्रों में स्थाई रूप से विचरण कर रहे हैं। छत्तीसगढ़ शासन का वन एवं '
-        'जलवायु परिवर्तन विभाग इन हाथियों के संरक्षण, संवर्धन और सुरक्षा के साथ-साथ जन समुदाय '
-        'की सुरक्षा को भी ध्यान में रखते हुए लगातार कार्य कर रहा है। माननीय वन मंत्री, वन एवं '
-        'जलवायु परिवर्तन विभाग, छत्तीसगढ़ शासन के निर्देशानुसार वन एवं जलवायु परिवर्तन विभाग '
-        'हाथी-मानव द्वंद्व को शून्य की स्थिति में लाने का प्रयास कर रहा है, जिसमें सकारात्मक '
-        'परिणाम भी सामने आए हैं। विगत कुछ दिनों से रायगढ़ जिले के रायगढ़ एवं धरमजयगढ़ '
-        'वनमंडल में हाथी शावकों की मृत्यु की घटनाओं को ध्यान में रखते हुए तथा मृत्यु के कारणों '
-        'को जानने के लिए माननीय वन मंत्री श्री केदार कश्यप के विशेष प्रयास से एक राष्ट्रीय स्तर '
-        'की कार्यशाला का आयोजन दिनांक 05 एवं 06 जून 2026 को रायगढ़ जिले में किया जा रहा है। '
-        'इस कार्यशाला में राष्ट्रीय स्तर के पशुचिकित्सक, वैज्ञानिक, हाथी विशेषज्ञ तथा '
-        'छत्तीसगढ़ राज्य के पशुचिकित्सक भाग लेंगे। साथ ही राज्य के हाथी प्रभावित जिलों से '
-        'वन एवं जलवायु परिवर्तन विभाग एवं पशु संसाधन विभाग के अधिकारी भी इस प्रशिक्षण में '
-        'हिस्सा ले रहे हैं। कार्यशाला का उद्देश्य जंगली हाथियों की मृत्यु के कारणों का '
-        'वैज्ञानिक अन्वेषण करना और भविष्य में प्रबंधन की रणनीति तैयार करना है। इसके अंतर्गत '
-        'प्रतिभागियों को मृत हाथी की जांच, नमूने इकट्ठा करने और उन्हें सुरक्षित ढंग से भेजने '
-        'का व्यावहारिक प्रशिक्षण दिया जाएगा। साथ ही शव संभालने में सुरक्षा, शव के उचित '
-        'निपटान तथा हाथियों की मौत की घटनाओं और स्वास्थ्य निगरानी के लिए तैयारी को '
-        'मज़बूत किया जाएगा।'
-    )
 
     # ────────────────────────────────────────────────────────────────────────
     # PAGE 1: Workshop at a Glance
@@ -787,30 +725,44 @@ def build(c):
     )
     pb.gap(8)
 
-    # Subheading for Hindi text
+    # Subheading for address
     pb.c.setFillColor(C_MUTED)
     pb.c.setFont('Helvetica-BoldOblique', 9)
-    pb.c.drawString(INN_L, pb.y, 'Address in original Hindi | मूल हिंदी में उद्बोधन')
-    pb.y -= 14
-
-    pb.hindi_box(MINISTER_HINDI, size=10, attrib='— माननीय वन मंत्री श्री केदार कश्यप')
-
-    pb.gap(6)
-    pb.c.setFillColor(C_MUTED)
-    pb.c.setFont('Helvetica-BoldOblique', 9)
-    pb.c.drawString(INN_L, pb.y, 'English Summary')
+    pb.c.drawString(INN_L, pb.y, 'Full Address — Hon\'ble Forest Minister Shri Kedar Kashyap')
     pb.y -= 14
 
     pb.para(
-        'The Hon\'ble Minister noted that Chhattisgarh\'s elephant population has grown steadily '
-        'over the last five years to approximately 450 individuals, inhabiting the forest areas '
-        'of Surguja, Bilaspur, Raipur, and Durg divisions. The Department of Forest & Climate '
-        'Change is continuously working for their conservation and protection while ensuring '
-        'community safety, and is striving to bring human-elephant conflict to zero. The workshop '
-        'aims to scientifically investigate causes of wild elephant deaths, provide practical '
-        'training in mortality examination, sample collection and safe dispatch, and strengthen '
-        'preparedness for future mortality incidents and health surveillance.'
+        'The elephant population in Chhattisgarh has been growing continuously over the past '
+        'five years, and currently approximately 450 elephants are present in the state. These '
+        'elephants are permanently inhabiting the forest areas of Surguja, Bilaspur, Raipur, '
+        'and Durg divisions. The Department of Forest and Climate Change, Government of '
+        'Chhattisgarh, is continuously working for the conservation, enhancement, and protection '
+        'of these elephants while also ensuring the safety of local communities. Under the '
+        'direction of the Hon\'ble Forest Minister, the department is striving to bring '
+        'human-elephant conflict to zero — and positive outcomes have already been achieved.'
     )
+    pb.gap(6)
+    pb.para(
+        'Keeping in mind the recent incidents of elephant calf deaths in the Raigarh and '
+        'Dharamjaigarh Forest Divisions of Raigarh district, and in order to investigate the '
+        'causes of these deaths, a national-level workshop has been organised on 5–6 June 2026 '
+        'in Raigarh district through the special initiative of Hon\'ble Forest Minister '
+        'Shri Kedar Kashyap. This workshop brings together national-level veterinarians, '
+        'scientists, and elephant experts alongside state veterinarians and officers of the '
+        'Department of Forest &amp; Climate Change and the Animal Resources Department from '
+        'all elephant-affected districts of Chhattisgarh.'
+    )
+    pb.gap(6)
+    pb.para(
+        'The objective of the workshop is to scientifically investigate the causes of wild '
+        'elephant deaths and to prepare management strategies for the future. Participants will '
+        'receive practical training in examining dead elephants, collecting biological samples, '
+        'and dispatching them safely to laboratories. In addition, the workshop will strengthen '
+        'safety protocols for carcass handling, procedures for proper carcass disposal, and '
+        'overall preparedness for elephant mortality incidents and health surveillance systems '
+        'across the state.'
+    )
+    pb.gap(6)
 
     c.showPage()
 
