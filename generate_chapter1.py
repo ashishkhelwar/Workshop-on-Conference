@@ -752,84 +752,14 @@ def build_story():
     # ── Chapter header ─────────────────────────────────────────────────────────
     add(ChapterHeader(
         '1',
-        'Workshop Overview & Elephant Mortality Analysis',
-        'Chhattisgarh 2021–2026: Trends, Causes & Recommendations',
+        'Elephant Mortality Analysis in Chhattisgarh (2021–2026)',
+        'Trends, Causes, Demographics & Priority Recommendations',
         'Chhattisgarh Forest Department  |  Technical Support: WII Dehradun'
     ))
     add(SP(10))
 
-    # ── Section 1: Workshop Background ────────────────────────────────────────
-    add(SectionHeading('1. Workshop Background & Objectives'))
-    add(SP(6))
-
-    add(P(
-        'The <b>Workshop on Essentials for Mortality Investigation of Asian Elephant</b> was '
-        'organised by the Chhattisgarh Forest Department with technical support from the '
-        'Wildlife Institute of India (WII), Dehradun, and laboratory partners ICAR-IVRI, '
-        'Bareilly and NDVSU, Jabalpur. The two-day programme (5–6 June 2026, Raigarh) '
-        'brought together field officers and wildlife veterinarians to build capacity in '
-        'systematic elephant necropsy, sample collection, disease diagnosis, and evidence-based '
-        'mortality investigations.', 'bodyJ'
-    ))
-    add(SP(6))
-
-    # Stats row
-    stat_data = [
-        [StatCard('84', 'Participants', C_MED, 105, 60),
-         StatCard('2', 'Days Training', C_MED, 105, 60),
-         StatCard('5', 'Expert Resource Persons', C_MED, 105, 60),
-         StatCard('3', 'Partner Institutions', C_MED, 105, 60)],
-    ]
-    stat_tbl = Table(stat_data, colWidths=[110]*4)
-    stat_tbl.setStyle(TableStyle([
-        ('ALIGN', (0,0), (-1,-1), 'CENTER'),
-        ('VALIGN',(0,0), (-1,-1), 'MIDDLE'),
-        ('LEFTPADDING',(0,0),(-1,-1), 4),
-        ('RIGHTPADDING',(0,0),(-1,-1), 4),
-        ('TOPPADDING',(0,0),(-1,-1), 0),
-        ('BOTTOMPADDING',(0,0),(-1,-1), 0),
-    ]))
-    add(stat_tbl)
-    add(SP(8))
-
-    add(SectionHeading('Workshop Objectives', level=2))
-    add(SP(4))
-    obj_data = [
-        [P('Theme', 'th'), P('Topics Covered', 'th')],
-        [P('Biology & Ecology', 'tdb'),
-         P('Biology, behaviour, ecology of Asian elephants; population dynamics in CG', 'td')],
-        [P('Pathology & Disease', 'tdb'),
-         P('Necropsy procedures, biosafety, sample collection, infectious & non-infectious diseases', 'td')],
-        [P('Surveillance & Response', 'tdb'),
-         P('Elephant surveillance systems, disposal protocols, site remediation, evidence documentation', 'td')],
-    ]
-    obj_tbl = Table(obj_data, colWidths=[120, 340])
-    obj_tbl.setStyle(base_ts(2))
-    add(obj_tbl)
-    add(SP(6))
-
-    add(SectionHeading('Resource Persons', level=2))
-    add(SP(4))
-    rp_data = [
-        [P('Name', 'th'), P('Institution', 'th'), P('Expertise', 'th')],
-        [P('Dr. A. B. Shrivastav', 'tdb'), P('NDVSU, Jabalpur', 'td'),
-         P('Wildlife Pathology, Elephant PM Examination', 'td')],
-        [P('Dr. Parag Nigam', 'tdb'), P('WII, Dehradun', 'td'),
-         P('Elephant Ecology & Population Biology', 'td')],
-        [P('Dr. Karikalan Mathesh', 'tdb'), P('ICAR-IVRI, Bareilly', 'td'),
-         P('Veterinary Pathology, Sample Diagnostics', 'td')],
-        [P('Dr. Tapendra Saini', 'tdb'), P('WII, Dehradun', 'td'),
-         P('Wildlife Surveillance & Disease Monitoring', 'td')],
-        [P('Dr. Chandra Prakash Sharma', 'tdb'), P('WII, Dehradun', 'td'),
-         P('Conservation Biology & Field Investigation', 'td')],
-    ]
-    rp_tbl = Table(rp_data, colWidths=[145, 145, 170])
-    rp_tbl.setStyle(base_ts(3))
-    add(rp_tbl)
-    add(SP(10))
-
-    # ── Section 2: Population Status ──────────────────────────────────────────
-    add(SectionHeading('2. Elephant Population Status in Chhattisgarh'))
+    # ── Section 1: Population Status ──────────────────────────────────────────
+    add(SectionHeading('1. Elephant Population Status in Chhattisgarh'))
     add(SP(6))
     add(P(
         'Chhattisgarh has witnessed a remarkable expansion of its elephant population over the '
@@ -862,8 +792,8 @@ def build_story():
 
     add(PageBreak())
 
-    # ── Section 3: Casualty Analysis ──────────────────────────────────────────
-    add(SectionHeading('3. Elephant Casualty Analysis (2021–2026)'))
+    # ── Section 2: Casualty Analysis ──────────────────────────────────────────
+    add(SectionHeading('2. Elephant Casualty Analysis (2021–2026)'))
     add(SP(6))
     add(KeyBox(
         'TOTAL: 49 Elephant Deaths | DH Division: 27 | RG Division: 22  |  '
@@ -912,8 +842,8 @@ def build_story():
     ))
     add(SP(10))
 
-    # ── Section 4: Cause of Death ─────────────────────────────────────────────
-    add(SectionHeading('4. Cause of Death Analysis'))
+    # ── Section 3: Cause of Death ─────────────────────────────────────────────
+    add(SectionHeading('3. Cause of Death Analysis'))
     add(SP(6))
     add(CauseOfDeathChart(width=460, height=145))
     add(P('Figure 3: Cause of death distribution (n=49). Electrocution and drowning account for '
@@ -944,8 +874,8 @@ def build_story():
 
     add(PageBreak())
 
-    # ── Section 5: Demographics ───────────────────────────────────────────────
-    add(SectionHeading('5. Demographic Analysis of Casualties'))
+    # ── Section 4: Demographics ───────────────────────────────────────────────
+    add(SectionHeading('4. Demographic Analysis of Casualties'))
     add(SP(6))
     add(DemographicsChart(width=460, height=135))
     add(P('Figure 4: Age group (left) and sex (right) distribution of casualties (n=46 and n=45 respectively). '
@@ -976,8 +906,8 @@ def build_story():
     ))
     add(SP(10))
 
-    # ── Section 6: Seasonal Variation ─────────────────────────────────────────
-    add(SectionHeading('6. Seasonal Variation in Mortality'))
+    # ── Section 5: Seasonal Variation ─────────────────────────────────────────
+    add(SectionHeading('5. Seasonal Variation in Mortality'))
     add(SP(6))
     add(SeasonalChart(width=460, height=145))
     add(P('Figure 5: Seasonal distribution of deaths by cause. October is the single deadliest month (8 deaths). '
@@ -1012,8 +942,8 @@ def build_story():
 
     add(PageBreak())
 
-    # ── Section 7: Range-wise Distribution ────────────────────────────────────
-    add(SectionHeading('7. Range-wise Distribution of Deaths'))
+    # ── Section 6: Range-wise Distribution ────────────────────────────────────
+    add(SectionHeading('6. Range-wise Distribution of Deaths'))
     add(SP(6))
     add(P(
         'Analysis of death locations reveals distinct spatial hotspots that require '
@@ -1063,8 +993,8 @@ def build_story():
     add(hot_tbl)
     add(SP(10))
 
-    # ── Section 8: Drowning PM Analysis ───────────────────────────────────────
-    add(SectionHeading('8. Suspected Drowning — Post-Mortem Analysis'))
+    # ── Section 7: Drowning PM Analysis ───────────────────────────────────────
+    add(SectionHeading('7. Suspected Drowning — Post-Mortem Analysis'))
     add(SP(6))
 
     add(KeyBox(
@@ -1118,8 +1048,8 @@ def build_story():
 
     add(PageBreak())
 
-    # ── Section 9: Case Study ─────────────────────────────────────────────────
-    add(SectionHeading('9. Case Study — Gurda Calf Drowning (01 June 2026)'))
+    # ── Section 8: Case Study ─────────────────────────────────────────────────
+    add(SectionHeading('8. Case Study — Gurda Calf Drowning (01 June 2026)'))
     add(SP(6))
 
     case_data = [
@@ -1147,36 +1077,8 @@ def build_story():
     add(case_tbl)
     add(SP(10))
 
-    # ── Section 10: Workshop Programme ────────────────────────────────────────
-    add(SectionHeading('10. Two-Day Workshop Programme'))
-    add(SP(6))
-
-    prog_data = [
-        [P('Day / Time', 'th'), P('Session', 'th'), P('Resource Person', 'th')],
-        [P('<b>Day 1</b>\nMorning', 'tdb'),
-         P('Inauguration & Overview | CG Elephant Population & Mortality Statistics | '
-           'Biological & Anatomical Aspects of Asian Elephants', 'td'),
-         P('Forest Officers, CG; Dr. Parag Nigam (WII)', 'td')],
-        [P('Day 1\nAfternoon', 'tdb'),
-         P('Non-Infectious Diseases in Asian Elephants | '
-           'Infectious Diseases & Surveillance | Practical: PM Examination Techniques', 'td'),
-         P('Dr. Karikalan Mathesh (ICAR-IVRI); Dr. Tapendra Saini (WII)', 'td')],
-        [P('<b>Day 2</b>\nMorning', 'tdb'),
-         P('Sample Collection & Chain of Custody | Non-Infectious Pathology | '
-           'Drowning & Electrocution Investigation', 'td'),
-         P('Dr. A. B. Shrivastav (NDVSU); Dr. C. P. Sharma (WII)', 'td')],
-        [P('Day 2\nAfternoon', 'tdb'),
-         P('Field Investigation Case Studies | Carcass Disposal & Site Remediation | '
-           'Recommendations & Valediction', 'td'),
-         P('All resource persons; CG Forest Dept Officers', 'td')],
-    ]
-    prog_tbl = Table(prog_data, colWidths=[80, 270, 110])
-    prog_tbl.setStyle(base_ts(3))
-    add(prog_tbl)
-    add(SP(10))
-
-    # ── Section 11: Recommendations ───────────────────────────────────────────
-    add(SectionHeading('11. Key Recommendations & Priority Action Plan'))
+    # ── Section 9: Recommendations ────────────────────────────────────────────
+    add(SectionHeading('9. Key Recommendations & Priority Action Plan'))
     add(SP(6))
     add(P(
         'Based on the 5-year mortality analysis, the following eight priority actions were '
@@ -1284,7 +1186,7 @@ def main():
         rightMargin=2.0 * cm,
         topMargin=2.4 * cm,
         bottomMargin=1.6 * cm,
-        title='Chapter 1 — Workshop Overview & Elephant Mortality Analysis',
+        title='Chapter 1 — Elephant Mortality Analysis in Chhattisgarh (2021–2026)',
         author='Chhattisgarh Forest Department'
     )
     story = build_story()

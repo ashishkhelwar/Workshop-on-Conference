@@ -258,53 +258,17 @@ def save(doc: Document, filename: str):
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# CHAPTER 1 — Workshop Overview & Elephant Mortality Analysis
+# CHAPTER 1 — Elephant Mortality Analysis in Chhattisgarh (2021–2026)
 # ═══════════════════════════════════════════════════════════════════════════════
 
 def build_chapter1():
-    doc = new_doc('Chapter 1 — Workshop Overview & Elephant Mortality Analysis')
+    doc = new_doc('Chapter 1 — Elephant Mortality Analysis in Chhattisgarh (2021–2026)')
     add_chapter_header(doc, '1',
-        'Workshop Overview & Elephant Mortality Analysis',
-        'Chhattisgarh 2021–2026: Trends, Causes & Recommendations',
+        'Elephant Mortality Analysis in Chhattisgarh (2021–2026)',
+        'Trends, Causes, Demographics & Priority Recommendations',
         'Chhattisgarh Forest Department  |  Technical Support: WII Dehradun')
 
-    add_h1(doc, '1. Workshop Background & Objectives')
-    add_body(doc,
-        'The Workshop on Essentials for Mortality Investigation of Asian Elephant was organised '
-        'by the Chhattisgarh Forest Department with technical support from the Wildlife Institute '
-        'of India (WII), Dehradun, and laboratory partners ICAR-IVRI, Bareilly and NDVSU, '
-        'Jabalpur. The two-day programme (5–6 June 2026, Raigarh) brought together 84 field '
-        'officers and wildlife veterinarians to build capacity in systematic elephant necropsy, '
-        'sample collection, disease diagnosis, and evidence-based mortality investigations.')
-
-    add_table(doc,
-        ['Statistic', 'Value'],
-        [['Participants', '84'],
-         ['Duration', '2 days (5–6 June 2026)'],
-         ['Venue', 'Raigarh, Chhattisgarh'],
-         ['Resource Persons', '5 expert faculty'],
-         ['Partner Institutions', '3 (CG Forest Dept, WII, ICAR-IVRI/NDVSU)']],
-        col_widths=[6, 10])
-
-    add_h2(doc, 'Workshop Objectives')
-    add_table(doc,
-        ['Theme', 'Topics Covered'],
-        [['Biology & Ecology', 'Biology, behaviour, ecology of Asian elephants; population dynamics in CG'],
-         ['Pathology & Disease', 'Necropsy procedures, biosafety, sample collection, infectious & non-infectious diseases'],
-         ['Surveillance & Response', 'Elephant surveillance systems, disposal protocols, site remediation, evidence documentation']],
-        col_widths=[5, 12])
-
-    add_h2(doc, 'Resource Persons')
-    add_table(doc,
-        ['Name', 'Institution', 'Expertise'],
-        [['Dr. A. B. Shrivastav', 'NDVSU, Jabalpur', 'Wildlife Pathology, Elephant PM Examination'],
-         ['Dr. Parag Nigam', 'WII, Dehradun', 'Elephant Ecology & Population Biology'],
-         ['Dr. Karikalan Mathesh', 'ICAR-IVRI, Bareilly', 'Veterinary Pathology, Sample Diagnostics'],
-         ['Dr. Tapendra Saini', 'WII, Dehradun', 'Wildlife Surveillance & Disease Monitoring'],
-         ['Dr. Chandra Prakash Sharma', 'WII, Dehradun', 'Conservation Biology & Field Investigation']],
-        col_widths=[5, 5, 7])
-
-    add_h1(doc, '2. Elephant Population Status in Chhattisgarh')
+    add_h1(doc, '1. Elephant Population Status in Chhattisgarh')
     add_body(doc,
         'Chhattisgarh has witnessed remarkable elephant population growth over two decades. '
         'From just 24 individuals in 2001 (transient from Odisha/Jharkhand), the population '
@@ -321,7 +285,7 @@ def build_chapter1():
          ['2026', '~451 (est.)', 'Highest ever; detailed census ongoing | CAGR ≈ 13%']],
         col_widths=[2.5, 4, 10.5])
 
-    add_h1(doc, '3. Elephant Casualty Analysis (2021–2026)')
+    add_h1(doc, '2. Elephant Casualty Analysis (2021–2026)')
     add_keybox(doc,
         'TOTAL: 49 Elephant Deaths | DH Division: 27 | RG Division: 22 | '
         '2025-26: 12 deaths (RECORD HIGH) — Immediate intervention required', danger=True)
@@ -337,7 +301,7 @@ def build_chapter1():
         col_widths=[2.5, 2.5, 2.5, 2.2, 7.3])
     add_body(doc, 'Human deaths in Human-Elephant Conflict: 45 total (DH: 36 | RG: 9) during 2021–2026.', bold=True)
 
-    add_h1(doc, '4. Cause of Death Analysis')
+    add_h1(doc, '3. Cause of Death Analysis')
     add_table(doc,
         ['Cause of Death', 'Count', 'Percentage', 'Key Mechanism'],
         [['Electrocution', '23', '47%', 'Stray power lines, illegal electric fencing around crops'],
@@ -348,7 +312,7 @@ def build_chapter1():
         col_widths=[4, 2, 3, 8])
     add_keybox(doc, 'Electrocution + Drowning = 74% of all deaths — both are PREVENTABLE', danger=True)
 
-    add_h1(doc, '5. Demographic Analysis of Casualties')
+    add_h1(doc, '4. Demographic Analysis of Casualties')
     add_table(doc,
         ['Age Category', 'Count', '%', 'Key Vulnerability'],
         [['Calf (0–2 yr)', '23', '50%', 'Drowning (calves cannot exit steep banks), electrocution'],
@@ -365,7 +329,7 @@ def build_chapter1():
     add_keybox(doc, 'CRITICAL: Calves (0-2 yr) = 50% of all deaths and 92% of drowning deaths. '
                     'Drowning prevention infrastructure is the highest-impact single intervention.')
 
-    add_h1(doc, '6. Seasonal Variation in Mortality')
+    add_h1(doc, '5. Seasonal Variation in Mortality')
     add_table(doc,
         ['Season', 'Months', 'Drowning', 'Electrocution', 'Key Driver'],
         [['Dry Season', 'Jan–May', '8', '6', 'Low water levels — calves trapped in drying pools'],
@@ -376,7 +340,7 @@ def build_chapter1():
         col_widths=[4, 2.5, 2.5, 3, 5])
     add_body(doc, 'October is the single deadliest month (8 deaths). Oct–Dec harvest season = 42% of annual deaths.', italic=True)
 
-    add_h1(doc, '7. Range-wise Distribution of Deaths')
+    add_h1(doc, '6. Range-wise Distribution of Deaths')
     add_table(doc,
         ['Forest Range', 'Division', 'Electrocution', 'Drowning', 'Other', 'Total', 'Status'],
         [[('Ghargoda', True), 'RG', '8', '5', '2', ('15', True), ('CRITICAL', True)],
@@ -389,7 +353,7 @@ def build_chapter1():
         col_widths=[3.5, 2, 2.5, 2.5, 2, 2, 2.5])
     add_body(doc, 'Human conflict hotspots: Chhal (10 deaths) > Borojh (9) > Lailungaan (8)', bold=True)
 
-    add_h1(doc, '8. Suspected Drowning — Post-Mortem Analysis')
+    add_h1(doc, '7. Suspected Drowning — Post-Mortem Analysis')
     add_keybox(doc,
         'KEY FINDING: 13 drowning deaths (27%). 92% were calves. '
         'ARSENIC DETECTED in 2 specimens — Tamnar Range, Dec 2025 (File F.2-19/DI/NRC/2025-26/CWL)', danger=True)
@@ -408,7 +372,7 @@ def build_chapter1():
          ['HCN (Cyanide)', 'NEGATIVE all cases', 'Plant/industrial cyanide excluded']],
         col_widths=[4.5, 4, 8.5])
 
-    add_h1(doc, '9. Case Study — Gurda Calf Drowning (01 June 2026)')
+    add_h1(doc, '8. Case Study — Gurda Calf Drowning (01 June 2026)')
     add_table(doc,
         ['Parameter', 'Details'],
         [['Date', '01 June 2026'],
@@ -422,20 +386,7 @@ def build_chapter1():
          ['Follow-up', 'Water sample collected for arsenic analysis; site flagged for earthen ramp installation']],
         col_widths=[4.5, 12.5])
 
-    add_h1(doc, '10. Two-Day Workshop Programme')
-    add_table(doc,
-        ['Day / Session', 'Topics', 'Resource Person'],
-        [['Day 1 — Morning', 'Inauguration & Overview | CG Population & Mortality Statistics | Biological & Anatomical Aspects',
-          'Forest Officers, CG; Dr. Parag Nigam (WII)'],
-         ['Day 1 — Afternoon', 'Non-Infectious Diseases | Infectious Diseases & Surveillance | Practical: PM Techniques',
-          'Dr. Karikalan Mathesh (ICAR-IVRI); Dr. Tapendra Saini (WII)'],
-         ['Day 2 — Morning', 'Sample Collection & Chain of Custody | Non-Infectious Pathology | Drowning & Electrocution',
-          'Dr. A. B. Shrivastav (NDVSU); Dr. C. P. Sharma (WII)'],
-         ['Day 2 — Afternoon', 'Case Studies | Carcass Disposal & Site Remediation | Recommendations & Valediction',
-          'All resource persons; CG Forest Dept Officers']],
-        col_widths=[4, 9, 4])
-
-    add_h1(doc, '11. Key Recommendations & Priority Action Plan')
+    add_h1(doc, '9. Key Recommendations & Priority Action Plan')
     add_table(doc,
         ['#', 'Priority Action', 'Timeline', 'Agency'],
         [['1', 'Environmental Water Sampling: Rabo & Panikshet dams + Tamnar Range water bodies for arsenic/heavy metals', 'Immediate', 'CG Forest Dept + ICAR-IVRI'],
