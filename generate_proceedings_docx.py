@@ -83,7 +83,28 @@ def bullet(doc, text, size=9, level=0):
     run.font.color.rgb = BLACK
 
 
+def _set_outline_level(p, level):
+    """Set outline level on a paragraph's pPr so Word Navigation Pane picks it up."""
+    from docx.oxml import OxmlElement
+    pPr = p._p.get_or_add_pPr()
+    ol = OxmlElement('w:outlineLvl')
+    ol.set(qn('w:val'), str(level))
+    pPr.append(ol)
+
+
 def chapter_header(doc, num, title, subtitle='', author=''):
+    # Invisible Heading 1 paragraph — enables Navigation Pane
+    label = f'Chapter {num} — {title}' if num else f'Overview — {title}'
+    h = doc.add_paragraph(label)
+    h.style = doc.styles['Heading 1']
+    h.paragraph_format.space_before = Pt(0)
+    h.paragraph_format.space_after  = Pt(2)
+    for run in h.runs:
+        run.font.name = 'Calibri'
+        run.font.size = Pt(14)
+        run.font.color.rgb = DARK
+
+    # Visual dark-green banner table
     tbl = doc.add_table(rows=1, cols=1)
     tbl.style = 'Table Grid'
     cell = tbl.rows[0].cells[0]
@@ -113,6 +134,17 @@ def chapter_header(doc, num, title, subtitle='', author=''):
 
 
 def h1(doc, text):
+    # Heading 2 paragraph for section visibility in Navigation Pane
+    h = doc.add_paragraph(text)
+    h.style = doc.styles['Heading 2']
+    h.paragraph_format.space_before = Pt(4)
+    h.paragraph_format.space_after  = Pt(2)
+    for run in h.runs:
+        run.font.name = 'Calibri'
+        run.font.size = Pt(11)
+        run.font.color.rgb = WHITE
+
+    # Visual green banner
     tbl = doc.add_table(rows=1, cols=1)
     tbl.style = 'Table Grid'
     cell = tbl.rows[0].cells[0]
