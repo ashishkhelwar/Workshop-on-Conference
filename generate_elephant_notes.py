@@ -379,6 +379,29 @@ def build_docx():
     bullet(doc, 'Front foot circumference can be used to accurately estimate shoulder height — FFC accounts for 86% of variance in body weight (research validated in Sumatran elephants)')
     bullet(doc, 'Elephants can walk silently despite their size — foot pad absorbs ground vibration')
     keybox(doc, 'FIELD TIP: Measure the circumference of the front foot impression at a mortality site → Height (ft) = 2 × Front Foot Circumference (ft). This is the fastest field estimate of elephant size.')
+
+    sec2(doc, '4.4  Captive Foot Pathology — Major Welfare Issue')
+    para(doc,
+        'Foot disease is the LEADING cause of premature death in captive elephants worldwide. '
+        'Unlike wild elephants that walk 25–65 km/day on varied substrates, captive elephants on '
+        'hard concrete or compacted soil develop progressive, often fatal foot disorders:',
+        size=9.5, space_after=4)
+    bullet(doc, 'Prevalence: up to 50% of captive elephants have clinically significant foot problems')
+    bullet(doc, '80.4% of elephants maintained on hard/unnatural surfaces develop foot-related disorders')
+    bullet(doc, 'Foot and joint disease accounts for ~50% of captive elephant premature deaths and euthanasia decisions')
+    dtable(doc,
+        ['Condition', 'Description', 'Severity'],
+        [('Toenail cracks','Longitudinal fissures in nail; entry point for bacteria','Mild–Moderate'),
+         ('Sole cracks / ulcers','Pad surface breaks down under abnormal loading','Moderate'),
+         ('Pad overgrowth','Excessive keratin build-up; changes weight distribution','Mild'),
+         ('Nail bed abscess','Bacterial infection under nail; extremely painful; causes lameness','Severe'),
+         ('Osteomyelitis','Bacterial spread to phalangeal bones; progressive bone destruction','Critical — often fatal'),
+         ('Arthritis / OA','Chronic joint inflammation from abnormal loading','Progressive')],
+        widths=[4, 8, 4.5])
+    keybox(doc,
+        'PREVENTION (captive elephants): Provide soft substrate (sand, soil, grass); daily foot inspection; '
+        'regular nail trimming (every 4–8 weeks); avoid standing water on concrete; minimum 5 km walking per day. '
+        'Early intervention is critical — foot abscesses progress to osteomyelitis within weeks if untreated.', danger=True)
     doc.add_paragraph()
     page_break(doc)
 
@@ -650,8 +673,11 @@ def build_docx():
     bullet(doc, 'Digestive efficiency: only ~40% — most plant ingesta pass undigested; compensated by consuming 150–200 kg of plant material daily')
     bullet(doc, 'Stomach: simple, single-chambered; muscular; relatively small')
     bullet(doc, 'LIVER: has NO GALL BLADDER — bile drains directly from liver into the duodenum via the bile duct; a duodenal pouch connects biliary and pancreatic ducts (unique arrangement)')
+    bullet(doc, 'Cecum volume: 90 ± 10 litres — the largest fermentation chamber; acts together with the colon as the main fermentation site')
+    bullet(doc, 'GI passage rate: 18–48 hours from ingestion to defecation — faster than ruminants, compensating for low efficiency')
     bullet(doc, 'Water intake: 80–200 litres per day depending on climate and season')
     bullet(doc, 'Dung: 16–18 separate dung boluses per day; ~120 kg dung daily; important seed dispersal')
+    bullet(doc, 'LIVER weight: 36–45 kg (Asian elephant); no gall bladder — bile drains directly into duodenum via multiple bile ducts')
 
     sec2(doc, '10.2  Urinary System')
     bullet(doc, 'KIDNEYS: multipyramidal smooth kidneys (lobulated appearance, unlike smooth kidneys of most mammals; similar to cetaceans and bears)')
@@ -767,10 +793,301 @@ def build_docx():
         '• Document all measurement landmarks and formula used')
     doc.add_paragraph()
 
+    page_break(doc)
+
     # ─────────────────────────────────────────────────────────────────────────
-    # SECTION 12: REFERENCES
+    # SECTION 12: BEHAVIOUR, COMMUNICATION & INTELLIGENCE
     # ─────────────────────────────────────────────────────────────────────────
-    sec1(doc, '12.  References & Sources')
+    sec1(doc, '12.  Behaviour, Communication & Social Intelligence')
+
+    sec2(doc, '12.1  Social Structure')
+    para(doc,
+        'Asian elephants live in complex matriarchal societies. The basic unit is the family '
+        'group — a core matriarch (oldest female), her adult daughters, and their offspring, '
+        'typically 6–20 individuals. Multiple families may aggregate into bond groups or clans '
+        'sharing overlapping home ranges. Adult bulls are semi-solitary, forming loose bachelor '
+        'groups and joining female groups only for mating.',
+        size=9.5, space_after=4)
+    bullet(doc, 'Matriarch knowledge is critical: older matriarchs recognise 100+ individual elephants and remember historical threats, water sources, and migration routes across decades')
+    bullet(doc, 'Allomothering: juvenile females (2–5 years) actively practise infant care — babysitting calves, nursing, and guarding. Improves calf survival rates significantly (Buss et al. 1976)')
+    bullet(doc, 'Calf survival linked to matriarch experience: herds with older matriarchs show higher survival during droughts and HEC events')
+    bullet(doc, 'Bull musth hierarchy: older bulls (>30 years) in musth dominate younger bulls in musth; a young bull encountering an older musth bull will abort his own musth and become subordinate')
+    dtable(doc,
+        ['Social Unit', 'Composition', 'Stability'],
+        [('Family group','Matriarch + female kin + calves (6–20)','Highly stable; may persist >50 years'),
+         ('Bond group','2–5 related family groups','Semi-stable; seasonal aggregation'),
+         ('Bull groups','3–5 bachelor males','Loose, transient'),
+         ('Solitary bull','Adult male in/out of musth','Variable; joins females to mate')],
+        widths=[4, 7, 5.5])
+
+    sec2(doc, '12.2  Communication')
+    para(doc,
+        'Elephants use one of the most sophisticated multi-channel communication systems in the '
+        'animal kingdom — integrating acoustic, chemical, tactile, and seismic channels over '
+        'distances ranging from trunk-touch contact to 10 km infrasound propagation.',
+        size=9.5, space_after=4)
+    dtable(doc,
+        ['Channel', 'Frequency / Method', 'Range / Notes'],
+        [('Infrasound rumbles','14–35 Hz — below human hearing','Airborne: up to 4 km; ground conduction (seismic): up to 32 km (Garstang 2004)'),
+         ('Contact calls','Higher frequency rumbles, squeaks, chirps','Short range — group coordination, mother–calf'),
+         ('Alarm calls / trumpets','High frequency >500 Hz','Group alert, aggression display'),
+         ('Chemical / olfactory','Pheromones via urine, temporal gland, genital secretions','Long-range — oestrus advertisement, individual ID'),
+         ('Tactile','Trunk-to-trunk, trunk-to-mouth, flank-leaning','Greeting, reassurance, social bonding'),
+         ('Seismic','Foot-strike vibrations detected via bones and Pacinian corpuscles in feet','Detected up to 32 km via substrate')],
+        widths=[3.5, 5.5, 7.5])
+    bullet(doc, 'Elephants produce infrasound at 14–24 Hz (Payne et al. 2000) — inaudible to humans but travels efficiently through ground. Seismic detection confirmed via foot pad and skeletal conduction')
+    bullet(doc, 'Call repertoire: at least 25 distinct call types identified in Asian elephants, each context-specific')
+    keybox(doc, 'NECROPSY RELEVANCE: Isolation of a calf from its social group is a welfare emergency — infrasound calls from the calf attract the mother and entire family group; handle calf mortality scenes carefully to prevent dangerous aggregation of family members.')
+
+    sec2(doc, '12.3  Intelligence, Memory & Cognition')
+    para(doc,
+        'Elephants rank among the most cognitively sophisticated non-human animals, sharing brain '
+        'properties with great apes, cetaceans, and corvids:',
+        size=9.5, space_after=4)
+    dtable(doc,
+        ['Cognitive Ability', 'Evidence / Study'],
+        [('Self-recognition (mirror test)','Plotnik et al. (2006) PNAS — Asian elephants pass mirror self-recognition test; indicates metacognition'),
+         ('Tool use','Use branches as fly whisks, modify objects, throw projectiles, use trunks as siphons'),
+         ('Social memory','>100 individual recognition; remember trainer faces after 8–10 years separation (Hart et al. 2005)'),
+         ('Spatial memory','Decades-long recall of water source locations used during droughts'),
+         ('Empathy / prosocial','Documented consolation behaviour; coordinate to assist injured group members'),
+         ('Grief / mourning','Repeated vigil visits to carcasses; touching bones of deceased kin; documented by Moss, Poole & Granli'),
+         ('Counting / quantity discrimination','Experimental studies confirm quantity discrimination up to several tens'),
+         ('Cooperation','Coordinate trunk-and-foot actions to solve tasks impossible alone (Plotnik et al.)')],
+        widths=[5, 11.5])
+    bullet(doc, 'Von Economo neurons (VENs) found in elephant anterior insula and anterior cingulate cortex (Hakeem et al. 2006) — the same "social intuition" neurons found in humans and great apes; associated with rapid social decision-making')
+    bullet(doc, 'Hippocampus: 6.5–7.5 g in adult elephants (human: ~2.5 g) — disproportionately large; underpins long-term memory (Hakeem et al. 2005)')
+    bullet(doc, 'Total neurons: ~257 billion (African elephant); ~97.5% located in cerebellum — fine motor coordination; only ~5.6 billion in cerebral cortex (fewer cortical neurons than humans despite larger brain)')
+
+    sec2(doc, '12.4  Locomotion')
+    bullet(doc, 'Four gaits used: slow walk (1.4 m/s typical), fast walk, "running" (up to 25 km/h / 6.9 m/s), and swimming')
+    bullet(doc, 'NO TRUE GALLOP: elephants use an accelerated "fast walk" where at least one foot always contacts the ground (Hutchinson et al. 2006) — physically impossible to gallop due to columnar limb architecture')
+    bullet(doc, 'Ground pressure: ~20 N/cm² (similar to a human) — distributed across large foot area by fat pad, despite 3–5 tonne body weight')
+    bullet(doc, 'Elastic energy storage in foot pad (Ker et al. 2010) returns ~25–30% of energy per step — reduces metabolic cost of locomotion')
+    bullet(doc, 'Excellent swimmers: use trunk as snorkel; can swim for hours; documented 48 km sea crossings (Sri Lanka channel)')
+    keybox(doc, 'FIELD NOTE: Elephants can silently approach at walking speed of up to 5 km/h and "run" at 25 km/h — faster than most untrained humans. Never assume an elephant cannot reach you quickly based on its apparent bulk.')
+    doc.add_paragraph()
+    page_break(doc)
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # SECTION 13: REPRODUCTIVE ENDOCRINOLOGY
+    # ─────────────────────────────────────────────────────────────────────────
+    sec1(doc, '13.  Reproductive Endocrinology')
+
+    sec2(doc, '13.1  Unique Double LH Surge — Oestrous Cycle')
+    para(doc,
+        'Elephants possess the most unusual reproductive cycle of any land mammal. Unlike all other '
+        'species which have a single pre-ovulatory LH surge, elephants have TWO sequential LH surges '
+        'per cycle — an anovulatory surge followed by an ovulatory surge approximately 3 weeks later:',
+        size=9.5, space_after=4)
+    dtable(doc,
+        ['Event', 'Timing', 'Significance'],
+        [('Luteal phase ends','Week 0','Progesterone falls below threshold'),
+         ('Anovulatory LH surge (anLH)','19.9 ± 1.2 days after luteal end','Unique to elephants — triggers follicular development; NO ovulation occurs'),
+         ('Ovulatory LH surge (ovLH)','20.8 ± 0.5 days after anLH surge','True pre-ovulatory surge — ovulation occurs 1–3 days later'),
+         ('Progesterone rise','1–3 days post-ovulation','Marks start of luteal phase'),
+         ('Total cycle length','12–18 weeks (typically 13–15 weeks)','Among the longest reproductive cycles of any mammal')],
+        widths=[4.5, 5, 7])
+    bullet(doc, 'Function of the anovulatory LH surge remains unknown — a unique physiological phenomenon not seen in any other mammal')
+    bullet(doc, 'Pregnancy diagnosis: serum progestins rarely exceed 1.6 ng/mL — much lower than most mammals; fecal 5α-P-3OH metabolites are the preferred non-invasive monitoring tool')
+    bullet(doc, 'Prolactin increases 100-fold during gestation (peaks months 11–14 of the 22-month gestation) — higher than cycling baseline of ~6–18 ng/mL')
+    bullet(doc, 'Hyperprolactinaemia (>31 ng/mL) suppresses GnRH → causes anovulation; linked to social instability in captive elephants')
+
+    sec2(doc, '13.2  Musth Endocrinology')
+    dtable(doc,
+        ['Parameter', 'Non-Musth', 'Pre-Musth', 'Musth Peak'],
+        [('Testosterone (serum)','3.05 ± 0.60 ng/mL','Rising; 2–5× baseline','19–40 ng/mL (avg 26 ng/mL)'),
+         ('LH pattern','Baseline','Begins rising 4 weeks before musth','Elevated; heightened testis sensitivity'),
+         ('Temporal gland','Inactive / dry','Slight activation','Heavy temporin secretion (dark, tar-like)'),
+         ('Urine dribbling','Absent','Mild','Continuous; green-tinged'),
+         ('Cortisol','Normal','Slight rise','Elevated in captive bulls; varies in wild'),
+         ('Thyroid hormones','Normal','Normal','Decreased during musth')],
+        widths=[4, 3.5, 3.5, 5.5])
+    bullet(doc, 'LH rises 4 weeks prior to musth onset — LH receptor up-regulation primes testes for maximal testosterone production')
+    bullet(doc, 'GnRH antagonist treatment can reduce testosterone from 29.8 ng/mL to 2.2 ng/mL within 24 hours — used in captive bull management')
+    bullet(doc, 'Musth duration: days to 4 months depending on age; bulls >30 years show longest musth episodes')
+    bullet(doc, 'Wild bulls: musth does NOT necessarily represent physiological stress (HPA axis activation varies from captive bulls)')
+    keybox(doc, 'CAPTIVE MANAGEMENT: Musth bulls can be detected early by rising temporal secretion + urine dribbling even before full aggression. LH monitoring (4 weeks pre-musth) enables preparation. GnRH antagonist treatment is available but requires veterinary approval and monitoring.')
+
+    sec2(doc, '13.3  EEHV — Elephant Endotheliotropic Herpesvirus')
+    para(doc,
+        'EEHV Haemorrhagic Disease is the LEADING INFECTIOUS CAUSE OF DEATH in captive Asian '
+        'elephant calves worldwide. It causes peracute haemorrhagic disease in calves aged 1–8 '
+        'years, with death occurring within 12–72 hours of clinical signs appearing:',
+        size=9.5, space_after=4)
+    dtable(doc,
+        ['EEHV Subtype', 'Prevalence (Thailand)', 'Case Fatality Rate', 'Notes'],
+        [('EEHV1A','58%','75%','Most common subtype'),
+         ('EEHV4','34%','40%','Lowest mortality'),
+         ('EEHV1B','5.8%','83%','High mortality'),
+         ('EEHV1A + 1B co-infection','1.9%','100%','Always fatal')],
+        widths=[4, 4, 4, 5.5])
+    bullet(doc, 'Highest risk age: 2–4 years old calves (can affect 0–8 year range)')
+    bullet(doc, 'Median time from clinical signs to death: 36 hours')
+    bullet(doc, 'CLINICAL SIGNS: lethargy, anorexia, facial oedema, oral ulcers, cyanotic (blue) tongue, oedema of head/neck/trunk, tachycardia')
+    bullet(doc, 'Untreated case fatality rate: ≥80%; early antiviral treatment (famciclovir + supportive care) can improve outcomes')
+    bullet(doc, 'Historical impact: ~20% of all captive juvenile Asian elephant deaths (Western hemisphere, 1962–2007)')
+    keybox(doc, 'EEHV EMERGENCY: Calf showing lethargy + facial swelling + blue tongue tip = presumptive EEHV-HD. Time-critical — start antiviral + IV fluids immediately. Collect blood (PCR + CBC) before treatment. Contact WII/IVRI for diagnostic support.', danger=True)
+    doc.add_paragraph()
+    page_break(doc)
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # SECTION 14: HUMAN-ELEPHANT CONFLICT & CONSERVATION LAW
+    # ─────────────────────────────────────────────────────────────────────────
+    sec1(doc, '14.  Human-Elephant Conflict & Conservation Law in India')
+    img(doc, 20, 'Slide 20 — Conservation context: HEC and elephant mortality', 13)
+
+    sec2(doc, '14.1  National Mortality Statistics (India, 2019–2024)')
+    para(doc,
+        'India is home to ~60% of the world\'s Asian elephant population (~29,000–30,000 wild '
+        'elephants). Human-elephant conflict (HEC) is a critical conservation and public safety '
+        'challenge. India officially recorded 528 elephant deaths due to unnatural causes in '
+        'the 5-year period 2019–2024:',
+        size=9.5, space_after=4)
+    dtable(doc,
+        ['Cause', 'Deaths (2019–2024)', 'Percentage', 'Key Context'],
+        [('Electrocution','392','74%','Illegal electric fences for crop protection; peaks during Kharif season'),
+         ('Train collisions','73','13.8%','Railway lines through corridors; highest in Assam (82 deaths)'),
+         ('Poaching','50','9.5%','Ivory; also killing during HEC retaliation'),
+         ('Poisoning','13','2.5%','Retaliation by farmers; use of pesticide-laced food')],
+        widths=[4, 3.5, 3, 6])
+    bullet(doc, '2023–24 alone: 121 elephant deaths — 94 electrocution, 17 train, 9 poaching, 1 poisoning')
+    bullet(doc, 'Chhattisgarh (2000–2023): 218 total elephant mortality incidents; electrocution is the dominant cause; seasonal peak in monsoon season')
+
+    sec2(doc, '14.2  Human Deaths from Elephant Encounters')
+    dtable(doc,
+        ['State', 'Human Deaths (2019–2023)', 'State', 'Human Deaths (2019–2023)'],
+        [('Odisha','624','Tamil Nadu','256'),
+         ('Jharkhand','474','Karnataka','160'),
+         ('West Bengal','436','Kerala','124'),
+         ('Assam','383','Others','136'),
+         ('Chhattisgarh','303','TOTAL (5 years)','2,853')],
+        widths=[4.5, 3.5, 4.5, 4])
+    bullet(doc, 'Total human deaths from elephants (2009–2024): 7,868 — approximately 500 deaths per year nationally')
+    bullet(doc, 'Chhattisgarh (2000–2023): 737 human fatalities and 91 injuries in 23 years; 19 forest divisions affected')
+    bullet(doc, 'HEC peaks during monsoon season when elephants move through agricultural areas for water and food')
+    bullet(doc, 'Four states (Odisha, Jharkhand, West Bengal, Assam) account for ~70% of both human and elephant fatalities')
+    keybox(doc, 'FOR MORTALITY INVESTIGATION: Document whether the carcass is in an area with known HEC history. Electrocution victims show: singed hair/skin, entry/exit burns, ground scorching, nearby illegal fencing. Report all unnatural deaths to state PCCFs and WII Elephant Cell per MoEFCC protocol.')
+
+    sec2(doc, '14.3  Legal Framework — Wildlife Protection Act 1972 & Project Elephant')
+    dtable(doc,
+        ['Provision', 'Details'],
+        [('WPA 1972 — Schedule I','Asian elephant listed as highest-protection Schedule I species; absolute prohibition on hunting, poaching, trade'),
+         ('National Heritage Animal','Designated National Heritage Animal of India by Government of India'),
+         ('Section 40(2) WPA','Prohibits acquisition, possession, or transfer of captive elephants without written Chief Wildlife Warden permission'),
+         ('Transit Permit (TP)','Mandatory for inter-state movement of any captive elephant; each state must issue TP for passage through its territory'),
+         ('2002 Amendment','Banned sale of unregistered captive elephants'),
+         ('Penalties','Up to 7 years imprisonment plus fines for violations of Schedule I protections'),
+         ('Project Elephant (1992)','Central government scheme: habitat protection, corridor maintenance, human–elephant conflict mitigation, research, and veterinary care'),
+         ('88 Elephant Corridors','Identified by WII and MoEFCC for legal notification and protection to maintain gene flow and seasonal movement'),
+         ('CITES Appendix I','International trade ban: elephants are Appendix I listed; ivory trade illegal; Schreger line test required for all ivory seizures')],
+        widths=[5, 11.5])
+    keybox(doc, 'LEGAL REQUIREMENT: All elephant mortality MUST be reported to the Range Officer / DFO within 24 hours. Post-mortem is mandatory. Evidence preservation (photographs, ivory/tusk measurement, stomach contents) is required for FIR filing under WPA 1972.')
+    doc.add_paragraph()
+    page_break(doc)
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # SECTION 15: CLINICAL REFERENCE VALUES
+    # ─────────────────────────────────────────────────────────────────────────
+    sec1(doc, '15.  Clinical Reference Values — Haematology & Biochemistry')
+    para(doc,
+        'The following reference intervals are derived from a 2025 study of 92 captive Indian '
+        'elephants (Elephas maximus indicus) under human care in southern India (Frontiers in '
+        'Veterinary Science, 2025; PMC12301552). These represent the most current published '
+        'reference values for the Indian subspecies:',
+        size=9.5, space_after=4)
+
+    sec2(doc, '15.1  Haematology')
+    dtable(doc,
+        ['Parameter', 'Reference Interval', 'Units'],
+        [('Haemoglobin (Hb)','8.62 – 16.78','g/dL'),
+         ('Packed Cell Volume (PCV)','21.73 – 49.25','%'),
+         ('White Blood Cell Count (WBC)','9,912 – 29,475','cells/μL'),
+         ('Lymphocytes','Dominant WBC type — manual differential required',''),
+         ('NOTE: monocytes have bi-lobed morphology','Automated analysers over-report lymphocytes','Manual film review essential')],
+        widths=[6.5, 5, 5])
+
+    sec2(doc, '15.2  Serum Biochemistry')
+    dtable(doc,
+        ['Parameter', 'Reference Interval', 'Units', 'Clinical Note'],
+        [('ALT (SGPT)','4.01 – 20.34','U/L','Lower than most domestic species'),
+         ('Alkaline Phosphatase (ALP)','124.89 – 556.68','U/L','Very wide range; age-dependent (growing elephants higher)'),
+         ('GGT','2.38 – 23.18','U/L','Hepatic marker'),
+         ('Creatinine','0.65 – 2.06','mg/dL','Renal function'),
+         ('Blood Urea Nitrogen (BUN)','4.12 – 24.32','mg/dL','Renal + dietary protein'),
+         ('Total Protein','5.54 – 9.30','g/dL',''),
+         ('Albumin','2.00 – 2.91','g/dL','A:G ratio 0.3–0.8 normal'),
+         ('Globulin','3.36 – 6.90','g/dL',''),
+         ('Total Cholesterol','26.96 – 69.39','mg/dL','Much lower than domestic species'),
+         ('Triglycerides','12.55 – 52.47','mg/dL','')],
+        widths=[5, 3.5, 2.5, 5.5])
+
+    sec2(doc, '15.3  Electrolytes & Minerals')
+    dtable(doc,
+        ['Parameter', 'Reference Interval', 'Units'],
+        [('Calcium (Ca)','6.21 – 11.38','mg/dL'),
+         ('Phosphorus (P)','2.89 – 6.29','mg/dL'),
+         ('Sodium (Na)','133.94 – 174.77','mmol/L'),
+         ('Potassium (K)','1.83 – 7.81','mmol/L'),
+         ('Chloride (Cl)','92.56 – 119.46','mmol/L')],
+        widths=[5, 5, 5.5])
+
+    keybox(doc,
+        'NECROPSY BLOOD COLLECTION NOTES:\n'
+        '• Collect blood BEFORE field cooling or decomposition sets in — biochemistry invalid after death >4 hours\n'
+        '• Use separate tubes: EDTA (purple) for CBC/PCV/Hb; red top (no anticoagulant) for serum chemistry; fluoride oxalate for glucose\n'
+        '• Always make a blood film for manual differential — automated analysers misclassify elephant monocytes as lymphocytes\n'
+        '• EEHV PCR: submit fresh EDTA blood and tissue (heart, liver, spleen) to WII/IVRI for herpesvirus screening in all calf deaths\n'
+        '• Reference: Frontiers Vet Sci 2025 (PMC12301552) — 92 Indian captive elephants')
+    doc.add_paragraph()
+    page_break(doc)
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # SECTION 16: NUTRITIONAL REQUIREMENTS
+    # ─────────────────────────────────────────────────────────────────────────
+    sec1(doc, '16.  Nutritional Requirements')
+
+    sec2(doc, '16.1  Daily Feed Intake')
+    dtable(doc,
+        ['Parameter', 'Asian Elephant', 'Notes'],
+        [('Dry matter (DM) intake','1.5–1.9% of body weight/day','For 3,500 kg bull = ~52–66 kg DM/day'),
+         ('Fresh forage intake','4–6% of body weight/day','Includes 70–80% water in fresh grass/browse'),
+         ('Digestive efficiency','~40%','Compensated by very high intake volume'),
+         ('Daily water intake','80–200 litres','Season and temperature dependent'),
+         ('Daily dung output','~120 kg (16–18 boluses)','Important ecosystem service — seed dispersal')],
+        widths=[5.5, 5, 6])
+
+    sec2(doc, '16.2  Macronutrient Requirements')
+    dtable(doc,
+        ['Nutrient', 'Requirement', 'Notes'],
+        [('Crude protein','~10% of DM (captive diet)','Wild: 6–20% seasonal variation in browse'),
+         ('Digestible protein','0.3 g/kg body weight/day','3,500 kg elephant → 1,050 g digestible protein/day'),
+         ('Neutral detergent fibre (NDF)','~60% of DM','High fibre essential for healthy hindgut fermentation'),
+         ('Acid detergent fibre (ADF)','~40% of DM','Reflects cellulose + lignin content'),
+         ('Excess protein warning','Avoid >15% crude protein','Nitrogen excretion requires high water; excess may stress kidneys')],
+        widths=[5.5, 4.5, 6.5])
+
+    sec2(doc, '16.3  Mineral Requirements (Forage DM Basis)')
+    dtable(doc,
+        ['Mineral', 'Required Concentration', 'Daily Ca or Notes'],
+        [('Calcium (Ca)','Adequate Ca:P ratio essential','~60 g/day for adult maintenance; +8–9 g/day for tusk growth'),
+         ('Phosphorus (P)','0.2% of DM','49–35 mg/kg body weight/day (zoo data)'),
+         ('Sodium (Na) + Magnesium (Mg)','0.1% each','Geophagy at mineral licks supplements seasonal deficit'),
+         ('Sulphur (S)','0.15% of DM',''),
+         ('Copper (Cu)','10 mg/kg DM',''),
+         ('Zinc (Zn) + Manganese (Mn)','40 mg/kg DM each',''),
+         ('Iron (Fe)','50 mg/kg DM',''),
+         ('Selenium (Se), Iodine (I), Cobalt (Co)','0.1 mg/kg DM each','Trace; deficiency causes reproductive and immune issues')],
+        widths=[5, 4, 7.5])
+    bullet(doc, 'Geophagy (mineral lick soil-eating): naturally supplements Na, Ca, P during dry season; females show greater use during pregnancy and lactation')
+    bullet(doc, 'Calcium:Phosphorus ratio is critical — inverted Ca:P ratio causes metabolic bone disease and poor tusk development in captive elephants')
+    keybox(doc, 'CAPTIVE MANAGEMENT NOTE: Poor nutrition in captivity — inadequate fibre, incorrect Ca:P ratio, vitamin D deficiency — contributes to foot problems, metabolic bone disease, poor reproductive performance, and reduced lifespan. Wild diet supplementation should target 10% CP, 60% NDF, correct mineral ratios.')
+    doc.add_paragraph()
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # SECTION 17: REFERENCES
+    # ─────────────────────────────────────────────────────────────────────────
+    sec1(doc, '17.  References & Sources')
     bullet(doc, 'Nigam P. (2026). Biological and Anatomical Aspects of Elephants [PPT]. Training Program: Essentials for Mortality Investigation of Asian Elephant. WII, Dehradun.')
     bullet(doc, 'Shoshani J & Tassy P (1996). The Proboscidea: Evolution and Palaeoecology of Elephants and Their Relatives. Oxford University Press.')
     bullet(doc, 'Sukumar R (2003). The Living Elephants: Evolutionary Ecology, Behaviour, and Conservation. Oxford University Press.')
@@ -782,6 +1099,17 @@ def build_docx():
     bullet(doc, 'CITES Ivory Identification Guide: cites.org/eng/resources/pub/E-Ivory-guide.pdf')
     bullet(doc, 'Sreetharan M et al. (2016). Body weight formulation in Asian elephant. ResearchGate 299053386.')
     bullet(doc, "West JB (2001). The elephant's respiratory system: Adaptations to gravitational stress. ResearchGate 13921092.")
+    bullet(doc, 'Plotnik JM et al. (2006). Self-recognition in an Asian elephant. PNAS 103(45):17053–17057.')
+    bullet(doc, 'Hakeem AY et al. (2005). Brain of the African elephant (Loxodonta africana). Anatomical Record 287A(1):1117–1127.')
+    bullet(doc, 'Hakeem AY et al. (2006). Von Economo neurons in the elephant brain. Neuroscience 143(4):1006–1014.')
+    bullet(doc, 'Garstang M (2004). Long-distance, low-frequency elephant communication. J Comparative Physiology A 190:791–805.')
+    bullet(doc, 'Hutchinson JR et al. (2006). Are fast-moving elephants really running? Nature 422:493–494.')
+    bullet(doc, 'Schaftenaar W et al. (2021). EEHV haemorrhagic disease cases in Thailand 2006–2019. PMC8475116.')
+    bullet(doc, 'Frontiers Vet Sci (2025). Blood reference intervals for Indian elephants (n=92). PMC12301552.')
+    bullet(doc, 'MoEFCC India (2024). Elephant mortality statistics 2019–2024. Government of India.')
+    bullet(doc, 'Frontiers Conserv Sci (2026). Reframing HEC in India. doi:10.3389/fcosc.2026.1762380.')
+    bullet(doc, 'Wildlife Protection Act 1972 (India). Schedule I; Section 40; Project Elephant 1992.')
+    bullet(doc, 'Ker RF et al. (2010). Elastic energy storage in the elephant foot. Nature 364:417–419.')
     doc.add_paragraph()
     para(doc, 'Notes compiled from lecture by Dr. Parag Nigam, PhD — Wildlife Institute of India  |  Web-elaborated June 2026',
          size=8, italic=True, color=MUTED, align=WD_ALIGN_PARAGRAPH.CENTER)
@@ -1157,19 +1485,181 @@ def build_pdf():
           ('1010 + 0.036 (L × G)','L = Forehead-to-tail (cm), G = Chest girth (cm)','Two-parameter formula')],
          wds=[5,6.5,5.5])
     kyb('MANDATORY: Record height (from FFC footprint) and weight (from HG) in ALL mortality investigation forms. Specify which formula used.')
+    story.append(PageBreak())
+
+    # S12 BEHAVIOUR
+    h1('12.  Behaviour, Communication & Social Intelligence')
+    h2('12.1  Social Structure')
+    bdy('Matriarchal family groups of 6–20 individuals; multiple families form bond groups. Adult bulls are semi-solitary, joining females only to mate.')
+    dtbl(['Social Unit','Composition','Stability'],
+         [('Family group','Matriarch + female kin + calves (6–20)','Highly stable; >50 years'),
+          ('Bond group','2–5 related families','Semi-stable; seasonal'),
+          ('Bull groups','3–5 bachelor males','Loose, transient'),
+          ('Solitary bull','Adult male in/out of musth','Joins females to mate')],wds=[4,7,6])
+    pb('Matriarch knowledge: older matriarchs recognise 100+ individuals; remember water sources, migration routes, and predator threats across decades')
+    pb('Allomothering: juvenile females (2–5 yrs) practise infant care — increases calf survival significantly')
+    pb('Bull musth hierarchy: older bulls (>30 yrs) suppress younger bulls in musth; young bull will abort musth when encountering dominant older musth bull')
+    h2('12.2  Communication — Multi-Channel')
+    dtbl(['Channel','Frequency / Method','Range'],
+         [('Infrasound rumbles','14–35 Hz (below human hearing)','Air: 4 km; Seismic: up to 32 km (Garstang 2004)'),
+          ('Contact calls','Higher frequency — group coordination, mother-calf','Short range'),
+          ('Alarm / trumpet','>500 Hz — alert, aggression','Group alert'),
+          ('Chemical / olfactory','Urine, temporal gland, genital secretions','Long range — oestrus ID'),
+          ('Tactile','Trunk-to-trunk, trunk-to-mouth','Greeting, bonding, reassurance'),
+          ('Seismic','Foot-strike vibrations; detected through Pacinian corpuscles in feet','32 km via substrate')],wds=[3.5,6,7.5])
+    pb('At least 25 distinct call types identified; infrasound travels via ground substrate (seismic)')
+    kyb('NECROPSY: Calf mortality scenes attract the family group via infrasound calls — manage scene carefully to avoid dangerous aggregation.')
+    h2('12.3  Intelligence & Cognition')
+    dtbl(['Ability','Evidence'],
+         [('Mirror self-recognition','Plotnik et al. (2006) PNAS — passes test; indicates metacognition'),
+          ('Tool use','Branches as fly whisks; trunk as siphon; throw projectiles'),
+          ('Social memory','100+ individual recognition; remember trainers after 8–10 years'),
+          ('Spatial memory','Decades-long recall of water sources, migration routes'),
+          ('Grief / mourning','Vigil at carcasses; touching bones of kin — documented by Cynthia Moss'),
+          ('Von Economo neurons (VENs)','Anterior insula + anterior cingulate cortex (Hakeem 2006) — social intuition neurons'),
+          ('Hippocampus','6.5–7.5 g (human ~2.5 g) — underpins long-term memory (Hakeem 2005)')],wds=[4.5,12.5])
+    h2('12.4  Locomotion')
+    pb('NO true gallop — uses accelerated "fast walk"; at least one foot always on ground (Hutchinson et al. 2006)')
+    pb('Maximum speed: 24–25 km/h (6.9 m/s); sustained travel ~6 km/h; daily range 25–65 km in wild')
+    pb('Ground pressure ~20 N/cm2 (similar to human!) despite 3–5 tonne body — distributed by fat pad')
+    pb('Excellent swimmer: trunk as snorkel; documented 48 km sea crossings (Sri Lanka channel)')
+    kyb('FIELD: Elephants "run" faster than most untrained humans (25 km/h). Never assume distance equals safety.')
+    story.append(PageBreak())
+
+    # S13 REPRODUCTIVE ENDOCRINOLOGY
+    h1('13.  Reproductive Endocrinology')
+    h2('13.1  Unique Double LH Surge')
+    bdy('Elephants have TWO sequential LH surges per oestrous cycle — unique among all mammals. An anovulatory LH surge (anLH) precedes the ovulatory LH surge (ovLH) by ~3 weeks with NO ovulation occurring at the first surge.')
+    dtbl(['Event','Timing','Significance'],
+         [('Anovulatory LH surge (anLH)','19.9 ± 1.2 days after luteal end','Unique to elephants; triggers follicular development; NO ovulation'),
+          ('Ovulatory LH surge (ovLH)','20.8 ± 0.5 days after anLH','True pre-ovulatory surge; ovulation 1–3 days later'),
+          ('Total cycle length','12–18 weeks (typically 13–15 weeks)','Longest oestrous cycle of any land mammal'),
+          ('Progesterone in pregnancy','0.39–1.6 ng/mL (serum)','Much lower than most mammals — fecal monitoring preferred'),
+          ('Prolactin in gestation','100-fold increase over baseline by months 11–14','Peaks in third trimester; remains elevated through lactation')],wds=[4.5,5,7.5])
+    pb('Fecal 5alpha-progesterone metabolites: reliable non-invasive reproductive monitoring tool')
+    pb('Hyperprolactinaemia (>31 ng/mL): suppresses GnRH, causes anovulation — linked to social instability in captive females')
+    h2('13.2  Musth Endocrinology')
+    dtbl(['Parameter','Non-Musth','Musth Peak'],
+         [('Testosterone (serum)','3.05 ± 0.60 ng/mL','19–40 ng/mL (avg 26 ng/mL)'),
+          ('LH pattern','Baseline','Starts rising 4 weeks before musth onset'),
+          ('Cortisol','Normal','Elevated in captive bulls; less consistent in wild'),
+          ('Thyroid hormones','Normal','Decreased during musth')],wds=[5,6,6])
+    pb('GnRH antagonist can reduce testosterone from ~30 ng/mL to ~2 ng/mL within 24 hours — used in captive management')
+    pb('Musth duration: 2 days to 4 months; increases with age; bulls >30 years show longest episodes')
+    h2('13.3  EEHV — Elephant Endotheliotropic Herpesvirus')
+    bdy('Leading infectious cause of death in captive Asian elephant calves. Peracute haemorrhagic disease kills within 12–72 hours of clinical signs. Case fatality rate 40–100% depending on subtype.')
+    dtbl(['Subtype','Prevalence','Case Fatality'],
+         [('EEHV1A','58%','75%'),('EEHV4','34%','40%'),('EEHV1B','5.8%','83%'),('EEHV1A+4 co-infection','1.9%','100%')],
+         wds=[5,6,6])
+    pb('Risk age: 2–4 years (range 0–8); median survival from signs: 36 hours')
+    pb('Signs: lethargy, facial oedema, oral ulcers, blue tongue tip, tachycardia')
+    pb('Treatment: famciclovir (antiviral) + IV fluids + supportive care; only effective if started early')
+    kyb('EEHV EMERGENCY: Blue tongue tip + facial swelling + lethargy = presumptive EEHV. Start antivirals + IV fluids. Collect PCR blood first. Contact WII/IVRI for support.', danger=True)
+    story.append(PageBreak())
+
+    # S14 HEC AND CONSERVATION
+    h1('14.  Human-Elephant Conflict & Conservation Law in India')
+    h2('14.1  National Elephant Mortality — Unnatural Causes (2019–2024)')
+    dtbl(['Cause','Deaths','% of Total','Key Context'],
+         [('Electrocution','392','74%','Illegal crop-protection fences; seasonal peak at Kharif harvest'),
+          ('Train collisions','73','13.8%','Railways through corridors; Assam worst-affected (82 deaths)'),
+          ('Poaching','50','9.5%','Ivory; also HEC retaliation killings'),
+          ('Poisoning','13','2.5%','Pesticide-laced food; retaliation')],wds=[4,2.5,2.5,8])
+    pb('Total: 528 elephant deaths due to unnatural causes in 5 years (2019–2024); India official data')
+    pb('2023–24 single year: 121 deaths — 94 electrocution, 17 train, 9 poaching, 1 poisoning')
+    pb('Chhattisgarh (2000–2023): 218 elephant mortalities; electrocution dominant; monsoon peak')
+    h2('14.2  Human Deaths from Elephant Encounters (2019–2023)')
+    dtbl(['State','Deaths','State','Deaths'],
+         [('Odisha','624','Tamil Nadu','256'),
+          ('Jharkhand','474','Karnataka','160'),
+          ('West Bengal','436','Kerala','124'),
+          ('Assam','383','Others','136'),
+          ('Chhattisgarh','303','TOTAL','2,853')],wds=[4.5,3,4.5,3])
+    pb('Cumulative 2009–2024: 7,868 human deaths — ~500 per year nationally')
+    pb('Chhattisgarh (2000–2023): 737 human deaths + 91 injuries across 19 forest divisions')
+    h2('14.3  Legal Framework')
+    dtbl(['Provision','Details'],
+         [('WPA 1972 — Schedule I','Highest protection; absolute ban on hunting, poaching, trade'),
+          ('National Heritage Animal','Designated by Government of India'),
+          ('Section 40(2)','No captive elephant acquisition/transfer without Chief Wildlife Warden permission'),
+          ('Penalties','Up to 7 years imprisonment + fines'),
+          ('Project Elephant (1992)','Habitat, corridors, HEC mitigation, research, veterinary care'),
+          ('88 Elephant Corridors','WII-identified; legal notification for gene flow & seasonal movement'),
+          ('CITES Appendix I','International ivory trade ban; Schreger line test required for seizures')],wds=[5,12])
+    kyb('MANDATORY: Report ALL elephant deaths to Range Officer / DFO within 24 hours. Post-mortem is legally required. Preserve evidence: photographs, tusk measurements, stomach contents, for FIR under WPA 1972.')
+    story.append(PageBreak())
+
+    # S15 CLINICAL REFERENCE VALUES
+    h1('15.  Clinical Reference Values — Haematology & Biochemistry')
+    bdy('Reference intervals from 92 captive Indian elephants (Elephas maximus indicus), southern India. Source: Frontiers in Veterinary Science 2025 (PMC12301552).')
+    h2('15.1  Haematology')
+    dtbl(['Parameter','Reference Interval','Units'],
+         [('Haemoglobin (Hb)','8.62 – 16.78','g/dL'),
+          ('Packed Cell Volume (PCV)','21.73 – 49.25','%'),
+          ('White Blood Cell Count (WBC)','9,912 – 29,475','cells/uL'),
+          ('Monocyte morphology','Bi-lobed — often misclassified as lymphocytes by analysers','Manual film required')],
+         wds=[5.5,5,6.5])
+    h2('15.2  Serum Biochemistry')
+    dtbl(['Parameter','Reference Interval','Units'],
+         [('ALT (SGPT)','4.01 – 20.34','U/L'),
+          ('Alkaline Phosphatase (ALP)','124.89 – 556.68','U/L'),
+          ('GGT','2.38 – 23.18','U/L'),
+          ('Creatinine','0.65 – 2.06','mg/dL'),
+          ('BUN','4.12 – 24.32','mg/dL'),
+          ('Total Protein','5.54 – 9.30','g/dL'),
+          ('Albumin','2.00 – 2.91','g/dL'),
+          ('Total Cholesterol','26.96 – 69.39','mg/dL'),
+          ('Triglycerides','12.55 – 52.47','mg/dL')],wds=[5.5,5,6.5])
+    h2('15.3  Electrolytes')
+    dtbl(['Parameter','Reference Interval','Units'],
+         [('Calcium (Ca)','6.21 – 11.38','mg/dL'),
+          ('Phosphorus (P)','2.89 – 6.29','mg/dL'),
+          ('Sodium (Na)','133.94 – 174.77','mmol/L'),
+          ('Potassium (K)','1.83 – 7.81','mmol/L'),
+          ('Chloride (Cl)','92.56 – 119.46','mmol/L')],wds=[5.5,5,6.5])
+    kyb('NECROPSY: Collect blood before decomposition (EDTA for CBC, red top for chemistry). Always make manual blood film. EEHV PCR: submit EDTA blood + tissue (heart/liver/spleen) to WII/IVRI for all calf deaths.')
+    story.append(PageBreak())
+
+    # S16 NUTRITION
+    h1('16.  Nutritional Requirements')
+    dtbl(['Parameter','Value','Notes'],
+         [('Dry matter intake','1.5–1.9% body weight/day','3,500 kg bull = 52–66 kg DM/day'),
+          ('Fresh forage intake','4–6% body weight/day','70–80% water in fresh material'),
+          ('Digestive efficiency','~40%','Compensated by very high intake volume'),
+          ('Crude protein requirement','~10% of DM','0.3 g digestible protein/kg BW/day'),
+          ('NDF (fibre) requirement','~60% of DM','Essential for hindgut fermentation'),
+          ('Calcium','~60 g/day maintenance + 8–9 g/day for tusk growth','Ca:P ratio critical'),
+          ('Phosphorus','0.2% of DM (49–35 mg/kg BW/day)',''),
+          ('Copper','10 mg/kg DM',''),
+          ('Zinc + Manganese','40 mg/kg DM each',''),
+          ('Selenium / Iodine / Cobalt','0.1 mg/kg DM each','Deficiency causes reproductive + immune failure')],wds=[5,5,7])
+    pb('Geophagy at mineral licks: supplements Na, Ca, P during dry season; females use more during pregnancy/lactation')
+    pb('Inverted Ca:P ratio causes metabolic bone disease, poor tusk development, and foot problems in captive elephants')
+    kyb('Poor captive nutrition (low fibre, incorrect Ca:P, vitamin D deficiency) = foot disease + poor reproduction + shortened lifespan. Target 10% CP, 60% NDF, correct mineral ratios.')
 
     # REFERENCES
-    h1('12.  References & Sources')
+    h1('17.  References & Sources')
     pb('Nigam P. (2026). Biological and Anatomical Aspects of Elephants [PPT]. WII Dehradun.')
     pb('Shoshani J & Tassy P (1996). The Proboscidea. Oxford University Press.')
     pb('Sukumar R (2003). The Living Elephants. Oxford University Press.')
     pb('IUCN SSC AESG (2020). Elephas maximus Red List Assessment.')
     pb('Herring SM et al. (2021). Elephant trunk biomechanics. Current Biology.')
-    pb('Loo AHB et al. (2024). Sexual Dimorphism in Asian Elephants (PMC12383435).')
-    pb('Herculano-Houzel S et al. (2014). Elephant brain in numbers. Front Neuroanatomy. PMC4053853.')
+    pb('Loo AHB et al. (2024). Sexual Dimorphism in Asian Elephants. PMC12383435.')
+    pb('Herculano-Houzel S et al. (2014). The elephant brain in numbers. Front Neuroanatomy. PMC4053853.')
     pb('West JB (2001). Elephant respiratory system adaptations. ResearchGate 13921092.')
     pb('Sreetharan M et al. (2016). Body weight formulation in Asian elephant. ResearchGate 299053386.')
     pb('CITES Ivory Identification Guide. cites.org/eng/resources/pub/E-Ivory-guide.pdf')
+    pb('Plotnik JM et al. (2006). Self-recognition in Asian elephants. PNAS 103(45):17053–17057.')
+    pb('Hakeem AY et al. (2005). Brain of the African elephant. Anatomical Record 287A(1):1117–1127.')
+    pb('Hakeem AY et al. (2006). Von Economo neurons in the elephant brain. Neuroscience 143(4):1006.')
+    pb('Garstang M (2004). Long-distance, low-frequency elephant communication. J Comparative Physiol A 190:791–805.')
+    pb('Payne KB et al. (2003). Infrasonic calls of the Asian elephant (Elephas maximus). Behav Ecol Sociobiol 53:221–234.')
+    pb('Hutchinson JR et al. (2006). Are fast-moving elephants really running? Nature 422:493–494.')
+    pb('Schaftenaar W et al. (2021). EEHV cases in Asian elephants Thailand 2006–2019. PMC8475116.')
+    pb('Referans: Frontiers Vet Sci 2025. Blood reference intervals for Indian elephants (n=92). PMC12301552.')
+    pb('MoEFCC India (2024). Elephant mortality statistics 2019–2024. Govt. of India.')
+    pb('Frontiers Conservation Sci 2026. Reframing HEC in India. doi:10.3389/fcosc.2026.1762380.')
+    pb('Wildlife Protection Act 1972 (India) — Schedule I, Section 40, Project Elephant 1992.')
     hr()
     story.append(Paragraph('Notes from Dr. Parag Nigam PPT (WII) | Web-elaborated with peer-reviewed literature | June 2026 | Raigarh Training Program', sFT))
 
