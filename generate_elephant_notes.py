@@ -176,6 +176,101 @@ def build_docx():
     page_break(doc)
 
     # ─────────────────────────────────────────────────────────────────────────
+    # OVERVIEW CHAPTER
+    # ─────────────────────────────────────────────────────────────────────────
+    h = doc.add_paragraph('Overview')
+    h.style = doc.styles['Heading 1']
+    h.paragraph_format.space_before = Pt(8)
+    h.paragraph_format.space_after  = Pt(2)
+    tbl0 = doc.add_table(rows=1, cols=1); tbl0.style = 'Table Grid'
+    c0 = tbl0.rows[0].cells[0]; shade_cell(c0, rgb_hex(DARK))
+    p0 = c0.paragraphs[0]; p0.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p0.paragraph_format.space_before = Pt(10); p0.paragraph_format.space_after = Pt(10)
+    r0a = p0.add_run('OVERVIEW\n')
+    r0a.font.name = 'Calibri'; r0a.font.size = Pt(16); r0a.font.bold = True; r0a.font.color.rgb = WHITE
+    r0b = p0.add_run('Biological and Anatomical Aspects of Elephants — Study Notes')
+    r0b.font.name = 'Calibri'; r0b.font.size = Pt(10); r0b.font.italic = True; r0b.font.color.rgb = TINT
+    doc.add_paragraph()
+
+    sec2(doc, 'About the Training Program')
+    dtable(doc,
+        ['Field', 'Detail'],
+        [('Program Title','Essentials for Mortality Investigation of Asian Elephant'),
+         ('Organised by','Chhattisgarh Forest Department, Government of Chhattisgarh'),
+         ('Technical Support','Wildlife Institute of India (WII), Dehradun'),
+         ('Laboratory Partners','ICAR-IVRI (Indian Veterinary Research Institute) & NDVSU Jabalpur'),
+         ('Dates','5–6 June 2026'),
+         ('Venue','Raigarh, Chhattisgarh'),
+         ('Target Participants','Forest Range Officers, Deputy Conservators of Forests, Veterinary Officers, Wildlife Division staff')],
+        widths=[5.5, 11])
+
+    sec2(doc, 'About the Faculty')
+    para(doc,
+        'Dr. Parag Nigam, PhD is Head of the Department of Wildlife Health Management at the '
+        'Wildlife Institute of India (WII), Dehradun — India\'s premier autonomous institution '
+        'for wildlife research and training under the Ministry of Environment, Forest & Climate '
+        'Change, Government of India. Dr. Nigam specialises in wildlife health, disease ecology, '
+        'and conservation medicine with extensive field experience in elephant health management.',
+        size=9.5, space_after=4)
+    bullet(doc, 'Institution: Wildlife Institute of India, Chandrabani, Dehradun — 248001, Uttarakhand')
+    bullet(doc, 'Department: Wildlife Health Management')
+    bullet(doc, 'Expertise: Elephant health, captive wildlife medicine, mortality investigation protocols, zoonotic disease surveillance')
+    bullet(doc, 'WII Elephant Cell: supports MoEFCC on all elephant conservation, mortality monitoring, and corridor management across India')
+
+    sec2(doc, 'Purpose of These Notes')
+    para(doc,
+        'These notes are compiled from Dr. Nigam\'s lecture slides on the biological and anatomical '
+        'aspects of Asian elephants, then elaborated with peer-reviewed literature from scientific '
+        'journals. They are intended as a comprehensive reference for field officers, veterinarians, '
+        'and wildlife managers conducting elephant mortality investigations in Chhattisgarh and '
+        'across India.',
+        size=9.5, space_after=4)
+    bullet(doc, 'Basis for all post-mortem examinations: understanding normal anatomy before identifying pathology')
+    bullet(doc, 'Reference for field measurements (height from FFC, weight from heart girth), blood parameters, and documentation requirements')
+    bullet(doc, 'Legal compliance: WPA 1972 Schedule I requirements for death reporting, evidence preservation, and FIR filing')
+
+    sec2(doc, 'Table of Contents')
+    toc_rows = [
+        ('1', 'Taxonomy, Classification & Overview', 'Evolutionary history, subspecies, senses'),
+        ('2', 'The Trunk (Proboscis)', '150,000 fascicles, muscular hydrostat, functions'),
+        ('3', 'Skeletal System', '326–351 bones, columnar design, bone microstructure'),
+        ('4', 'Foot Anatomy', 'Semi-digitigrade, sesamoid sixth digit, captive pathology'),
+        ('5', 'Thorax & Rib Cage', 'Rib count, NO pleural space — critical clinical danger'),
+        ('6', 'Skull Morphology & Sexual Dimorphism', 'Honeycomb sinuses, sex determination from skull'),
+        ('7', 'Age Estimation — Molar Progression', 'M1–M6 table, lamellae counting, forensic ageing'),
+        ('8', 'Dentition — Tusks & Ivory', 'Tusk layers, Schreger lines at 115°, CITES forensics'),
+        ('9', 'Skin, Eyes & Integumentary Glands', 'No sweat glands, temporal gland, musth, EEHV'),
+        ('10', 'Internal Organs', 'Bifid heart, multipyramidal kidneys, 35 m intestine, no gall bladder'),
+        ('11', 'Field Estimation of Height & Weight', 'FFC formula, heart girth formulae, mandatory documentation'),
+        ('12', 'Behaviour, Communication & Intelligence', 'Matriarchal herds, infrasound, VENs, mirror test, locomotion'),
+        ('13', 'Reproductive Endocrinology', 'Double LH surge, musth testosterone, EEHV calf mortality'),
+        ('14', 'Human-Elephant Conflict & Conservation Law', 'India mortality stats, WPA 1972, Project Elephant'),
+        ('15', 'Clinical Reference Values', 'Blood parameters — 92 Indian captive elephants (2025 data)'),
+        ('16', 'Nutritional Requirements', 'Daily intake, protein, fibre, minerals, Ca:P ratio'),
+        ('17', 'References & Sources', 'Peer-reviewed literature and key citations'),
+    ]
+    dtable(doc,
+        ['§', 'Section', 'Key Topics'],
+        toc_rows,
+        widths=[1, 6, 9.5])
+
+    sec2(doc, 'Key Principles for Mortality Investigation')
+    keybox(doc,
+        'GOLDEN RULES FOR ELEPHANT MORTALITY INVESTIGATION:\n'
+        '1. REPORT within 24 hours to Range Officer / DFO — legally mandatory under WPA 1972\n'
+        '2. PHOTOGRAPH everything before moving the carcass: position, surroundings, wounds, burns, entry/exit points\n'
+        '3. MEASURE: Front foot circumference (height), heart girth (weight), tusk length & circumference\n'
+        '4. DETERMINE SEX from skull/pelvis/testes/genitalia even if heavily decomposed\n'
+        '5. ASSESS AGE from molar wear (document molar set in use + degree of wear)\n'
+        '6. COLLECT SAMPLES: blood (EDTA + red top + fluoride oxalate), fresh tissue (heart, liver, spleen, kidney), stomach contents, skin for toxicology\n'
+        '7. IDENTIFY CAUSE: electrocution (burn marks, singed hair), train (fractures, drag marks), poaching (bullet/arrow wounds, tusk removal), disease, old age\n'
+        '8. PRESERVE EVIDENCE for FIR: document all findings in standard mortality form; submit to state PCCF and WII Elephant Cell\n'
+        '9. COORDINATE with IVRI/NDVSU for laboratory diagnostics when cause is uncertain\n'
+        '10. NEVER assume — document everything and let laboratory findings confirm the cause of death')
+    doc.add_paragraph()
+    page_break(doc)
+
+    # ─────────────────────────────────────────────────────────────────────────
     # SECTION 1: TAXONOMY
     # ─────────────────────────────────────────────────────────────────────────
     sec1(doc, '1.  Taxonomy, Classification & Overview')
@@ -1229,6 +1324,53 @@ def build_pdf():
     story.append(Spacer(1, 0.4*cm)); story.append(tb); story.append(Spacer(1, 0.3*cm))
     pi(1,'Slide 1 — Title slide',13); pi(2,'Slide 2 — Largest terrestrial mammal',13)
     kyb('Notes elaborated with peer-reviewed literature and web sources | June 2026')
+    story.append(PageBreak())
+
+    # OVERVIEW
+    h1('Overview')
+    h2('About the Training Program')
+    dtbl(['Field','Detail'],
+         [('Program Title','Essentials for Mortality Investigation of Asian Elephant'),
+          ('Organised by','Chhattisgarh Forest Department, Government of Chhattisgarh'),
+          ('Technical Support','Wildlife Institute of India (WII), Dehradun'),
+          ('Lab Partners','ICAR-IVRI & NDVSU Jabalpur'),
+          ('Dates','5–6 June 2026'),
+          ('Venue','Raigarh, Chhattisgarh'),
+          ('Participants','Forest Range Officers, DCFs, Veterinary Officers, Wildlife Division staff')],
+         wds=[4.5,12.5])
+    h2('About the Faculty — Dr. Parag Nigam, PhD')
+    bdy('Head, Department of Wildlife Health Management, Wildlife Institute of India (WII), Dehradun — India\'s premier autonomous wildlife research institution under MoEFCC. Expertise: elephant health, captive wildlife medicine, mortality investigation, zoonotic disease surveillance. WII Elephant Cell supports MoEFCC on all national elephant conservation and mortality monitoring.')
+    h2('Table of Contents')
+    dtbl(['§','Section','Key Topics'],
+         [('1','Taxonomy, Classification & Overview','Evolutionary history, subspecies, senses'),
+          ('2','The Trunk (Proboscis)','150,000 fascicles, muscular hydrostat, functions'),
+          ('3','Skeletal System','326–351 bones, columnar design, bone microstructure'),
+          ('4','Foot Anatomy','Semi-digitigrade, sesamoid sixth digit, captive pathology'),
+          ('5','Thorax & Rib Cage','Rib count, NO pleural space — critical clinical danger'),
+          ('6','Skull Morphology & Sexual Dimorphism','Honeycomb sinuses, sex determination from skull'),
+          ('7','Age Estimation — Molar Progression','M1–M6 table, lamellae counting, forensic ageing'),
+          ('8','Dentition — Tusks & Ivory','Tusk layers, Schreger lines 115°, CITES forensics'),
+          ('9','Skin, Eyes & Integumentary Glands','No sweat glands, temporal gland, musth danger'),
+          ('10','Internal Organs','Bifid heart, multipyramidal kidneys, 35 m intestine, no gall bladder'),
+          ('11','Field Estimation of Height & Weight','FFC formula, heart girth, mandatory documentation'),
+          ('12','Behaviour, Communication & Intelligence','Matriarchal herds, infrasound, VENs, mirror test'),
+          ('13','Reproductive Endocrinology','Double LH surge, musth testosterone, EEHV fatality rates'),
+          ('14','Human-Elephant Conflict & Conservation Law','India mortality stats, WPA 1972, Project Elephant'),
+          ('15','Clinical Reference Values','Blood parameters — 92 Indian elephants (2025 data)'),
+          ('16','Nutritional Requirements','Daily intake, protein, fibre, minerals, Ca:P ratio'),
+          ('17','References & Sources','Peer-reviewed literature and key citations')],
+         wds=[1,6,10])
+    h2('Golden Rules — Elephant Mortality Investigation')
+    kyb('1. REPORT within 24 h to Range Officer / DFO — mandatory under WPA 1972\n'
+        '2. PHOTOGRAPH position, wounds, burns, entry/exit points before moving carcass\n'
+        '3. MEASURE: front foot circumference (height), heart girth (weight), tusk dimensions\n'
+        '4. DETERMINE SEX from skull / pelvis / gonads even if heavily decomposed\n'
+        '5. ASSESS AGE from molar wear — document molar set in use + degree of wear\n'
+        '6. COLLECT SAMPLES: EDTA blood, red-top serum, tissue (heart/liver/spleen/kidney), stomach contents, skin for toxicology\n'
+        '7. IDENTIFY CAUSE: electrocution (burn marks), train (fractures/drag), poaching (wounds/tusk removal), disease, old age\n'
+        '8. PRESERVE EVIDENCE for FIR — submit to state PCCF and WII Elephant Cell\n'
+        '9. COORDINATE with IVRI / NDVSU for laboratory diagnostics when cause uncertain\n'
+        '10. NEVER assume — document everything; let laboratory confirm cause of death', danger=False)
     story.append(PageBreak())
 
     # S1 TAXONOMY
