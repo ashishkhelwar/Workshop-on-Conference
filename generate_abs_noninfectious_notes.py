@@ -244,6 +244,24 @@ def build_docx():
         'that even toxins present at low environmental concentrations can be ingested in lethal total '
         'doses. Their hindgut fermentation also generates and releases toxins (e.g., HCN from cyanogenic '
         'glycosides) over an extended period.')
+
+    sec2(doc, '2.3  National Mortality Data — Unnatural Causes (Lok Sabha, 2024)')
+    para(doc,
+        'Government data tabled in the Lok Sabha in July 2024 quantified elephant deaths from '
+        'unnatural causes over a five-year period. These figures place poisoning in its proper '
+        'context relative to the dominant unnatural killers — electrocution and train accidents:')
+    dtable(doc,
+        ['Unnatural Cause', 'Deaths (5 yrs)', 'Share', 'Worst-Affected States'],
+        [('Electrocution','392','74.2%','Odisha 71, Assam 55, Karnataka 52, Tamil Nadu 49, Chhattisgarh 32, Jharkhand 30, Kerala 29'),
+         ('Train accidents','73','13.8%','Assam 22, Odisha 16'),
+         ('Poaching','50','9.5%','Odisha 17, Meghalaya 14, Tamil Nadu 10'),
+         ('Poisoning','13','2.5%','Assam 10, Chhattisgarh 2, West Bengal 1'),
+         ('TOTAL UNNATURAL','528','100%','All India')],
+        widths=[3.5, 2, 1.5, 9.5])
+    bullet(doc, 'ELECTROCUTION dominates — 392 of 528 (74%) of all unnatural elephant deaths; see Section 6')
+    bullet(doc, 'POPULATION CONTEXT: The 2017 all-India synchronised census recorded 29,964 wild elephants — approximately 60% of the global wild Asian elephant population')
+    bullet(doc, 'Chhattisgarh appears in the worst-affected list for both electrocution (32) and poisoning (2) — directly relevant to this training program')
+    bullet(doc, 'NOTE: Ministry tallies are periodically revised; figures here reflect the July 2024 Lok Sabha reply (Source: Business Standard / The Week reporting of Lok Sabha Unstarred Question data)')
     page_break(doc)
 
     # ─── SECTION 3: ANTHROPOGENIC POISONS ─────────────────────────────────────
@@ -253,15 +271,31 @@ def build_docx():
         'anthropogenic poisons affecting elephants are agrochemicals, cyanide, and fertilizers/heavy metals.')
 
     sec2(doc, '3.1  Agrochemicals — Pesticides')
-    bullet(doc, 'Elephants raiding crops/plantations consume dangerous levels of agrochemicals')
-    bullet(doc, 'Most are deadly NEUROTOXINS: organophosphates (e.g., chlorpyrifos, monocrotophos) and carbamates')
-    bullet(doc, 'Neonicotinoids (e.g., imidacloprid) — newer systemic insecticides also implicated')
-    sec3(doc, 'Organophosphate (OP) / Carbamate Mechanism (web-elaborated):')
-    bullet(doc, 'Inhibit acetylcholinesterase (AChE) enzyme → accumulation of acetylcholine at synapses', level=1)
-    bullet(doc, 'Cholinergic crisis: SLUDGE signs — Salivation, Lacrimation, Urination, Defecation, GI distress, Emesis', level=1)
-    bullet(doc, 'Muscarinic: miosis (pinpoint pupils), bronchorrhoea, bradycardia; Nicotinic: muscle fasciculation, paralysis', level=1)
-    bullet(doc, 'Death from respiratory failure (bronchoconstriction + respiratory muscle paralysis + central depression)', level=1)
-    bullet(doc, 'ANTIDOTE: Atropine sulphate (blocks muscarinic effects) + Pralidoxime/2-PAM (reactivates AChE — OP only, not carbamate)', level=1)
+    bullet(doc, 'Elephants raiding crops/plantations consume dangerous levels of agrochemicals; pesticides are also used DELIBERATELY in baits (laced crops, fruit, salt) for retaliatory killing and poaching')
+    bullet(doc, 'Most are deadly NEUROTOXINS: organophosphates (OPs) and carbamates; newer neonicotinoids also implicated')
+    sec3(doc, 'Specific Compounds Implicated in Indian Wildlife Poisoning:')
+    dtable(doc,
+        ['Compound', 'Class', 'Toxicity / Notes'],
+        [('Carbofuran ("Furadan")','Carbamate','Granular; widely available (esp. Kerala); a LEADING agent in deliberate wildlife baiting'),
+         ('Monocrotophos','Organophosphate','Highly toxic — mammalian oral LD50 ~18–20 mg/kg; common in Indian poisonings; used on grain baits'),
+         ('Aldicarb ("Temik")','Carbamate','One of the MOST acutely toxic carbamates; used in baiting'),
+         ('Chlorpyrifos','Organophosphate','Less acutely toxic (LD50 ~500 mg/kg goats); cattle/exotic breeds notably susceptible'),
+         ('Imidacloprid','Neonicotinoid','Systemic insecticide; implicated in death of a wild adult Asian elephant (Kerala)')],
+        widths=[3.5, 2.5, 11])
+    sec3(doc, 'OP vs Carbamate — Mechanism:')
+    bullet(doc, 'BOTH inhibit acetylcholinesterase (AChE) → acetylcholine accumulates at muscarinic, nicotinic and CNS synapses', level=1)
+    bullet(doc, 'OPs PHOSPHORYLATE AChE — binding becomes irreversible after "aging" (hours); carbamates CARBAMYLATE AChE reversibly — toxicity self-limiting (<24 h) if animal survives', level=1)
+    sec3(doc, 'Clinical Signs — Cholinergic Toxidrome (DUMBELS):')
+    bullet(doc, 'MUSCARINIC: Defecation, Urination, Miosis (pinpoint pupils), Bronchorrhoea/Bronchoconstriction, Emesis, Lacrimation, Salivation; bradycardia', level=1)
+    bullet(doc, 'NICOTINIC: muscle fasciculations, tremors, weakness, flaccid paralysis', level=1)
+    bullet(doc, 'CNS: depression, ataxia, seizures; DEATH from respiratory failure', level=1)
+    sec3(doc, 'Diagnosis:')
+    bullet(doc, 'Cholinesterase (ChE) activity in whole blood, BRAIN and retina — brain AChE depression to <50% of normal is DIAGNOSTIC', level=1)
+    bullet(doc, 'Detect parent compound in stomach contents, liver, and bait material (GC-MS / LC-MS)', level=1)
+    bullet(doc, 'CRITICAL: carbamate-inhibited ChE spontaneously reactivates — freeze samples FAST and analyse promptly to avoid false negatives', level=1)
+    sec3(doc, 'Antidote Dosing (cattle/large-animal reference — extrapolate for elephant):')
+    bullet(doc, 'ATROPINE: 0.6–1.0 mg/kg (cattle) — give ~⅓ IV, remainder IM/SC; repeat to effect ("atropinisation": pupil dilation, drying secretions, alertness)', level=1)
+    bullet(doc, 'PRALIDOXIME (2-PAM): 20–50 mg/kg as 5% solution, slow IV (5–10 min) or IM — reactivates AChE; MUST be given EARLY (before aging); effective for OPs, generally not for carbamates', level=1)
 
     sec2(doc, '3.2  Cyanide')
     bullet(doc, 'Used in illegal poaching and mining operations — can cause rapid, fatal hypoxia (cellular asphyxiation)')
@@ -305,6 +339,19 @@ def build_docx():
         'investigations revealed that the deaths were caused by accidental toxicity from eating crops '
         'infected with fungal mycotoxins (cyclopiazonic acid). Dr. Shrivastava notes: "I have seen / '
         'treated two cases in KTR (Kanha Tiger Reserve) during 1997–98."', danger=True)
+    sec3(doc, 'What the Forensic Investigation Found (verified):')
+    bullet(doc, 'Confirmed event: 10 wild elephants died over 3 days (29–31 October 2024) in Sankhani/Bakeli, Khitoli range, Bandhavgarh Tiger Reserve, Madhya Pradesh')
+    bullet(doc, 'Samples (viscera, liver, kidney) sent to ICAR-IVRI Bareilly, WII Dehradun, MP State FSL Sagar, and CCMB Hyderabad')
+    bullet(doc, 'IVRI toxicology report (5 Nov 2024): NO nitrates/nitrites, NO heavy metals, and NO pesticides (OP, organochlorine, pyrethroid, carbamate) detected')
+    bullet(doc, 'CYCLOPIAZONIC ACID (CPA) was CONFIRMED in the viscera of all elephants → diagnosis: ingestion of large quantities of FUNGUS-INFECTED Kodo millet')
+    bullet(doc, 'Key nuance: the FUNGUS (toxin) on the millet — not the millet grain itself — was the proximate cause ("fungus, not Kodo millet, responsible")')
+
+    sec3(doc, 'CPA Mechanism & Pathology (web-elaborated):')
+    bullet(doc, 'CPA is an indole-tetramic acid mycotoxin from Aspergillus flavus, A. tamarii and Penicillium spp. infesting Kodo millet')
+    bullet(doc, 'Mechanism: potent inhibitor of Ca²⁺-dependent ATPases (SERCA) of the endo/sarcoplasmic reticulum → disrupts intracellular calcium gradients and the muscle contraction–relaxation cycle')
+    bullet(doc, 'Effects: acute HEPATOTOXICITY, nephrotoxicity, and GI-tract effects; vascular damage; neurological signs (depression, loss of mobility)')
+    bullet(doc, 'AFLATOXINS (related): Aspergillus flavus/parasiticus on grain — hepatotoxic/hepatocarcinogenic; hepatic necrosis, bile-duct proliferation, icterus, coagulopathy — a key differential in grain-associated die-offs')
+
     sec3(doc, 'Management of Kodo Millet Toxicity:')
     bullet(doc, 'Combination of preventive measures in cultivation, storage and processing')
     bullet(doc, 'Biocontrol agents — non-toxigenic fungal strains can competitively exclude toxigenic strains and reduce mycotoxin production')
@@ -340,7 +387,9 @@ def build_docx():
     bullet(doc, 'Sorghum species (Sorghum bicolor) contain a cyanogenic glucoside called DHURRIN')
     bullet(doc, 'When the plant is chewed or its cells are ruptured, plant enzymes (β-glucosidase) mix with dhurrin, releasing HYDROGEN CYANIDE')
     bullet(doc, 'The toxin is rapidly absorbed into the bloodstream and blocks cellular oxygen use (binds cytochrome c oxidase)')
-    bullet(doc, 'Result: cells cannot use oxygen despite adequate blood oxygen → death by internal asphyxiation (histotoxic hypoxia)')
+    bullet(doc, 'Result: cells cannot use oxygen despite adequate blood oxygen → "histotoxic hypoxia" → forced anaerobic metabolism → profound LACTIC ACIDOSIS → death')
+    bullet(doc, 'Approximate lethal dose (general mammalian): ~2–2.5 mg cyanide/kg body weight; onset within ~15–20 min')
+    bullet(doc, 'CAUTION at necropsy: the classic cherry-red colour FADES rapidly after death and air exposure — it is SUGGESTIVE, not confirmatory; mucous membranes may turn cyanotic once respiration stops')
 
     sec2(doc, '5.2  Signs and Symptoms')
     bullet(doc, 'RAPID ONSET: Symptoms appear within minutes to a few hours of consumption')
@@ -403,26 +452,58 @@ def build_docx():
          ('Electrocution','An electric shock that is FATAL')],
         widths=[4, 13])
 
-    sec2(doc, '6.2  Electrocution in Indian Elephants — Context')
-    bullet(doc, 'Electrocution is the LEADING cause of unnatural elephant death in India (~70–75% of unnatural deaths in recent national data)')
-    bullet(doc, 'Sources: illegal live wires hung low around crop fields (deliberate, for crop protection or poaching); sagging/low-hanging 11 kV power transmission lines; solar fence tampering')
-    bullet(doc, 'Both INTENTIONAL (poaching, conflict retaliation) and ACCIDENTAL (sagging legal power lines) electrocutions occur')
+    sec2(doc, '6.2  Electrocution in Indian Elephants — Statistics')
+    bullet(doc, 'Electrocution is the SINGLE LARGEST cause of unnatural elephant death in India')
+    bullet(doc, 'Lok Sabha (July 2024): 392 of 528 unnatural deaths (74%) over 5 years were electrocution')
+    bullet(doc, '2010–2020: electrocution killed 741 of 1,160 (≈64%) non-natural deaths; long-run share since 2009 ≈ 67%')
+    bullet(doc, 'State-wise (2024 dataset): Odisha 71, Assam 55, Karnataka 52, Tamil Nadu 49, Chhattisgarh 32, Jharkhand 30, Kerala 29')
+    bullet(doc, 'NOTE: headline 5-year figures (e.g., 348 in 2022 vs 392 in 2024) come from different reporting windows — do not sum across statements')
 
-    sec2(doc, '6.3  Postmortem Findings in Electrocution (web-elaborated)')
-    bullet(doc, 'ELECTRICAL BURN MARKS (Joule burns): focal, often at the trunk tip, ear, shoulder, or feet — point of contact with the wire; singed skin, charring, crater-like lesions')
-    bullet(doc, 'CURRENT MARKS: characteristic blistering/charring at entry and exit points')
-    bullet(doc, 'Subcutaneous and intramuscular HAEMORRHAGE along the current path')
-    bullet(doc, 'Internal: pulmonary congestion and oedema; petechial haemorrhages on heart (epicardium/endocardium); generalised venous congestion')
-    bullet(doc, 'Carcass often found near a known electrical source (fence line, power pole, field boundary)')
-    bullet(doc, 'Dr. Shrivastava note: "Experience — charcoal powder" — charred tissue at the contact site has a charcoal-like appearance; histology confirms thermal/electrical coagulative necrosis')
+    sec2(doc, '6.3  Sources & Mechanisms')
+    dtable(doc,
+        ['Source', 'Description'],
+        [('Illegal live-wire fences','Power illegally tapped ("hooking") from 11 kV HT or LT lines to electrify crop/home fences — the LEADING driver; deliberate, sometimes for poaching'),
+         ('Sagging overhead lines','Low-hanging 11 kV lines (observed as low as ~1.5 m vs an ~3.3 m tall elephant) due to wide pole spacing, base erosion, waterlogging'),
+         ('Solar-fence tampering','Bypassing the low-current pulsed energiser and connecting fence wire directly to mains — turns a legal, non-lethal deterrent into a lethal trap'),
+         ('Accidental (legal lines)','Genuine accidental contact with sagging but legally installed transmission infrastructure in corridors')],
+        widths=[4, 13])
+
+    sec2(doc, '6.4  Postmortem / Necropsy Findings')
+    bullet(doc, 'CURRENT MARK / ELECTRIC MARK (gross "gold standard"): crater-like skin elevation around a sunken pale centre at the contact point — trunk tip, feet, dorsum')
+    bullet(doc, 'JOULE BURN: heat-generated burn — collagen denaturation + dermal oedema; singed hair; Grade III–IV burns, blistering, bone/muscle exposure')
+    bullet(doc, 'METALLIZATION: microscopic conductor-metal particles deposited in skin at contact — reported in >50% of cases (detectable histochemically/SEM)')
+    bullet(doc, 'HISTOPATHOLOGY: coagulative necrosis of epidermis; intra/sub-epidermal clefting; "NUCLEAR STREAMING" — elongation, palisading and hyperchromasia of basal epidermal nuclei aligned to current flow; dermal collagen homogenisation')
+    bullet(doc, 'INTERNAL: generalised visceral congestion (brain, heart, lungs); pulmonary oedema; sub-epicardial/endocardial petechiae; myocardial necrosis; rhabdomyolysis; slow-clotting dark blood; bloody orifice discharge')
+    bullet(doc, 'Dr. Shrivastava note: "Experience — charcoal powder" — charred contact tissue has a charcoal-like appearance')
+    bullet(doc, 'CAVEAT: nuclear streaming and coagulative necrosis are NOT pathognomonic (also seen in flame/thermal burns); gross lesions may be ABSENT if contact area is wide or skin is wet — diagnosis leans on lesion + scene/circumstantial evidence')
+    bullet(doc, 'Reference: Schulze C et al. (2016). Electrical Injuries in Animals: Causes, Pathogenesis, and Morphological Findings. Veterinary Pathology')
+
+    sec2(doc, '6.5  Lightning Strike vs Man-Made Electrocution')
+    dtable(doc,
+        ['Feature', 'Lightning Strike', 'Man-Made Electrocution'],
+        [('Skin marks','LICHTENBERG FIGURES — arborescent/fern-like pink-red "ferning" (pathognomonic); appear ~1 hr, fade 24–36 hr','DISCRETE deep contact/current burns at well-defined entry and exit'),
+         ('Tissue damage','Superficial/transient — NOT true burns; minimal histology change','Focal DEEP charring; coagulative necrosis; metallization'),
+         ('Number of animals','Often MULTIPLE animals down together','Usually single animal or a group along a wire line'),
+         ('Scene','Open/exposed ground or under tall trees; split tree; storm history; scorched vegetation','Proximity to power line, hooked wire, or fence'),
+         ('Entry/exit','Poorly defined','Well-defined (feet often = exit to ground)')],
+        widths=[3, 7, 7])
+    bullet(doc, 'NOTE: Lichtenberg figures are NOT burns — histology shows only subtle superficial dermal capillary dilatation, no deep damage; "magnetisation of nearby metal" is a low-confidence discriminator')
+
+    sec2(doc, '6.6  Legal Framework')
+    bullet(doc, 'WILDLIFE (PROTECTION) ACT 1972: elephant is Schedule I (highest protection); killing prosecuted under Section 51; often filed with IPC 429 and the Electricity Act')
+    bullet(doc, 'ELECTRICITY ACT 2003: Section 161 (mandatory accident reporting & inquiry within ~24 hr); Section 135 (theft of electricity — illegal hooking); Section 146 (penalty for non-compliance)')
+    bullet(doc, 'STRICT LIABILITY: NGT has held electricity utilities liable for elephant electrocution from their lines (e.g., CESU Odisha ordered to deposit ₹4 crore + maintain lines against sagging)')
+    bullet(doc, 'GROUND CLEARANCE: MoEFCC 2010 committee recommended minimum 5.5 m clearance for ≤11 kV lines in vulnerable areas; Karnataka Elephant Task Force: 6.096 m (flat) / 9.144 m (sloping) terrain')
+    bullet(doc, 'KARNATAKA HIGH COURT (26 Apr 2025, suo motu after elephant "Ashwathamma"): directed underground cabling in eco-sensitive zones; ban/replace illegal fences; AI/CCTV e-surveillance (Nagarahole pilot → statewide); enforce WPA & Electricity Act')
     keybox(doc,
         'ELECTROCUTION INVESTIGATION CHECKLIST:\n'
-        '• Document the SCENE: photograph wires, poles, distance from carcass, sagging height\n'
-        '• Locate and photograph ENTRY/EXIT burn marks with scale bar\n'
-        '• Collect skin from burn margin (histology: coagulative necrosis, "streaming" of epidermal nuclei)\n'
-        '• Sample heart, lung (congestion/haemorrhage documentation)\n'
-        '• Coordinate with electricity board / police — electrocution is a punishable offence under WPA 1972 & Electricity Act\n'
-        '• Distinguish lightning strike (singeing in arborescent/fern-like pattern, multiple animals) from man-made electrocution', danger=True)
+        '• Document the SCENE: photograph wires, poles, distance from carcass, sag height (measure!)\n'
+        '• Locate and photograph ENTRY/EXIT current marks with scale bar; sample skin from burn margin\n'
+        '• Histology: coagulative necrosis + nuclear streaming; look for metallization at contact point\n'
+        '• Sample heart, lung (congestion/haemorrhage); document myocardial petechiae\n'
+        '• RULE OUT lightning: search for Lichtenberg figures, multiple carcasses, storm evidence\n'
+        '• Coordinate with electricity board / police — electrocution is punishable under WPA 1972 (Sec 51) + Electricity Act (Sec 135/161)\n'
+        '• PREVENTION: convert illegal AC fences to legal pulsed SOLAR energisers (non-lethal short shock)', danger=True)
     page_break(doc)
 
     # ─── SECTION 7: PYOMETRA ──────────────────────────────────────────────────
@@ -437,27 +518,47 @@ def build_docx():
         '(having never given birth) female elephants, and is often linked to prolonged hormonal '
         'fluctuations and underlying reproductive issues.')
 
-    sec2(doc, '7.2  Causes & Pathophysiology')
-    bullet(doc, 'HORMONAL CHANGES: Fluctuating progesterone levels and an abnormally thickened uterine lining (endometrium) create an environment favourable for bacterial growth')
-    bullet(doc, 'BACTERIAL INFECTION: Bacteria such as Escherichia coli or Enterococcus faecium cause suppurative (pus-forming) inflammation')
-    bullet(doc, 'PRE-EXISTING CONDITIONS: Cystic Endometrial Hyperplasia (CEH) or benign tumours (leiomyomas/fibroids) frequently complicate the reproductive tract of older captive elephants and trigger pyometra')
-    bullet(doc, 'The non-breeding (nulliparous) state in captive elephants leads to repeated, uninterrupted oestrous cycles — continuous progesterone exposure predisposes to CEH-pyometra complex (web-elaborated)')
+    sec2(doc, '7.2  CEH–Pyometra Complex & Pathophysiology')
+    bullet(doc, 'CYSTIC ENDOMETRIAL HYPERPLASIA (CEH) is the principal precursor lesion — present in ~67% of captive Asian elephants (vs 15% African) aged 26–57 yrs (Agnew, Munson & Ramsay, Vet Pathol 2004)')
+    bullet(doc, 'CEH-pyometra complex (canine model): chronic progesterone (luteal) dominance → endometrial gland proliferation + cystic dilation → reduced uterine defence → fluid accumulation → bacterial colonisation → pyometra')
+    bullet(doc, 'HORMONAL: CEH is "associated with prolonged phases of both estrogen and progesterone influence"; the long luteal phase (~6–12 weeks) maximises endometrial stimulation')
+    bullet(doc, 'BACTERIAL: Escherichia coli (predominant), Streptococcus, Staphylococcus, Klebsiella, Proteus, Pseudomonas, Bacteroides — pure or mixed (largely extrapolated; elephant-specific culture series are sparse)')
+    bullet(doc, 'CO-PATHOLOGY: Uterine LEIOMYOMAS are the most common reproductive tumour — more prevalent/larger in older nulliparous Asian elephants (reported 30–100%; one series 90% of neoplasia cases); ~13% uterine adenocarcinoma')
 
-    sec2(doc, '7.3  Treatment')
+    sec2(doc, '7.3  Why Nulliparous Captive Females Are Predisposed')
+    bullet(doc, 'ASYMMETRIC REPRODUCTIVE AGING (Hermes, Hildebrandt & Göritz 2004): prolonged non-reproductive periods + continuous endogenous steroid exposure → genital pathology, reduced fertility, eventual irreversible acyclicity (males not similarly affected)')
+    bullet(doc, 'Repeated unbroken oestrous cycling (no pregnancy/lactation "rest") → cumulative unopposed progesterone/estrogen on the endometrium → CEH substrate')
+    bullet(doc, 'Up to 14% of captive Asian (29% African) elephants are acyclic or cycle irregularly — a marker of this reproductive-health decline')
+
+    sec2(doc, '7.4  Reproductive-Tract Anatomy — Why Drainage Is Hard')
+    bullet(doc, 'The elephant has an EXCEPTIONALLY LONG vestibule (urogenital canal), ~1.0–1.4 m, opening between the hind legs')
+    bullet(doc, 'A membranous HYMENAL constriction (orifice <2 cm) separates urogenital canal from vagina in nulliparous animals')
+    bullet(doc, 'Total tract length (vulva-to-ovary) ranges 120–358 cm — this long, narrow, valved canal IMPEDES natural drainage and makes transcervical access very difficult, favouring closed-type pus accumulation')
+    bullet(doc, 'ULTRASONOGRAPHY is the key diagnostic tool for endometrial cysts, CEH, leiomyoma, and intrauterine fluid/pyometra')
+
+    sec2(doc, '7.5  Treatment')
     dtable(doc,
         ['Approach', 'Detail'],
-        [('i. Hormonal Downregulation','Use of GnRH vaccines (like Improvac) or Deslorelin implants to suppress reproductive cycles and shrink the affected uterine tissue'),
-         ('ii. Aggressive Antibiotic Therapy','Broad-spectrum systemic antibiotics targeting the specific cultured pathogens'),
-         ('iii. Uterine Lavage','Flushing the uterus to evacuate accumulated pus'),
-         ('iv. Surgical Drainage','Vaginal vestibulotomy — surgical opening to drain the uterine pus (as shown in slide 10)'),
-         ('v. Homeopathic (practised)','Pyrogenium 1000 + Hepar sulph 1000 + Secale 1000 (as documented by Dr. Shrivastava)')],
+        [('i. Hormonal Downregulation','GnRH vaccine (Improvac-type) → anti-GnRH antibodies block GnRH → ↓LH/FSH → suppress cyclicity & remove progesterone drive. Also Deslorelin (GnRH agonist) implants → pituitary down-regulation. EAZA: treat pyometra BEFORE GnRH vaccination'),
+         ('ii. Aggressive Antibiotic Therapy','Broad-spectrum systemic antibiotics, ideally culture-guided'),
+         ('iii. Uterine / Transcervical Lavage','Flushing the uterus with warm sterile saline to evacuate pus — constrained by the long urogenital canal/hymen'),
+         ('iv. Prostaglandins (PGF2α)','Promote myometrial contraction & cervical relaxation to expel contents (minimally documented in elephants)'),
+         ('v. Surgical Drainage','Vaginal vestibulotomy — surgical access through the long urogenital canal for lavage/drainage (slide 10)'),
+         ('vi. Homeopathic (practised)','Pyrogenium 1000 + Hepar sulph 1000 + Secale 1000 (documented by Dr. Shrivastava)')],
         widths=[4.5, 12.5])
+    bullet(doc, 'OVARIOHYSTERECTOMY is NOT practical in adult elephants — body size, vascularity, and extreme tract length (up to 358 cm) make it unfeasible; management is conservative/palliative')
+    bullet(doc, 'PROGNOSIS: guarded to poor. Documented cases (deslorelin + antibiotics) showed short-term improvement but the animals later died (necropsy: enlarged uterus, leiomyoma). Advanced closed-cervix pyometra → uterine distension, rupture, peritonitis, sepsis, death')
+
+    sec2(doc, '7.6  Luteal-Phase Caution & Prevention')
+    bullet(doc, 'Elephant cycle: luteal (high-progesterone) phase ~6–12 weeks, follicular ~4–6 weeks; extended low-progesterone (>12 weeks) = acyclicity/"flatlining"')
+    bullet(doc, 'Avoid GnRH-agonist implantation during the luteal (diestrus) phase — high progesterone increases pyometra risk')
     keybox(doc,
         'CLINICAL NOTE: Pyometra is a reproductive EMERGENCY in elephants. Toxins from the infected '
-        'uterus (endotoxaemia) can cause septic shock and death. In captive females, prevention '
-        'centres on managed breeding or hormonal cycle suppression to break the cystic-endometrial-'
-        'hyperplasia → pyometra cascade. Vaginal vestibulotomy provides surgical drainage when '
-        'medical management fails.')
+        'uterus (endotoxaemia) can cause septic shock and death. The long valved urogenital canal '
+        'favours CLOSED-type pus accumulation and impairs drainage — raising mortality. In captive '
+        'females, prevention centres on managed breeding or hormonal cycle suppression to break the '
+        'CEH → pyometra cascade. Vaginal vestibulotomy provides surgical drainage when medical '
+        'management fails; ovariohysterectomy is not feasible.')
     page_break(doc)
 
     # ─── SECTION 8: HYPERTHERMIA ──────────────────────────────────────────────
@@ -470,25 +571,50 @@ def build_docx():
         'serious welfare and mortality concern for both working/captive and free-ranging elephants '
         'during Indian summers.')
 
+    para(doc,
+        'Normal elephant core body temperature is comparatively LOW (~36.2 ± 0.5°C; working range ≈ 35.9–37°C) '
+        'and they do NOT pant or sweat conventionally — making heat dissipation, not heat generation, the '
+        'physiological challenge.', size=9.5, space_after=4)
+
     sec2(doc, '8.2  Why Elephants Are Prone to Overheating')
-    bullet(doc, 'THE SQUARE-CUBE LAW: As body volume increases, heat production rises faster than the skin surface area available to dissipate it. Massive body size is good for RETAINING heat but POOR at losing it')
-    bullet(doc, 'LACK OF SWEAT GLANDS: Elephants do not have traditional (distributed) sweat glands. They have pores only between their toes and rely on "transepidermal water loss" (passive moisture diffusion through skin)')
-    bullet(doc, 'METABOLIC HEAT: Continuous physical activity (walking in hot sunlight without rest or water) generates high metabolic heat that easily triggers hyperthermia if the animal cannot cool down')
+    bullet(doc, 'THE SQUARE-CUBE LAW: surface area scales as the square while volume/mass scales as the cube — so giants have proportionally little skin to dump metabolic heat. Heat dissipation problems set in above ~35°C ambient')
+    bullet(doc, 'COMPENSATION: elephants\' thermal conductance is 3–5× higher than predicted allometrically, attributed to their lack of fur (offsets the low surface-area:volume disadvantage)')
+    bullet(doc, 'HEAT STORAGE: during exercise in full sun (8–34.5°C ambient), 56–100% of active metabolic heat is STORED in core tissues and dumped later (often at night) — elephants "ride out" heat')
+    bullet(doc, 'METABOLIC HEAT: continuous walking in hot sun without rest/water generates heat faster than it can be lost; modelling suggests arterial blood can rise ~5°C to potentially lethal levels after ~15 min locomotion at 26°C ambient')
+
+    sec2(doc, '8.2b  The Sweat-Gland Question — Precise Science')
+    bullet(doc, 'The claim "elephants have no sweat glands" is an OVERSIMPLIFICATION — they lack dense, body-wide conventional sweat glands, but specialised glands and high cutaneous water loss DO exist')
+    bullet(doc, 'INTERDIGITAL GLANDS resembling human eccrine sweat glands occur between the toes/toenail cuticles of the Asian elephant — true sweat-gland tissue, but restricted to the feet (minimal thermoregulatory role)')
+    bullet(doc, 'Elephants show very high CUTANEOUS EVAPORATIVE WATER LOSS (CEWL): 0.31–8.9 g·min⁻¹·m⁻² (Asian) — water diffuses through the bare skin itself, not via glands (Dunkin et al. 2013)')
+    bullet(doc, 'SKIN MICRO-CRACKS: African elephant skin fractures into millions of true micro-channels that retain 5–10× more water/mud than a flat surface, prolonging evaporative cooling (Martins et al. 2018, Nature Comms)')
 
     sec2(doc, '8.3  Natural Cooling Mechanisms')
     dtable(doc,
         ['Mechanism', 'How It Works'],
-        [('The Ears','Elephant ears act as giant THERMAL WINDOWS. Flapping cools the blood circulating through the dense ear vasculature, reducing overall body temperature significantly'),
-         ('Wallowing & Spraying','Bathing in mud and water is vital. Water evaporation provides intensive cooling; residual mud protects skin from solar radiation. Elephants also spray their own saliva'),
-         ('Skin Permeability','The elephant\'s hide becomes more PERMEABLE in hot weather, allowing them to lose moisture and cool down faster through evaporation — provided they have access to drinking water'),
-         ('Skin Wrinkles','(web-elaborated) Deep skin wrinkles increase surface area and retain water/mud after wallowing, prolonging evaporative cooling')],
+        [('The Ears (thermal windows)','Large, thin, highly vascularised pinnae. Elephants vasodilate/"flood" the ears with blood, then flap to create convective + evaporative cooling; cooled blood returns to core. Up to ~100% of an African elephant\'s heat-loss need can be met by the pinnae (Phillips & Heath 1992)'),
+         ('Wallowing & Spraying','Bathing in mud/water + trunk-spraying water = PRIMARY evaporative cooling. Water evaporation cools; residual mud blocks solar radiation and prolongs water retention'),
+         ('Cutaneous Water Loss','Water diffuses through the bare skin itself; skin micro-channels hold applied water/mud. At 29–32°C ambient, evaporative cooling becomes the ONLY remaining avenue'),
+         ('Body-wide thermal windows','Discrete hot vascular patches appear across the whole body surface (not just ears) as ambient temperature rises (Weissenböck et al. 2010)')],
         widths=[4, 13])
 
-    sec2(doc, '8.4  Prevention & Management (web-elaborated)')
+    sec2(doc, '8.4  How Heat Stress Kills (Pathophysiology)')
+    bullet(doc, 'HEAT STROKE = core temperature >40°C plus CNS dysfunction, progressing to multi-organ failure')
+    bullet(doc, 'Cascade: excess heat → protein denaturation, mitochondrial dysfunction, oxidative stress, release of DAMPs → systemic inflammatory response')
+    bullet(doc, 'ENDOTHELIAL barrier disruption (unifying lesion) → vascular leak, oedema, microthrombi → impaired perfusion → ischaemic organ injury')
+    bullet(doc, 'DIC (disseminated intravascular coagulation) reported in ~48% of severe heat-stroke cases — strongly linked to multi-organ dysfunction and death')
+    bullet(doc, 'Organ-specific: liver (coagulopathy), kidney (rhabdomyolysis → AKI), heart (arrhythmia → circulatory collapse, irreversible shock)')
+
+    sec2(doc, '8.5  Recent Heat-Wave Deaths in India')
+    bullet(doc, 'April 2022, Karnataka: two ~15-yr-old elephants died within a week near Cauvery Wildlife Sanctuary — one of heat stroke (Chikkalahalli), one of suspected dehydration (Satnur range), amid drought + extreme heat')
+    bullet(doc, 'Heat stroke is documented as a cause of death in captive juvenile elephants forced to work in heat without adequate water/shade')
+    bullet(doc, '2024 Kerala: record summer heat reported to make captive temple elephants stressed and more aggressive — a heat-attributable welfare crisis')
+    bullet(doc, 'CAUTION: not all elephant deaths in hot months are heat-related — Odisha\'s 106 elephant deaths in 2024–25 were largely electrocution, not heat')
+
+    sec2(doc, '8.6  Prevention & Management')
     bullet(doc, 'Ensure constant access to SHADE and clean DRINKING WATER, especially 11 AM – 4 PM')
     bullet(doc, 'Provide wallowing pools / mud baths for captive elephants')
     bullet(doc, 'Avoid working/walking elephants during peak heat; reschedule to early morning or evening')
-    bullet(doc, 'Recognise heat stress signs: rapid breathing, ear-flapping intensified, lethargy, reluctance to move, collapse')
+    bullet(doc, 'Recognise heat-stress signs: rapid breathing, intensified ear-flapping, lethargy, reluctance to move, collapse')
     bullet(doc, 'Emergency cooling: continuous water spraying (especially ears, head), move to shade, IV fluids')
     page_break(doc)
 
@@ -507,13 +633,42 @@ def build_docx():
     bullet(doc, 'Extreme weakness; unable to walk; very slow walk and reduced activity')
     bullet(doc, 'Lethargy, exercise intolerance, reduced work capacity in captive elephants')
 
-    sec2(doc, '9.3  Diagnosis')
-    bullet(doc, 'BLOOD EXAMINATION: Low Haemoglobin (Hb)')
-    bullet(doc, 'BLOOD SMEAR: typical TARGET CELLS (codocytes) — RBCs that are MICROCYTIC (small) and HYPOCHROMIC (pale, with increased central pallor)')
-    bullet(doc, 'Target cell appearance is characteristic of iron deficiency (and also seen in liver disease, thalassaemia in other species)')
-    bullet(doc, 'Reference normal Hb range (Indian captive elephants, web-elaborated): ~8.6–16.8 g/dL; values below this range confirm anaemia')
+    sec2(doc, '9.3  Normal Haematology Reference Values (Indian Elephants)')
+    para(doc, 'Reference intervals for Indian elephants (Elephas maximus indicus) under human care (Frontiers Vet Sci 2025; PMC12301552). Note: elephant RBCs are LARGE (high MCV) and relatively few in number:', size=9.5, space_after=3)
+    dtable(doc,
+        ['Parameter', 'Reference Interval', 'Note'],
+        [('Haemoglobin (Hb)','8.62–16.78 g/dL','Low Hb confirms anaemia'),
+         ('PCV / Haematocrit','21.73–49.25 %','Packed cell volume'),
+         ('RBC count','1.77–4.9 ×10⁶/µL','Relatively LOW count (large cells)'),
+         ('MCV','112.49–131.39 fL','HIGH — elephant RBCs are large'),
+         ('MCH','39.3–62.39 pg','Mean cell haemoglobin'),
+         ('MCHC','33.40–41.0 g/dL','Mean cell Hb concentration'),
+         ('WBC (TLC)','9,912–29,475 cells/µL','Total leucocyte count'),
+         ('Platelets','171.6–947.1 ×10³/µL','—')],
+        widths=[4, 5, 8])
+    bullet(doc, 'DISTINCTIVE MORPHOLOGY: elephants (Afrotheria) have HETEROPHILS instead of neutrophils, and a unique MONOCYTE with a bilobed/trilobed nucleus (peroxidase-positive); MONOCYTES are the most abundant leucocyte in healthy elephants')
+    bullet(doc, 'Automated analysers are INACCURATE for elephant blood — a manual Wright/Giemsa differential is preferred')
 
-    sec2(doc, '9.4  Treatment')
+    sec2(doc, '9.4  Diagnosis')
+    bullet(doc, 'BLOOD EXAMINATION: Low Haemoglobin (Hb) below the reference interval')
+    bullet(doc, 'BLOOD SMEAR: target cells (codocytes), hypochromia, microcytosis, anisocytosis (microcytic-hypochromic pattern supports iron deficiency by general veterinary principle)')
+    bullet(doc, 'IRON PANEL: serum iron, ferritin, TIBC, transferrin saturation (low iron + high TIBC + low ferritin = deficiency); hepcidin in research settings')
+    bullet(doc, 'PARASITOLOGY: faecal egg counts to identify blood-feeding helminths (see 9.2)')
+
+    sec2(doc, '9.5  Causes of Anaemia in Elephants')
+    bullet(doc, 'GI STRONGYLE NEMATODES (Murshidia, Quilonia, Bathmostomum, Equinurbia) → protein-losing gastroenteropathy → hypoalbuminaemia + anaemia')
+    bullet(doc, 'HOOKWORMS: Bathmostomum sangeri (caecum/colon) and Grammocephalus hybridatus (bile duct/liver) — blood-feeders causing anaemia, weakness, hepatic insufficiency')
+    bullet(doc, 'LIVER FLUKE Fasciola (Fascioloides) jacksoni — prevalence 18–62% in the Indomalayan region; causes anaemia + hypoproteinaemia, hepatic congestion/fibrosis')
+    bullet(doc, 'NUTRITIONAL: iron, copper, cobalt deficiency (copper is needed for iron mobilisation); captive diets often deficient')
+    bullet(doc, 'ANAEMIA OF CHRONIC DISEASE: especially chronic M. tuberculosis (iron-sequestration); EEHV in calves causes acute anaemia + thrombocytopenia')
+    keybox(doc,
+        'IRON OVERLOAD CAUTION: Iron storage disease (haemochromatosis-type) is a recognised problem '
+        'in captive elephants from excess dietary iron. Crucially, blind iron supplementation can '
+        'REACTIVATE latent infections such as M. tuberculosis (iron feeds the pathogen). Confirm true '
+        'iron-deficiency with an iron panel BEFORE supplementing — do not supplement reflexively. '
+        'Adult forage requirement: Cu 10, Fe 50, Co 0.1 mg/kg.', danger=True)
+
+    sec2(doc, '9.6  Treatment')
     sec3(doc, '1. Diet Change — to full normal elephant diet:')
     bullet(doc, 'Soybeans, horse gram, Napier grass, bamboo, leaves, grains, fruits', level=1)
     sec3(doc, '2. Supplementation:')
@@ -543,8 +698,17 @@ def build_docx():
     bullet(doc, 'WTI (Wildlife Trust of India). Elephant Mortality Database — poisoning records 1997–2005')
     bullet(doc, 'Bengis RG et al. (2004). The role of wildlife in emerging and re-emerging zoonoses. Rev Sci Tech OIE')
     bullet(doc, 'Wang DZ (2008). Neurotoxins from marine and freshwater algae. Marine Drugs 6(2): 349–371')
-    bullet(doc, 'Hooijberg EH et al. (2023). Haematology reference intervals for Asian elephants. (Indian captive elephant blood parameters)')
+    bullet(doc, 'Reference intervals for haematology & biochemistry in Indian elephants (Elephas maximus indicus) under human care (2025). Frontiers in Veterinary Science 12: 1602296 (PMC12301552)')
+    bullet(doc, 'Schulze C, Peters M, Baumgärtner W, Wohlsein P (2016). Electrical Injuries in Animals: Causes, Pathogenesis, and Morphological Findings. Veterinary Pathology 53(5): 1018–1037')
+    bullet(doc, 'Agnew DW, Munson L, Ramsay EC (2004). Cystic Endometrial Hyperplasia in Elephants. Veterinary Pathology 41(2): 179–183')
+    bullet(doc, 'Hermes R, Hildebrandt TB, Göritz F (2004). Asymmetric reproductive aging in long-term captivity. Animal Reproduction Science 82–83: 49–60')
+    bullet(doc, 'Landolfi JA et al. (2021). Reproductive Tract Neoplasia in Adult Female Asian Elephants. Veterinary Pathology 58(6)')
+    bullet(doc, 'Dunkin RC et al. (2013). Climate influences thermal balance and water use in elephants. Journal of Experimental Biology 216: 2939–2952')
+    bullet(doc, 'Martins AF et al. (2018). Bending cracks in African elephant skin. Nature Communications 9: 3865')
+    bullet(doc, 'Rowe MF et al. (2013). Heat storage in Asian elephants during submaximal exercise. J Exp Biology 216: 1774–1785')
     bullet(doc, 'Mahato G et al. (2021). Heavy metal toxicosis in wild and captive elephants — review. Indian Journal of Veterinary Pathology')
+    bullet(doc, 'Lok Sabha Unstarred Question reply (July 2024). Elephant deaths from unnatural causes 2019–2024. MoEFCC, Government of India')
+    bullet(doc, 'Karnataka High Court (2025). Suo Motu W.P. on elephant electrocution ("Ashwathamma" case) — power-line management directions')
     bullet(doc, 'Project Elephant, MoEFCC (2017). Gajah: Securing the Future for Elephants in India')
 
     para(doc,
@@ -684,15 +848,34 @@ def build_pdf():
           ('III. Environmental Toxins','Naturally occurring toxins','Cyanobacteria (blue-green algae); toxic plants; heavy metals')],
          wds=[4.5,6,6.5])
     kyb('SUSCEPTIBILITY: Bulk foraging (150–300 kg/day) means even low-concentration toxins reach lethal total doses. Hindgut fermentation also releases toxins (e.g. HCN) over an extended period.')
+    h2('2.3  National Mortality Data — Unnatural Causes (Lok Sabha, 2024)')
+    dtbl(['Unnatural Cause','Deaths (5 yr)','Share','Worst States'],
+         [('Electrocution','392','74.2%','Odisha 71, Assam 55, Karnataka 52, TN 49, Chhattisgarh 32'),
+          ('Train accidents','73','13.8%','Assam 22, Odisha 16'),
+          ('Poaching','50','9.5%','Odisha 17, Meghalaya 14, TN 10'),
+          ('Poisoning','13','2.5%','Assam 10, Chhattisgarh 2, WB 1'),
+          ('TOTAL','528','100%','All India')],
+         wds=[3.5,2.2,1.8,9])
+    pb('Electrocution dominates (74%); poisoning is 2.5% of unnatural deaths (see Section 6)')
+    pb('Population context: 2017 census = 29,964 wild elephants (~60% of global wild Asian elephants)')
+    pb('Chhattisgarh appears for both electrocution (32) and poisoning (2) — directly relevant here')
     story.append(PageBreak())
 
     # S3
     h1('3.  Anthropogenic Poisons')
     h2('3.1  Agrochemicals — Pesticides (Neurotoxins)')
-    pb('Crop-raiding elephants consume organophosphates (chlorpyrifos, monocrotophos), carbamates, neonicotinoids (imidacloprid)')
-    pb('OP/Carbamate mechanism: inhibit acetylcholinesterase → acetylcholine accumulates → cholinergic crisis')
-    pb('SLUDGE signs: Salivation, Lacrimation, Urination, Defecation, GI distress, Emesis; miosis; muscle fasciculation')
-    pb('Death from respiratory failure; ANTIDOTE: Atropine + Pralidoxime (2-PAM, for OP only)')
+    pb('Crop-raiding consumption AND deliberate baiting (laced crops/fruit/salt) for retaliation/poaching')
+    dtbl(['Compound','Class','Toxicity / Notes'],
+         [('Carbofuran ("Furadan")','Carbamate','Granular; leading agent in deliberate wildlife baiting (esp. Kerala)'),
+          ('Monocrotophos','Organophosphate','Highly toxic — oral LD50 ~18–20 mg/kg; common on grain baits'),
+          ('Aldicarb ("Temik")','Carbamate','Among the most acutely toxic carbamates'),
+          ('Chlorpyrifos','Organophosphate','Less acutely toxic (LD50 ~500 mg/kg goats)'),
+          ('Imidacloprid','Neonicotinoid','Killed a wild adult Asian elephant (Kerala)')],
+         wds=[3.5,2.5,11])
+    pb('Mechanism: both inhibit acetylcholinesterase → ACh accumulates. OPs phosphorylate (irreversible after "aging"); carbamates carbamylate (reversible, <24 h)')
+    pb('DUMBELS toxidrome: Defecation, Urination, Miosis, Bronchorrhoea, Emesis, Lacrimation, Salivation; fasciculation; death from respiratory failure')
+    pb('Diagnosis: brain AChE depression <50% of normal = diagnostic; freeze samples FAST (carbamate ChE reactivates)')
+    pb('ANTIDOTE: Atropine 0.6–1.0 mg/kg (cattle ref; ⅓ IV) + Pralidoxime/2-PAM 20–50 mg/kg slow IV (OP only, give early)')
     h2('3.2  Cyanide')
     pb('Used in illegal poaching/mining → rapid fatal hypoxia; poachers lace salt licks near waterholes')
     pb('Binds cytochrome c oxidase → blocks mitochondrial oxygen use (see Section 5 for detail)')
@@ -709,13 +892,16 @@ def build_pdf():
     pi(4, 'Slide 4 — Field photographs: raided Kodo millet crop; necropsy organ findings', 12)
     h2('4.1  Crop-Borne Mycotoxins — Kodo Millet (Cyclopiazonic Acid)')
     bdy('Elephants raiding farm fields are highly susceptible to mycotoxins like Cyclopiazonic Acid (CPA) — a fungal toxin (Aspergillus, Penicillium) that infects Kodo millet (Paspalum scrobiculatum) and causes acute vascular damage and liver/kidney necrosis. Contamination occurs when heavy/unseasonal rainfall coincides with grain maturation.')
-    kyb('CASE — Bandhavgarh Tiger Reserve (MP): A herd of 13 elephants raided Kodo millet crops; TEN ELEPHANTS DIED. Forensic PM + lab confirmed accidental mycotoxin (CPA) toxicity. Dr. Shrivastava: "I have seen/treated two cases in KTR during 1997–98."', danger=True)
-    pb('Management: preventive cultivation/storage/processing; biocontrol (non-toxigenic fungal strains); proper drying + airtight storage of Kodo')
+    kyb('CASE — Bandhavgarh Tiger Reserve (MP): A herd raided Kodo millet crops; TEN wild elephants died over 3 days (29–31 Oct 2024), Khitoli range. IVRI report (5 Nov 2024): NO nitrates, NO heavy metals, NO pesticides — but CYCLOPIAZONIC ACID (CPA) confirmed in viscera of all. Verdict: fungus-infected Kodo millet (the fungus, not the grain). Dr. Shrivastava: "treated two cases in KTR during 1997–98."', danger=True)
+    pb('CPA mechanism: indole-tetramic acid mycotoxin (Aspergillus/Penicillium); inhibits Ca²⁺-ATPase (SERCA) → disrupts calcium gradients → hepatotoxicity, nephrotoxicity, vascular damage')
+    pb('Aflatoxins (differential): A. flavus on grain → hepatic necrosis, bile-duct proliferation, icterus, coagulopathy')
+    pb('Management: preventive cultivation/storage; biocontrol (non-toxigenic fungal strains); proper drying + airtight storage of Kodo')
     h2('4.2  Cyanotoxins / Cyanobacteria (Blue-Green Algae)')
     pb('Toxic blue-green algae blooms in stagnant seasonal water → neurotoxins + hepatotoxins → fatal die-offs')
     pb('Common in hot, dry seasons when water sources shrink/concentrate')
-    pb('Microcystins (hepatotoxins, Microcystis) → liver necrosis; Anatoxin-a/Saxitoxins (neurotoxins) → respiratory paralysis')
-    pb('2020 Botswana (Okavango) African elephant mass die-off attributed to cyanobacterial neurotoxins')
+    pb('Microcystins (hepatotoxins, Microcystis) → inhibit protein phosphatases → hepatocyte necrosis, intrahepatic haemorrhage')
+    pb('Anatoxin-a (neurotoxin) → nicotinic ACh-receptor agonist → depolarising paralysis; Saxitoxins → block Na⁺ channels → flaccid paralysis')
+    pb('2020 Botswana (Okavango): ≥330 African elephants died — tusks intact (poaching ruled out); cyanobacterial neurotoxins implicated; elephants drink up to 200 L/day → high toxin dose')
     h2('4.3  Toxic Plants')
     pb('Elephants generally avoid toxic vegetation, but oleander (cardiac glycosides) → fatal arrhythmia')
     pb('Calcium oxalate-containing plants → severe oral/GI irritation, swelling, systemic distress')
@@ -726,7 +912,7 @@ def build_pdf():
     pi(5, 'Slide 5 — HCN poisoning: mechanism, signs, risk factors, management & antidote', 12)
     pi(6, 'Slide 6 — HCN case report (Zoo Print 2010); Electrocution introduction', 12)
     h2('5.1  Mechanism')
-    bdy('HCN (prussic acid) poisoning occurs when elephants consume STRESSED sorghum (drought, frost, trampling) → rapid cellular asphyxiation. Sorghum (Sorghum bicolor) contains the cyanogenic glucoside DHURRIN. When chewed, plant enzymes mix with dhurrin → release hydrogen cyanide → binds cytochrome c oxidase → cells cannot use oxygen → histotoxic hypoxia → death.')
+    bdy('HCN (prussic acid) poisoning occurs when elephants consume STRESSED sorghum (drought, frost, trampling) → rapid cellular asphyxiation. Sorghum (Sorghum bicolor) contains the cyanogenic glucoside DHURRIN. When chewed, plant enzymes mix with dhurrin → release hydrogen cyanide → binds cytochrome c oxidase → cells cannot use oxygen → histotoxic hypoxia → lactic acidosis → death. Lethal dose ~2–2.5 mg/kg; onset ~15–20 min. The cherry-red colour FADES after death — suggestive, not confirmatory.')
     h2('5.2  Signs & Symptoms')
     pb('RAPID ONSET: minutes to a few hours after consumption')
     pb('Laboured/rapid breathing, staggering gait, muscle tremors, convulsions, recumbency, sudden death')
@@ -756,16 +942,35 @@ def build_pdf():
          [('Electric Shock','Physical sensation/injury from electricity (muscle spasm, minor burns) — NON-FATAL'),
           ('Electrocution','An electric shock that is FATAL')],
          wds=[4,13])
-    h2('6.2  Context in India')
-    pb('LEADING cause of unnatural elephant death in India (~70–75% of unnatural deaths)')
-    pb('Sources: illegal low live wires around crops; sagging 11 kV power lines; solar-fence tampering')
-    pb('Both intentional (poaching/retaliation) and accidental (sagging legal lines)')
-    h2('6.3  Postmortem Findings')
-    pb('Electrical BURN MARKS (Joule burns) at contact point — trunk tip, ear, shoulder, feet; charring, crater lesions')
-    pb('Subcutaneous/intramuscular haemorrhage along current path; entry & exit current marks')
-    pb('Internal: pulmonary congestion/oedema; cardiac petechiae; generalised venous congestion')
-    pb('Carcass near electrical source; Dr. Shrivastava note: "charcoal powder" appearance of charred contact tissue')
-    kyb('INVESTIGATION: photograph scene (wires, poles, sag height, distance); burn marks with scale bar; skin histology (coagulative necrosis, epidermal nuclear streaming); coordinate with electricity board/police (punishable under WPA 1972 & Electricity Act); distinguish lightning (fern-pattern singeing, multiple animals).', danger=True)
+    h2('6.2  Statistics (India)')
+    pb('SINGLE LARGEST cause of unnatural elephant death — 392 of 528 (74%) over 5 years (Lok Sabha 2024); long-run share since 2009 ≈ 67%')
+    pb('State-wise (2024): Odisha 71, Assam 55, Karnataka 52, Tamil Nadu 49, Chhattisgarh 32, Jharkhand 30, Kerala 29')
+    h2('6.3  Sources & Mechanisms')
+    dtbl(['Source','Description'],
+         [('Illegal live-wire fences','Power "hooked" from 11 kV/LT lines to electrify crop fences — LEADING driver; deliberate'),
+          ('Sagging overhead lines','Low 11 kV lines (as low as ~1.5 m vs ~3.3 m elephant) from wide pole spacing/erosion'),
+          ('Solar-fence tampering','Bypassing the pulsed energiser → connecting to mains turns a legal fence lethal'),
+          ('Accidental','Genuine contact with sagging legal lines in corridors')],
+         wds=[4,13])
+    h2('6.4  Postmortem Findings')
+    pb('CURRENT/ELECTRIC MARK (gross gold standard): crater-like skin elevation around sunken pale centre at contact (trunk tip, feet, dorsum)')
+    pb('JOULE BURN: collagen denaturation + dermal oedema; singed hair; METALLIZATION (conductor metal in skin) in >50% of cases')
+    pb('HISTOLOGY: coagulative epidermal necrosis; "NUCLEAR STREAMING" of basal nuclei aligned to current flow; dermal collagen homogenisation')
+    pb('INTERNAL: visceral congestion; pulmonary oedema; myocardial petechiae/necrosis; rhabdomyolysis; slow-clotting dark blood')
+    pb('CAVEAT: nuclear streaming/necrosis NOT pathognomonic (also in flame burns); gross lesions may be absent if contact wide/skin wet (Schulze 2016)')
+    h2('6.5  Lightning vs Man-Made Electrocution')
+    dtbl(['Feature','Lightning','Man-Made'],
+         [('Skin','LICHTENBERG (fern-like) figures — pathognomonic; fade 24–36 hr; NOT burns','Discrete deep contact/current burns; metallization'),
+          ('Animals','Often multiple down together','Single or group along a wire'),
+          ('Scene','Open ground/tall trees; storm; scorched vegetation','Near power line/hooked wire/fence'),
+          ('Entry/exit','Poorly defined','Well-defined (feet = exit)')],
+         wds=[2.5,7,7.5])
+    h2('6.6  Legal Framework')
+    pb('WPA 1972: elephant Schedule I; killing under Section 51 (+ IPC 429, Electricity Act)')
+    pb('Electricity Act 2003: Sec 161 (accident report/inquiry), Sec 135 (theft — illegal hooking), Sec 146 (penalty)')
+    pb('NGT strict liability of utilities (e.g. CESU Odisha ordered ₹4 crore + line maintenance)')
+    pb('Clearance: MoEFCC 2010 min 5.5 m for ≤11 kV; Karnataka HC 2025 — underground cabling, ban illegal fences, AI/CCTV surveillance')
+    kyb('INVESTIGATION: photograph scene (wires, poles, sag height, distance); current marks with scale bar; skin histology (coagulative necrosis + nuclear streaming + metallization); sample heart/lung; RULE OUT lightning (Lichtenberg figures, multiple carcasses); coordinate electricity board/police (WPA Sec 51 + Electricity Act Sec 135/161); PREVENT by converting illegal AC fences to pulsed SOLAR energisers.', danger=True)
     story.append(PageBreak())
 
     # S7
@@ -774,42 +979,57 @@ def build_pdf():
     pi(10, 'Slide 10 — Vaginal vestibulotomy in Asian elephant: surgical drainage', 12)
     h2('7.1  Definition')
     bdy('Pyometra = severe, life-threatening uterine infection with accumulation of PUS and severe inflammation. Most common in AGING, NULLIPAROUS (never-bred) females, linked to prolonged hormonal fluctuation and reproductive issues.')
-    h2('7.2  Causes & Pathophysiology')
-    pb('Hormonal: fluctuating progesterone + thickened endometrium favour bacterial growth')
-    pb('Bacterial: E. coli or Enterococcus faecium → suppurative inflammation')
-    pb('Pre-existing: Cystic Endometrial Hyperplasia (CEH) or leiomyomas in older captive elephants trigger pyometra')
-    pb('Nulliparous state → repeated uninterrupted cycles → continuous progesterone → CEH-pyometra complex')
-    h2('7.3  Treatment')
+    h2('7.2  CEH–Pyometra Complex & Pathophysiology')
+    pb('CEH (cystic endometrial hyperplasia) is the precursor — present in ~67% of captive Asian elephants aged 26–57 yr (Agnew et al. 2004)')
+    pb('Chronic progesterone (luteal ~6–12 wk) dominance → endometrial proliferation/cysts → reduced defence → bacterial colonisation → pyometra')
+    pb('Bacteria: E. coli (predominant), Streptococcus, Staphylococcus, Klebsiella, Proteus (extrapolated; elephant culture series sparse)')
+    pb('Co-pathology: uterine LEIOMYOMAS most common tumour — larger/commoner in older nulliparous Asians (30–100%); ~13% adenocarcinoma')
+    h2('7.3  Predisposition & Anatomy')
+    pb('Asymmetric reproductive aging (Hermes et al. 2004): prolonged non-breeding + continuous steroid exposure → genital pathology, irreversible acyclicity')
+    pb('Up to 14% captive Asian (29% African) elephants are acyclic/irregular')
+    pb('Anatomy: urogenital canal ~1.0–1.4 m; hymenal orifice <2 cm; total tract up to 358 cm → impedes drainage, favours closed pyometra')
+    pb('Ultrasonography is the key diagnostic tool (cysts, CEH, leiomyoma, intrauterine fluid)')
+    h2('7.4  Treatment')
     dtbl(['Approach','Detail'],
-         [('Hormonal downregulation','GnRH vaccines (Improvac) or Deslorelin implants to suppress cycles, shrink tissue'),
-          ('Antibiotic therapy','Broad-spectrum systemic antibiotics targeting cultured pathogens'),
-          ('Uterine lavage','Flushing the uterus to evacuate pus'),
-          ('Surgical drainage','Vaginal vestibulotomy (see slide 10)'),
+         [('Hormonal downregulation','GnRH vaccine (Improvac) → ↓LH/FSH; Deslorelin implants. EAZA: treat pyometra BEFORE vaccinating'),
+          ('Antibiotic therapy','Broad-spectrum, culture-guided'),
+          ('Uterine/transcervical lavage','Warm saline flush — constrained by the long canal/hymen'),
+          ('Prostaglandins (PGF2α)','Myometrial contraction + cervical relaxation (minimally documented in elephants)'),
+          ('Surgical drainage','Vaginal vestibulotomy (slide 10)'),
           ('Homeopathic (practised)','Pyrogenium 1000 + Hepar sulph 1000 + Secale 1000 (Dr. Shrivastava)')],
-         wds=[4.5,12.5])
-    kyb('Pyometra is a reproductive EMERGENCY — uterine endotoxaemia can cause septic shock and death. Prevention in captive females: managed breeding or hormonal cycle suppression to break the CEH→pyometra cascade.')
+         wds=[4,13])
+    pb('Ovariohysterectomy NOT practical (body size, vascularity, tract up to 358 cm); prognosis guarded to poor — documented cases improved then died')
+    kyb('Pyometra is a reproductive EMERGENCY — endotoxaemia → septic shock/death; the long valved canal favours CLOSED accumulation, raising mortality. Avoid GnRH-agonist implants during the luteal phase. Prevention: managed breeding or cycle suppression to break the CEH→pyometra cascade.')
     story.append(PageBreak())
 
     # S8
     h1('8.  Hyperthermia & Heat Stress')
     h2('8.1  Definition')
     bdy('Hyperthermia is a life-threatening condition from high environmental temperature, lack of access to water/shade, massive body size, and lack of sweat glands — a serious mortality concern during Indian summers.')
+    bdy('Normal core temperature is LOW (~36.2 ± 0.5°C); elephants do NOT pant or sweat conventionally — heat DISSIPATION, not generation, is the challenge.')
     h2('8.2  Why Elephants Overheat')
-    pb('SQUARE-CUBE LAW: heat production rises faster than skin surface area; massive size retains heat but loses it poorly')
-    pb('NO SWEAT GLANDS: pores only between toes; rely on transepidermal water loss')
-    pb('METABOLIC HEAT: continuous walking in hot sun without rest/water triggers hyperthermia')
+    pb('SQUARE-CUBE LAW: surface area scales as square, mass as cube → little skin to dump heat; problems set in above ~35°C ambient')
+    pb('Compensation: thermal conductance 3–5× higher than predicted (lack of fur); but 56–100% of exercise heat is STORED in core and dumped later')
+    pb('Modelling: arterial blood can rise ~5°C to lethal levels after ~15 min locomotion at 26°C ambient')
+    h2('8.2b  The Sweat-Gland Question (precise science)')
+    pb('"No sweat glands" is an oversimplification: lack dense body-wide glands BUT have INTERDIGITAL eccrine-like glands (feet only)')
+    pb('Very high cutaneous evaporative water loss (0.31–8.9 g/min/m², Asian) — water diffuses through bare skin, not glands (Dunkin 2013)')
+    pb('Skin MICRO-CRACKS retain 5–10× more water/mud than flat skin, prolonging evaporative cooling (Martins 2018, Nature Comms)')
     h2('8.3  Natural Cooling Mechanisms')
     dtbl(['Mechanism','How It Works'],
-         [('The Ears','Giant thermal windows; flapping cools blood in dense ear vasculature'),
-          ('Wallowing & Spraying','Mud/water evaporation cools; residual mud blocks solar radiation; saliva spraying'),
-          ('Skin Permeability','Hide becomes more permeable in heat → faster evaporative cooling (needs drinking water)'),
-          ('Skin Wrinkles','Increase surface area; retain water/mud → prolong evaporative cooling')],
+         [('The Ears (thermal windows)','Vasodilate/flood ears with blood, flap for convective+evaporative cooling; up to ~100% of heat-loss need (Phillips & Heath 1992)'),
+          ('Wallowing & Spraying','PRIMARY evaporative cooling; mud blocks solar radiation, prolongs water retention'),
+          ('Cutaneous water loss','Through bare skin; at 29–32°C ambient, evaporation is the ONLY remaining avenue'),
+          ('Body-wide windows','Hot vascular patches appear across whole body as ambient rises (Weissenböck 2010)')],
          wds=[4,13])
-    h2('8.4  Prevention & Management')
-    pb('Constant access to SHADE + clean DRINKING WATER, especially 11 AM–4 PM')
-    pb('Provide wallowing pools/mud baths; avoid working elephants during peak heat')
-    pb('Recognise signs: rapid breathing, intensified ear-flapping, lethargy, collapse')
-    pb('Emergency cooling: continuous water spray (ears/head), shade, IV fluids')
+    h2('8.4  How Heat Stress Kills')
+    pb('Heat stroke = core >40°C + CNS dysfunction → protein denaturation, oxidative stress, DAMPs → systemic inflammation')
+    pb('Endothelial barrier disruption → vascular leak, microthrombi → ischaemic organ injury; DIC in ~48% of severe cases')
+    pb('Organ failure: liver (coagulopathy), kidney (rhabdomyolysis→AKI), heart (arrhythmia→circulatory collapse)')
+    h2('8.5  Recent India Cases & Management')
+    pb('Apr 2022 Karnataka: 2 young elephants died near Cauvery WLS (heat stroke + dehydration) amid drought/extreme heat')
+    pb('Constant SHADE + DRINKING WATER (esp. 11 AM–4 PM); wallowing pools; avoid work in peak heat')
+    pb('Signs: rapid breathing, intensified ear-flapping, lethargy, collapse. Emergency: water spray (ears/head), shade, IV fluids')
     story.append(PageBreak())
 
     # S9
@@ -817,11 +1037,22 @@ def build_pdf():
     pi(11, 'Slide 11 — Blood smear: microcytic hypochromic target cells (codocytes)', 12)
     h2('9.1  Definition & Signs')
     bdy('Anaemia = qualitative and quantitative reduction in blood quality / oxygen-carrying capacity. Iron deficiency → microcytic, hypochromic RBCs. Signs: pale mucous membranes, extreme weakness, unable to walk, very slow walk and reduced activity.')
-    h2('9.2  Diagnosis')
-    pb('Blood examination: LOW Haemoglobin (Hb)')
-    pb('Blood smear: typical TARGET CELLS (codocytes) — MICROCYTIC, HYPOCHROMIC RBCs')
-    pb('Reference Hb (Indian captive elephants): ~8.6–16.8 g/dL; below range confirms anaemia')
-    h2('9.3  Treatment')
+    h2('9.2  Normal Haematology Reference Values (Indian Elephants)')
+    dtbl(['Parameter','Reference Interval','Note'],
+         [('Haemoglobin','8.62–16.78 g/dL','Low = anaemia'),
+          ('PCV / Haematocrit','21.73–49.25 %','—'),
+          ('RBC count','1.77–4.9 ×10⁶/µL','LOW count (large cells)'),
+          ('MCV','112.49–131.39 fL','HIGH — large RBCs'),
+          ('WBC (TLC)','9,912–29,475 /µL','—'),
+          ('Platelets','171.6–947.1 ×10³/µL','—')],
+         wds=[4,5,8])
+    pb('Distinctive: HETEROPHILS (not neutrophils); unique bilobed/trilobed MONOCYTE (most abundant leucocyte). Automated analysers inaccurate — use manual Giemsa smear (Frontiers Vet Sci 2025)')
+    h2('9.3  Diagnosis & Causes')
+    pb('Low Hb; smear: target cells, hypochromia, microcytosis, anisocytosis; iron panel (serum iron, ferritin, TIBC); faecal egg counts')
+    pb('Causes: GI strongyles (Murshidia, Quilonia, Bathmostomum) → protein-losing enteropathy; hookworms (B. sangeri caecum, Grammocephalus bile duct)')
+    pb('Liver fluke Fasciola jacksoni (18–62% Indomalayan) → anaemia + hypoproteinaemia; nutritional (Fe/Cu/Co); chronic disease (TB iron-sequestration); EEHV in calves')
+    kyb('IRON OVERLOAD CAUTION: haemochromatosis-type iron storage disease occurs in captive elephants; blind iron supplementation can REACTIVATE latent M. tuberculosis. Confirm true deficiency with an iron panel BEFORE supplementing. Forage requirement: Cu 10, Fe 50, Co 0.1 mg/kg.', danger=True)
+    h2('9.4  Treatment')
     pb('Diet change to full normal elephant diet: soybeans, horse gram, Napier grass, bamboo, leaves, grains, fruits')
     pb('Iron supplements: Jaggery (gur), honey')
     pb('Vitamin B12 injections; Multivitamins + mineral mixture')
@@ -840,6 +1071,14 @@ def build_pdf():
     pb('Fowler ME & Mikota SK (2006). Biology, Medicine and Surgery of Elephants. Blackwell, Iowa')
     pb('WTI. Elephant Mortality Database — poisoning records 1997–2005')
     pb('Wang DZ (2008). Neurotoxins from marine and freshwater algae. Marine Drugs 6(2): 349–371')
+    pb('Schulze C et al. (2016). Electrical Injuries in Animals. Veterinary Pathology 53(5): 1018–1037')
+    pb('Agnew DW, Munson L, Ramsay EC (2004). Cystic Endometrial Hyperplasia in Elephants. Vet Pathol 41(2): 179–183')
+    pb('Hermes R, Hildebrandt TB, Göritz F (2004). Asymmetric reproductive aging. Anim Reprod Sci 82–83: 49–60')
+    pb('Dunkin RC et al. (2013). Thermal balance & cutaneous water loss in elephants. J Exp Biol 216: 2939–2952')
+    pb('Martins AF et al. (2018). Bending cracks in African elephant skin. Nature Communications 9: 3865')
+    pb('Reference intervals for haematology in Indian elephants (2025). Frontiers Vet Sci 12: 1602296 (PMC12301552)')
+    pb('Lok Sabha reply (July 2024). Elephant deaths from unnatural causes 2019–2024. MoEFCC, GoI')
+    pb('Karnataka High Court (2025). Elephant electrocution suo motu directions ("Ashwathamma" case)')
     pb('Mahato G et al. (2021). Heavy metal toxicosis in elephants — review. Indian J Vet Pathology')
     pb('Project Elephant, MoEFCC (2017). Gajah: Securing the Future for Elephants in India')
     hr()
