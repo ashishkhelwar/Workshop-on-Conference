@@ -1,417 +1,415 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Dashboard</title>
+<title>वन बजट डैशबोर्ड — वनमण्डल रायगढ़</title>
 <style>
   :root {
-    --page-bg: #f5f6f8;
-    --sidebar: #1e293b;
-    --accent: #6366f1;
-    --accent-soft: #cfd0fc;
+    --page-bg: #f4f7f4;
+    --sidebar: #14342b;
+    --accent: #2f8f5b;
+    --accent-2: #1f6e43;
+    --accent-soft: #b9e0c8;
     --white: #ffffff;
-    --border: #e2e8f0;
-    --text-dark: #0f172a;
-    --text-muted: #64748b;
-    --sidebar-text: #cad4e1;
-    --track: #eef0f6;
+    --border: #e2e8e4;
+    --text-dark: #10231b;
+    --text-muted: #5d6b63;
+    --sidebar-text: #b9ccc2;
+    --track: #e8eeea;
     --green: #16a34a; --green-bg: #e5f7ec;
     --amber: #b47a09; --amber-bg: #fef3d8;
     --red: #dc2626; --red-bg: #fee9e9;
-    --shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    --blue: #2563eb; --blue-bg: #e6effe;
+    --shadow: 0 2px 8px rgba(16, 35, 27, 0.05);
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
   body {
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background: var(--page-bg);
-    color: var(--text-dark);
+    font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Noto Sans Devanagari", Arial, sans-serif;
+    background: var(--page-bg); color: var(--text-dark);
     -webkit-font-smoothing: antialiased;
   }
+  .dashboard { display: flex; min-height: 100vh; max-width: 1440px; margin: 0 auto; }
 
-  .dashboard {
-    display: flex;
-    min-height: 100vh;
-    max-width: 1440px;
-    margin: 0 auto;
-  }
-
-  /* ---------- SIDEBAR ---------- */
-  .sidebar {
-    width: 248px;
-    flex-shrink: 0;
-    background: var(--sidebar);
-    padding: 28px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding-bottom: 24px;
-  }
-  .logo-mark {
-    width: 32px; height: 32px;
-    border-radius: 8px;
-    background: var(--accent);
-    flex-shrink: 0;
-  }
-  .logo-text { color: var(--white); font-size: 18px; font-weight: 700; }
-
-  .nav-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 11px 14px;
-    border-radius: 10px;
-    color: var(--sidebar-text);
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    text-decoration: none;
-  }
-  .nav-item .icon {
-    width: 18px; height: 18px;
-    border-radius: 5px;
-    background: var(--sidebar-text);
-    opacity: 0.6;
-    flex-shrink: 0;
-  }
-  .nav-item:hover { background: rgba(255, 255, 255, 0.06); }
-  .nav-item.active {
-    background: var(--accent);
-    color: var(--white);
-    font-weight: 600;
-  }
-  .nav-item.active .icon { background: var(--white); opacity: 1; }
-
+  /* SIDEBAR */
+  .sidebar { width: 250px; flex-shrink: 0; background: var(--sidebar); padding: 26px 18px; display: flex; flex-direction: column; gap: 6px; }
+  .logo { display: flex; align-items: center; gap: 12px; padding: 0 6px 22px; }
+  .logo-mark { width: 38px; height: 38px; border-radius: 10px; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .logo-text { color: var(--white); font-size: 16px; font-weight: 700; line-height: 1.25; }
+  .logo-text small { display: block; color: var(--sidebar-text); font-size: 11px; font-weight: 500; }
+  .nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 10px; color: var(--sidebar-text); font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none; }
+  .nav-item .ic { width: 8px; height: 8px; border-radius: 50%; background: var(--sidebar-text); opacity: .55; flex-shrink: 0; }
+  .nav-item:hover { background: rgba(255,255,255,.06); }
+  .nav-item.active { background: var(--accent); color: var(--white); font-weight: 600; }
+  .nav-item.active .ic { background: #fff; opacity: 1; }
   .spacer { flex: 1; }
-
-  .profile {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.08);
-  }
-  .avatar {
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    background: var(--accent);
-    flex-shrink: 0;
-  }
-  .profile-name { color: var(--white); font-size: 13px; font-weight: 600; }
+  .profile { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: rgba(255,255,255,.08); }
+  .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .profile-name { color: #fff; font-size: 13px; font-weight: 600; }
   .profile-mail { color: var(--sidebar-text); font-size: 11px; }
 
-  /* ---------- MAIN ---------- */
+  /* MAIN */
   .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-
-  .header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 20px 32px;
-    background: var(--white);
-    border-bottom: 1px solid var(--border);
-  }
-  .header h1 { font-size: 22px; font-weight: 700; }
+  .header { display: flex; align-items: center; gap: 16px; padding: 20px 32px; background: #fff; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .header h1 { font-size: 21px; font-weight: 700; }
   .header .subtitle { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
   .header .grow { flex: 1; }
-  .search {
-    width: 240px;
-    padding: 10px 14px;
-    border-radius: 10px;
-    background: var(--page-bg);
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-    font-size: 13px;
-  }
-  .btn {
-    padding: 11px 18px;
-    border-radius: 10px;
-    background: var(--accent);
-    color: var(--white);
-    font-size: 13px;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    white-space: nowrap;
-  }
+  .search { min-width: 200px; padding: 10px 14px; border-radius: 10px; background: var(--page-bg); border: 1px solid var(--border); color: var(--text-dark); font-size: 13px; }
+  .btn { padding: 11px 16px; border-radius: 10px; background: var(--accent); color: #fff; font-size: 13px; font-weight: 600; border: none; cursor: pointer; white-space: nowrap; }
 
-  .content {
-    flex: 1;
-    padding: 28px 32px;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
+  .content { flex: 1; padding: 26px 32px; display: flex; flex-direction: column; gap: 22px; }
+  .card { background: #fff; border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow); }
 
-  .card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    box-shadow: var(--shadow);
-  }
+  /* STAT CARDS */
+  .stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+  .stat { padding: 18px; display: flex; flex-direction: column; gap: 8px; }
+  .stat-label { font-size: 12.5px; font-weight: 500; color: var(--text-muted); }
+  .stat-value { font-size: 23px; font-weight: 700; letter-spacing: -.02em; }
+  .stat-sub { font-size: 11px; color: var(--text-muted); }
+  .stat.accent { background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%); border: none; }
+  .stat.accent .stat-label, .stat.accent .stat-sub { color: rgba(255,255,255,.8); }
+  .stat.accent .stat-value { color: #fff; }
 
-  /* ---------- STAT CARDS ---------- */
-  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-  .stat { padding: 20px; display: flex; flex-direction: column; gap: 12px; }
-  .stat-label { font-size: 13px; font-weight: 500; color: var(--text-muted); }
-  .stat-value { font-size: 28px; font-weight: 700; }
-  .stat-foot { display: flex; align-items: center; gap: 8px; }
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: 600;
-  }
-  .badge.up { background: var(--green-bg); color: var(--green); }
-  .badge.down { background: var(--red-bg); color: var(--red); }
-  .stat-vs { font-size: 11px; color: var(--text-muted); }
-
-  /* ---------- CHART ROW ---------- */
-  .chart-row { display: grid; grid-template-columns: 1fr 340px; gap: 24px; }
-  .panel-head {
-    display: flex;
-    align-items: center;
-    margin-bottom: 24px;
-  }
+  .panel-head { display: flex; align-items: center; margin-bottom: 20px; }
   .panel-head h2 { font-size: 16px; font-weight: 600; }
-  .panel-head .action { margin-left: auto; font-size: 13px; font-weight: 500; color: var(--accent); cursor: pointer; }
-  .revenue, .traffic { padding: 22px 24px; }
+  .panel-head .action { margin-left: auto; font-size: 12.5px; font-weight: 500; color: var(--accent); }
 
-  .bars {
-    display: flex;
-    align-items: flex-end;
-    gap: 14px;
-    height: 260px;
-  }
-  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; height: 100%; justify-content: flex-end; }
-  .bar { width: 100%; border-radius: 6px; background: var(--accent-soft); }
-  .bar.current { background: var(--accent); }
-  .bar-label { font-size: 11px; font-weight: 500; color: var(--text-muted); }
+  .chart-row { display: grid; grid-template-columns: 1.4fr 1fr; gap: 22px; }
+  .pad { padding: 22px 24px; }
 
-  .source { margin-bottom: 20px; }
-  .source:last-child { margin-bottom: 0; }
-  .source-top { display: flex; align-items: center; margin-bottom: 8px; }
-  .source-name { font-size: 13px; font-weight: 500; }
-  .source-val { margin-left: auto; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+  /* grouped bar chart */
+  .bars { display: flex; align-items: flex-end; gap: 18px; height: 260px; padding-top: 10px; }
+  .bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 10px; height: 100%; justify-content: flex-end; }
+  .bar-pair { display: flex; align-items: flex-end; gap: 6px; height: 100%; width: 100%; justify-content: center; }
+  .bar { width: 26px; border-radius: 6px 6px 0 0; position: relative; transition: height .3s; min-height: 2px; }
+  .bar.s { background: var(--accent-soft); }
+  .bar.e { background: var(--accent); }
+  .bar-label { font-size: 12px; font-weight: 600; color: var(--text-dark); }
+  .bar-val { font-size: 10px; color: var(--text-muted); }
+  .legend { display: flex; gap: 18px; margin-top: 14px; }
+  .legend span { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); }
+  .legend i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+
+  /* scheme progress */
+  .src { margin-bottom: 16px; }
+  .src:last-child { margin-bottom: 0; }
+  .src-top { display: flex; align-items: center; margin-bottom: 7px; gap: 10px; }
+  .src-name { font-size: 12.5px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .src-val { margin-left: auto; font-size: 12.5px; font-weight: 600; color: var(--text-muted); white-space: nowrap; }
   .track { height: 8px; border-radius: 4px; background: var(--track); overflow: hidden; }
   .track-fill { height: 100%; border-radius: 4px; background: var(--accent); }
 
-  /* ---------- TABLE ---------- */
+  /* year mini cards */
+  .years { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .ycard { padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; border-left: 4px solid var(--accent); }
+  .ylabel { font-size: 12.5px; color: var(--text-muted); font-weight: 500; }
+  .yval { font-size: 19px; font-weight: 700; }
+  .ymeta { font-size: 11px; color: var(--text-muted); }
+
+  /* TABLE */
   .table { overflow: hidden; }
-  .table-head {
-    display: flex;
-    align-items: center;
-    padding: 20px 24px;
-  }
+  .table-head { display: flex; align-items: center; padding: 18px 22px; gap: 12px; flex-wrap: wrap; }
   .table-head h2 { font-size: 16px; font-weight: 600; }
-  .table-head .action { margin-left: auto; font-size: 13px; font-weight: 500; color: var(--accent); cursor: pointer; }
-  table { width: 100%; border-collapse: collapse; }
-  thead th {
-    text-align: left;
-    padding: 12px 24px;
-    background: #f8f9fb;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-muted);
-    letter-spacing: 0.03em;
-  }
-  tbody td {
-    padding: 16px 24px;
-    font-size: 13px;
-    border-top: 1px solid var(--border);
-  }
-  td.order { color: var(--accent); }
+  .filters { margin-left: auto; display: flex; gap: 10px; flex-wrap: wrap; }
+  .filters select, .filters input { padding: 8px 11px; border-radius: 8px; border: 1px solid var(--border); background: var(--page-bg); font-size: 12.5px; color: var(--text-dark); font-family: inherit; }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; min-width: 820px; }
+  thead th { text-align: left; padding: 11px 22px; background: #f6f9f7; font-size: 11.5px; font-weight: 600; color: var(--text-muted); letter-spacing: .02em; white-space: nowrap; position: sticky; top: 0; }
+  th.r, td.r { text-align: right; }
+  tbody td { padding: 13px 22px; font-size: 12.5px; border-top: 1px solid var(--border); vertical-align: middle; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.sn { color: var(--text-muted); }
   td.amount { font-weight: 600; }
-  .pill {
-    display: inline-flex;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-  }
-  .pill.completed { background: var(--green-bg); color: var(--green); }
-  .pill.pending { background: var(--amber-bg); color: var(--amber); }
-  .pill.cancelled { background: var(--red-bg); color: var(--red); }
+  tbody tr:hover { background: #f9fbfa; }
+  .pill { display: inline-flex; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+  .pill.done { background: var(--green-bg); color: var(--green); }
+  .pill.part { background: var(--amber-bg); color: var(--amber); }
+  .pill.none { background: var(--blue-bg); color: var(--blue); }
+  .pill.over { background: var(--red-bg); color: var(--red); }
+  .empty { padding: 40px; text-align: center; color: var(--text-muted); font-size: 13px; }
+  .tfoot { padding: 12px 22px; font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--border); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
 
   @media (max-width: 1100px) {
     .stats { grid-template-columns: repeat(2, 1fr); }
     .chart-row { grid-template-columns: 1fr; }
+    .years { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 720px) {
     .sidebar { display: none; }
-    .stats { grid-template-columns: 1fr; }
-    .header { flex-wrap: wrap; }
-    .search { width: 100%; order: 3; }
-    .table-wrap { overflow-x: auto; }
+    .stats, .years { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
-  <div class="dashboard">
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-      <div class="logo">
-        <div class="logo-mark"></div>
-        <span class="logo-text">Acme Inc</span>
-      </div>
-      <a class="nav-item active"><span class="icon"></span>Dashboard</a>
-      <a class="nav-item"><span class="icon"></span>Analytics</a>
-      <a class="nav-item"><span class="icon"></span>Reports</a>
-      <a class="nav-item"><span class="icon"></span>Customers</a>
-      <a class="nav-item"><span class="icon"></span>Products</a>
-      <a class="nav-item"><span class="icon"></span>Settings</a>
-      <div class="spacer"></div>
-      <div class="profile">
-        <div class="avatar"></div>
-        <div>
-          <div class="profile-name">Ashish Khelwar</div>
-          <div class="profile-mail">admin@acme.com</div>
-        </div>
-      </div>
-    </aside>
-
-    <!-- MAIN -->
-    <div class="main">
-      <!-- HEADER -->
-      <header class="header">
-        <div>
-          <h1>Dashboard</h1>
-          <div class="subtitle">Welcome back, here's what's happening today.</div>
-        </div>
-        <div class="grow"></div>
-        <input class="search" type="text" placeholder="Search&hellip;" />
-        <button class="btn">+ New Report</button>
-      </header>
-
-      <!-- CONTENT -->
-      <main class="content">
-        <!-- STAT CARDS -->
-        <section class="stats">
-          <div class="card stat">
-            <div class="stat-label">Total Revenue</div>
-            <div class="stat-value">$48,290</div>
-            <div class="stat-foot"><span class="badge up">&#9650; +12.5%</span><span class="stat-vs">vs last month</span></div>
-          </div>
-          <div class="card stat">
-            <div class="stat-label">Active Users</div>
-            <div class="stat-value">8,942</div>
-            <div class="stat-foot"><span class="badge up">&#9650; +8.1%</span><span class="stat-vs">vs last month</span></div>
-          </div>
-          <div class="card stat">
-            <div class="stat-label">New Orders</div>
-            <div class="stat-value">1,204</div>
-            <div class="stat-foot"><span class="badge down">&#9660; -3.2%</span><span class="stat-vs">vs last month</span></div>
-          </div>
-          <div class="card stat">
-            <div class="stat-label">Conversion</div>
-            <div class="stat-value">3.68%</div>
-            <div class="stat-foot"><span class="badge up">&#9650; +2.4%</span><span class="stat-vs">vs last month</span></div>
-          </div>
-        </section>
-
-        <!-- CHART ROW -->
-        <section class="chart-row">
-          <!-- Revenue bar chart -->
-          <div class="card revenue">
-            <div class="panel-head">
-              <h2>Revenue Overview</h2>
-              <span class="action">Last 12 months</span>
-            </div>
-            <div class="bars">
-              <div class="bar-col"><div class="bar" style="height:110px"></div><div class="bar-label">Jan</div></div>
-              <div class="bar-col"><div class="bar" style="height:150px"></div><div class="bar-label">Feb</div></div>
-              <div class="bar-col"><div class="bar" style="height:130px"></div><div class="bar-label">Mar</div></div>
-              <div class="bar-col"><div class="bar" style="height:190px"></div><div class="bar-label">Apr</div></div>
-              <div class="bar-col"><div class="bar" style="height:170px"></div><div class="bar-label">May</div></div>
-              <div class="bar-col"><div class="bar" style="height:220px"></div><div class="bar-label">Jun</div></div>
-              <div class="bar-col"><div class="bar" style="height:200px"></div><div class="bar-label">Jul</div></div>
-              <div class="bar-col"><div class="bar" style="height:240px"></div><div class="bar-label">Aug</div></div>
-              <div class="bar-col"><div class="bar" style="height:210px"></div><div class="bar-label">Sep</div></div>
-              <div class="bar-col"><div class="bar" style="height:250px"></div><div class="bar-label">Oct</div></div>
-              <div class="bar-col"><div class="bar" style="height:230px"></div><div class="bar-label">Nov</div></div>
-              <div class="bar-col"><div class="bar current" style="height:260px"></div><div class="bar-label">Dec</div></div>
-            </div>
-          </div>
-
-          <!-- Traffic sources -->
-          <div class="card traffic">
-            <div class="panel-head">
-              <h2>Traffic Sources</h2>
-              <span class="action">View all</span>
-            </div>
-            <div class="source">
-              <div class="source-top"><span class="source-name">Organic Search</span><span class="source-val">12,480</span></div>
-              <div class="track"><div class="track-fill" style="width:78%"></div></div>
-            </div>
-            <div class="source">
-              <div class="source-top"><span class="source-name">Direct</span><span class="source-val">8,210</span></div>
-              <div class="track"><div class="track-fill" style="width:56%"></div></div>
-            </div>
-            <div class="source">
-              <div class="source-top"><span class="source-name">Social Media</span><span class="source-val">6,050</span></div>
-              <div class="track"><div class="track-fill" style="width:42%"></div></div>
-            </div>
-            <div class="source">
-              <div class="source-top"><span class="source-name">Referral</span><span class="source-val">3,940</span></div>
-              <div class="track"><div class="track-fill" style="width:28%"></div></div>
-            </div>
-            <div class="source">
-              <div class="source-top"><span class="source-name">Email</span><span class="source-val">2,120</span></div>
-              <div class="track"><div class="track-fill" style="width:18%"></div></div>
-            </div>
-          </div>
-        </section>
-
-        <!-- TABLE -->
-        <section class="card table">
-          <div class="table-head">
-            <h2>Recent Orders</h2>
-            <span class="action">View all orders</span>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>ORDER</th><th>CUSTOMER</th><th>DATE</th><th>AMOUNT</th><th>STATUS</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="order">#ORD-7841</td><td>Priya Sharma</td><td>Jul 06, 2026</td><td class="amount">$1,240</td>
-                  <td><span class="pill completed">Completed</span></td>
-                </tr>
-                <tr>
-                  <td class="order">#ORD-7840</td><td>Rahul Verma</td><td>Jul 06, 2026</td><td class="amount">$860</td>
-                  <td><span class="pill pending">Pending</span></td>
-                </tr>
-                <tr>
-                  <td class="order">#ORD-7839</td><td>Anita Desai</td><td>Jul 05, 2026</td><td class="amount">$2,105</td>
-                  <td><span class="pill completed">Completed</span></td>
-                </tr>
-                <tr>
-                  <td class="order">#ORD-7838</td><td>Vikram Singh</td><td>Jul 05, 2026</td><td class="amount">$430</td>
-                  <td><span class="pill cancelled">Cancelled</span></td>
-                </tr>
-                <tr>
-                  <td class="order">#ORD-7837</td><td>Meera Nair</td><td>Jul 04, 2026</td><td class="amount">$1,690</td>
-                  <td><span class="pill completed">Completed</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-      </main>
+<div class="dashboard">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-mark">🌳</div>
+      <div class="logo-text">वन बजट<small>वनमण्डल रायगढ़</small></div>
     </div>
+    <a class="nav-item active"><span class="ic"></span>डैशबोर्ड</a>
+    <a class="nav-item"><span class="ic"></span>परिक्षेत्र</a>
+    <a class="nav-item"><span class="ic"></span>योजनाएँ</a>
+    <a class="nav-item"><span class="ic"></span>कार्य सूची</a>
+    <a class="nav-item"><span class="ic"></span>रिपोर्ट</a>
+    <a class="nav-item"><span class="ic"></span>सेटिंग्स</a>
+    <div class="spacer"></div>
+    <div class="profile">
+      <div class="avatar"></div>
+      <div>
+        <div class="profile-name">Ashish Khelwar</div>
+        <div class="profile-mail">admin@acme.com</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="header">
+      <div>
+        <h1>वन बजट डैशबोर्ड</h1>
+        <div class="subtitle">10-2406 वानिकी और वन्यजीवन (आयोजनेत्तर) — स्वीकृत, व्यय एवं शेष राशि का सार</div>
+      </div>
+      <div class="grow"></div>
+      <input class="search" id="globalSearch" type="text" placeholder="कार्य / स्थल खोजें…" />
+      <button class="btn" onclick="window.print()">रिपोर्ट प्रिंट करें</button>
+    </header>
+
+    <main class="content">
+      <!-- STAT CARDS -->
+      <section class="stats" id="stats"></section>
+
+      <!-- CHART ROW -->
+      <section class="chart-row">
+        <div class="card pad">
+          <div class="panel-head"><h2>परिक्षेत्र-वार स्वीकृत बनाम व्यय</h2><span class="action">राशि ₹ में</span></div>
+          <div class="bars" id="rangeBars"></div>
+          <div class="legend">
+            <span><i style="background:var(--accent-soft)"></i>स्वीकृत राशि</span>
+            <span><i style="background:var(--accent)"></i>व्यय राशि</span>
+          </div>
+        </div>
+        <div class="card pad">
+          <div class="panel-head"><h2>योजना-वार स्वीकृत राशि</h2><span class="action">कुल का %</span></div>
+          <div id="schemeBars"></div>
+        </div>
+      </section>
+
+      <!-- YEAR BREAKDOWN -->
+      <section class="years" id="years"></section>
+
+      <!-- TABLE -->
+      <section class="card table">
+        <div class="table-head">
+          <h2>कार्यों की सूची</h2>
+          <div class="filters">
+            <select id="fRange"><option value="">सभी परिक्षेत्र</option></select>
+            <select id="fScheme"><option value="">सभी योजनाएँ</option></select>
+            <select id="fYear"><option value="">सभी वर्ष</option></select>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>क्र.</th><th>योजना</th><th>कार्य</th><th>वर्ष</th><th>परिक्षेत्र</th><th>स्थल</th>
+                <th class="r">स्वीकृत</th><th class="r">व्यय</th><th class="r">शेष</th><th>स्थिति</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+        <div class="tfoot"><span id="rowCount"></span><span id="sumLine"></span></div>
+      </section>
+    </main>
   </div>
+</div>
+
+<script>
+const DATA = [{"sn":1,"code":"4349","scheme":"सड़क निर्माण/मरम्मत","work":"वनमार्गों का मरम्मत कार्य","year":"प्रथम वर्ष","range":"रायगढ़","site":"परिक्षेत्र स्तर पर","sanctioned":0.0,"expenditure":0.0,"balance":0.0},{"sn":2,"code":"4349","scheme":"सड़क निर्माण/मरम्मत","work":"वनमार्गों का मरम्मत कार्य","year":"प्रथम वर्ष","range":"खरसिया","site":"परिक्षेत्र स्तर पर","sanctioned":0.0,"expenditure":0.0,"balance":0.0},{"sn":3,"code":"4349","scheme":"सड़क निर्माण/मरम्मत","work":"वनमार्गों का मरम्मत कार्य","year":"प्रथम वर्ष","range":"घड़घोड़ा","site":"परिक्षेत्र स्तर पर","sanctioned":0.0,"expenditure":0.0,"balance":0.0},{"sn":4,"code":"4349","scheme":"सड़क निर्माण/मरम्मत","work":"वनमार्गों का मरम्मत कार्य","year":"प्रथम वर्ष","range":"वनमण्डल","site":"परिक्षेत्र स्तर पर","sanctioned":500000.0,"expenditure":0.0,"balance":500000.0},{"sn":5,"code":"6218","scheme":"भवनों का मरम्मत","work":"(003) कार्यालयीन भवन","year":"प्रथम वर्ष","range":"वनमण्डल","site":"वनमण्डल स्तर पर","sanctioned":200000.0,"expenditure":0.0,"balance":200000.0},{"sn":6,"code":"6218","scheme":"भवनों का मरम्मत","work":"(004) आवासीय भवन","year":"प्रथम वर्ष","range":"वनमण्डल","site":"वनमण्डल स्तर पर","sanctioned":400000.0,"expenditure":0.0,"balance":400000.0},{"sn":7,"code":"0813","scheme":"कार्यकारी योजना","work":"मुनारा निर्माण कार्य","year":"प्रथम वर्ष","range":"वनमण्डल","site":"परिक्षेत्र स्तर पर","sanctioned":206000.0,"expenditure":0.0,"balance":206000.0},{"sn":8,"code":"0813","scheme":"कार्यकारी योजना","work":"मुनारा निर्माण कार्य","year":"प्रथम वर्ष","range":"वनमण्डल","site":"परिक्षेत्र स्तर पर","sanctioned":41000.0,"expenditure":0.0,"balance":41000.0},{"sn":9,"code":"0813","scheme":"कार्यकारी योजना","work":"अनुरक्षण कार्य","year":"प्रथम वर्ष","range":"वनमण्डल","site":"परिक्षेत्र स्तर पर","sanctioned":3000.0,"expenditure":0.0,"balance":3000.0},{"sn":10,"code":"3877","scheme":"क्षेत्रीय वनमण्डल","work":"मार्किंग कार्य","year":"प्रथम वर्ष","range":"रायगढ़","site":"परिक्षेत्र स्तर पर","sanctioned":0.0,"expenditure":0.0,"balance":0.0},{"sn":11,"code":"3877","scheme":"क्षेत्रीय वनमण्डल","work":"मार्किंग कार्य","year":"प्रथम वर्ष","range":"घड़घोड़ा","site":"परिक्षेत्र स्तर पर","sanctioned":0.0,"expenditure":0.0,"balance":0.0},{"sn":12,"code":"3877","scheme":"क्षेत्रीय वनमण्डल","work":"मार्किंग कार्य","year":"प्रथम वर्ष","range":"तमनार","site":"परिक्षेत्र स्तर पर","sanctioned":0.0,"expenditure":0.0,"balance":0.0},{"sn":13,"code":"3877","scheme":"क्षेत्रीय वनमण्डल","work":"मार्किंग कार्य","year":"प्रथम वर्ष","range":"वनमण्डल","site":"वनमण्डल स्तर पर","sanctioned":360000.0,"expenditure":0.0,"balance":360000.0},{"sn":14,"code":"3877","scheme":"क्षेत्रीय वनमण्डल","work":"02-004 दैनिक वेतनभोगी श्रमिकों का मज़दूरी व्यय","year":"प्रथम वर्ष","range":"वनमण्डल","site":"वनमण्डल स्तर पर","sanctioned":2145000.0,"expenditure":1960685.0,"balance":184315.0},{"sn":15,"code":"3877","scheme":"क्षेत्रीय वनमण्डल","work":"25-006 अन्य व्यय","year":"प्रथम वर्ष","range":"वनमण्डल","site":"वनमण्डल स्तर पर","sanctioned":50000.0,"expenditure":17214.0,"balance":32786.0},{"sn":16,"code":"3877","scheme":"क्षेत्रीय वनमण्डल","work":"25-009 डिमार्केशन एवं मार्किंग मटेरियल","year":"प्रथम वर्ष","range":"वनमण्डल","site":"वनमण्डल स्तर पर","sanctioned":331000.0,"expenditure":0.0,"balance":331000.0},{"sn":17,"code":"3877","scheme":"क्षेत्रीय वनमण्डल","work":"27-006 अन्य व्यय","year":"प्रथम वर्ष","range":"वनमण्डल","site":"वनमण्डल स्तर पर","sanctioned":75000.0,"expenditure":0.0,"balance":75000.0},{"sn":18,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"सेकंड वर्ष","range":"रायगढ़","site":"908 RF","sanctioned":473139.0,"expenditure":0.0,"balance":473139.0},{"sn":19,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"सेकंड वर्ष","range":"रायगढ़","site":"902 RF","sanctioned":514044.0,"expenditure":18876.0,"balance":495168.0},{"sn":20,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"सेकंड वर्ष","range":"घड़घोड़ा","site":"1300 RF","sanctioned":346503.0,"expenditure":0.0,"balance":346503.0},{"sn":21,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"सेकंड वर्ष","range":"तमनार","site":"832","sanctioned":379275.0,"expenditure":0.0,"balance":379275.0},{"sn":22,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"सेकंड वर्ष","range":"रायगढ़","site":"966 RF","sanctioned":501970.0,"expenditure":0.0,"balance":501970.0},{"sn":23,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"सेकंड वर्ष","range":"घड़घोड़ा","site":"1275 RF","sanctioned":500590.0,"expenditure":43528.0,"balance":457062.0},{"sn":24,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"सेकंड वर्ष","range":"तमनार","site":"833","sanctioned":398479.0,"expenditure":0.0,"balance":398479.0},{"sn":25,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"तृतीय वर्ष","range":"रायगढ़","site":"918 RF","sanctioned":430875.0,"expenditure":0.0,"balance":430875.0},{"sn":26,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"तृतीय वर्ष","range":"रायगढ़","site":"900 RF","sanctioned":641693.0,"expenditure":18876.0,"balance":622817.0},{"sn":27,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"तृतीय वर्ष","range":"रायगढ़","site":"909 RF","sanctioned":581600.0,"expenditure":0.0,"balance":581600.0},{"sn":28,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"तृतीय वर्ष","range":"रायगढ़","site":"917 RF","sanctioned":462962.0,"expenditure":0.0,"balance":462962.0},{"sn":29,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"तृतीय वर्ष","range":"रायगढ़","site":"907 RF","sanctioned":495874.0,"expenditure":9438.0,"balance":486436.0},{"sn":30,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"तृतीय वर्ष","range":"रायगढ़","site":"917 RF","sanctioned":324996.0,"expenditure":0.0,"balance":324996.0},{"sn":31,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"तृतीय वर्ष","range":"घड़घोड़ा","site":"1271 RF","sanctioned":460256.0,"expenditure":0.0,"balance":460256.0},{"sn":32,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"तृतीय वर्ष","range":"रायगढ़","site":"926 RF","sanctioned":377055.0,"expenditure":0.0,"balance":377055.0},{"sn":33,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"तृतीय वर्ष","range":"घड़घोड़ा","site":"1272 RF","sanctioned":763311.0,"expenditure":65292.0,"balance":698019.0},{"sn":34,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"तृतीय वर्ष","range":"तमनार","site":"768 RF","sanctioned":491378.0,"expenditure":0.0,"balance":491378.0},{"sn":35,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"तृतीय वर्ष","range":"तमनार","site":"बजरमुड़ा 831","sanctioned":469412.0,"expenditure":0.0,"balance":469412.0},{"sn":36,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"तृतीय वर्ष","range":"रायगढ़","site":"ढेंगुरनाला -2","sanctioned":631392.0,"expenditure":0.0,"balance":631392.0},{"sn":37,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"तृतीय वर्ष","range":"घड़घोड़ा","site":"कया - 1267 (84.830)","sanctioned":984832.0,"expenditure":21764.0,"balance":963068.0},{"sn":38,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"तृतीय वर्ष","range":"तमनार","site":"बजरमुड़ा 829","sanctioned":286364.0,"expenditure":0.0,"balance":286364.0},{"sn":39,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"चतुर्थ वर्ष","range":"तमनार","site":"बजरमुड़ा 829","sanctioned":287478.0,"expenditure":0.0,"balance":287478.0},{"sn":40,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"चतुर्थ वर्ष","range":"रायगढ़","site":"डेंगुरनाला -1 (905)","sanctioned":240043.0,"expenditure":0.0,"balance":240043.0},{"sn":41,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"चतुर्थ वर्ष","range":"घड़घोड़ा","site":"कया 1267","sanctioned":302479.0,"expenditure":65292.0,"balance":237187.0},{"sn":42,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"चतुर्थ वर्ष","range":"घड़घोड़ा","site":"कया 1276","sanctioned":261648.0,"expenditure":43528.0,"balance":218120.0},{"sn":43,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"चतुर्थ वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा 1263","sanctioned":348352.0,"expenditure":65292.0,"balance":283060.0},{"sn":44,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"चतुर्थ वर्ष","range":"तमनार","site":"846 RF","sanctioned":279414.0,"expenditure":0.0,"balance":279414.0},{"sn":45,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"चतुर्थ वर्ष","range":"रायगढ़","site":"906 RF","sanctioned":399586.0,"expenditure":0.0,"balance":399586.0},{"sn":46,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"चतुर्थ वर्ष","range":"तमनार","site":"तमनार 763","sanctioned":282695.0,"expenditure":0.0,"balance":282695.0},{"sn":47,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"चतुर्थ वर्ष","range":"रायगढ़","site":"बड़गांव 898","sanctioned":507305.0,"expenditure":18876.0,"balance":488429.0},{"sn":48,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"चतुर्थ वर्ष","range":"तमनार","site":"तमनार 767 RF","sanctioned":497708.0,"expenditure":0.0,"balance":497708.0},{"sn":49,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"चतुर्थ वर्ष","range":"रायगढ़","site":"बढ़गांव 901","sanctioned":321292.0,"expenditure":9438.0,"balance":311854.0},{"sn":50,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"चतुर्थ वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा 1236","sanctioned":314425.0,"expenditure":0.0,"balance":314425.0},{"sn":51,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"चतुर्थ वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा 1247","sanctioned":184780.0,"expenditure":0.0,"balance":184780.0},{"sn":52,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"चतुर्थ वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा 1250","sanctioned":70795.0,"expenditure":0.0,"balance":70795.0},{"sn":53,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"चतुर्थ वर्ष","range":"तमनार","site":"765 RF","sanctioned":282007.0,"expenditure":0.0,"balance":282007.0},{"sn":54,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"चतुर्थ वर्ष","range":"रायगढ़","site":"898 RF","sanctioned":472527.0,"expenditure":18876.0,"balance":453651.0},{"sn":55,"code":"3531","scheme":"सहायक प्राकृतिक पुनरोत्पादन","work":"(3531) सहायक प्राकृतिक पुनरोत्पादन","year":"चतुर्थ वर्ष","range":"घड़घोड़ा","site":"1263 PF","sanctioned":379466.0,"expenditure":65292.0,"balance":314174.0},{"sn":56,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"रायगढ़","site":"बोईरदादर 904 RF","sanctioned":9454.0,"expenditure":0.0,"balance":9454.0},{"sn":57,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"रायगढ़","site":"बोईरदादर 941 PF","sanctioned":23510.0,"expenditure":0.0,"balance":23510.0},{"sn":58,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"रायगढ़","site":"बोईरदादर 943 PF","sanctioned":8035.0,"expenditure":0.0,"balance":8035.0},{"sn":59,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"रायगढ़","site":"बोईरदादर 944 OA","sanctioned":1014.0,"expenditure":0.0,"balance":1014.0},{"sn":60,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"रायगढ़","site":"बोईरदादर 945 PF","sanctioned":8807.0,"expenditure":0.0,"balance":8807.0},{"sn":61,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"रायगढ़","site":"बोरसिया 967 RF","sanctioned":64988.0,"expenditure":44568.0,"balance":20420.0},{"sn":62,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"रायगढ़","site":"कोसमखार 1031 OA","sanctioned":22046.0,"expenditure":0.0,"balance":22046.0},{"sn":63,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"रायगढ़","site":"सपनई 979 PF","sanctioned":64593.0,"expenditure":0.0,"balance":64593.0},{"sn":64,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"रायगढ़","site":"टपरंगा 808 PF","sanctioned":24371.0,"expenditure":0.0,"balance":24371.0},{"sn":65,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"रायगढ़","site":"तिलगाधार 994 PF","sanctioned":31862.0,"expenditure":0.0,"balance":31862.0},{"sn":66,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"रायगढ़","site":"उर्दना 924","sanctioned":55907.0,"expenditure":0.0,"balance":55907.0},{"sn":67,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"तमनार","site":"डागदानी 861 PF","sanctioned":13764.0,"expenditure":0.0,"balance":13764.0},{"sn":68,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"तमनार","site":"डागदानी 862 PF","sanctioned":14736.0,"expenditure":0.0,"balance":14736.0},{"sn":69,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"तमनार","site":"मिलुपारा 788 PF","sanctioned":28239.0,"expenditure":0.0,"balance":28239.0},{"sn":70,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"तमनार","site":"मिलुपारा 790 PF","sanctioned":3325.0,"expenditure":0.0,"balance":3325.0},{"sn":71,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"तमनार","site":"मिलुपारा 791 PF","sanctioned":16940.0,"expenditure":0.0,"balance":16940.0},{"sn":72,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"तमनार","site":"तिलाईपाली 842 PF","sanctioned":36003.0,"expenditure":0.0,"balance":36003.0},{"sn":73,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"घड़घोड़ा","site":"चारमार 1274","sanctioned":37107.0,"expenditure":0.0,"balance":37107.0},{"sn":74,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"घड़घोड़ा","site":"घरघोड़ी 1345 OA","sanctioned":41180.0,"expenditure":0.0,"balance":41180.0},{"sn":75,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"घड़घोड़ा","site":"कोसमघाट 1235 PF","sanctioned":48978.0,"expenditure":15413.0,"balance":33565.0},{"sn":76,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"घड़घोड़ा","site":"कुधुरमहुआ 1354 PF","sanctioned":8114.0,"expenditure":0.0,"balance":8114.0},{"sn":77,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"घड़घोड़ा","site":"कुधुरमहुआ 1355 PF","sanctioned":13601.0,"expenditure":0.0,"balance":13601.0},{"sn":78,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"घड़घोड़ा","site":"कुधुरमहुआ 1356 PF","sanctioned":6012.0,"expenditure":0.0,"balance":6012.0},{"sn":79,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"घड़घोड़ा","site":"कुडुमकेला 1285 OA","sanctioned":21776.0,"expenditure":0.0,"balance":21776.0},{"sn":80,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"घड़घोड़ा","site":"कुडुमकेला 1286 PF","sanctioned":21860.0,"expenditure":0.0,"balance":21860.0},{"sn":81,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"घड़घोड़ा","site":"कुडुमकेला 1288 OA","sanctioned":3976.0,"expenditure":0.0,"balance":3976.0},{"sn":82,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"घड़घोड़ा","site":"नवागढ़ 1261 PF","sanctioned":30383.0,"expenditure":0.0,"balance":30383.0},{"sn":83,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"घड़घोड़ा","site":"राय 1299 PF","sanctioned":17428.0,"expenditure":0.0,"balance":17428.0},{"sn":84,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"घड़घोड़ा","site":"राय 1307 PF","sanctioned":7184.0,"expenditure":0.0,"balance":7184.0},{"sn":85,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"खरसिया","site":"बरगढ़ 1185 PF","sanctioned":14936.0,"expenditure":0.0,"balance":14936.0},{"sn":86,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"खरसिया","site":"बरगढ़ 1186 OA","sanctioned":13067.0,"expenditure":0.0,"balance":13067.0},{"sn":87,"code":"2965","scheme":"बिगड़े वनों का सुधार","work":"बिगड़े वनों का सुधार कार्य","year":"प्रथम वर्ष","range":"खरसिया","site":"डोंगरीखोल 1133","sanctioned":59804.0,"expenditure":59804.0,"balance":0.0},{"sn":88,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"चतुर्थ वर्ष","range":"रायगढ़","site":"गजमार 1007","sanctioned":42456.0,"expenditure":0.0,"balance":42456.0},{"sn":89,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"चतुर्थ वर्ष","range":"रायगढ़","site":"राबो - S 871","sanctioned":57500.0,"expenditure":0.0,"balance":57500.0},{"sn":90,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"चतुर्थ वर्ष","range":"रायगढ़","site":"उर्दना 895","sanctioned":78825.0,"expenditure":0.0,"balance":78825.0},{"sn":91,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"चतुर्थ वर्ष","range":"खरसिया","site":"बरगढ़ 1144","sanctioned":43436.0,"expenditure":0.0,"balance":43436.0},{"sn":92,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"चतुर्थ वर्ष","range":"खरसिया","site":"डोरीखोल 1142","sanctioned":31046.0,"expenditure":0.0,"balance":31046.0},{"sn":93,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"चतुर्थ वर्ष","range":"खरसिया","site":"मांड 1191","sanctioned":34669.0,"expenditure":0.0,"balance":34669.0},{"sn":94,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"चतुर्थ वर्ष","range":"खरसिया","site":"राबो - N 1174","sanctioned":78025.0,"expenditure":0.0,"balance":78025.0},{"sn":95,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"चतुर्थ वर्ष","range":"तमनार","site":"सिलोट - E 723","sanctioned":77443.0,"expenditure":0.0,"balance":77443.0},{"sn":96,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"चतुर्थ वर्ष","range":"तमनार","site":"सिलोट -W 716","sanctioned":44577.0,"expenditure":0.0,"balance":44577.0},{"sn":97,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"चतुर्थ वर्ष","range":"तमनार","site":"टोलो - E 779","sanctioned":75903.0,"expenditure":0.0,"balance":75903.0},{"sn":98,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"चतुर्थ वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - N 1201","sanctioned":83754.0,"expenditure":0.0,"balance":83754.0},{"sn":99,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"चतुर्थ वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा -S 1207","sanctioned":78366.0,"expenditure":0.0,"balance":78366.0},{"sn":100,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"चतुर्थ वर्ष","range":"रायगढ़","site":"रायगढ़ -1 1008","sanctioned":109082.0,"expenditure":0.0,"balance":109082.0},{"sn":101,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"चतुर्थ वर्ष","range":"रायगढ़","site":"रायगढ़ -2 902","sanctioned":96949.0,"expenditure":0.0,"balance":96949.0},{"sn":102,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"चतुर्थ वर्ष","range":"रायगढ़","site":"रायगढ़ -3 908","sanctioned":98059.0,"expenditure":0.0,"balance":98059.0},{"sn":103,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"चतुर्थ वर्ष","range":"खरसिया","site":"खरसियां - 1 1145","sanctioned":78435.0,"expenditure":0.0,"balance":78435.0},{"sn":104,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"चतुर्थ वर्ष","range":"खरसिया","site":"खरसियां - 2 1175","sanctioned":67615.0,"expenditure":0.0,"balance":67615.0},{"sn":105,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"चतुर्थ वर्ष","range":"तमनार","site":"तमनार - 1 775","sanctioned":132235.0,"expenditure":0.0,"balance":132235.0},{"sn":106,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"चतुर्थ वर्ष","range":"तमनार","site":"तमनार - 2 760","sanctioned":81587.0,"expenditure":0.0,"balance":81587.0},{"sn":107,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"चतुर्थ वर्ष","range":"तमनार","site":"तमनार - 2 761","sanctioned":114203.0,"expenditure":0.0,"balance":114203.0},{"sn":108,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"चतुर्थ वर्ष","range":"तमनार","site":"तमनार - 3 770","sanctioned":101001.0,"expenditure":0.0,"balance":101001.0},{"sn":109,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"चतुर्थ वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 1 1314","sanctioned":79300.0,"expenditure":0.0,"balance":79300.0},{"sn":110,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"चतुर्थ वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 1 1315","sanctioned":87833.0,"expenditure":0.0,"balance":87833.0},{"sn":111,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"चतुर्थ वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 2 1300","sanctioned":133135.0,"expenditure":0.0,"balance":133135.0},{"sn":112,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"चतुर्थ वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 3 1236 P","sanctioned":46626.0,"expenditure":0.0,"balance":46626.0},{"sn":113,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"चतुर्थ वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 3 1247 P","sanctioned":27430.0,"expenditure":0.0,"balance":27430.0},{"sn":114,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"चतुर्थ वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 3 1250","sanctioned":10510.0,"expenditure":0.0,"balance":10510.0},{"sn":115,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"तृतीय वर्ष","range":"रायगढ़","site":"गजमार 1007","sanctioned":56410.0,"expenditure":0.0,"balance":56410.0},{"sn":116,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"तृतीय वर्ष","range":"रायगढ़","site":"राबो -S 868","sanctioned":102204.0,"expenditure":0.0,"balance":102204.0},{"sn":117,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"तृतीय वर्ष","range":"रायगढ़","site":"उर्दना 891","sanctioned":57236.0,"expenditure":0.0,"balance":57236.0},{"sn":118,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"तृतीय वर्ष","range":"खरसिया","site":"बरगढ़ 1166 PF","sanctioned":67828.0,"expenditure":0.0,"balance":67828.0},{"sn":119,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"तृतीय वर्ष","range":"खरसिया","site":"डोरीखोल 1135","sanctioned":33469.0,"expenditure":0.0,"balance":33469.0},{"sn":120,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"तृतीय वर्ष","range":"खरसिया","site":"मांड 1170","sanctioned":93433.0,"expenditure":0.0,"balance":93433.0},{"sn":121,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"तृतीय वर्ष","range":"खरसिया","site":"राबो - N 1177","sanctioned":104293.0,"expenditure":0.0,"balance":104293.0},{"sn":122,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"तृतीय वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - N 1197","sanctioned":157442.0,"expenditure":0.0,"balance":157442.0},{"sn":123,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"तृतीय वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा -S 1208","sanctioned":103948.0,"expenditure":0.0,"balance":103948.0},{"sn":124,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"तृतीय वर्ष","range":"घड़घोड़ा","site":"राय 1302","sanctioned":11409.0,"expenditure":0.0,"balance":11409.0},{"sn":125,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"तृतीय वर्ष","range":"तमनार","site":"सिलोट - E 722","sanctioned":92103.0,"expenditure":0.0,"balance":92103.0},{"sn":126,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"तृतीय वर्ष","range":"तमनार","site":"सिलोट -W 709","sanctioned":42245.0,"expenditure":0.0,"balance":42245.0},{"sn":127,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"तृतीय वर्ष","range":"तमनार","site":"टोलो - E 779","sanctioned":58902.0,"expenditure":0.0,"balance":58902.0},{"sn":128,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"तृतीय वर्ष","range":"तमनार","site":"टोलो - N 761","sanctioned":0.0,"expenditure":0.0,"balance":0.0},{"sn":129,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"तृतीय वर्ष","range":"तमनार","site":"टोलो - S 774","sanctioned":124078.0,"expenditure":0.0,"balance":124078.0},{"sn":130,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"तृतीय वर्ष","range":"रायगढ़","site":"रायगढ़ -1 1009","sanctioned":126903.0,"expenditure":0.0,"balance":126903.0},{"sn":131,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"तृतीय वर्ष","range":"रायगढ़","site":"रायगढ़ -1 1010","sanctioned":137812.0,"expenditure":0.0,"balance":137812.0},{"sn":132,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"तृतीय वर्ष","range":"रायगढ़","site":"रायगढ़ -2 903","sanctioned":146669.0,"expenditure":0.0,"balance":146669.0},{"sn":133,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"तृतीय वर्ष","range":"रायगढ़","site":"रायगढ़ -3 909","sanctioned":120646.0,"expenditure":0.0,"balance":120646.0},{"sn":134,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"तृतीय वर्ष","range":"तमनार","site":"तमनार - 1 776","sanctioned":81570.0,"expenditure":0.0,"balance":81570.0},{"sn":135,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"तृतीय वर्ष","range":"तमनार","site":"तमनार - 1 777","sanctioned":110631.0,"expenditure":0.0,"balance":110631.0},{"sn":136,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"तृतीय वर्ष","range":"तमनार","site":"तमनार - 2 743 PF","sanctioned":52378.0,"expenditure":0.0,"balance":52378.0},{"sn":137,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"तृतीय वर्ष","range":"तमनार","site":"तमनार - 2 757 PF","sanctioned":5035.0,"expenditure":0.0,"balance":5035.0},{"sn":138,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"तृतीय वर्ष","range":"तमनार","site":"तमनार - 2 797 OA","sanctioned":33769.0,"expenditure":0.0,"balance":33769.0},{"sn":139,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"तृतीय वर्ष","range":"तमनार","site":"तमनार - 2 803 PF","sanctioned":6306.0,"expenditure":0.0,"balance":6306.0},{"sn":140,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"तृतीय वर्ष","range":"तमनार","site":"तमनार - 3 771","sanctioned":201889.0,"expenditure":0.0,"balance":201889.0},{"sn":141,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"तृतीय वर्ष","range":"खरसिया","site":"खरसियां - 1 1146","sanctioned":75541.0,"expenditure":0.0,"balance":75541.0},{"sn":142,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"तृतीय वर्ष","range":"खरसिया","site":"खरसियां - 2 1176","sanctioned":104211.0,"expenditure":0.0,"balance":104211.0},{"sn":143,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"तृतीय वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 1 1216 PF","sanctioned":13820.0,"expenditure":0.0,"balance":13820.0},{"sn":144,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"तृतीय वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 1 1218 OA","sanctioned":9738.0,"expenditure":0.0,"balance":9738.0},{"sn":145,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"तृतीय वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 1 1221 OA","sanctioned":8985.0,"expenditure":0.0,"balance":8985.0},{"sn":146,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"तृतीय वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 1 1223 OA","sanctioned":18850.0,"expenditure":0.0,"balance":18850.0},{"sn":147,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"तृतीय वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 1 1324 PF","sanctioned":23944.0,"expenditure":0.0,"balance":23944.0},{"sn":148,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"तृतीय वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 1 1325 PF","sanctioned":14415.0,"expenditure":0.0,"balance":14415.0},{"sn":149,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"तृतीय वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 1 1327 PF","sanctioned":7772.0,"expenditure":0.0,"balance":7772.0},{"sn":150,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"तृतीय वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 1 1334 OA","sanctioned":5280.0,"expenditure":0.0,"balance":5280.0},{"sn":151,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"तृतीय वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 2 1318","sanctioned":104992.0,"expenditure":0.0,"balance":104992.0},{"sn":152,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"तृतीय वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 3 1253 PF","sanctioned":52097.0,"expenditure":0.0,"balance":52097.0},{"sn":153,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"तृतीय वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 3 1260 PF","sanctioned":51747.0,"expenditure":0.0,"balance":51747.0},{"sn":154,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"प्रथम वर्ष","range":"रायगढ़","site":"गजमार 1010","sanctioned":64863.0,"expenditure":31565.0,"balance":33298.0},{"sn":155,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"प्रथम वर्ष","range":"रायगढ़","site":"राबो -S 870","sanctioned":142077.0,"expenditure":0.0,"balance":142077.0},{"sn":156,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"प्रथम वर्ष","range":"रायगढ़","site":"उर्दना 888","sanctioned":115701.0,"expenditure":0.0,"balance":115701.0},{"sn":157,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"प्रथम वर्ष","range":"रायगढ़","site":"उर्दना 890","sanctioned":70429.0,"expenditure":0.0,"balance":70429.0},{"sn":158,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"प्रथम वर्ष","range":"तमनार","site":"सिलोट - E 722","sanctioned":43877.0,"expenditure":0.0,"balance":43877.0},{"sn":159,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"प्रथम वर्ष","range":"तमनार","site":"सिलोट - W 714","sanctioned":40390.0,"expenditure":0.0,"balance":40390.0},{"sn":160,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"प्रथम वर्ष","range":"तमनार","site":"टोलो - E 782","sanctioned":139858.0,"expenditure":0.0,"balance":139858.0},{"sn":161,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"प्रथम वर्ष","range":"तमनार","site":"टोलो - N 758","sanctioned":52299.0,"expenditure":0.0,"balance":52299.0},{"sn":162,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"प्रथम वर्ष","range":"तमनार","site":"टोलो -S 775","sanctioned":160546.0,"expenditure":0.0,"balance":160546.0},{"sn":163,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"प्रथम वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - N 1200","sanctioned":114553.0,"expenditure":0.0,"balance":114553.0},{"sn":164,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"प्रथम वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा -S 1206","sanctioned":95892.0,"expenditure":0.0,"balance":95892.0},{"sn":165,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"प्रथम वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा -S 1209","sanctioned":86862.0,"expenditure":0.0,"balance":86862.0},{"sn":166,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"प्रथम वर्ष","range":"घड़घोड़ा","site":"राय 1313","sanctioned":43422.0,"expenditure":26485.0,"balance":16937.0},{"sn":167,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"प्रथम वर्ष","range":"खरसिया","site":"बरगढ़ 1149","sanctioned":89787.0,"expenditure":0.0,"balance":89787.0},{"sn":168,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"प्रथम वर्ष","range":"खरसिया","site":"डोरीखोल 1135","sanctioned":30299.0,"expenditure":30299.0,"balance":0.0},{"sn":169,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"प्रथम वर्ष","range":"खरसिया","site":"मांड 1160","sanctioned":41408.0,"expenditure":0.0,"balance":41408.0},{"sn":170,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"प्रथम वर्ष","range":"खरसिया","site":"राबो - N 1183","sanctioned":85737.0,"expenditure":75403.0,"balance":10334.0},{"sn":171,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"प्रथम वर्ष","range":"रायगढ़","site":"रायगढ़ -1 914","sanctioned":239084.0,"expenditure":0.0,"balance":239084.0},{"sn":172,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"प्रथम वर्ष","range":"रायगढ़","site":"रायगढ़ -2 904","sanctioned":133353.0,"expenditure":0.0,"balance":133353.0},{"sn":173,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"प्रथम वर्ष","range":"रायगढ़","site":"रायगढ़ -3 910","sanctioned":176268.0,"expenditure":0.0,"balance":176268.0},{"sn":174,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"प्रथम वर्ष","range":"तमनार","site":"तमनार - 1 778","sanctioned":152487.0,"expenditure":0.0,"balance":152487.0},{"sn":175,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"प्रथम वर्ष","range":"तमनार","site":"तमनार - 1 779","sanctioned":152487.0,"expenditure":0.0,"balance":152487.0},{"sn":176,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"प्रथम वर्ष","range":"तमनार","site":"तमनार - 2 831","sanctioned":143387.0,"expenditure":0.0,"balance":143387.0},{"sn":177,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"प्रथम वर्ष","range":"तमनार","site":"तमनार - 3 772","sanctioned":118282.0,"expenditure":0.0,"balance":118282.0},{"sn":178,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"प्रथम वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 1 1341PF","sanctioned":8463.0,"expenditure":0.0,"balance":8463.0},{"sn":179,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"प्रथम वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 1 1346 OA","sanctioned":26863.0,"expenditure":0.0,"balance":26863.0},{"sn":180,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"प्रथम वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 1 1347 PF","sanctioned":27137.0,"expenditure":0.0,"balance":27137.0},{"sn":181,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"प्रथम वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 1 1362 PF","sanctioned":19586.0,"expenditure":0.0,"balance":19586.0},{"sn":182,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"प्रथम वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 1 1365 PF","sanctioned":14327.0,"expenditure":14327.0,"balance":0.0},{"sn":183,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"प्रथम वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 2 1319","sanctioned":166991.0,"expenditure":0.0,"balance":166991.0},{"sn":184,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"प्रथम वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 3 1263 PF","sanctioned":131177.0,"expenditure":0.0,"balance":131177.0},{"sn":185,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"प्रथम वर्ष","range":"खरसिया","site":"खरसियां - 1 1147","sanctioned":204846.0,"expenditure":204218.0,"balance":628.0},{"sn":186,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"प्रथम वर्ष","range":"खरसिया","site":"खरसियां - 2 1177","sanctioned":120262.0,"expenditure":120379.0,"balance":-117.0},{"sn":187,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"सेकंड वर्ष","range":"रायगढ़","site":"गजमार 1010","sanctioned":194332.0,"expenditure":259425.0,"balance":-65093.0},{"sn":188,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"सेकंड वर्ष","range":"रायगढ़","site":"राबो -S 870","sanctioned":533482.0,"expenditure":0.0,"balance":533482.0},{"sn":189,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"सेकंड वर्ष","range":"रायगढ़","site":"उर्दना 888","sanctioned":643373.0,"expenditure":0.0,"balance":643373.0},{"sn":190,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"सेकंड वर्ष","range":"रायगढ़","site":"उर्दना 890","sanctioned":391403.0,"expenditure":0.0,"balance":391403.0},{"sn":191,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"सेकंड वर्ष","range":"तमनार","site":"सिलोट - E 722","sanctioned":243845.0,"expenditure":0.0,"balance":243845.0},{"sn":192,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"सेकंड वर्ष","range":"तमनार","site":"सिलोट -W 714","sanctioned":222732.0,"expenditure":0.0,"balance":222732.0},{"sn":193,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"सेकंड वर्ष","range":"तमनार","site":"टोलो - E 782","sanctioned":777250.0,"expenditure":0.0,"balance":777250.0},{"sn":194,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"सेकंड वर्ष","range":"तमनार","site":"टोलो - N 758","sanctioned":290645.0,"expenditure":0.0,"balance":290645.0},{"sn":195,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"सेकंड वर्ष","range":"तमनार","site":"टोलो -S 775","sanctioned":847643.0,"expenditure":0.0,"balance":847643.0},{"sn":196,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"सेकंड वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - N 1200","sanctioned":331139.0,"expenditure":0.0,"balance":331139.0},{"sn":197,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"सेकंड वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा -S 1206","sanctioned":406650.0,"expenditure":0.0,"balance":406650.0},{"sn":198,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"सेकंड वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा -S 1209","sanctioned":482729.0,"expenditure":0.0,"balance":482729.0},{"sn":199,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"सेकंड वर्ष","range":"घड़घोड़ा","site":"राय 1313","sanctioned":127685.0,"expenditure":0.0,"balance":127685.0},{"sn":200,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"सेकंड वर्ष","range":"खरसिया","site":"बरगढ़ 1149","sanctioned":306073.0,"expenditure":0.0,"balance":306073.0},{"sn":201,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"सेकंड वर्ष","range":"खरसिया","site":"डोरीखोल 1135","sanctioned":155259.0,"expenditure":0.0,"balance":155259.0},{"sn":202,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"सेकंड वर्ष","range":"खरसिया","site":"मांड 1160","sanctioned":0.0,"expenditure":0.0,"balance":0.0},{"sn":203,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"संरक्षण कार्य वृत्त (PWC)","year":"सेकंड वर्ष","range":"खरसिया","site":"राबो - N 1183","sanctioned":453760.0,"expenditure":444412.0,"balance":9348.0},{"sn":204,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"सेकंड वर्ष","range":"रायगढ़","site":"रायगढ़ -1 914","sanctioned":1328256.0,"expenditure":52000.0,"balance":1276256.0},{"sn":205,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"सेकंड वर्ष","range":"रायगढ़","site":"रायगढ़ -2 904","sanctioned":741097.0,"expenditure":0.0,"balance":741097.0},{"sn":206,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"सेकंड वर्ष","range":"रायगढ़","site":"रायगढ़ -3 910","sanctioned":979592.0,"expenditure":0.0,"balance":979592.0},{"sn":207,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"सेकंड वर्ष","range":"तमनार","site":"तमनार - 1 778","sanctioned":847437.0,"expenditure":0.0,"balance":847437.0},{"sn":208,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"सेकंड वर्ष","range":"तमनार","site":"तमनार - 1 779","sanctioned":847437.0,"expenditure":0.0,"balance":847437.0},{"sn":209,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"सेकंड वर्ष","range":"तमनार","site":"तमनार - 2 831","sanctioned":796864.0,"expenditure":0.0,"balance":796864.0},{"sn":210,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"सेकंड वर्ष","range":"तमनार","site":"तमनार - 3 772","sanctioned":657343.0,"expenditure":0.0,"balance":657343.0},{"sn":211,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"सेकंड वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 1 1341 PF","sanctioned":47032.0,"expenditure":0.0,"balance":47032.0},{"sn":212,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"सेकंड वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 1 1346 PF","sanctioned":114896.0,"expenditure":0.0,"balance":114896.0},{"sn":213,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"सेकंड वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 1 1347 PF","sanctioned":150814.0,"expenditure":0.0,"balance":150814.0},{"sn":214,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"सेकंड वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 1 1362 PF","sanctioned":108847.0,"expenditure":0.0,"balance":108847.0},{"sn":215,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"सेकंड वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 1 1365 PF","sanctioned":79619.0,"expenditure":0.0,"balance":79619.0},{"sn":216,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"सेकंड वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 2 1319","sanctioned":928038.0,"expenditure":0.0,"balance":928038.0},{"sn":217,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"सेकंड वर्ष","range":"घड़घोड़ा","site":"घरघोड़ा - 3 1263 PF","sanctioned":0.0,"expenditure":0.0,"balance":0.0},{"sn":218,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"सेकंड वर्ष","range":"खरसिया","site":"खरसियां - 1 1147","sanctioned":1138418.0,"expenditure":1138857.0,"balance":-439.0},{"sn":219,"code":"6827","scheme":"भू-जल संरक्षण योजना","work":"वॉटरशेड मैनेजमेंट कार्य वृत्त","year":"सेकंड वर्ष","range":"खरसिया","site":"खरसियां - 2 1177","sanctioned":666310.0,"expenditure":640022.0,"balance":26288.0},{"sn":220,"code":"1902","scheme":"तेज़ी से बढ़ने वाले वृक्षारोपण","work":"तेज़ी से बढ़ने वाले वृक्षारोपण","year":"चतुर्थ वर्ष","range":"रायगढ़","site":"ऑक्सीवन, जुर्डा (रायगढ़)","sanctioned":68000.0,"expenditure":0.0,"balance":68000.0},{"sn":221,"code":"6724","scheme":"बांस वनों का पुनरुद्धार","work":"आरडीबीएफ़ कार्य वृत्त","year":"प्रथम वर्ष","range":"रायगढ़","site":"गिण्डोला 913","sanctioned":35187.0,"expenditure":0.0,"balance":35187.0},{"sn":222,"code":"6724","scheme":"बांस वनों का पुनरुद्धार","work":"आरडीबीएफ़ कार्य वृत्त","year":"प्रथम वर्ष","range":"रायगढ़","site":"तुमीडीह 886","sanctioned":41125.0,"expenditure":0.0,"balance":41125.0},{"sn":223,"code":"6724","scheme":"बांस वनों का पुनरुद्धार","work":"आरडीबीएफ़ कार्य वृत्त","year":"प्रथम वर्ष","range":"तमनार","site":"बरकछार 779","sanctioned":78638.0,"expenditure":0.0,"balance":78638.0}];
+
+const fmt = (n) => {
+  const neg = n < 0; n = Math.abs(Math.round(n));
+  let s = n.toString(), out = "", c = 0;
+  // Indian numbering
+  const rev = s.split("").reverse();
+  for (let i = 0; i < rev.length; i++) {
+    out = rev[i] + out;
+    const grp = (i === 2) || (i > 2 && (i - 2) % 2 === 0);
+    if (grp && i !== rev.length - 1) out = "," + out;
+  }
+  return (neg ? "-₹" : "₹") + out;
+};
+const fmtShort = (n) => {
+  const neg = n < 0; n = Math.abs(n);
+  let v, u;
+  if (n >= 1e7) { v = n / 1e7; u = "Cr"; }
+  else if (n >= 1e5) { v = n / 1e5; u = "L"; }
+  else if (n >= 1e3) { v = n / 1e3; u = "K"; }
+  else { return (neg ? "-₹" : "₹") + Math.round(n); }
+  return (neg ? "-₹" : "₹") + v.toFixed(v >= 100 ? 0 : 1) + u;
+};
+
+const sum = (arr, k) => arr.reduce((a, r) => a + r[k], 0);
+const uniq = (arr, k) => [...new Set(arr.map(r => r[k]))];
+
+// group helper
+function groupBy(arr, key) {
+  const m = new Map();
+  for (const r of arr) {
+    const g = m.get(r[key]) || { sanctioned: 0, expenditure: 0, count: 0 };
+    g.sanctioned += r.sanctioned; g.expenditure += r.expenditure; g.count++;
+    m.set(r[key], g);
+  }
+  return m;
+}
+
+// ---- KPI CARDS ----
+function renderStats() {
+  const s = sum(DATA, "sanctioned"), e = sum(DATA, "expenditure"), b = sum(DATA, "balance");
+  const util = s ? (e / s * 100) : 0;
+  const cards = [
+    { label: "कुल स्वीकृत राशि", value: fmtShort(s), sub: DATA.length + " कार्य", accent: true },
+    { label: "कुल व्यय", value: fmtShort(e), sub: "उपयोग " + util.toFixed(1) + "%" },
+    { label: "कुल शेष राशि", value: fmtShort(b), sub: (100 - util).toFixed(1) + "% अव्ययित" },
+    { label: "उपयोग दर", value: util.toFixed(1) + "%", sub: "व्यय / स्वीकृत" },
+    { label: "परिक्षेत्र / योजनाएँ", value: uniq(DATA, "range").length + " / " + uniq(DATA, "scheme").length, sub: uniq(DATA, "year").length + " वर्ष चक्र" },
+  ];
+  document.getElementById("stats").innerHTML = cards.map(c => `
+    <div class="card stat${c.accent ? ' accent' : ''}">
+      <div class="stat-label">${c.label}</div>
+      <div class="stat-value">${c.value}</div>
+      <div class="stat-sub">${c.sub}</div>
+    </div>`).join("");
+}
+
+// ---- RANGE BAR CHART ----
+function renderRangeBars() {
+  const g = groupBy(DATA, "range");
+  const entries = [...g.entries()].sort((a, b) => b[1].sanctioned - a[1].sanctioned);
+  const max = Math.max(...entries.map(e => e[1].sanctioned)) || 1;
+  document.getElementById("rangeBars").innerHTML = entries.map(([name, v]) => {
+    const hs = Math.max(2, v.sanctioned / max * 210);
+    const he = Math.max(2, v.expenditure / max * 210);
+    return `<div class="bar-group">
+      <div class="bar-pair">
+        <div class="bar s" style="height:${hs}px" title="स्वीकृत ${fmt(v.sanctioned)}"></div>
+        <div class="bar e" style="height:${he}px" title="व्यय ${fmt(v.expenditure)}"></div>
+      </div>
+      <div style="text-align:center">
+        <div class="bar-label">${name}</div>
+        <div class="bar-val">${fmtShort(v.sanctioned)}</div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+// ---- SCHEME PROGRESS ----
+function renderSchemeBars() {
+  const g = groupBy(DATA, "scheme");
+  const entries = [...g.entries()].sort((a, b) => b[1].sanctioned - a[1].sanctioned);
+  const total = sum(DATA, "sanctioned") || 1;
+  const max = entries[0][1].sanctioned || 1;
+  document.getElementById("schemeBars").innerHTML = entries.map(([name, v]) => {
+    const pct = v.sanctioned / total * 100;
+    const w = v.sanctioned / max * 100;
+    return `<div class="src">
+      <div class="src-top">
+        <span class="src-name" title="${name}">${name}</span>
+        <span class="src-val">${fmtShort(v.sanctioned)} · ${pct.toFixed(1)}%</span>
+      </div>
+      <div class="track"><div class="track-fill" style="width:${w}%"></div></div>
+    </div>`;
+  }).join("");
+}
+
+// ---- YEAR BREAKDOWN ----
+const YEAR_ORDER = ["प्रथम वर्ष", "सेकंड वर्ष", "तृतीय वर्ष", "चतुर्थ वर्ष"];
+function renderYears() {
+  const g = groupBy(DATA, "year");
+  const entries = [...g.entries()].sort((a, b) => YEAR_ORDER.indexOf(a[0]) - YEAR_ORDER.indexOf(b[0]));
+  document.getElementById("years").innerHTML = entries.map(([name, v]) => {
+    const util = v.sanctioned ? (v.expenditure / v.sanctioned * 100) : 0;
+    return `<div class="card ycard">
+      <div class="ylabel">${name}</div>
+      <div class="yval">${fmtShort(v.sanctioned)}</div>
+      <div class="ymeta">${v.count} कार्य · व्यय ${fmtShort(v.expenditure)} (${util.toFixed(0)}%)</div>
+    </div>`;
+  }).join("");
+}
+
+// ---- STATUS ----
+function statusOf(r) {
+  if (r.sanctioned <= 0) return { c: "none", t: "स्वीकृति शून्य" };
+  if (r.expenditure > r.sanctioned) return { c: "over", t: "अधिक व्यय" };
+  const u = r.expenditure / r.sanctioned * 100;
+  if (u >= 99) return { c: "done", t: "पूर्ण" };
+  if (u > 0) return { c: "part", t: "आंशिक" };
+  return { c: "none", t: "प्रारंभ नहीं" };
+}
+
+// ---- FILTERS + TABLE ----
+function fillSelect(id, key) {
+  const sel = document.getElementById(id);
+  const order = id === "fYear" ? YEAR_ORDER : null;
+  let vals = uniq(DATA, key);
+  if (order) vals.sort((a, b) => order.indexOf(a) - order.indexOf(b));
+  else vals.sort();
+  for (const v of vals) {
+    const o = document.createElement("option"); o.value = v; o.textContent = v; sel.appendChild(o);
+  }
+}
+
+function currentFiltered() {
+  const q = document.getElementById("globalSearch").value.trim().toLowerCase();
+  const fr = document.getElementById("fRange").value;
+  const fs = document.getElementById("fScheme").value;
+  const fy = document.getElementById("fYear").value;
+  return DATA.filter(r =>
+    (!fr || r.range === fr) && (!fs || r.scheme === fs) && (!fy || r.year === fy) &&
+    (!q || (r.work + " " + r.site + " " + r.scheme).toLowerCase().includes(q))
+  );
+}
+
+function renderTable() {
+  const rows = currentFiltered();
+  const tb = document.getElementById("tbody");
+  if (!rows.length) {
+    tb.innerHTML = `<tr><td colspan="10" class="empty">कोई कार्य नहीं मिला</td></tr>`;
+  } else {
+    tb.innerHTML = rows.map(r => {
+      const st = statusOf(r);
+      return `<tr>
+        <td class="sn">${r.sn}</td>
+        <td>${r.scheme}</td>
+        <td>${r.work}</td>
+        <td>${r.year}</td>
+        <td>${r.range}</td>
+        <td>${r.site}</td>
+        <td class="num amount">${fmt(r.sanctioned)}</td>
+        <td class="num">${fmt(r.expenditure)}</td>
+        <td class="num">${fmt(r.balance)}</td>
+        <td><span class="pill ${st.c}">${st.t}</span></td>
+      </tr>`;
+    }).join("");
+  }
+  document.getElementById("rowCount").textContent = rows.length + " / " + DATA.length + " कार्य दिखाए जा रहे हैं";
+  document.getElementById("sumLine").textContent =
+    "स्वीकृत " + fmt(sum(rows, "sanctioned")) + "  ·  व्यय " + fmt(sum(rows, "expenditure")) + "  ·  शेष " + fmt(sum(rows, "balance"));
+}
+
+// init
+renderStats();
+renderRangeBars();
+renderSchemeBars();
+renderYears();
+fillSelect("fRange", "range");
+fillSelect("fScheme", "scheme");
+fillSelect("fYear", "year");
+renderTable();
+["globalSearch", "fRange", "fScheme", "fYear"].forEach(id =>
+  document.getElementById(id).addEventListener("input", renderTable));
+</script>
 </body>
 </html>
