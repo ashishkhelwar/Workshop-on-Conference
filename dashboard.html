@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboard</title>
+<style>
+  :root {
+    --page-bg: #f5f6f8;
+    --sidebar: #1e293b;
+    --accent: #6366f1;
+    --accent-soft: #cfd0fc;
+    --white: #ffffff;
+    --border: #e2e8f0;
+    --text-dark: #0f172a;
+    --text-muted: #64748b;
+    --sidebar-text: #cad4e1;
+    --track: #eef0f6;
+    --green: #16a34a; --green-bg: #e5f7ec;
+    --amber: #b47a09; --amber-bg: #fef3d8;
+    --red: #dc2626; --red-bg: #fee9e9;
+    --shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--page-bg);
+    color: var(--text-dark);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .dashboard {
+    display: flex;
+    min-height: 100vh;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  /* ---------- SIDEBAR ---------- */
+  .sidebar {
+    width: 248px;
+    flex-shrink: 0;
+    background: var(--sidebar);
+    padding: 28px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 24px;
+  }
+  .logo-mark {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  .logo-text { color: var(--white); font-size: 18px; font-weight: 700; }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    border-radius: 10px;
+    color: var(--sidebar-text);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .nav-item .icon {
+    width: 18px; height: 18px;
+    border-radius: 5px;
+    background: var(--sidebar-text);
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+  .nav-item:hover { background: rgba(255, 255, 255, 0.06); }
+  .nav-item.active {
+    background: var(--accent);
+    color: var(--white);
+    font-weight: 600;
+  }
+  .nav-item.active .icon { background: var(--white); opacity: 1; }
+
+  .spacer { flex: 1; }
+
+  .profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.08);
+  }
+  .avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  .profile-name { color: var(--white); font-size: 13px; font-weight: 600; }
+  .profile-mail { color: var(--sidebar-text); font-size: 11px; }
+
+  /* ---------- MAIN ---------- */
+  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 32px;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+  }
+  .header h1 { font-size: 22px; font-weight: 700; }
+  .header .subtitle { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+  .header .grow { flex: 1; }
+  .search {
+    width: 240px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: var(--page-bg);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  .btn {
+    padding: 11px 18px;
+    border-radius: 10px;
+    background: var(--accent);
+    color: var(--white);
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .content {
+    flex: 1;
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+  }
+
+  /* ---------- STAT CARDS ---------- */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .stat { padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+  .stat-label { font-size: 13px; font-weight: 500; color: var(--text-muted); }
+  .stat-value { font-size: 28px; font-weight: 700; }
+  .stat-foot { display: flex; align-items: center; gap: 8px; }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .badge.up { background: var(--green-bg); color: var(--green); }
+  .badge.down { background: var(--red-bg); color: var(--red); }
+  .stat-vs { font-size: 11px; color: var(--text-muted); }
+
+  /* ---------- CHART ROW ---------- */
+  .chart-row { display: grid; grid-template-columns: 1fr 340px; gap: 24px; }
+  .panel-head {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  .panel-head h2 { font-size: 16px; font-weight: 600; }
+  .panel-head .action { margin-left: auto; font-size: 13px; font-weight: 500; color: var(--accent); cursor: pointer; }
+  .revenue, .traffic { padding: 22px 24px; }
+
+  .bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 14px;
+    height: 260px;
+  }
+  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; height: 100%; justify-content: flex-end; }
+  .bar { width: 100%; border-radius: 6px; background: var(--accent-soft); }
+  .bar.current { background: var(--accent); }
+  .bar-label { font-size: 11px; font-weight: 500; color: var(--text-muted); }
+
+  .source { margin-bottom: 20px; }
+  .source:last-child { margin-bottom: 0; }
+  .source-top { display: flex; align-items: center; margin-bottom: 8px; }
+  .source-name { font-size: 13px; font-weight: 500; }
+  .source-val { margin-left: auto; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+  .track { height: 8px; border-radius: 4px; background: var(--track); overflow: hidden; }
+  .track-fill { height: 100%; border-radius: 4px; background: var(--accent); }
+
+  /* ---------- TABLE ---------- */
+  .table { overflow: hidden; }
+  .table-head {
+    display: flex;
+    align-items: center;
+    padding: 20px 24px;
+  }
+  .table-head h2 { font-size: 16px; font-weight: 600; }
+  .table-head .action { margin-left: auto; font-size: 13px; font-weight: 500; color: var(--accent); cursor: pointer; }
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    text-align: left;
+    padding: 12px 24px;
+    background: #f8f9fb;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.03em;
+  }
+  tbody td {
+    padding: 16px 24px;
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+  }
+  td.order { color: var(--accent); }
+  td.amount { font-weight: 600; }
+  .pill {
+    display: inline-flex;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .pill.completed { background: var(--green-bg); color: var(--green); }
+  .pill.pending { background: var(--amber-bg); color: var(--amber); }
+  .pill.cancelled { background: var(--red-bg); color: var(--red); }
+
+  @media (max-width: 1100px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .chart-row { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 720px) {
+    .sidebar { display: none; }
+    .stats { grid-template-columns: 1fr; }
+    .header { flex-wrap: wrap; }
+    .search { width: 100%; order: 3; }
+    .table-wrap { overflow-x: auto; }
+  }
+</style>
+</head>
+<body>
+  <div class="dashboard">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-mark"></div>
+        <span class="logo-text">Acme Inc</span>
+      </div>
+      <a class="nav-item active"><span class="icon"></span>Dashboard</a>
+      <a class="nav-item"><span class="icon"></span>Analytics</a>
+      <a class="nav-item"><span class="icon"></span>Reports</a>
+      <a class="nav-item"><span class="icon"></span>Customers</a>
+      <a class="nav-item"><span class="icon"></span>Products</a>
+      <a class="nav-item"><span class="icon"></span>Settings</a>
+      <div class="spacer"></div>
+      <div class="profile">
+        <div class="avatar"></div>
+        <div>
+          <div class="profile-name">Ashish Khelwar</div>
+          <div class="profile-mail">admin@acme.com</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main">
+      <!-- HEADER -->
+      <header class="header">
+        <div>
+          <h1>Dashboard</h1>
+          <div class="subtitle">Welcome back, here's what's happening today.</div>
+        </div>
+        <div class="grow"></div>
+        <input class="search" type="text" placeholder="Search&hellip;" />
+        <button class="btn">+ New Report</button>
+      </header>
+
+      <!-- CONTENT -->
+      <main class="content">
+        <!-- STAT CARDS -->
+        <section class="stats">
+          <div class="card stat">
+            <div class="stat-label">Total Revenue</div>
+            <div class="stat-value">$48,290</div>
+            <div class="stat-foot"><span class="badge up">&#9650; +12.5%</span><span class="stat-vs">vs last month</span></div>
+          </div>
+          <div class="card stat">
+            <div class="stat-label">Active Users</div>
+            <div class="stat-value">8,942</div>
+            <div class="stat-foot"><span class="badge up">&#9650; +8.1%</span><span class="stat-vs">vs last month</span></div>
+          </div>
+          <div class="card stat">
+            <div class="stat-label">New Orders</div>
+            <div class="stat-value">1,204</div>
+            <div class="stat-foot"><span class="badge down">&#9660; -3.2%</span><span class="stat-vs">vs last month</span></div>
+          </div>
+          <div class="card stat">
+            <div class="stat-label">Conversion</div>
+            <div class="stat-value">3.68%</div>
+            <div class="stat-foot"><span class="badge up">&#9650; +2.4%</span><span class="stat-vs">vs last month</span></div>
+          </div>
+        </section>
+
+        <!-- CHART ROW -->
+        <section class="chart-row">
+          <!-- Revenue bar chart -->
+          <div class="card revenue">
+            <div class="panel-head">
+              <h2>Revenue Overview</h2>
+              <span class="action">Last 12 months</span>
+            </div>
+            <div class="bars">
+              <div class="bar-col"><div class="bar" style="height:110px"></div><div class="bar-label">Jan</div></div>
+              <div class="bar-col"><div class="bar" style="height:150px"></div><div class="bar-label">Feb</div></div>
+              <div class="bar-col"><div class="bar" style="height:130px"></div><div class="bar-label">Mar</div></div>
+              <div class="bar-col"><div class="bar" style="height:190px"></div><div class="bar-label">Apr</div></div>
+              <div class="bar-col"><div class="bar" style="height:170px"></div><div class="bar-label">May</div></div>
+              <div class="bar-col"><div class="bar" style="height:220px"></div><div class="bar-label">Jun</div></div>
+              <div class="bar-col"><div class="bar" style="height:200px"></div><div class="bar-label">Jul</div></div>
+              <div class="bar-col"><div class="bar" style="height:240px"></div><div class="bar-label">Aug</div></div>
+              <div class="bar-col"><div class="bar" style="height:210px"></div><div class="bar-label">Sep</div></div>
+              <div class="bar-col"><div class="bar" style="height:250px"></div><div class="bar-label">Oct</div></div>
+              <div class="bar-col"><div class="bar" style="height:230px"></div><div class="bar-label">Nov</div></div>
+              <div class="bar-col"><div class="bar current" style="height:260px"></div><div class="bar-label">Dec</div></div>
+            </div>
+          </div>
+
+          <!-- Traffic sources -->
+          <div class="card traffic">
+            <div class="panel-head">
+              <h2>Traffic Sources</h2>
+              <span class="action">View all</span>
+            </div>
+            <div class="source">
+              <div class="source-top"><span class="source-name">Organic Search</span><span class="source-val">12,480</span></div>
+              <div class="track"><div class="track-fill" style="width:78%"></div></div>
+            </div>
+            <div class="source">
+              <div class="source-top"><span class="source-name">Direct</span><span class="source-val">8,210</span></div>
+              <div class="track"><div class="track-fill" style="width:56%"></div></div>
+            </div>
+            <div class="source">
+              <div class="source-top"><span class="source-name">Social Media</span><span class="source-val">6,050</span></div>
+              <div class="track"><div class="track-fill" style="width:42%"></div></div>
+            </div>
+            <div class="source">
+              <div class="source-top"><span class="source-name">Referral</span><span class="source-val">3,940</span></div>
+              <div class="track"><div class="track-fill" style="width:28%"></div></div>
+            </div>
+            <div class="source">
+              <div class="source-top"><span class="source-name">Email</span><span class="source-val">2,120</span></div>
+              <div class="track"><div class="track-fill" style="width:18%"></div></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TABLE -->
+        <section class="card table">
+          <div class="table-head">
+            <h2>Recent Orders</h2>
+            <span class="action">View all orders</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ORDER</th><th>CUSTOMER</th><th>DATE</th><th>AMOUNT</th><th>STATUS</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="order">#ORD-7841</td><td>Priya Sharma</td><td>Jul 06, 2026</td><td class="amount">$1,240</td>
+                  <td><span class="pill completed">Completed</span></td>
+                </tr>
+                <tr>
+                  <td class="order">#ORD-7840</td><td>Rahul Verma</td><td>Jul 06, 2026</td><td class="amount">$860</td>
+                  <td><span class="pill pending">Pending</span></td>
+                </tr>
+                <tr>
+                  <td class="order">#ORD-7839</td><td>Anita Desai</td><td>Jul 05, 2026</td><td class="amount">$2,105</td>
+                  <td><span class="pill completed">Completed</span></td>
+                </tr>
+                <tr>
+                  <td class="order">#ORD-7838</td><td>Vikram Singh</td><td>Jul 05, 2026</td><td class="amount">$430</td>
+                  <td><span class="pill cancelled">Cancelled</span></td>
+                </tr>
+                <tr>
+                  <td class="order">#ORD-7837</td><td>Meera Nair</td><td>Jul 04, 2026</td><td class="amount">$1,690</td>
+                  <td><span class="pill completed">Completed</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
