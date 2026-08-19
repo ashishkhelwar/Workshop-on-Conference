@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wild Elephant Mortality — Raigarh Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* === VIEWPORT BASE (mandatory fixed-stage) === */
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#060e07}
+.deck-viewport{position:fixed;inset:0;overflow:hidden;background:#060e07}
+.deck-stage{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;transform-origin:0 0}
+.slide{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;
+  visibility:hidden;opacity:0;pointer-events:none;
+  transition:opacity .55s ease,visibility .55s ease}
+.slide.active{visibility:visible;opacity:1;pointer-events:auto;z-index:1}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.2s!important}}
+
+/* === THEME === */
+:root{
+  --green:#52B788;--amber:#D4A04A;--ember:#E07B3A;
+  --drown:#4A9FD4;--elec:#D44A4A;--arsenic:#D4A04A;
+  --text:#f0ede6;--muted:rgba(240,237,230,.55);--dim:rgba(240,237,230,.3);
+  --card:rgba(255,255,255,.04);--card2:rgba(255,255,255,.07);
+  --border:rgba(82,183,136,.15);--grid:rgba(82,183,136,.05);
+}
+
+/* forest dark bg + subtle grid */
+.bg-forest{
+  background:
+    radial-gradient(ellipse 55% 55% at 8% 92%,rgba(52,183,136,.09) 0%,transparent 55%),
+    radial-gradient(ellipse 45% 45% at 92% 8%,rgba(212,160,74,.07) 0%,transparent 55%),
+    linear-gradient(165deg,#0a1410 0%,#0e1d14 55%,#090f0b 100%);
+}
+.bg-forest::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:90px 90px;
+}
+
+/* === ENTRANCE ANIMATIONS === */
+.rev{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+.rev-l{opacity:0;transform:translateX(-36px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+.rev-s{opacity:0;transform:scale(.93);transition:opacity .65s cubic-bezier(.16,1,.3,1),transform .65s cubic-bezier(.16,1,.3,1)}
+.slide.active .rev,.slide.active .rev-l,.slide.active .rev-s{opacity:1;transform:none}
+.d1{transition-delay:.08s}.d2{transition-delay:.18s}.d3{transition-delay:.28s}
+.d4{transition-delay:.38s}.d5{transition-delay:.48s}.d6{transition-delay:.58s}
+.d7{transition-delay:.68s}.d8{transition-delay:.78s}.d9{transition-delay:.88s}
+.d10{transition-delay:.98s}.d11{transition-delay:1.08s}.d12{transition-delay:1.18s}
+.d13{transition-delay:1.28s}.d14{transition-delay:1.38s}
+
+/* === BAR CHART === */
+.bar-row{display:flex;align-items:center;gap:20px;margin:0 0 18px}
+.bar-label{width:250px;flex-shrink:0;font-family:'IBM Plex Sans',sans-serif;font-size:21px;font-weight:500;color:var(--text)}
+.bar-track{flex:1;height:24px;background:rgba(255,255,255,.06);border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.05)}
+.bar-fill{height:100%;width:0;border-radius:12px;transition:width 1.3s cubic-bezier(.16,1,.3,1);transition-delay:.3s}
+.slide.active .bar-fill{width:var(--tw)}
+.bar-pct{width:200px;flex-shrink:0;font-family:'IBM Plex Sans',sans-serif;font-size:20px;font-weight:600}
+
+/* === CARDS & ALERTS === */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px 32px}
+.alert{border-radius:10px;padding:16px 20px;margin:8px 0;font-family:'IBM Plex Sans',sans-serif;
+  font-size:20px;display:flex;gap:12px;align-items:flex-start;line-height:1.45}
+.a-red{background:rgba(212,74,74,.1);border-left:4px solid var(--elec);color:#f8c0c0}
+.a-green{background:rgba(82,183,136,.08);border-left:4px solid var(--green);color:#b8f0d0}
+.a-amber{background:rgba(212,160,74,.1);border-left:4px solid var(--amber);color:#f0d898}
+.a-blue{background:rgba(74,159,212,.1);border-left:4px solid var(--drown);color:#acd8f8}
+.a-purple{background:rgba(138,100,200,.1);border-left:4px solid #8A64C8;color:#d0b8f8}
+
+/* === STAT BOX === */
+.stat-box{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:24px 28px;text-align:center;min-width:150px}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:64px;font-weight:700;line-height:1;display:block}
+.stat-lbl{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:400;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;display:block;margin-top:6px}
+
+/* === SLIDE LAYOUT === */
+.slide-inner{position:absolute;inset:0;display:flex}
+.sidebar{width:108px;flex-shrink:0;background:rgba(82,183,136,.04);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:54px 0}
+.sb-num{font-family:'Cormorant Garamond',serif;font-size:60px;font-weight:700;
+  color:var(--green);opacity:.3;writing-mode:vertical-rl;letter-spacing:-4px}
+.sb-tag{font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:500;color:var(--dim);
+  text-transform:uppercase;letter-spacing:3px;writing-mode:vertical-rl;transform:rotate(180deg)}
+.content{flex:1;padding:62px 84px;overflow:hidden;display:flex;flex-direction:column}
+
+/* === TYPOGRAPHY === */
+.slide-title{font-family:'Cormorant Garamond',serif;font-size:58px;font-weight:700;
+  color:var(--text);line-height:1.05;margin:0 0 6px}
+.slide-sub{font-family:'IBM Plex Sans',sans-serif;font-size:21px;font-weight:300;
+  color:var(--muted);margin:0 0 34px;letter-spacing:.5px}
+.section-label{font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;
+  color:var(--green);text-transform:uppercase;letter-spacing:3px;margin-bottom:10px}
+.body-text{font-family:'IBM Plex Sans',sans-serif;font-size:23px;font-weight:400;color:var(--text);line-height:1.5}
+.hl{color:var(--amber);font-weight:700}
+.gr{color:var(--green);font-weight:700}
+.rd{color:var(--elec);font-weight:700}
+.bl{color:var(--drown);font-weight:700}
+
+/* grid helpers */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+
+/* === DIVIDER SLIDE === */
+.div-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.div-bg-num{font-family:'Cormorant Garamond',serif;font-size:280px;font-weight:700;
+  color:rgba(82,183,136,.06);line-height:1;position:absolute;pointer-events:none;letter-spacing:-15px}
+.div-title{font-family:'Cormorant Garamond',serif;font-size:76px;font-weight:700;
+  color:var(--text);position:relative;z-index:1;margin:0}
+.div-sub{font-family:'IBM Plex Sans',sans-serif;font-size:25px;font-weight:300;
+  color:var(--muted);position:relative;z-index:1;margin:16px 0 0}
+.div-line{width:72px;height:3px;background:linear-gradient(to right,var(--green),transparent);
+  margin:22px auto 0;position:relative;z-index:1}
+
+/* === PRIORITY === */
+.pri-item{display:flex;gap:16px;align-items:flex-start;padding:14px 18px;
+  background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:10px}
+.pri-tag{width:42px;height:42px;flex-shrink:0;border-radius:8px;display:flex;
+  align-items:center;justify-content:center;font-family:'IBM Plex Sans',sans-serif;
+  font-size:16px;font-weight:700;color:white}
+.pri-title{font-family:'IBM Plex Sans',sans-serif;font-size:20px;font-weight:600;color:var(--text);margin:0 0 3px}
+.pri-desc{font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:400;color:var(--muted);margin:0}
+
+/* === DATA TABLE === */
+.dtable{width:100%;border-collapse:collapse;font-family:'IBM Plex Sans',sans-serif;font-size:17px}
+.dtable th{background:rgba(82,183,136,.08);color:var(--green);padding:10px 14px;
+  text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:1.5px;
+  font-weight:600;border-bottom:1px solid var(--border)}
+.dtable td{padding:9px 14px;color:var(--text);border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle}
+.dtable tr:hover td{background:rgba(255,255,255,.03)}
+
+/* === NAVIGATION === */
+#nav-dots{position:fixed;right:28px;top:50%;transform:translateY(-50%);z-index:1000;display:flex;flex-direction:column;gap:10px}
+.nd{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.2);cursor:pointer;transition:all .3s ease}
+.nd.active{background:var(--green);transform:scale(1.5)}
+.nd:hover:not(.active){background:rgba(82,183,136,.5)}
+#slide-ctr{position:fixed;bottom:22px;right:28px;font-family:'IBM Plex Sans',sans-serif;
+  font-size:13px;color:rgba(255,255,255,.22);z-index:1000;letter-spacing:2px}
+
+/* === EVIDENCE CHAIN === */
+.chain{display:flex;align-items:stretch;gap:0}
+.chain-step{flex:1;background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:22px 24px;position:relative}
+.chain-step+.chain-step{margin-left:-1px;border-left:none;border-radius:0 12px 12px 0}
+.chain-step:first-child{border-radius:12px 0 0 12px}
+.chain-arrow{position:absolute;right:-16px;top:50%;transform:translateY(-50%);
+  width:32px;height:32px;background:var(--green);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:#0a1410;font-size:18px;font-weight:700;z-index:2}
+.chain-step-num{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;
+  color:var(--green);opacity:.5;line-height:1;margin-bottom:8px}
+.chain-step-title{font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:600;
+  color:var(--text);margin:0 0 6px}
+.chain-step-body{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:400;
+  color:var(--muted);margin:0;line-height:1.5}
+
+/* === CLUSTER MAP CARDS === */
+.cluster-card{background:var(--card2);border:1px solid rgba(82,183,136,.2);border-radius:12px;
+  padding:22px 26px;border-top:3px solid var(--green)}
+.cluster-title{font-family:'IBM Plex Sans',sans-serif;font-size:19px;font-weight:600;
+  color:var(--green);margin:0 0 10px}
+.cluster-body{font-family:'IBM Plex Sans',sans-serif;font-size:17px;color:var(--text);
+  line-height:1.6;margin:0}
+</style>
+</head>
+<body>
+<div class="deck-viewport">
+<div class="deck-stage bg-forest" id="stage">
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 1 — COVER
+══════════════════════════════════════════════════════════ -->
+<div class="slide active" id="s1">
+  <div style="position:absolute;inset:0;display:grid;grid-template-columns:1fr 500px">
+
+    <!-- Left -->
+    <div style="padding:80px 96px;display:flex;flex-direction:column;justify-content:flex-end">
+      <div class="section-label rev d1">Raigarh · Dharamjaigarh · Chhattisgarh</div>
+      <div style="width:56px;height:3px;background:linear-gradient(to right,var(--green),transparent);margin:12px 0 28px" class="rev d1"></div>
+
+      <h1 class="rev d2" style="font-family:'Cormorant Garamond',serif;font-size:90px;font-weight:700;
+          color:var(--text);line-height:1.0;margin:0 0 10px">
+        Wild Elephant<br><em style="color:var(--green);font-style:italic">Mortality</em>
+      </h1>
+
+      <p class="rev d3" style="font-family:'IBM Plex Sans',sans-serif;font-size:26px;font-weight:300;
+          color:var(--muted);margin:0 0 16px;letter-spacing:.5px">
+        Complete Forensic Analysis
+      </p>
+
+      <p class="rev d3" style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;
+          color:var(--dim);margin:0 0 48px;line-height:1.7">
+        16 Post-Mortem reports · 12 Forensic lab findings<br>
+        ICAR-IVRI Izatnagar · NDVSU SWFH Jabalpur · 558-compartment GIS overlay
+      </p>
+
+      <div style="display:flex;gap:18px;flex-wrap:wrap">
+        <div class="stat-box rev-s d4">
+          <span class="stat-val" style="color:var(--green)" data-count="18">0</span>
+          <span class="stat-lbl">Elephant Deaths</span>
+        </div>
+        <div class="stat-box rev-s d5">
+          <span class="stat-val" style="color:var(--ember)" data-count="9">0</span>
+          <span class="stat-lbl">Human Deaths</span>
+        </div>
+        <div class="stat-box rev-s d6">
+          <span class="stat-val" style="color:var(--drown);font-size:52px">20 mo</span>
+          <span class="stat-lbl">Study Period</span>
+        </div>
+        <div class="stat-box rev-s d7">
+          <span class="stat-val" style="color:var(--amber);font-size:46px">₹48L</span>
+          <span class="stat-lbl">Compensation</span>
+        </div>
+        <div class="stat-box rev-s d8">
+          <span class="stat-val" style="color:#8A64C8" data-count="558">0</span>
+          <span class="stat-lbl">GIS Compartments</span>
+        </div>
+      </div>
+
+      <p class="rev d9" style="font-family:'IBM Plex Sans',sans-serif;font-size:15px;
+          color:var(--dim);margin-top:36px">
+        CONFIDENTIAL · Raigarh Forest Division · Compiled 27 May 2026
+      </p>
+    </div>
+
+    <!-- Right panel -->
+    <div style="border-left:1px solid var(--border);background:rgba(82,183,136,.03);
+        display:flex;flex-direction:column;justify-content:center;padding:72px 52px;gap:20px">
+
+      <p class="section-label rev d2" style="margin-bottom:6px">Key Findings</p>
+
+      <div class="alert a-red rev d3">
+        <span>⚠️</span>
+        <div><strong>83%</strong> of deaths from human-modified hazards</div>
+      </div>
+      <div class="alert a-blue rev d4">
+        <span>💧</span>
+        <div><strong>61% calf mortality</strong> — all drowning victims ≤3 yr</div>
+      </div>
+      <div class="alert a-amber rev d5">
+        <span>☠️</span>
+        <div><strong>Arsenic confirmed</strong> in Tamnar–Bangursiya water bodies</div>
+      </div>
+      <div class="alert a-green rev d6">
+        <span>🔬</span>
+        <div><strong>Zero viral/bacterial cause</strong> across all 12 lab reports</div>
+      </div>
+      <div class="alert a-purple rev d7">
+        <span>⚡</span>
+        <div><strong>Electrocution preventable</strong> — dept notified day before Oct 2024 incident</div>
+      </div>
+      <div class="alert a-green rev d8">
+        <span>✅</span>
+        <div><strong>Intervention works</strong> — Dehardih pond clearance stopped all deaths at that site</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 2 — CAUSE DISTRIBUTION
+══════════════════════════════════════════════════════════ -->
+<div class="slide" id="s2">
+  <div class="slide-inner">
+    <div class="sidebar">
+      <span class="sb-num">02</span>
+      <span class="sb-tag">Cause Analysis</span>
+    </div>
+    <div class="content">
+      <div class="section-label rev d1">Mortality Breakdown</div>
+      <h2 class="slide-title rev d2">Cause of Death Distribution</h2>
+      <p class="slide-sub rev d2">18 confirmed deaths · 2021–2026 · Raigarh & Dharamjaigarh Forest Divisions</p>
+
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+
+        <div class="bar-row rev d3">
+          <span class="bar-label">💧 Drowning</span>
+          <div class="bar-track"><div class="bar-fill" style="--tw:55.6%;background:var(--drown)"></div></div>
+          <span class="bar-pct" style="color:var(--drown)">10 deaths · 55.6%</span>
+        </div>
+        <p class="rev d3" style="font-family:'IBM Plex Sans',sans-serif;font-size:17px;
+            color:var(--muted);margin:-10px 0 18px 272px">
+          All victims ≤3 yr · 8 water bodies · No toxin/virus found
+        </p>
+
+        <div class="bar-row rev d4">
+          <span class="bar-label">⚡ Electrocution</span>
+          <div class="bar-track"><div class="bar-fill" style="--tw:38.9%;background:var(--elec)"></div></div>
+          <span class="bar-pct" style="color:var(--elec)">7 deaths · 38.9%</span>
+        </div>
+        <p class="rev d4" style="font-family:'IBM Plex Sans',sans-serif;font-size:17px;
+            color:var(--muted);margin:-10px 0 18px 272px">
+          4 incidents · Tamnar Range ×2 · Gharghoda ×2 · PIL 89/2024 filed
+        </p>
+
+        <div class="bar-row rev d5">
+          <span class="bar-label">❓ Under Investigation</span>
+          <div class="bar-track"><div class="bar-fill" style="--tw:11.1%;background:#6B7A8D"></div></div>
+          <span class="bar-pct" style="color:#6B7A8D">2 deaths · 11.1%</span>
+        </div>
+        <p class="rev d5" style="font-family:'IBM Plex Sans',sans-serif;font-size:17px;
+            color:var(--muted);margin:-10px 0 18px 272px">
+          Kurkut Nadi · 106 cm circumferential neck ring — possible snare
+        </p>
+
+        <div class="bar-row rev d6">
+          <span class="bar-label">🦴 Head Trauma</span>
+          <div class="bar-track"><div class="bar-fill" style="--tw:5.6%;background:#8A64C8"></div></div>
+          <span class="bar-pct" style="color:#8A64C8">1 death · 5.6%</span>
+        </div>
+
+        <div class="bar-row rev d7">
+          <span class="bar-label">🌿 Malnutrition</span>
+          <div class="bar-track"><div class="bar-fill" style="--tw:5.6%;background:var(--green)"></div></div>
+          <span class="bar-pct" style="color:var(--green)">1 death · 5.6%</span>
+        </div>
+
+        <div class="alert a-red rev d8" style="margin-top:24px">
+          <span>⚠️</span>
+          <div><strong>83% of all deaths (15/18)</strong> are attributable to human-modified hazards —
+          unsafe water bodies, unprotected power lines, one suspected snare.
+          <strong>ZERO viral or conventional poisoning cause</strong> found in any laboratory report.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 3 — AGE DISTRIBUTION
+══════════════════════════════════════════════════════════ -->
+<div class="slide" id="s3">
+  <div class="slide-inner">
+    <div class="sidebar">
+      <span class="sb-num">03</span>
+      <span class="sb-tag">Age Profile</span>
+    </div>
+    <div class="content">
+      <div class="section-label rev d1">Age Distribution</div>
+      <h2 class="slide-title rev d2">The Calf Catastrophe</h2>
+      <p class="slide-sub rev d2">61% of deaths are calves under 24 months — median drowning age is 6 months</p>
+
+      <div style="flex:1;display:flex;gap:60px;align-items:center">
+        <div style="flex:1">
+          <div class="bar-row rev d3">
+            <span class="bar-label">Infant 0–6 mo</span>
+            <div class="bar-track"><div class="bar-fill" style="--tw:38.9%;background:var(--elec)"></div></div>
+            <span class="bar-pct" style="color:var(--elec)">7 · 38.9%</span>
+          </div>
+          <div class="bar-row rev d4">
+            <span class="bar-label">Calf 7–24 mo</span>
+            <div class="bar-track"><div class="bar-fill" style="--tw:22.2%;background:var(--ember)"></div></div>
+            <span class="bar-pct" style="color:var(--ember)">4 · 22.2%</span>
+          </div>
+          <div class="bar-row rev d5">
+            <span class="bar-label">Sub-adult 2–5 yr</span>
+            <div class="bar-track"><div class="bar-fill" style="--tw:22.2%;background:var(--amber)"></div></div>
+            <span class="bar-pct" style="color:var(--amber)">4 · 22.2%</span>
+          </div>
+          <div class="bar-row rev d6">
+            <span class="bar-label">Adult 5–30 yr</span>
+            <div class="bar-track"><div class="bar-fill" style="--tw:5.6%;background:var(--drown)"></div></div>
+            <span class="bar-pct" style="color:var(--drown)">1 · 5.6%</span>
+          </div>
+          <div class="bar-row rev d7">
+            <span class="bar-label">Senior 30+ yr</span>
+            <div class="bar-track"><div class="bar-fill" style="--tw:11.1%;background:#6B7A8D"></div></div>
+            <span class="bar-pct" style="color:#6B7A8D">2 · 11.1%</span>
+          </div>
+        </div>
+
+        <div style="width:480px;flex-shrink:0;display:flex;flex-direction:column;gap:18px">
+          <div class="alert a-red rev-s d4">
+            <span>🐘</span>
+            <div><strong>61% of deaths (11/18)</strong> are calves ≤24 months.
+            Not one drowning victim was over 3 years old.</div>
+          </div>
+          <div class="alert a-blue rev-s d5">
+            <span>♂</span>
+            <div><strong>70% of drowning victims are male calves</strong> — exploratory behaviour
+            increases exposure to water hazards.</div>
+          </div>
+          <div class="alert a-amber rev-s d6">
+            <span>🔬</span>
+            <div>Arsenic-positive cases <strong>#12 &amp; #13</strong> were both calves
+            aged 7 months and 4–6 months respectively.</div>
+          </div>
+          <div class="card rev-s d7" style="border-top:2px solid var(--green)">
+            <p style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;color:var(--muted);margin:0 0 6px">
+              Implication for population
+            </p>
+            <p style="font-family:'IBM Plex Sans',sans-serif;font-size:21px;color:var(--text);margin:0;line-height:1.5">
+              Loss of calves disrupts herd cohesion, depresses recruitment rates,
+              and threatens long-term population viability in this corridor.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 4 — COMPLETE DEATH RECORD
+══════════════════════════════════════════════════════════ -->
+<div class="slide" id="s4">
+  <div class="slide-inner">
+    <div class="sidebar">
+      <span class="sb-num">04</span>
+      <span class="sb-tag">Death Record</span>
+    </div>
+    <div class="content" style="padding:48px 72px">
+      <div class="section-label rev d1">Complete Register</div>
+      <h2 class="slide-title rev d2" style="font-size:50px;margin-bottom:4px">18 Deaths · 2021–2026</h2>
+      <p class="slide-sub rev d2" style="margin-bottom:20px">Raigarh + Dharamjaigarh Forest Divisions · Bilaspur Circle</p>
+
+      <div class="rev d3" style="flex:1;overflow:hidden">
+        <table class="dtable">
+          <thead>
+            <tr>
+              <th>#</th><th>Date</th><th>Range</th><th>Location</th>
+              <th>Sex / Age</th><th>Cause</th><th>Lab</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Nov 2022</td><td>Gharghoda</td><td>Amlidih</td><td>F · 10–12 yr</td><td style="color:var(--elec)">⚡ Electrocution</td><td>Tox Neg</td></tr>
+            <tr><td>2</td><td>Dec 2022</td><td>Gharghoda</td><td>Pusalda</td><td>F · 1 yr</td><td style="color:var(--elec)">⚡ Electrocution</td><td>Tox Neg</td></tr>
+            <tr><td>3–5</td><td>Oct 2024</td><td>Tamnar</td><td>Kachkoba</td><td>M+F · 65+55+2.5 yr</td><td style="color:var(--elec)">⚡ Electrocution ×3</td><td>Tox Neg</td></tr>
+            <tr><td>6</td><td>Dec 2024</td><td>Gharghoda</td><td>Deharidih</td><td>M · 2 yr</td><td style="color:var(--drown)">💧 Drowning</td><td>Tox Neg</td></tr>
+            <tr><td>7</td><td>Jan 2025</td><td>Gharghoda</td><td>Karkatta Dam</td><td>F · 2–3 mo</td><td style="color:var(--drown)">💧 Drowning</td><td>Tox Neg</td></tr>
+            <tr><td>8</td><td>Jan 2025</td><td>Gharghoda</td><td>Pankhatadam</td><td>F · 2 yr</td><td style="color:var(--drown)">💧 Drowning</td><td>Tox Neg</td></tr>
+            <tr><td>9</td><td>May 2025</td><td>Gharghoda</td><td>Karkatta Nadi</td><td>F · 2–4 mo</td><td style="color:#8A64C8">🦴 Head Trauma</td><td>Tox+HCN Neg</td></tr>
+            <tr><td>10</td><td>May 2025</td><td>Gharghoda</td><td>Karkatta Nadi</td><td>M · 5 mo</td><td style="color:var(--drown)">💧 Drowning</td><td>Tox+HCN Neg</td></tr>
+            <tr><td>11</td><td>Oct 2025</td><td>Tamnar</td><td>Kerakhol East</td><td>M · 20 yr</td><td style="color:var(--elec)">⚡ Electrocution</td><td>Pending</td></tr>
+            <tr><td>12</td><td>Nov 2025</td><td>Tamnar</td><td>Saraipali</td><td>M · 7 mo</td><td style="color:var(--drown)">💧 Drowning</td><td style="color:var(--amber);font-weight:700">⚠ Arsenic+</td></tr>
+            <tr><td>13</td><td>Dec 2025</td><td>Raigarh</td><td>Bangursiya</td><td>M · 4–6 mo</td><td style="color:var(--drown)">💧 Drowning</td><td style="color:var(--amber);font-weight:700">⚠ Arsenic+ Pneumonia</td></tr>
+            <tr><td>14</td><td>Jan 2026</td><td>Gharghoda</td><td>Kaya/Sakra Nala</td><td>M · 1 yr</td><td style="color:#8A64C8">🪨 Fall/Injury</td><td>Pending</td></tr>
+            <tr><td>15</td><td>Feb 2026</td><td>Tamnar</td><td>Jhingol</td><td>F · calf</td><td style="color:var(--green)">🌿 Malnutrition</td><td>Pending</td></tr>
+            <tr><td>16–17</td><td>Mar 2026</td><td>Gharghoda</td><td>Kurkut Nadi</td><td>M+F · 2.5–3 yr</td><td style="color:#6B7A8D">❓ Under Investigation</td><td>Decomposed</td></tr>
+            <tr><td>18–20</td><td>May 2026</td><td>Chhal (DHJ)</td><td>Ghoghra/Kerajharia/Amamuda</td><td>M · 6 mo–2 yr</td><td style="color:var(--drown)">💧 Drowning ×3</td><td>EEHV Neg</td></tr>
+          </tbody>
+        </table>
+        <p style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;color:var(--dim);margin-top:12px">
+          💧 Drowning · ⚡ Electrocution · 🦴 Trauma · 🌿 Malnutrition · ❓ Under Investigation · ⚠ As+ = Arsenic Positive
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 5 — SEASONAL PATTERN
+══════════════════════════════════════════════════════════ -->
+<div class="slide" id="s5">
+  <div class="slide-inner">
+    <div class="sidebar">
+      <span class="sb-num">05</span>
+      <span class="sb-tag">Temporal</span>
+    </div>
+    <div class="content">
+      <div class="section-label rev d1">Temporal Analysis</div>
+      <h2 class="slide-title rev d2">Seasonal Pattern — May Pulse &amp; Monsoon Silence</h2>
+      <p class="slide-sub rev d2">Month-by-month distribution reveals structural hazard cycles</p>
+
+      <div style="flex:1;display:flex;gap:48px">
+        <!-- Month bars -->
+        <div style="flex:1">
+          <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:12px;height:280px;align-items:flex-end;margin-bottom:16px">
+            <!-- each month column -->
+            <div class="rev d2" style="display:flex;flex-direction:column;align-items:center;gap:8px">
+              <span style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:var(--muted)">0</span>
+              <div style="width:100%;height:4px;background:rgba(255,255,255,.06);border-radius:4px"></div>
+              <span style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;color:var(--dim)">Jun</span>
+            </div>
+            <div class="rev d2" style="display:flex;flex-direction:column;align-items:center;gap:8px">
+              <span style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:var(--muted)">0</span>
+              <div style="width:100%;height:4px;background:rgba(255,255,255,.06);border-radius:4px"></div>
+              <span style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;color:var(--dim)">Jul</span>
+            </div>
+            <div class="rev d2" style="display:flex;flex-direction:column;align-items:center;gap:8px">
+              <span style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:var(--muted)">0</span>
+              <div style="width:100%;height:4px;background:rgba(255,255,255,.06);border-radius:4px"></div>
+              <span style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;color:var(--dim)">Aug</span>
+            </div>
+            <div class="rev d2" style="display:flex;flex-direction:column;align-items:center;gap:8px">
+              <span style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:var(--muted)">0</span>
+              <div style="width:100%;height:4px;background:rgba(255,255,255,.06);border-radius:4px"></div>
+              <span style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;color:var(--dim)">Sep</span>
+            </div>
+            <div class="rev d3" style="display:flex;flex-direction:column;align-items:center;gap:8px">
+              <span style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:var(--elec)">4</span>
+              <div style="width:100%;height:calc(4/5*220px);background:var(--elec);border-radius:6px 6px 0 0;opacity:.8"></div>
+              <span style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;color:var(--elec);font-weight:700">Oct</span>
+            </div>
+            <div class="rev d3" style="display:flex;flex-direction:column;align-items:center;gap:8px">
+              <span style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:var(--muted)">1</span>
+              <div style="width:100%;height:calc(1/5*220px);background:var(--drown);border-radius:6px 6px 0 0;opacity:.7"></div>
+              <span style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;color:var(--dim)">Nov</span>
+            </div>
+            <div class="rev d4" style="display:flex;flex-direction:column;align-items:center;gap:8px">
+              <span style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:var(--muted)">2</span>
+              <div style="width:100%;height:calc(2/5*220px);background:var(--drown);border-radius:6px 6px 0 0;opacity:.7"></div>
+              <span style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;color:var(--dim)">Dec</span>
+            </div>
+            <div class="rev d4" style="display:flex;flex-direction:column;align-items:center;gap:8px">
+              <span style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:var(--muted)">2</span>
+              <div style="width:100%;height:calc(2/5*220px);background:var(--drown);border-radius:6px 6px 0 0;opacity:.7"></div>
+              <span style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;color:var(--dim)">Jan</span>
+            </div>
+            <div class="rev d5" style="display:flex;flex-direction:column;align-items:center;gap:8px">
+              <span style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:var(--muted)">1</span>
+              <div style="width:100%;height:calc(1/5*220px);background:var(--drown);border-radius:6px 6px 0 0;opacity:.7"></div>
+              <span style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;color:var(--dim)">Feb</span>
+            </div>
+            <div class="rev d5" style="display:flex;flex-direction:column;align-items:center;gap:8px">
+              <span style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:var(--muted)">3</span>
+              <div style="width:100%;height:calc(3/5*220px);background:var(--amber);border-radius:6px 6px 0 0;opacity:.8"></div>
+              <span style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;color:var(--dim)">Mar</span>
+            </div>
+            <div class="rev d6" style="display:flex;flex-direction:column;align-items:center;gap:8px">
+              <span style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:var(--muted)">0</span>
+              <div style="width:100%;height:4px;background:rgba(255,255,255,.06);border-radius:4px"></div>
+              <span style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;color:var(--dim)">Apr</span>
+            </div>
+            <div class="rev d6" style="display:flex;flex-direction:column;align-items:center;gap:8px">
+              <span style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;color:var(--amber)">5</span>
+              <div style="width:100%;height:220px;background:var(--amber);border-radius:6px 6px 0 0"></div>
+              <span style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;color:var(--amber);font-weight:700">May ☀️</span>
+            </div>
+          </div>
+          <div style="height:1px;background:var(--border);margin-bottom:12px"></div>
+          <p class="rev d7" style="font-family:'IBM Plex Sans',sans-serif;font-size:16px;color:var(--dim);text-align:center">
+            Month (Jun–Sep = Monsoon · Zero deaths)
+          </p>
+        </div>
+
+        <!-- Right insights -->
+        <div style="width:480px;flex-shrink:0;display:flex;flex-direction:column;justify-content:center;gap:16px">
+          <div class="alert a-amber rev-s d4">
+            <span>☀️</span>
+            <div><strong>May: 5 deaths (27.8%)</strong> — pre-monsoon pools shrink into steep muddy traps.
+            Summer calving adds newborns near hazardous sites.</div>
+          </div>
+          <div class="alert a-red rev-s d5">
+            <span>⚡</span>
+            <div><strong>October: 4 electrocution deaths</strong> — post-monsoon vegetation flush
+            draws herds into power corridors.</div>
+          </div>
+          <div class="alert a-green rev-s d6">
+            <span>🌧️</span>
+            <div><strong>Zero deaths June–September (monsoon).</strong> Abundant dispersed water
+            eliminates crowding at hazardous sites — confirms structural hazard theory.</div>
+          </div>
+          <div class="card rev-s d7" style="border-top:2px solid var(--amber)">
+            <p style="font-family:'IBM Plex Sans',sans-serif;font-size:17px;color:var(--muted);margin:0 0 8px">
+              Management implication
+            </p>
+            <p style="font-family:'IBM Plex Sans',sans-serif;font-size:19px;color:var(--text);margin:0;line-height:1.5">
+              Seasonal patrol intensity must be <strong style="color:var(--amber)">highest in April–May</strong>
+              (pre-monsoon water hazard) and <strong style="color:var(--elec)">October</strong>
+              (post-monsoon electrocution risk).
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 6 — DROWNING ANALYSIS
+══════════════════════════════════════════════════════════ -->
+<div class="slide" id="s6">
+  <div class="slide-inner">
+    <div class="sidebar">
+      <span class="sb-num">06</span>
+      <span class="sb-tag">Drowning</span>
+    </div>
+    <div class="content">
+      <div class="section-label rev d1" style="color:var(--drown)">Cause Deep-Dive</div>
+      <h2 class="slide-title rev d2" style="color:var(--text)">
+        💧 Drowning — <span style="color:var(--drown)">10 Deaths · 55.6%</span>
+      </h2>
+      <p class="slide-sub rev d2">8 distinct water bodies · All victims ≤3 years old · Zero toxin/virus found</p>
+
+      <div style="flex:1;display:flex;gap:40px">
+        <div style="flex:1">
+          <div class="section-label rev d3" style="font-size:12px;margin-bottom:14px">Hazard Water Bodies</div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div class="cluster-card rev d3">
+              <div class="cluster-title">Deharidih Pond</div>
+              <div class="cluster-body">1 death (Dec 2024) · <strong style="color:var(--green)">✅ Cleared 10,620 m²</strong> — zero deaths since intervention</div>
+            </div>
+            <div class="cluster-card rev d4">
+              <div class="cluster-title">Karkatta Dam</div>
+              <div class="cluster-body">1 death (Jan 2025) · Steep earth banks · No protective barrier</div>
+            </div>
+            <div class="cluster-card rev d5">
+              <div class="cluster-title">Pankhatadam</div>
+              <div class="cluster-body">1 death (Jan 2025) · Irrigation tank with sloped masonry walls</div>
+            </div>
+            <div class="cluster-card rev d6">
+              <div class="cluster-title">Karkatta Nadi</div>
+              <div class="cluster-body">2 deaths (May 2025) · Fast-flowing seasonal channel · May flood pulse</div>
+            </div>
+            <div class="cluster-card rev d7">
+              <div class="cluster-title">Saraipali / Bangursiya</div>
+              <div class="cluster-body">2 deaths (Nov–Dec 2025) · <span style="color:var(--amber);font-weight:700">Arsenic positive</span> · ICAR-IVRI confirmed</div>
+            </div>
+            <div class="cluster-card rev d8">
+              <div class="cluster-title">Dharamjaigarh Cluster</div>
+              <div class="cluster-body">3 deaths (May 2026) · Ghoghra Dam · Kerajharia RF · Amamuda Talab</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="width:420px;flex-shrink:0;display:flex;flex-direction:column;gap:16px;justify-content:center">
+          <div class="alert a-green rev-s d4">
+            <span>✅</span>
+            <div><strong>Dehardih pond clearance works.</strong> Zero deaths since the 10,620 m²
+            hyacinth removal. Administrative record confirms it was the sole intervention.</div>
+          </div>
+          <div class="alert a-red rev-s d5">
+            <span>⚠️</span>
+            <div>7 of 8 hazard sites have <strong>no protective barrier, no warning signage,
+            no calf-exit ramp.</strong></div>
+          </div>
+          <div class="alert a-amber rev-s d6">
+            <span>☠️</span>
+            <div>2 drowning sites also carry <strong>arsenic contamination</strong> —
+            calves ingest water before drowning. Dual hazard.</div>
+          </div>
+          <div class="card rev-s d7" style="border-top:2px solid var(--drown)">
+            <p style="font-family:'Cormorant Garamond',serif;font-size:26px;font-style:italic;
+                color:var(--text);line-height:1.4;margin:0">
+              "Every single drowning victim was under 3 years old — this is not
+              coincidence, it is infrastructure failure."
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 7 — ELECTROCUTION ANALYSIS
+══════════════════════════════════════════════════════════ -->
+<div class="slide" id="s7">
+  <div class="slide-inner">
+    <div class="sidebar">
+      <span class="sb-num">07</span>
+      <span class="sb-tag">Electrocution</span>
+    </div>
+    <div class="content">
+      <div class="section-label rev d1" style="color:var(--elec)">Cause Deep-Dive</div>
+      <h2 class="slide-title rev d2">⚡ Electrocution — <span style="color:var(--elec)">7 Deaths · 4 Incidents</span></h2>
+      <p class="slide-sub rev d2">Tamnar Range ×2 · Gharghoda ×2 · PIL 89/2024 filed in Chhattisgarh HC</p>
+
+      <div style="flex:1;display:flex;gap:40px">
+        <div style="flex:1;display:flex;flex-direction:column;gap:16px">
+
+          <div class="card rev d3" style="border-left:4px solid var(--elec)">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+              <div>
+                <p style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;
+                    color:var(--elec);margin:0 0 6px">Incident 1 &amp; 2 — Gharghoda · Nov–Dec 2022</p>
+                <p style="font-family:'IBM Plex Sans',sans-serif;font-size:20px;color:var(--text);margin:0;line-height:1.5">
+                  Amlidih &amp; Pusalda. Female 10–12 yr + Female 1 yr calf. Sagging low-voltage line
+                  in agricultural fringe. Toxicology negative. Compensation disbursed.
+                </p>
+              </div>
+              <span style="background:var(--elec);color:white;border-radius:8px;padding:6px 14px;
+                  font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:700;white-space:nowrap;margin-left:16px">2 deaths</span>
+            </div>
+          </div>
+
+          <div class="card rev d4" style="border-left:4px solid var(--elec)">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+              <div>
+                <p style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;
+                    color:var(--elec);margin:0 0 6px">Incident 3 — Tamnar · Oct 26, 2024 ⚠️ CRITICAL</p>
+                <p style="font-family:'IBM Plex Sans',sans-serif;font-size:20px;color:var(--text);margin:0;line-height:1.5">
+                  Kachkoba. Male 65 yr + Female 55 yr + Male 2.5 yr calf — three elephants simultaneously.
+                  <span style="color:var(--elec);font-weight:700">Electricity department was notified the day before.</span>
+                  PIL 89/2024 filed Oct 27.
+                </p>
+              </div>
+              <span style="background:var(--elec);color:white;border-radius:8px;padding:6px 14px;
+                  font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:700;white-space:nowrap;margin-left:16px">3 deaths</span>
+            </div>
+          </div>
+
+          <div class="card rev d5" style="border-left:4px solid var(--elec)">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+              <div>
+                <p style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:700;
+                    color:var(--elec);margin:0 0 6px">Incident 4 — Tamnar · Oct 20, 2025</p>
+                <p style="font-family:'IBM Plex Sans',sans-serif;font-size:20px;color:var(--text);margin:0;line-height:1.5">
+                  Kerakhol East. Male adult 20 yr. Sagging overhead line in post-monsoon agricultural area.
+                  PM &amp; toxicology pending.
+                </p>
+              </div>
+              <span style="background:rgba(212,74,74,.4);color:white;border-radius:8px;padding:6px 14px;
+                  font-family:'IBM Plex Sans',sans-serif;font-size:14px;font-weight:700;white-space:nowrap;margin-left:16px">1 death</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="width:400px;flex-shrink:0;display:flex;flex-direction:column;gap:16px;justify-content:center">
+          <div class="alert a-red rev-s d4">
+            <span>⚠️</span>
+            <div><strong>Every electrocution incident involved a sagging or unprotected line</strong>
+            in elephant movement corridors — a known, mappable hazard.</div>
+          </div>
+          <div class="alert a-purple rev-s d5">
+            <span>⚖️</span>
+            <div><strong>PIL 89/2024</strong> filed in Chhattisgarh High Court.
+            CG State Electricity Board directed to submit compliance report.</div>
+          </div>
+          <div class="alert a-amber rev-s d6">
+            <span>📋</span>
+            <div>Common root cause: <strong>no underground cable requirement, no real-time
+            alert system, no elephant-presence fencing protocol</strong> near corridors.</div>
+          </div>
+          <div class="card rev-s d7" style="border-top:2px solid var(--green)">
+            <p style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;color:var(--muted);margin:0 0 8px">Solution pathway</p>
+            <p style="font-family:'IBM Plex Sans',sans-serif;font-size:19px;color:var(--text);margin:0;line-height:1.5">
+              Underground cabling across 6 identified wildlife crossings ·
+              SMS alert system in 2-km corridor buffer zones
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 8 — ARSENIC DISCOVERY
+══════════════════════════════════════════════════════════ -->
+<div class="slide" id="s8">
+  <div class="slide-inner">
+    <div class="sidebar">
+      <span class="sb-num">08</span>
+      <span class="sb-tag">Arsenic</span>
+    </div>
+    <div class="content">
+      <div class="section-label rev d1" style="color:var(--amber)">Toxicology Finding</div>
+      <h2 class="slide-title rev d2">☠️ Arsenic — <span style="color:var(--amber)">Silent Contaminant</span></h2>
+      <p class="slide-sub rev d2">Confirmed in Tamnar–Bangursiya water bodies · Multi-organ damage via histopathology · Dec 2025</p>
+
+      <div style="flex:1;display:flex;gap:44px">
+        <div style="flex:1">
+          <!-- Evidence chain -->
+          <div class="section-label rev d3" style="font-size:12px;margin-bottom:14px">Discovery Timeline</div>
+
+          <div class="pri-item rev d3">
+            <div class="pri-tag" style="background:var(--amber)">Nov</div>
+            <div>
+              <p class="pri-title">Death #12 — Saraipali (Nov 2025)</p>
+              <p class="pri-desc">Male calf 7 mo · Drowning · PM: hepatomegaly, renal congestion · ICAR-IVRI sent samples</p>
+            </div>
+          </div>
+
+          <div class="pri-item rev d4">
+            <div class="pri-tag" style="background:var(--amber)">Dec</div>
+            <div>
+              <p class="pri-title">Death #13 — Bangursiya (Dec 2025)</p>
+              <p class="pri-desc">Male calf 4–6 mo · Drowning + Pneumonia · Arsenic in liver, kidney, muscle · ICAR-IVRI confirmed</p>
+            </div>
+          </div>
+
+          <div class="pri-item rev d5">
+            <div class="pri-tag" style="background:var(--green)">Lab</div>
+            <div>
+              <p class="pri-title">ICAR-IVRI Izatnagar — Histopathology Dec 2025</p>
+              <p class="pri-desc">Toxic hepatitis pattern · Tubular nephrosis · Pulmonary congestion · Arsenic in all organ samples</p>
+            </div>
+          </div>
+
+          <div class="pri-item rev d6">
+            <div class="pri-tag" style="background:#6B7A8D">Root</div>
+            <div>
+              <p class="pri-title">Source Hypothesis: Industrial Effluent &amp; Coal Washery Runoff</p>
+              <p class="pri-desc">Tamnar thermal plant + coal washery upstream · No water quality monitoring at elephant-use water bodies</p>
+            </div>
+          </div>
+
+          <div class="alert a-amber rev d7" style="margin-top:12px">
+            <span>⚠️</span>
+            <div>Arsenic was <strong>only discovered via histopathology</strong> in December 2025.
+            Standard PM + routine tox missed it entirely. Earlier cases may have had undetected arsenic exposure.</div>
+          </div>
+        </div>
+
+        <div style="width:420px;flex-shrink:0;display:flex;flex-direction:column;gap:16px;justify-content:center">
+          <div class="card rev-s d4" style="border-top:3px solid var(--amber)">
+            <p class="section-label" style="font-size:12px;color:var(--amber)">Lab Findings Summary</p>
+            <p style="font-family:'IBM Plex Sans',sans-serif;font-size:19px;color:var(--text);margin:0;line-height:1.7">
+              ✦ <strong>Liver:</strong> Hepatocyte necrosis, vacuolar degeneration<br>
+              ✦ <strong>Kidney:</strong> Tubular nephrosis, glomerular changes<br>
+              ✦ <strong>Lung:</strong> Congestion, oedema (secondary)<br>
+              ✦ <strong>Arsenic confirmed</strong> in multiple tissue types
+            </p>
+          </div>
+
+          <div class="alert a-red rev-s d5">
+            <span>🔴</span>
+            <div>9 human deaths in the same corridor — <strong>arsenic-contaminated water
+            shared by elephants and local communities.</strong></div>
+          </div>
+
+          <div class="alert a-green rev-s d6">
+            <span>✅</span>
+            <div><strong>Immediate requirement:</strong> Water quality testing at all
+            8 identified elephant-use water bodies. Chromogenic field kits available.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 9 — DHARAMJAIGARH 2026 CLUSTER
+══════════════════════════════════════════════════════════ -->
+<div class="slide" id="s9">
+  <div class="slide-inner">
+    <div class="sidebar">
+      <span class="sb-num">09</span>
+      <span class="sb-tag">Cluster</span>
+    </div>
+    <div class="content">
+      <div class="section-label rev d1" style="color:var(--elec)">Emerging Hotspot</div>
+      <h2 class="slide-title rev d2">Dharamjaigarh 2026 — <span style="color:var(--elec)">3 Deaths in 15 Days</span></h2>
+      <p class="slide-sub rev d2">Chhal Range · May 8–24, 2026 · EEHV negative · All drowning · All male calves</p>
+
+      <div style="flex:1;display:flex;gap:44px">
+        <div style="flex:1;display:flex;flex-direction:column;gap:16px">
+          <div class="grid3">
+            <div class="cluster-card rev d3" style="border-top-color:var(--drown)">
+              <div class="cluster-title" style="color:var(--drown)">Death #18 — May 8</div>
+              <div class="cluster-body">
+                Ghoghra Dam · Male 6 mo calf<br>
+                Drowning · EEHV-1A/B tested negative<br>
+                Steep reservoir walls, no exit
+              </div>
+            </div>
+            <div class="cluster-card rev d4" style="border-top-color:var(--drown)">
+              <div class="cluster-title" style="color:var(--drown)">Death #19 — May 11</div>
+              <div class="cluster-body">
+                511 RF Kerajharia · Male 5–6 mo<br>
+                Drowning · EEHV negative<br>
+                Natural pool, steep bank profile
+              </div>
+            </div>
+            <div class="cluster-card rev d5" style="border-top-color:var(--drown)">
+              <div class="cluster-title" style="color:var(--drown)">Death #20 — May 24</div>
+              <div class="cluster-body">
+                Amamuda Talab · Male 1.5–2 yr<br>
+                Drowning · PM pending<br>
+                Village tank, no protective barrier
+              </div>
+            </div>
+          </div>
+
+          <div class="alert a-red rev d6">
+            <span>🚨</span>
+            <div><strong>3 deaths in 15 days</strong> in a new geographic area (Dharamjaigarh / DHJ Division)
+            signals that the drowning hazard cluster is <strong>expanding geographically.</strong>
+            Urgent field audit of all DHJ water bodies required.</div>
+          </div>
+
+          <div class="alert a-green rev d7">
+            <span>🔬</span>
+            <div>EEHV-1 tested by two independent labs (Bengaluru + Bhopal) — <strong>confirmed negative.</strong>
+            This is definitively not a viral outbreak. The clustering is geographic hazard, not disease.</div>
+          </div>
+
+          <div class="alert a-amber rev d8">
+            <span>📍</span>
+            <div>All three sites are within <strong>Chhal Range (DHJ)</strong> — first recorded
+            elephant drowning cluster in this range. Likely linked to expanding herd range under
+            habitat pressure from Raigarh corridor congestion.</div>
+          </div>
+        </div>
+
+        <div style="width:380px;flex-shrink:0">
+          <div class="card rev-s d4" style="border-top:3px solid var(--green);height:100%;box-sizing:border-box">
+            <p class="section-label" style="font-size:12px;margin-bottom:16px">Comparison: Raigarh vs DHJ</p>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+              <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:14px;text-align:center">
+                <span style="font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;color:var(--text);display:block">17</span>
+                <span style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;color:var(--muted)">Raigarh deaths<br>2021–Mar 2026</span>
+              </div>
+              <div style="background:rgba(212,74,74,.08);border-radius:8px;padding:14px;text-align:center;border:1px solid rgba(212,74,74,.2)">
+                <span style="font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;color:var(--elec);display:block">3</span>
+                <span style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;color:var(--muted)">DHJ deaths<br>May 2026 only</span>
+              </div>
+            </div>
+
+            <p style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;color:var(--text);margin:0 0 12px;line-height:1.5">
+              DHJ escalation rate is <span style="color:var(--elec);font-weight:700">significantly higher</span> than
+              the Raigarh baseline. Without intervention, the cluster will continue through May–June 2026.
+            </p>
+
+            <div class="alert a-red" style="font-size:17px">
+              <span>📢</span>
+              <div><strong>Immediate Action:</strong> Deploy rapid hazard mitigation team to all
+              DHJ water bodies this week.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 10 — EVIDENCE CHAIN
+══════════════════════════════════════════════════════════ -->
+<div class="slide" id="s10">
+  <div class="slide-inner">
+    <div class="sidebar">
+      <span class="sb-num">10</span>
+      <span class="sb-tag">Forensics</span>
+    </div>
+    <div class="content">
+      <div class="section-label rev d1">Forensic Process</div>
+      <h2 class="slide-title rev d2">PM → Laboratory → Verdict</h2>
+      <p class="slide-sub rev d2">Systematic multi-stage elimination of disease and conventional poisoning</p>
+
+      <!-- Evidence chain steps -->
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:20px">
+
+        <div style="display:flex;gap:16px;align-items:stretch">
+          <div class="card rev-s d3" style="flex:1;border-top:3px solid var(--green);text-align:center;padding:20px">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--green);opacity:.5;line-height:1;margin-bottom:8px">01</div>
+            <p style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:600;color:var(--text);margin:0 0 6px">Field PM</p>
+            <p style="font-family:'IBM Plex Sans',sans-serif;font-size:15px;color:var(--muted);margin:0;line-height:1.4">16 post-mortem examinations · Scene documentation · Organ harvest for lab</p>
+          </div>
+          <div style="display:flex;align-items:center;color:var(--green);font-size:28px">→</div>
+          <div class="card rev-s d4" style="flex:1;border-top:3px solid var(--amber);text-align:center;padding:20px">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--amber);opacity:.5;line-height:1;margin-bottom:8px">02</div>
+            <p style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:600;color:var(--text);margin:0 0 6px">Routine Toxicology</p>
+            <p style="font-family:'IBM Plex Sans',sans-serif;font-size:15px;color:var(--muted);margin:0;line-height:1.4">OPC · OC · HCN · heavy metals · conventional panel · <span style="color:var(--green)">Negative across all</span></p>
+          </div>
+          <div style="display:flex;align-items:center;color:var(--green);font-size:28px">→</div>
+          <div class="card rev-s d5" style="flex:1;border-top:3px solid var(--drown);text-align:center;padding:20px">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--drown);opacity:.5;line-height:1;margin-bottom:8px">03</div>
+            <p style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:600;color:var(--text);margin:0 0 6px">Virology</p>
+            <p style="font-family:'IBM Plex Sans',sans-serif;font-size:15px;color:var(--muted);margin:0;line-height:1.4">EEHV-1A/B · EMCV · Anthrax · Salmonella · <span style="color:var(--green)">Negative across all</span></p>
+          </div>
+          <div style="display:flex;align-items:center;color:var(--green);font-size:28px">→</div>
+          <div class="card rev-s d6" style="flex:1;border-top:3px solid var(--amber);text-align:center;padding:20px">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--amber);opacity:.5;line-height:1;margin-bottom:8px">04</div>
+            <p style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:600;color:var(--text);margin:0 0 6px">Histopathology</p>
+            <p style="font-family:'IBM Plex Sans',sans-serif;font-size:15px;color:var(--muted);margin:0;line-height:1.4">Organ sections · Dec 2025: <span style="color:var(--amber);font-weight:700">Arsenic confirmed</span> in #12 &amp; #13</p>
+          </div>
+          <div style="display:flex;align-items:center;color:var(--green);font-size:28px">→</div>
+          <div class="card rev-s d7" style="flex:1;border-top:3px solid var(--green);text-align:center;padding:20px">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--green);opacity:.5;line-height:1;margin-bottom:8px">05</div>
+            <p style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;font-weight:600;color:var(--text);margin:0 0 6px">Verdict</p>
+            <p style="font-family:'IBM Plex Sans',sans-serif;font-size:15px;color:var(--muted);margin:0;line-height:1.4"><span style="color:var(--green);font-weight:700">Human-modified hazards</span> confirmed as cause in 83% of deaths</p>
+          </div>
+        </div>
+
+        <div class="grid2 rev d8">
+          <div class="alert a-green">
+            <span>🔬</span>
+            <div>Labs used: <strong>ICAR-IVRI Izatnagar</strong> (national reference lab) + <strong>NDVSU SWFH Jabalpur</strong> +
+            WADI Jabalpur + Karnataka state lab (EEHV). Independent cross-verification.</div>
+          </div>
+          <div class="alert a-amber">
+            <span>📋</span>
+            <div>Lab register examination revealed <strong>29+ individual samples</strong> across
+            blood, serum, vitreous humour, liver, kidney, lung, intestinal content, soil, and water.</div>
+          </div>
+        </div>
+
+        <div class="alert a-red rev d9">
+          <span>⚠️</span>
+          <div>Arsenic was <strong>only detectable via histopathology</strong> — not by routine tox screen.
+          This means earlier deaths (2022–2024) may have had arsenic co-exposure that went undetected.
+          Retrospective histopathology of archived tissue is recommended.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 11 — PRIORITY RECOMMENDATIONS
+══════════════════════════════════════════════════════════ -->
+<div class="slide" id="s11">
+  <div class="slide-inner">
+    <div class="sidebar">
+      <span class="sb-num">11</span>
+      <span class="sb-tag">Priorities</span>
+    </div>
+    <div class="content" style="padding:52px 80px">
+      <div class="section-label rev d1">Action Plan</div>
+      <h2 class="slide-title rev d2" style="font-size:50px;margin-bottom:4px">Priority Recommendations</h2>
+      <p class="slide-sub rev d2" style="margin-bottom:18px">P1–P4 immediate (0–30 days) · P5–P8 short-term (1–6 months)</p>
+
+      <div class="grid2 rev d3" style="flex:1">
+        <div>
+          <div class="pri-item">
+            <div class="pri-tag" style="background:#B02020">P1</div>
+            <div>
+              <p class="pri-title">Emergency water body audit — DHJ Division</p>
+              <p class="pri-desc">Field survey of all Chhal Range water bodies · Install escape ramps at Ghoghra Dam, Amamuda Talab, Kerajharia pool within 7 days</p>
+            </div>
+          </div>
+          <div class="pri-item">
+            <div class="pri-tag" style="background:#B02020">P2</div>
+            <div>
+              <p class="pri-title">Arsenic water testing — all 8 hazard sites</p>
+              <p class="pri-desc">Chromogenic arsenic field test + CPCB-accredited lab confirmation · Include Saraipali, Bangursiya, all DHJ sites</p>
+            </div>
+          </div>
+          <div class="pri-item">
+            <div class="pri-tag" style="background:#E65100">P3</div>
+            <div>
+              <p class="pri-title">Electrocution line audit — Tamnar corridor</p>
+              <p class="pri-desc">Map all sag points within 2 km of confirmed elephant movement paths · Provide to CSEB for emergency rectification under PIL 89/2024</p>
+            </div>
+          </div>
+          <div class="pri-item">
+            <div class="pri-tag" style="background:#E65100">P4</div>
+            <div>
+              <p class="pri-title">Pre-monsoon patrol intensification (May)</p>
+              <p class="pri-desc">Double patrol frequency at all 8 water bodies · Deploy trained responders with calf-rescue equipment at highest-risk sites</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="pri-item">
+            <div class="pri-tag" style="background:#F57F17">P5</div>
+            <div>
+              <p class="pri-title">Retrospective histopathology — archived tissue</p>
+              <p class="pri-desc">Request ICAR-IVRI to test archived tissue from 2022–2024 deaths for arsenic · Estimate full exposure timeline</p>
+            </div>
+          </div>
+          <div class="pri-item">
+            <div class="pri-tag" style="background:#F57F17">P6</div>
+            <div>
+              <p class="pri-title">Calf escape infrastructure — 8 priority sites</p>
+              <p class="pri-desc">Earthen ramps (3 m wide, ≤25° slope) at all steep water body banks · Replicate Dehardih model · Budget ₹2–4 lakh per site</p>
+            </div>
+          </div>
+          <div class="pri-item">
+            <div class="pri-tag" style="background:#1E7E3E">P7</div>
+            <div>
+              <p class="pri-title">GIS-integrated hazard monitoring system</p>
+              <p class="pri-desc">Use 558-compartment overlay to create seasonal risk heat maps · Automate alert when elephant GPS collar enters hazard zone</p>
+            </div>
+          </div>
+          <div class="pri-item">
+            <div class="pri-tag" style="background:#1E7E3E">P8</div>
+            <div>
+              <p class="pri-title">Industrial effluent monitoring — Tamnar watershed</p>
+              <p class="pri-desc">Upstream monitoring at coal washery and thermal plant outflows · Quarterly heavy metals testing · Share data with CHW authority</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 12 — CONCLUSION / Q&A
+══════════════════════════════════════════════════════════ -->
+<div class="slide" id="s12">
+  <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+
+    <div class="div-bg-num">12</div>
+
+    <div class="section-label rev d1" style="position:relative;z-index:1">Summary</div>
+
+    <h1 class="rev d2" style="font-family:'Cormorant Garamond',serif;font-size:84px;font-weight:700;
+        color:var(--text);position:relative;z-index:1;margin:8px 0;line-height:1.05">
+      Not Fate. <em style="color:var(--green);font-style:italic">Infrastructure Failure.</em>
+    </h1>
+
+    <div style="width:72px;height:3px;background:linear-gradient(to right,transparent,var(--green),transparent);
+        margin:20px auto;position:relative;z-index:1" class="rev d2"></div>
+
+    <p class="rev d3" style="font-family:'IBM Plex Sans',sans-serif;font-size:24px;font-weight:300;
+        color:var(--muted);position:relative;z-index:1;max-width:1100px;line-height:1.6;margin:0 0 40px">
+      83% of 18 elephant deaths were preventable. Every drowning site needs a ramp.
+      Every power line needs to be mapped. Every water body needs to be tested for arsenic.
+      The data is clear. The solutions are known. The timeline is now.
+    </p>
+
+    <div class="rev d4" style="display:flex;gap:24px;position:relative;z-index:1;margin-bottom:48px">
+      <div class="stat-box">
+        <span class="stat-val" style="color:var(--green)">83%</span>
+        <span class="stat-lbl">Preventable</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-val" style="color:var(--drown)">0</span>
+        <span class="stat-lbl">Deaths at cleared sites</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-val" style="color:var(--amber)">8</span>
+        <span class="stat-lbl">Priority actions</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-val" style="color:var(--elec)">0</span>
+        <span class="stat-lbl">Viral causes found</span>
+      </div>
+    </div>
+
+    <div class="rev d5" style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:8px">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:700;
+          color:var(--green);margin:0">Questions &amp; Discussion</p>
+      <p style="font-family:'IBM Plex Sans',sans-serif;font-size:18px;color:var(--dim);margin:0">
+        CONFIDENTIAL · Raigarh Forest Division · Compiled 27 May 2026
+      </p>
+    </div>
+  </div>
+</div>
+
+</div><!-- end deck-stage -->
+</div><!-- end deck-viewport -->
+
+<!-- Navigation dots -->
+<div id="nav-dots">
+  <div class="nd active" onclick="goTo(0)" title="Cover"></div>
+  <div class="nd" onclick="goTo(1)" title="Cause Distribution"></div>
+  <div class="nd" onclick="goTo(2)" title="Age Distribution"></div>
+  <div class="nd" onclick="goTo(3)" title="Death Record"></div>
+  <div class="nd" onclick="goTo(4)" title="Seasonal Pattern"></div>
+  <div class="nd" onclick="goTo(5)" title="Drowning Analysis"></div>
+  <div class="nd" onclick="goTo(6)" title="Electrocution"></div>
+  <div class="nd" onclick="goTo(7)" title="Arsenic"></div>
+  <div class="nd" onclick="goTo(8)" title="DHJ Cluster"></div>
+  <div class="nd" onclick="goTo(9)" title="Evidence Chain"></div>
+  <div class="nd" onclick="goTo(10)" title="Priorities"></div>
+  <div class="nd" onclick="goTo(11)" title="Conclusion"></div>
+</div>
+
+<div id="slide-ctr">1 / 12</div>
+
+<style>
+#nav-dots{position:fixed;right:28px;top:50%;transform:translateY(-50%);z-index:1000;display:flex;flex-direction:column;gap:10px}
+.nd{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.2);cursor:pointer;transition:all .3s ease}
+.nd.active{background:var(--green);transform:scale(1.5)}
+.nd:hover:not(.active){background:rgba(82,183,136,.5)}
+#slide-ctr{position:fixed;bottom:22px;right:28px;font-family:'IBM Plex Sans',sans-serif;
+  font-size:13px;color:rgba(255,255,255,.22);z-index:1000;letter-spacing:2px}
+</style>
+
+<script>
+(function(){
+  const TOTAL = 12;
+  let current = 0;
+  let touchStartX = 0;
+
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const dots = Array.from(document.querySelectorAll('.nd'));
+  const ctr = document.getElementById('slide-ctr');
+  const stage = document.getElementById('stage');
+
+  /* ── Stage scaling ── */
+  function scaleStage() {
+    const vw = window.innerWidth, vh = window.innerHeight;
+    const scaleX = vw / 1920, scaleY = vh / 1080;
+    const s = Math.min(scaleX, scaleY);
+    const tx = (vw - 1920 * s) / 2;
+    const ty = (vh - 1080 * s) / 2;
+    stage.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + s + ')';
+  }
+  scaleStage();
+  window.addEventListener('resize', scaleStage);
+
+  /* ── Counter animation ── */
+  function animateCounters(slide) {
+    slide.querySelectorAll('[data-count]').forEach(el => {
+      const target = parseInt(el.dataset.count, 10);
+      const duration = 1200;
+      const start = performance.now();
+      function tick(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const ease = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(ease * target);
+        if (progress < 1) requestAnimationFrame(tick);
+        else el.textContent = target;
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+
+  /* ── Go to slide ── */
+  function goTo(n) {
+    if (n < 0 || n >= TOTAL) return;
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+    ctr.textContent = (current + 1) + ' / ' + TOTAL;
+    animateCounters(slides[current]);
+  }
+
+  /* make goTo global for dot onclick */
+  window.goTo = goTo;
+
+  /* ── Keyboard navigation ── */
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault(); goTo(current + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault(); goTo(current - 1);
+    }
+  });
+
+  /* ── Click navigation (left half = prev, right half = next) ── */
+  document.addEventListener('click', e => {
+    if (e.target.closest('#nav-dots')) return;
+    if (e.clientX < window.innerWidth / 2) goTo(current - 1);
+    else goTo(current + 1);
+  });
+
+  /* ── Touch swipe ── */
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', e => {
+    const dx = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(dx) > 40) dx > 0 ? goTo(current + 1) : goTo(current - 1);
+  });
+
+  /* run counters on initial slide */
+  animateCounters(slides[0]);
+})();
+</script>
+</body>
+</html>
